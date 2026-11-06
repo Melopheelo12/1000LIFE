@@ -1,0 +1,787 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 1 — LE CENTRE (16 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== intro
+titre: L'arrivée
+declencheur: manual
+---
+!moment soir
+!retirer moreau
+!placer moi 150 gauche
+!placer maman 112 droite
+> Rivemont, fin août. La vieille voiture de ta mère s'est arrêtée devant le centre de formation du Stade Rivemont.
+maman (inquiet): Voilà. On y est.
+maman: Tu as pris ta trousse de toilette ? Tes protège-tibias ? Ton chargeur ?
+* Maman. J'ai tout. Promis.
+  maman (content): D'accord, d'accord. Je me tais.
+* (La serrer dans tes bras sans rien dire) #famille
+  ~ rel.maman += 6
+  maman (emu): Mon grand…
+maman: Écoute-moi bien. Le foot, c'est ton rêve, je le sais. Mais promets-moi une chose.
+maman (serieux): Tu passes ton bac. Quoi qu'il arrive.
+* Je te le promets. #cle #famille
+  ~ var.promesse_bac = vrai; rel.maman += 8
+  ~ souvenir(maman, promesse, "Tu lui as promis de passer ton bac")
+  maman (content): Je te fais confiance.
+* Je ferai de mon mieux.
+  ~ rel.maman += 2
+  maman: « De mon mieux »… Bon. C'est déjà ça.
+* Je vais devenir pro, maman. Le bac, ça ne sert à rien. #cle #ambition
+  ~ rel.maman -= 8; stat.confiance += 5
+  ~ souvenir(maman, refus_bac, "Tu lui as dit que le bac ne servait à rien")
+  maman (triste): …On en reparlera.
+maman: Ton frère t'a fait ça. Il a passé la soirée dessus.
+> Elle te tend un dessin : toi, en maillot, soulevant une coupe immense. En bas, en grosses lettres : « MON FRÈRE LE CHAMPION ».
+~ rencontrer(yanis)
+maman (emu): Allez, file. Ils t'attendent.
+!sortir maman gauche
+!lieu chambre_centre 230 jour
+> Ta chambre. Deux lits, un bureau, une fenêtre sur le terrain. Ton colocataire est déjà installé.
+!placer karim 90 droite
+karim (content): Yo ! T'es le nouveau ? Karim. Ailier gauche, le plus rapide du centre. Et le plus beau, accessoirement.
+* Enchanté. Moi, c'est {joueur.nom}. #sociable
+  ~ rel.karim += 5
+  karim: Bienvenue, {joueur.nom}. T'inquiète, je te fais visiter.
+* « Le plus rapide » ? On verra ça sur le terrain. #ambition
+  ~ rel.karim += 2; stat.confiance += 2
+  karim (rire): Ha ! J'aime bien. On fera la course demain.
+* (Hocher la tête, sans plus)
+  ~ rel.karim -= 2
+  karim: Pas bavard, hein ? Ça viendra.
+karim: Le coach Moreau fait sa première séance demain matin, sur le terrain. Un conseil : sois à l'heure. Il ne pardonne rien.
+~ objectif(contrat, "Décrocher un contrat professionnel à la fin de la saison")
+> Déplace-toi avec ← → ou en cliquant. Interagis avec E. Chaque semaine, tu as 3 actions ; l'entraînement collectif t'attend au terrain (passe par le couloir puis le vestiaire, ou ouvre le PLAN).
+
+=== ch1_premier_entrainement
+titre: Premier entraînement
+declencheur: enter:terrain
+chapitres: ch1
+quand: temps.semaine == 1
+unique: oui
+priorite: 100
+---
+~ var.entraine = vrai
+!placer moreau 300 gauche
+!placer moi 250 droite
+!placer karim 336 gauche 1
+!placer lucas 366 gauche 2
+moreau: Bonjour, messieurs. Pour les nouveaux : je suis Didier Moreau. Ici, personne ne vous doit rien.
+moreau: Sur cent gamins qui passent ce portail, dix signent pro. Trois font carrière. Regardez votre voisin : statistiquement, il ne sera plus là dans deux ans.
+lucas (fier): Moi, je serai là. Mon père dit que…
+moreau (colere): Ton père n'est pas sur ce terrain, Ferrand.
+!emote lucas sueur
+moreau: Exercice. Trois contre deux, on termine par une frappe. {joueur.nom}, tu commences.
+~ rencontrer(lucas); rencontrer(moreau)
+!equipe chasubles orange #ffffff #25222b orange
+!preset exercice
+!camera moi
+> Le ballon arrive dans tes pieds. Karim se démarque à gauche, Lucas s'agite au point de penalty. Un défenseur en chasuble fonce sur toi.
+* Faire la passe à Karim #collectif
+  test stat.passe vs 40
+  !ballon vers karim passe
+  !son passe
+  si reussite
+    !anim karim frappe
+    !son frappe
+    !ballon vers but tir
+    > Passe millimétrée. Karim n'a plus qu'à pousser le ballon au fond.
+    karim (content): Ça, c'est une passe !
+    ~ rel.karim += 10; rel.moreau += 4; stat.passe += 1
+    ~ souvenir(karim, premiere_passe, "Ta passe décisive dès le premier entraînement")
+  sinon
+    > Ta passe est un peu longue. Karim la récupère quand même et tente sa chance : à côté.
+    ~ rel.karim += 4; rel.moreau += 2
+  moreau: Bonne lecture. Le football se joue à onze.
+* Tenter de dribbler le défenseur #individuel
+  test stat.technique vs 45
+  si reussite
+    !courir moi 470
+    > Crochet, accélération : le défenseur est dans le vent.
+    !anim moi frappe
+    !son frappe
+    !ballon vers but tir
+    > Et tu conclus !
+    ~ stat.confiance += 6; rel.moreau += 2; rel.karim -= 3; stat.technique += 1
+    karim (pensif): J'étais seul, hein…
+  sinon
+    !anim plot1 tacle
+    !ballon vers plot1 passe
+    > Le défenseur te lit comme un livre ouvert. Ballon perdu.
+    ~ stat.confiance -= 5; rel.moreau -= 4; rel.karim -= 3
+    moreau: Le dribble est un outil. Pas une religion.
+* Frapper directement #individuel #frappe
+  test stat.frappe vs 52
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    > De loin, ta frappe se loge sous la barre. Un silence, puis quelques sifflements admiratifs.
+    ~ stat.confiance += 8; rel.moreau += 3; stat.reputation += 2; rel.lucas -= 5
+    lucas (colere): Coup de chance.
+  sinon
+    !ballon vers dessus tir
+    > Le ballon termine sa course dans le grillage. Quelqu'un ricane.
+    ~ stat.confiance -= 4; rel.moreau -= 5
+    lucas (moqueur): Joli. Les oiseaux te remercient.
+* Garder le ballon et temporiser #prudent
+  > Tu protèges le ballon, dos au jeu, en attendant du soutien. Le jeu ralentit.
+  moreau: Temporiser, c'est bien. Trop temporiser, c'est disparaître.
+  ~ rel.moreau += 1; stat.mental += 1
+!ballon cacher
+moreau: Bien. Tout le monde à la douche. On remet ça la semaine prochaine.
+> Chaque semaine, l'entraînement collectif a lieu ici. Le coach remarque les absents.
+
+=== ch1_cantine_lucas
+titre: Le plateau
+declencheur: enter:cantine
+chapitres: ch1
+quand: temps.semaine <= 3
+unique: oui
+priorite: 60
+---
+!placer lucas 300 gauche
+!placer moi 250 droite
+> Plateau en main, tu cherches une place. Lucas te barre la route, entouré de deux types de l'équipe.
+lucas (fier): Tiens, le prodige. Il paraît que ta mère t'a accompagné jusqu'à la porte. Elle te coupe aussi ta viande ?
+> Ses copains rient. Toute la cantine regarde.
+* Répondre avec humour #sociable
+  test stat.mental + stat.confiance / 4 vs 50
+  si reussite
+    moi: Au moins, elle ne vient pas jouer à ma place. Ton père, il fait encore tes contrôles orientés ?
+    > Éclat de rire général. Même un des copains de Lucas pouffe.
+    ~ stat.confiance += 5; rel.lucas -= 6; stat.reputation += 1
+    lucas (colere): …Tu vas le regretter.
+  sinon
+    moi: Euh… Elle est sympa, ma mère.
+    > Ta réplique tombe à plat. Les rires redoublent.
+    ~ stat.moral -= 5; stat.confiance -= 3
+* L'ignorer et passer ton chemin #prudent
+  > Tu le contournes sans un mot. Lucas hausse les épaules, déçu de ne pas avoir son spectacle.
+  ~ stat.mental += 2; rel.lucas += 2
+* Lui renverser ton plateau dessus #impulsif #cle
+  ~ var.bagarre_cantine = vrai; rel.lucas -= 25; stat.discipline -= 10; stat.confiance += 6
+  !anim moi interagir
+  !emote lucas colere
+  > Purée, sauce et compote sur un survêtement tout neuf. Lucas se jette sur toi ; il faut trois éducateurs pour vous séparer.
+  ~ souvenir(lucas, humiliation, "Tu l'as humilié devant toute la cantine")
+  ~ planifier(ch1_convocation_bagarre, 1)
+  karim (surpris): T'es complètement fou… Mais c'était magnifique.
+  ~ rel.karim += 4
+* [rel.karim >= 15] Laisser Karim lui répondre
+  karim: Lucas, t'as pas des crampons à faire cirer par ton papa ?
+  > Lucas rougit et s'éloigne. Karim te fait un clin d'œil.
+  ~ rel.karim += 3; rel.lucas -= 4
+
+=== ch1_convocation_bagarre
+titre: Convocation
+declencheur: scheduled
+---
+!lieu bureau_moreau 120
+moreau (colere): Assieds-toi. La cantine. Le plateau. Explique-moi.
+* Lucas m'a provoqué. #honnete
+  moreau: Et alors ? Sur le terrain, on te provoquera chaque week-end. Tu renverseras ton plateau sur l'arbitre ?
+  ~ rel.moreau -= 4
+* Vous avez raison, coach. Ça ne se reproduira pas. #discipline
+  ~ rel.moreau += 3; stat.discipline += 4
+  moreau: J'espère bien.
+moreau: Tu es privé du prochain match. Et tu nettoies le vestiaire toute la semaine.
+~ var.suspendu = 1; stat.statut -= 6
+
+=== ch1_rencontre_ines
+titre: La voisine de table
+declencheur: enter:salle_cours
+chapitres: ch1
+unique: oui
+priorite: 60
+---
+!placer ines 196 gauche
+!placer moi 160 droite
+> Cours de mathématiques, obligatoire pour les pensionnaires. Une fille relève la tête quand tu entres.
+ines: Tu es le nouveau footeux ? Assieds-toi, il reste une place à côté de moi. Je ne mords pas. Enfin, pas en maths.
+~ rencontrer(ines)
+* Tu es aussi au centre ? #sociable
+  ines: Non, je suis au lycée d'à côté. Le centre loue nos salles. Je prépare le concours de kiné. Kiné du sport.
+  ~ rel.ines += 4
+* Les maths, c'est pas trop mon truc… #honnete
+  ines (content): Ça tombe bien, c'est le mien. Je t'aide, si tu veux. En échange, tu m'expliques le hors-jeu : mon père hurle devant la télé et je n'ai jamais compris pourquoi.
+  ~ rel.ines += 6; var.aide_ines = vrai
+* (Jouer les beaux gosses) Tu viens me voir jouer samedi ?
+  ines (pensif): …On se connaît depuis dix secondes.
+  ~ rel.ines -= 3
+ines: Bon. Exercice 4. Tu commences ?
+[var.aide_ines] ~ stat.etudes += 4
+
+=== ch1_karim_secret
+titre: La nuit de Karim
+declencheur: tick_start
+chapitres: ch1
+quand: temps.semaine == 3 et non var.karim_renvoye
+unique: oui
+priorite: 90
+---
+!lieu chambre_centre 200 nuit
+!placer karim 120 droite
+!placer moi 200 gauche
+> Il est minuit passé. Karim est assis sur son lit, habillé, son sac sur les genoux.
+karim (triste): Tu dors pas ? …Écoute. Mon père est à l'hôpital depuis lundi. Le cœur. Ma mère dit que c'est grave.
+karim: Les sorties sont interdites en semaine, tu le sais. Mais je dois le voir. J'y vais cette nuit et je reviens avant le réveil.
+karim: Si le surveillant passe pour l'appel de minuit et demi… tu peux dire que je suis aux toilettes ? Ou glisser un oreiller sous ma couette ?
+* Je te couvre. Vas-y. #loyal #cle
+  ~ var.karim_couvert = vrai; rel.karim += 18
+  ~ souvenir(karim, couvert, "Tu l'as couvert la nuit où il est allé voir son père")
+  karim (emu): Je te revaudrai ça. Je te le jure.
+  !sortir karim droite
+  test stat.mental + stat.confiance / 3 vs 55
+  si reussite
+    > Le surveillant passe et jette un œil à l'oreiller sous la couette. Ton cœur cogne. Il repart.
+    > Karim rentre à l'aube, les yeux rouges. Il te serre la main sans un mot.
+  sinon
+    > Le surveillant soulève la couette. L'oreiller roule par terre.
+    ~ var.karim_pris = vrai; rel.moreau -= 8; stat.discipline -= 6
+    ~ planifier(ch1_karim_sanction, 1)
+* Je viens avec toi. #loyal #cle
+  ~ var.karim_accompagne = vrai; rel.karim += 22; stat.discipline -= 4
+  ~ souvenir(karim, accompagne, "Tu l'as accompagné à l'hôpital, en pleine nuit")
+  karim (surpris): T'es sérieux ? …Merci, frère.
+  !fondu
+  > Deux heures de bus de nuit. Le père de Karim dort, relié à des machines. Karim lui tient la main longtemps.
+  > Vous rentrez au petit matin… pile quand Moreau termine son jogging.
+  ~ rel.moreau -= 10; stat.energie -= 30
+  ~ planifier(ch1_karim_sanction, 1)
+* Désolé. Si on se fait prendre, on est virés tous les deux. #prudent #cle
+  ~ var.karim_refuse = vrai; rel.karim -= 18
+  ~ souvenir(karim, refus, "Tu as refusé de le couvrir la nuit où son père était à l'hôpital")
+  karim (triste): …Ouais. Je comprends. Laisse tomber.
+  > Il défait son sac en silence et se couche dos à toi. Tu ne dors pas beaucoup cette nuit-là.
+* Je préviens le surveillant. Les règles sont les règles. #trahison #cle
+  ~ var.karim_denonce = vrai; rel.karim -= 45; rel.moreau += 5; stat.discipline += 5
+  ~ souvenir(karim, trahison, "Tu l'as dénoncé au surveillant")
+  karim (colere): T'as fait QUOI ?
+  > Le lendemain, tout le centre sait que tu as « balancé ». Karim est privé de sortie pour un mois.
+  ~ stat.reputation -= 3; rel.lucas += 6
+
+=== ch1_karim_sanction
+titre: Dans le bureau du coach
+declencheur: scheduled
+---
+!lieu bureau_moreau 120
+!placer karim 92 droite
+moreau (colere): Entrez. Tous les deux.
+si var.karim_accompagne
+  moreau: Six heures du matin, en plein footing, je croise deux de mes joueurs qui rentrent en douce. Vous me prenez pour qui ?
+sinon
+  moreau: Un oreiller sous une couette. Sérieusement ? On n'est pas en colonie de vacances.
+karim: Coach, c'est moi. Mon père est à l'hôpital, je…
+moreau: Je sais, pour ton père, Benali. L'hôpital a appelé. Tu crois que je n'aurais pas signé une autorisation si tu me l'avais demandée ?
+!emote karim sueur
+* Assumer : « C'était aussi mon idée. » #loyal
+  ~ rel.karim += 8; rel.moreau += 4
+  moreau: Au moins, tu ne te caches pas.
+* Rester silencieux
+  ~ rel.moreau -= 2
+moreau: Une semaine de corvées pour vous deux. La prochaine fois, vous frappez à cette porte avant de faire le mur.
+~ stat.statut -= 4
+
+=== ch1_djibril_fete
+titre: La soirée de Djibril
+declencheur: enter:quartier
+chapitres: ch1
+quand: temps.semaine >= 2 et temps.semaine <= 6
+unique: oui
+priorite: 60
+---
+!placer djibril 400 gauche
+!placer moi 356 droite
+djibril (content): Regardez qui revient au bercail ! Le footballeur professionnel !
+djibril: Samedi soir, grosse soirée chez mon cousin. Tout le quartier sera là. Tu viens, j'espère ? Tu nous dois bien ça.
+moi: Samedi ? J'ai match dimanche matin.
+djibril: Justement ! Tu passes, tu rentres à minuit. Allez, Cendrillon.
+* D'accord, mais je rentre tôt. #fete
+  ~ var.fete_veille_match = vrai; rel.djibril += 10; stat.moral += 6
+  djibril: Voilà ! Je savais que t'étais resté un vrai.
+* Désolé, pas cette fois. Le match compte trop. #discipline
+  ~ rel.djibril -= 6; stat.discipline += 3
+  djibril (pensif): T'as changé, toi. Bon. La prochaine, alors.
+* [rel.djibril >= 30] Lui proposer plutôt de venir voir ton match #sociable
+  djibril (rire): Moi, dans un stade, à neuf heures du matin ? …Bon. Pour toi, d'accord.
+  ~ var.djibril_au_match = vrai; rel.djibril += 4
+djibril: Au fait. Ton petit frère traîne avec les grands du bâtiment D. Je dis ça, je dis rien.
+~ var.alerte_yanis = vrai
+
+=== ch1_lendemain_de_fete
+titre: Lendemain de fête
+declencheur: tick_end
+chapitres: ch1
+quand: var.fete_veille_match
+unique: oui
+priorite: 70
+---
+!lieu chambre_centre 200 aube
+> Tu es rentré à trois heures du matin. « Minuit », c'était optimiste.
+~ stat.energie -= 35; stat.forme -= 10
+test stat.discipline vs 45
+si echec
+  > Pire : une photo de toi, verre à la main, tourne sur les réseaux. Quelqu'un l'a montrée au coach.
+  ~ rel.moreau -= 10; stat.statut -= 8
+  ~ souvenir(moreau, fete, "Ta soirée la veille d'un match de championnat")
+sinon
+  > Personne ne semble au courant. Pour cette fois.
+
+=== ch1_yanis_batiment_d
+titre: Le petit frère
+declencheur: enter:appart_maman
+chapitres: ch1
+quand: var.alerte_yanis
+unique: oui
+priorite: 60
+---
+!placer yanis 200 gauche
+!placer moi 156 droite
+yanis (content): T'es là ! Tu restes manger ? Maman fait des pâtes au thon !
+> Yanis porte une casquette neuve. Bien trop chère pour le budget de la famille.
+* Elle vient d'où, cette casquette ? #famille
+  yanis (inquiet): …Un cadeau. Des grands du bâtiment D. Je leur rends des petits services.
+  * Lui parler sérieusement, comme un grand frère #famille #cle
+    moi: Yanis. Ces gars-là ne font pas de cadeaux. Un jour, ils te demanderont quelque chose que tu ne voudras pas faire.
+    yanis (triste): Toi, t'es jamais là. Eux, ils sont là.
+    moi: Alors je serai plus là. Promis. Et toi, tu viens t'entraîner au city avec moi le week-end.
+    ~ var.yanis_protege += 1; rel.yanis += 10
+    ~ souvenir(yanis, promesse, "Tu lui as promis d'être plus présent")
+  * En parler à maman #famille
+    ~ rel.yanis -= 8; rel.maman += 4; var.yanis_protege += 1
+    yanis (colere): Balance !
+  * Laisser couler, il est grand
+    ~ var.yanis_neglige += 1
+    yanis: T'inquiète, je gère.
+* Le complimenter sur sa casquette
+  ~ var.yanis_neglige += 1; rel.yanis += 3
+  yanis (fier): Elle est stylée, hein ?
+maman: À table, les garçons !
+~ rel.maman += 3; stat.moral += 5
+
+=== ch1_appel_argent
+titre: Fin de mois difficile
+declencheur: activity:appeler_maman
+chapitres: ch1
+quand: temps.semaine >= 2
+unique: oui
+priorite: 50
+---
+!son telephone
+maman: Allô, mon chéri ? …Oui, oui, tout va bien.
+maman (inquiet): Enfin… La machine à laver a lâché. Et l'assurance de la voiture tombe ce mois-ci. Mais ne t'inquiète pas, je vais faire des heures en plus.
+* [stat.argent >= 150] Lui envoyer 150 € de tes économies #famille #genereux
+  ~ stat.argent -= 150; rel.maman += 10; stat.moral += 3; var.aide_maman += 1
+  maman (emu): Non, je ne peux pas accepter… Bon. Merci, mon grand. Je te les rendrai.
+* Lui suggérer de demander une aide au club #debrouillard
+  maman: Au club ? Je n'oserai jamais…
+  ~ var.aide_club_demande = vrai; rel.maman += 2
+* Tu verras ça avec quelqu'un d'autre, maman. Moi, je dois me concentrer.
+  ~ rel.maman -= 8
+  maman (triste): Oui… Bien sûr. Concentre-toi.
+
+=== ch1_point_moreau
+titre: Le point avec le coach
+declencheur: talk:moreau
+chapitres: ch1
+quand: temps.semaine >= 3
+unique: oui
+priorite: 50
+---
+moreau: Tu tombes bien, {joueur.nom}. On est à mi-saison. Je vais être franc.
+si stat.statut >= 50
+  moreau: Tu fais partie des garçons que je regarde de près. Ne gâche pas ça.
+sinon si stat.statut >= 30
+  moreau: Tu as des qualités. Mais aujourd'hui, tu n'es pas au-dessus du lot.
+sinon
+  moreau: Pour l'instant, je ne vois pas pourquoi je te garderais l'an prochain.
+[mem.moreau.fete] !rappel moreau.fete
+[mem.moreau.fete] moreau (colere): Et les soirées la veille des matchs, c'est terminé. C'est clair ?
+moreau: Qu'est-ce que tu attends de moi ?
+* Que vous me disiez où progresser. #discipline
+  moreau: Ton jeu sans ballon. Et ta régularité. Le talent sans régularité, ça ne vaut rien.
+  ~ rel.moreau += 6; stat.mental += 2
+* Du temps de jeu. Je mérite d'être titulaire. #ambition
+  test stat.statut + stat.confiance / 3 vs 55
+  si reussite
+    moreau: …C'est ce que j'aime entendre. Prouve-le samedi.
+    ~ rel.moreau += 3; stat.statut += 5
+  sinon
+    moreau (colere): Mériter ? Tu ne mérites rien. Tu gagnes ta place ou tu la perds.
+    ~ rel.moreau -= 5
+* Rien. Je fais mon truc.
+  ~ rel.moreau -= 6
+  moreau: Alors fais-le bien.
+
+=== ch1_recruteur
+titre: Un inconnu en tribune
+declencheur: tick_start
+chapitres: ch1
+quand: temps.semaine >= 4 et temps.semaine <= 6 et stat.reputation >= 12
+unique: oui
+priorite: 40
+chance: 70
+---
+!lieu couloir 214
+!placer moi 250 gauche
+> Un homme en doudoune rouge t'attend près du distributeur. Logo de l'Olympique Marvaux sur la poitrine.
+> « Recruteur. Je t'ai vu jouer. Marvaux cherche des garçons comme toi pour son centre. Meilleures installations, meilleure prime de signature. »
+> « Réfléchis. Si Rivemont ne te garde pas… ou même s'il te garde, d'ailleurs. Voilà ma carte. »
+* Prendre la carte #ambition
+  ~ var.carte_marvaux = vrai
+  > Tu glisses la carte dans ta poche. Elle pèse étrangement lourd.
+* Refuser poliment : « Rivemont m'a donné ma chance. » #loyal
+  ~ var.loyal_rivemont = vrai; stat.reputation += 1
+  > L'homme hausse les épaules. « La loyauté, ça ne paie pas toujours, petit. »
+  ~ souvenir(moreau, loyaute, "Tu as refusé l'approche de Marvaux par loyauté")
+
+=== ch1_duel_lucas
+titre: Le duel
+declencheur: enter:terrain
+chapitres: ch1
+quand: temps.semaine >= 5 et temps.semaine <= 6
+unique: oui
+priorite: 95
+---
+~ var.entraine = vrai; var.duel_moi = 0; var.duel_lucas = 0; var.duel_manche = 0
+!placer moreau 300 gauche
+!placer lucas 430 gauche
+!placer moi 390 droite
+moreau: La finale de la Coupe des Espoirs approche. Il me faut un titulaire de plus.
+moreau: Ferrand, {joueur.nom}. Un contre un, trois manches. Le meilleur démarre la finale.
+lucas (fier): Prépare-toi à pleurer.
+[mem.lucas.humiliation] lucas (colere): Et cette fois, pas de plateau pour te sauver.
+!equipe chasubles orange #ffffff #25222b orange
+!ballon pied moi
+-> manche
+
+@manche
+~ var.duel_manche += 1
+> Manche {var.duel_manche} sur 3. Toi {var.duel_moi} – {var.duel_lucas} Lucas.
++ Jouer en puissance #physique
+  test stat.physique + stat.forme / 6 vs 54
+  si reussite
+    !courir moi +40
+    > Épaule contre épaule, tu fais céder Lucas.
+    ~ var.duel_moi += 1
+  sinon
+    !anim lucas tacle
+    > Lucas tient bon et te pique le ballon.
+    ~ var.duel_lucas += 1
++ Jouer en finesse #technique
+  test (joueur.poste == "defenseur" ? stat.defense : stat.technique) + stat.forme / 6 vs 56
+  si reussite
+    > Un geste propre, précis. Lucas est battu.
+    ~ var.duel_moi += 1
+  sinon
+    > Trop appliqué. Lucas anticipe.
+    ~ var.duel_lucas += 1
++ Jouer avec la tête #mental
+  test stat.mental + stat.confiance / 4 vs 52
+  si reussite
+    > Tu attends sa faute. Il s'énerve, se jette… et tu en profites.
+    ~ var.duel_moi += 1
+  sinon
+    > Tu réfléchis une seconde de trop.
+    ~ var.duel_lucas += 1
+[var.duel_manche < 3] -> manche
+!ballon cacher
+si var.duel_moi > var.duel_lucas
+  ~ var.titulaire_coupe = vrai; stat.statut += 10; stat.confiance += 6; rel.lucas -= 8
+  moreau: {joueur.nom} démarre la finale. Ferrand, sur le banc.
+  lucas (colere): C'est pas fini.
+  * Lui tendre la main #fairplay
+    ~ rel.lucas += 12
+    > Lucas regarde ta main longtemps. Puis il la serre, du bout des doigts.
+    lucas: …T'as bien joué. Ça m'arrache la bouche de le dire.
+  * Le chambrer : « Bien essayé. » #provoc
+    ~ rel.lucas -= 12
+    ~ souvenir(lucas, chambrage, "Tu l'as chambré après le duel")
+sinon
+  ~ stat.statut -= 4; stat.confiance -= 5; rel.lucas += 5
+  moreau: Ferrand démarre. {joueur.nom}, tu seras le premier remplaçant. Sois prêt.
+  lucas (fier): La classe, ça ne s'apprend pas.
+
+=== ch1_examens
+titre: Les examens blancs
+declencheur: tick_start
+chapitres: ch1
+quand: temps.semaine == 6
+unique: oui
+priorite: 60
+---
+!lieu salle_cours 200
+> Examens blancs du bac. Trois heures de sciences, deux de français.
+[rel.ines >= 15] !placer ines 232 gauche
+[rel.ines >= 15] ines: Respire. Tu sais plus de choses que tu ne le crois.
+test stat.etudes vs 45
+si reussite
+  > Tu rends ta copie avec un sentiment étrange : tu as compris ce que tu écrivais.
+  ~ stat.etudes += 6; rel.maman += 3
+  [var.promesse_bac] ~ souvenir(maman, examens, "Tes bonnes notes aux examens blancs")
+sinon
+  > Tu bloques sur la moitié des questions. Ta mère va recevoir le bulletin.
+  ~ stat.moral -= 6; rel.maman -= 3
+  [var.promesse_bac] maman (inquiet): Tu m'avais promis, tu te souviens ?
+
+=== ch1_finale_coupe
+titre: Finale de la Coupe des Espoirs
+declencheur: tick_end
+chapitres: ch1
+quand: temps.semaine == 7
+unique: oui
+priorite: 85
+---
+~ var.match_joue = vrai; var.stade_taille = 2; var.score_nous = 0; var.score_eux = 0; var.minute = 0; var.note_match = 6
+~ var.adversaire = "Olympique Marvaux U17"; var.adv_court = "OM"; var.adv_couleur = "#d63c3c"
+!lieu stade 320 nuit
+!equipe nous {var.club_couleur} {var.club_couleur2} #ffffff {var.club_couleur}
+!equipe eux #d63c3c #ffffff #ffffff #d63c3c
+!fx foule 0.7
+> Finale de la Coupe des Espoirs. Trois mille personnes, des recruteurs plein les tribunes, et l'Olympique Marvaux en face.
+~ var.titulaire = var.titulaire_coupe ou stat.statut >= 48
+si var.titulaire
+  > Tu es titulaire.
+sinon
+  > Tu commences sur le banc. Moreau te fait signe : tu entreras à l'heure de jeu.
+[var.djibril_au_match] > Dans un coin de la tribune, tu reconnais Djibril, en doudoune, qui agite un drapeau du club… à l'envers.
+!son sifflet
+si var.titulaire
+  ~ var.minute = 28
+  !preset milieu
+  > {var.minute}e minute. Le ballon te parvient à trente mètres du but.
+  * Frappe lointaine #frappe
+    test stat.frappe + stat.forme / 5 vs 60
+    !anim moi frappe
+    !son frappe
+    si reussite
+      !ballon vers but tir
+      !fx filet
+      !son but
+      !titre BUT !
+      ~ var.score_nous += 1; var.buts += 1; var.note_match += 1.2; stat.confiance += 5
+      > Lucarne ! Le stade explose.
+    sinon
+      !ballon vers dessus tir
+      ~ var.note_match -= 0.3
+      > Au-dessus.
+  * Jouer simple et décaler #collectif
+    test stat.passe vs 48
+    !ballon vers co1 passe
+    si reussite
+      ~ var.note_match += 0.5; rel.moreau += 2
+      > Le jeu respire. Rivemont prend le contrôle du match.
+    sinon
+      ~ var.note_match -= 0.2
+      > La passe est interceptée.
+!preset defense
+~ var.minute = 52
+> {var.minute}e minute. Contre-attaque de Marvaux…
+!ballon vers but_gauche tir
+!fx filet
+~ var.score_eux += 1
+> But de Marvaux. {var.club_court} {var.score_nous}–{var.score_eux}.
+[non var.titulaire] > Moreau se tourne vers le banc. « {joueur.nom}, échauffé ? Tu entres. »
+[non var.titulaire] ~ var.titulaire = vrai
+~ var.minute = 71
+!preset attaque
+!placer karim 330 droite 2
+!ballon pied karim
+> {var.minute}e minute. Karim récupère le ballon sur l'aile gauche.
+si mem.karim.couvert ou mem.karim.accompagne
+  !rappel karim.{mem.karim.accompagne ? "accompagne" : "couvert"}
+  karim (content): {joueur.nom} ! Je t'avais dit que je te revaudrais ça !
+  > Il ignore Lucas, pourtant démarqué, et te glisse le ballon dans la course.
+  !ballon vers moi passe
+  ~ var.bonus_karim = 14
+  -> occasion
+sinon si mem.karim.trahison ou mem.karim.refus
+  !rappel karim.{mem.karim.trahison ? "trahison" : "refus"}
+  > Tu es seul au point de penalty. Karim te voit. Il te regarde une seconde… et sert Lucas.
+  !placer lucas 520 droite 1
+  !ballon vers lucas passe
+  -> lucas_frappe
+sinon
+  > Karim lève la tête et centre au hasard dans la surface.
+  !ballon vers moi centre
+  ~ var.bonus_karim = 0
+  -> occasion
+
+@occasion
+* Frapper du premier coup #frappe
+  test stat.frappe + var.bonus_karim + stat.forme / 6 vs 60
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    -> egalisation
+  sinon
+    !anim gk plongeon
+    !ballon vers gk tir
+    > Le gardien sort le grand jeu.
+    ~ var.note_match -= 0.3
+    -> fin_match
+* Contrôler et dribbler le gardien #technique
+  test stat.technique + var.bonus_karim + stat.confiance / 6 vs 62
+  si reussite
+    !courir moi 570
+    !anim gk plongeon
+    !ballon vers but passe
+    -> egalisation
+  sinon
+    !anim gk plongeon
+    !ballon vers gk passe
+    ~ var.note_match -= 0.4
+    > Le gardien plonge dans tes pieds.
+    -> fin_match
+* [var.lucas_club == rivemont] Remiser pour Lucas, mieux placé #collectif
+  !placer lucas 540 droite 1
+  !ballon vers lucas passe
+  ~ rel.lucas += 12; var.note_match += 0.6
+  ~ souvenir(lucas, passe_finale, "Tu lui as offert l'égalisation en finale")
+  test 55 vs 50
+  si reussite
+    !anim lucas frappe
+    !ballon vers but tir
+    -> egalisation
+  sinon
+    !anim lucas frappe
+    !ballon vers dessus tir
+    > Lucas croque. Il se prend la tête à deux mains.
+    -> fin_match
+
+@lucas_frappe
+!anim lucas frappe
+!son frappe
+test 50 vs 50
+si reussite
+  !ballon vers but tir
+  !fx filet
+  !son but
+  ~ var.score_nous += 1
+  > Lucas égalise. Il court vers le virage sans te regarder.
+  -> fin_match
+sinon
+  !ballon vers dessus tir
+  > Lucas tire dans les nuages.
+  -> fin_match
+
+@egalisation
+!fx filet
+!son but
+!fx foule 1
+!titre BUT !
+!anim moi joie
+~ var.score_nous += 1; var.note_match += 1.3; stat.confiance += 5
+[var.bonus_karim > 0] ~ var.buts += 1
+[var.bonus_karim > 0] ~ rel.karim += 6
+> {var.club_court} {var.score_nous}–{var.score_eux} !
+-> fin_match
+
+@fin_match
+~ var.minute = 90
+!fx foule 0.6
+si var.score_nous == var.score_eux
+  > Égalité au coup de sifflet final. Tirs au but.
+  !preset penalty
+  > Quatre tirs partout. Moreau te désigne pour le cinquième.
+  * Placer en force, côté ouvert #frappe
+    test stat.frappe + stat.mental / 3 vs 66
+    !anim moi frappe
+    !son frappe
+    si reussite
+      !ballon vers but tir
+      ~ var.score_nous += 1
+    sinon
+      !anim gk plongeon
+      !ballon vers gk tir
+  * Panenka, au milieu #artiste
+    test stat.technique + stat.confiance / 2 vs 74
+    !anim moi passe
+    si reussite
+      !ballon vers but lob
+      ~ var.score_nous += 1; stat.notoriete += 3
+    sinon
+      !ballon vers gk lob
+      ~ stat.confiance -= 8
+      > Le gardien n'a même pas bougé. Il cueille le ballon. Humiliation.
+  * Attendre le plongeon du gardien #mental
+    test stat.mental + stat.confiance / 3 vs 64
+    !anim moi passe
+    si reussite
+      !anim gk plongeon
+      !ballon vers but passe
+      ~ var.score_nous += 1
+    sinon
+      !ballon vers gk passe
+si var.score_nous > var.score_eux
+  !fx confettis
+  !fx foule 1
+  !son but
+  !titre VICTOIRE !
+  !anim moi joie boucle
+  > Rivemont remporte la Coupe des Espoirs !
+  ~ var.coupe_espoirs = vrai; var.trophees += 1; stat.reputation += 8; stat.statut += 8; stat.moral += 15; rel.moreau += 6
+  ~ actu("Coupe des Espoirs : Rivemont l'emporte face à Marvaux !")
+sinon
+  !anim moi triste
+  > Défaite en finale. Les joueurs de Marvaux dansent devant leur tribune.
+  ~ stat.moral -= 10; stat.reputation += 2
+~ var.matchs += 1; var.notes_total += var.note_match
+!anim moi idle
+!fx foule 0.3
+
+=== ch1_verdict
+titre: Le verdict
+declencheur: chapter_end
+chapitres: ch1
+unique: oui
+priorite: 100
+---
+!lieu bureau_moreau 120 jour
+~ var.note_saison = stat.statut + rel.moreau / 2 + (stat.technique + stat.frappe + stat.passe + stat.defense + stat.physique + stat.mental) / 12 + stat.discipline / 5 + (var.coupe_espoirs ? 10 : 0)
+moreau: Assieds-toi. C'est la fin de la saison. Tu sais pourquoi tu es là.
+[var.karim_denonce] moreau: Pour Benali… il quitte le centre. Il a perdu le goût, après cette histoire. Je voulais que tu le saches.
+[var.karim_denonce] ~ var.karim_renvoye = vrai; var.karim_club = "aucun"
+si var.note_saison >= 70
+  moreau (content): Le club te propose un contrat stagiaire professionnel. Trois ans.
+  ~ objectifReussi(contrat)
+  [mem.moreau.loyaute] !rappel moreau.loyaute
+  [mem.moreau.loyaute] moreau: Et je sais que tu as dit non à Marvaux. Ça compte, pour moi.
+  [mem.moreau.loyaute] ~ rel.moreau += 6
+  * Signer sans hésiter #loyal #cle
+    ~ var.loyal_rivemont = vrai; rel.moreau += 5
+    ~ souvenir(moreau, signature, "Tu as signé ton premier contrat à Rivemont")
+    moreau: Bienvenue chez les grands. Le plus dur commence.
+  * [var.carte_marvaux] Appeler Marvaux pour faire monter les enchères #ambition #cle
+    ~ var.loyal_rivemont = faux; rel.moreau -= 12; stat.argent += 3000
+    ~ souvenir(moreau, chantage, "Tu as utilisé l'offre de Marvaux pour négocier")
+    moreau (colere): Tu crois que je ne sais pas qui t'a appelé ? …Le président a accepté d'augmenter ta prime. Moi, je n'oublierai pas.
+  * [var.carte_marvaux] Rejoindre l'Olympique Marvaux #ambition #cle
+    ~ var.club = "Olympique Marvaux"; var.club_id = "marvaux"; var.club_court = "OM"; var.club_couleur = "#d63c3c"; var.club_couleur2 = "#ffffff"; var.loyal_rivemont = faux; var.stade_nom = "Vélodrome des Pins"; rel.moreau -= 25; stat.argent += 8000
+    ~ souvenir(moreau, depart, "Tu as quitté Rivemont pour l'ennemi juré, Marvaux")
+    moreau (triste): Marvaux. Évidemment. Bonne chance, alors.
+sinon si var.note_saison >= 52 et var.carte_marvaux
+  moreau: Le club ne te propose pas de contrat. Je suis désolé.
+  > En sortant, tu retrouves la carte du recruteur de Marvaux dans ta poche.
+  * Appeler Marvaux #ambition #cle
+    ~ var.club = "Olympique Marvaux"; var.club_id = "marvaux"; var.club_court = "OM"; var.club_couleur = "#d63c3c"; var.club_couleur2 = "#ffffff"; var.loyal_rivemont = faux; var.stade_nom = "Vélodrome des Pins"; stat.argent += 2000
+    > Marvaux accepte de te prendre à l'essai. Tu signes un contrat stagiaire.
+  * Rejoindre le FC Valmont, en National 3 #humble #cle
+    ~ var.club = "FC Valmont"; var.club_id = "valmont"; var.club_court = "FCV"; var.club_couleur = "#2f9a4c"; var.club_couleur2 = "#ffffff"; var.stade_nom = "Stade Municipal de Valmont"; var.chemin_amateur = vrai
+sinon
+  moreau (triste): Le club ne te propose pas de contrat. Tu as des qualités, mais pas encore le niveau. Je suis désolé.
+  ~ objectifEchoue(contrat)
+  moreau: J'ai un ami, Patrick Gomis, qui entraîne le FC Valmont en National 3. Si tu veux continuer, je l'appelle.
+  * Accepter : repartir d'en bas #humble #cle
+    ~ var.club = "FC Valmont"; var.club_id = "valmont"; var.club_court = "FCV"; var.club_couleur = "#2f9a4c"; var.club_couleur2 = "#ffffff"; var.stade_nom = "Stade Municipal de Valmont"; var.chemin_amateur = vrai; rel.moreau += 6
+    ~ souvenir(moreau, valmont, "Il t'a recommandé au FC Valmont quand le club ne t'a pas gardé")
+    moreau: Bien. Le chemin est plus long, mais il existe.
+  * [var.promesse_bac ou stat.etudes >= 50] Arrêter le foot et te consacrer aux études #cle
+    ~ var.arret_foot = vrai
+    moreau (pensif): C'est peut-être la décision la plus courageuse que j'aie entendue dans ce bureau.
+    ~ fin("une_autre_vie")
+  * Rentrer au quartier sans rien dire à personne #cle
+    ~ var.arret_foot = vrai
+    ~ fin("le_quartier")

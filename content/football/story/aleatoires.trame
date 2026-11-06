@@ -1,0 +1,254 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ÉVÉNEMENTS ALÉATOIRES — tirés en début de semaine, pondérés par la situation
+// ═══════════════════════════════════════════════════════════════════════
+
+=== al_blessure_entrainement
+titre: Une douleur à la cuisse
+declencheur: random
+quand: var.blesse == 0
+poids: 1 + var.genou * 0.6 + (stat.energie < 40 ? 2 : 0) + (stat.sante < 60 ? 1.5 : 0)
+recharge: 6
+---
+> En fin de séance, une douleur vive te saisit l'arrière de la cuisse.
+* Le dire tout de suite à Bruno #prudent
+  ~ var.blesse = 1; stat.sante -= 5; rel.bruno += 4
+  > Petite élongation. Une semaine de repos et de soins.
+* Serrer les dents et continuer #risque
+  test stat.physique + stat.sante / 4 vs 58
+  si reussite
+    > La douleur passe. Tu as eu de la chance.
+  sinon
+    > Ça empire. Déchirure. Trois semaines d'arrêt.
+    ~ var.blesse = 3; var.blessures += 1; var.genou += 1; stat.sante -= 20
+    ~ souvenir(bruno, alerte, "Il t'avait dit d'écouter ton corps")
+
+=== al_grippe
+titre: La grippe
+declencheur: random
+poids: 1
+recharge: 10
+---
+> Fièvre, courbatures, nez qui coule. La grippe t'a eu.
+~ stat.energie -= 30; stat.forme -= 8; stat.sante -= 10
+* Rester au lit et te soigner #prudent
+  ~ stat.energie += 15; actions -= 1
+* T'entraîner quand même #risque
+  ~ stat.statut += 2; stat.sante -= 10
+
+=== al_supporter
+titre: Un jeune supporter
+declencheur: random
+quand: stat.reputation >= 10
+poids: 1.2
+recharge: 5
+---
+> À la sortie de l'entraînement, un gamin de huit ans t'attend avec un maillot trop grand et un feutre.
+* Signer, discuter, faire un selfie #fans
+  ~ stat.reputation += 1; stat.moral += 4; stat.notoriete += 1
+  > Sa mère te remercie. Le gamin ne dit pas un mot ; il tremble de bonheur.
+* Signer vite fait, tu es pressé
+  ~ stat.moral += 1
+* L'ignorer
+  ~ stat.reputation -= 1
+  > Sur les réseaux, une vidéo montre un enfant en larmes et toi qui passes. Mauvaise publicité.
+  ~ stat.notoriete += 1
+
+=== al_recruteur
+titre: Des recruteurs dans les tribunes
+declencheur: random
+quand: stat.forme >= 60
+poids: 1
+recharge: 6
+---
+> On murmure que des recruteurs étrangers étaient au stade cette semaine. Pour toi.
+~ stat.reputation += 3; stat.confiance += 4
+
+=== al_panne_reveil
+titre: Panne de réveil
+declencheur: random
+poids: 1
+recharge: 8
+---
+> Ton téléphone s'est éteint pendant la nuit. Tu ouvres les yeux… vingt minutes après le début de l'entraînement.
+* Courir jusqu'au centre sans petit-déjeuner #effort
+  ~ stat.energie -= 20; stat.statut -= 1
+  > Tu arrives en sueur, avec dix minutes de retard. Le coach te regarde, sans un mot.
+* Inventer une excuse #mensonge
+  test stat.mental vs 55
+  si reussite
+    > « Un accident sur la rocade. » Personne ne vérifie.
+  sinon
+    > Le coach a vu ta story Instagram de la veille à deux heures du matin.
+    ~ stat.statut -= 6; stat.discipline -= 4
+* Appeler pour prévenir et assumer #honnete
+  ~ stat.statut -= 2; stat.discipline += 1
+
+=== al_interview_improvisee
+titre: Micro tendu
+declencheur: random
+quand: temps.chapitre >= 2
+poids: 1.2
+recharge: 4
+---
+> À la sortie du stade, un journaliste te tend un micro. « Votre entraîneur ne vous fait pas assez jouer. Vous êtes frustré ? »
+* « Je respecte ses choix et je travaille. » #humble
+  ~ stat.statut += 2; stat.reputation += 1
+* « Oui. Je mérite plus de temps de jeu. » #ambition
+  ~ stat.notoriete += 3; stat.statut -= 4; stat.confiance += 2
+* « Pas de commentaire. »
+  ~ stat.notoriete += 1
+
+=== al_rumeur_transfert
+titre: Rumeur de transfert
+declencheur: random
+quand: temps.chapitre >= 3 et stat.reputation >= 40
+poids: 1
+recharge: 6
+---
+> Un grand journal annonce que tu es « dans le viseur » d'un club étranger. Ton téléphone explose.
+* Démentir publiquement : tu es bien ici #loyal
+  ~ stat.statut += 3; stat.reputation += 1
+  [var.club_id == rivemont] ~ rel.vasseur += 4
+* Laisser planer le doute #ambition
+  ~ stat.notoriete += 3; stat.statut -= 3
+  > Les supporters commencent à te siffler.
+
+=== al_coequipier_endette
+titre: Un coéquipier dans le besoin
+declencheur: random
+quand: temps.chapitre >= 2 et stat.argent >= 5000
+poids: 0.8
+recharge: 12
+---
+> Un jeune coéquipier vient te voir, gêné. Son père a perdu son travail ; la famille ne peut plus payer le loyer.
+* Lui prêter de l'argent #genereux
+  ~ stat.argent -= 4000; stat.moral += 6; stat.statut += 2; var.mentorat += 1
+  > Il te rembourse six mois plus tard, jusqu'au dernier euro. Et il te le rappelle chaque fois qu'il marque.
+* L'orienter vers l'aide sociale du club #prudent
+  ~ var.mentorat += 1
+* Lui dire que ce n'est pas ton problème
+  ~ stat.statut -= 2; stat.moral -= 2
+
+=== al_maman_malade
+titre: Un appel de l'hôpital
+declencheur: random
+quand: rel.maman >= 0 et non var.maman_partie
+poids: 0.5
+recharge: 30
+---
+!son telephone
+> Ta mère a fait un malaise au travail. Rien de grave, disent les médecins, mais elle doit se reposer.
+* Aller la voir immédiatement, quitte à rater un entraînement #famille
+  ~ rel.maman += 12; stat.statut -= 4; var.entraine = vrai
+  > Elle sourit en te voyant entrer. « Tu n'aurais pas dû venir. » Elle te serre la main très fort.
+* [stat.argent >= 2000] Lui payer une aide à domicile #genereux
+  ~ stat.argent -= 2000; rel.maman += 6
+* Lui envoyer un message
+  ~ rel.maman -= 6
+
+=== al_defi_reseaux
+titre: Le défi viral
+declencheur: random
+quand: stat.notoriete >= 8
+poids: 0.9
+recharge: 6
+---
+> Un défi de jonglage circule sur les réseaux. Des milliers de joueurs pros s'y collent.
+* Relever le défi avec une figure folle #artiste
+  test stat.technique vs 60
+  si reussite
+    > Trois millions de vues en une nuit.
+    ~ stat.notoriete += 6; stat.moral += 4
+  sinon
+    > Tu rates tout, en beauté. Douze millions de vues. Pour les mauvaises raisons.
+    ~ stat.notoriete += 8; stat.confiance -= 4
+* Laisser passer
+  ~ stat.discipline += 1
+
+=== al_achat_impulsif
+titre: La vitrine
+declencheur: random
+quand: stat.argent >= 20000
+poids: 0.7
+recharge: 10
+---
+> Une montre de luxe dans une vitrine. Le prix d'un petit appartement.
+* L'acheter #flambeur
+  ~ stat.argent -= min(stat.argent, 15000); stat.notoriete += 3; stat.moral += 4
+* Passer ton chemin #prudent
+  ~ stat.discipline += 1
+
+=== al_hopital_enfants
+titre: Visite à l'hôpital des enfants
+declencheur: random
+quand: temps.chapitre >= 2
+poids: 0.6
+recharge: 15
+---
+> Le club organise une visite à l'hôpital pédiatrique. Tu n'es pas obligé d'y aller.
+* Y aller, et rester toute l'après-midi #genereux
+  ~ stat.reputation += 2; stat.moral += 8; var.engagement += 1; stat.energie -= 10
+  > Un petit garçon chauve te fait promettre de marquer samedi. Tu promets.
+  ~ var.promesse_enfant = vrai
+* Envoyer des maillots dédicacés
+  ~ stat.reputation += 1
+
+=== al_bonne_nuit
+titre: Une nuit parfaite
+declencheur: random
+poids: 1.2
+recharge: 4
+---
+> Tu as dormi neuf heures d'affilée. Tu te réveilles avec l'impression de pouvoir courir un marathon.
+~ stat.energie += 25; stat.moral += 5; stat.forme += 4
+
+=== al_ancien_joueur
+titre: Le vieux du club
+declencheur: random
+quand: temps.chapitre >= 2
+poids: 0.8
+recharge: 12
+---
+> Un ancien joueur du club, la soixantaine, t'aborde au bord du terrain.
+> « J'ai vu ton dernier match. Tu as du talent, mais tu cours partout. Le football, c'est savoir quand ne pas courir. »
+* L'écouter attentivement #humble
+  ~ stat.mental += 3; stat.energie += 5
+* Le remercier, poliment, sans plus
+  ~ stat.mental += 1
+
+=== al_pari_djibril
+titre: Le tuyau
+declencheur: random
+quand: temps.chapitre >= 3 et rel.djibril >= 10 et non var.djibril_prison
+poids: 0.6
+recharge: 20
+---
+> Djibril t'envoie un message : « Frère, dis-moi juste si votre défenseur central est blessé pour samedi. C'est pour un pari, rien de méchant. »
+* Lui donner l'info, ce n'est rien #cle
+  ~ var.scandale += 1; rel.djibril += 4
+  ~ souvenir(clara, tuyau, "Les informations que tu as données à un parieur")
+* Refuser : ça ne se fait pas #integrite
+  ~ rel.djibril -= 3; stat.discipline += 2
+
+=== al_ines_message
+titre: Un message d'Inès
+declencheur: random
+quand: var.couple
+poids: 1.2
+recharge: 4
+---
+> « Pensé à toi en voyant la mer ce matin. Rentre vite. »
+* Lui répondre longuement #romance
+  ~ rel.ines += 4; stat.moral += 4
+* Un cœur, et au lit
+  ~ rel.ines += 1
+
+=== al_promesse_enfant
+titre: La promesse
+declencheur: random
+quand: var.promesse_enfant et var.buts >= 1
+unique: oui
+poids: 3
+---
+> Une lettre arrive au club, écrite au feutre. « Merci d'avoir marqué. Je suis guéri. Signé : le petit garçon de l'hôpital. »
+~ stat.moral += 15; stat.reputation += 2

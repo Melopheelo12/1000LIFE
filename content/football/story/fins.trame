@@ -1,0 +1,240 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  FINS — évaluées par priorité à la fin de la carrière (ou forcées)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== epilogue_commun
+titre: Ce qu'ils sont devenus
+declencheur: manual
+---
+> Et les autres ?
+si var.karim_renvoye
+  > Karim n'est jamais revenu au foot. On dit qu'il conduit un taxi de nuit à Rivemont. Il ne répond pas à tes messages.
+sinon si rel.karim >= 50
+  > Karim est resté ton meilleur ami. À chaque étape, il était là, au premier rang, à hurler ton nom.
+sinon si rel.karim >= 10
+  > Karim et toi, vous vous envoyez un message à chaque anniversaire. Parfois, ça suffit.
+sinon
+  > Karim et toi ne vous parlez plus. Une histoire qui s'est abîmée, un soir, au centre de formation.
+si rel.lucas >= 30
+  > Lucas Ferrand a fini par devenir un ami. Un drôle d'ami, mais un ami.
+sinon si rel.lucas <= -40
+  > Lucas Ferrand parle encore de toi dans ses interviews. Jamais en bien.
+si var.couple
+  > Inès a ouvert son cabinet de kinésithérapie du sport. Sur le mur, une seule photo : vous deux, le soir de votre premier dîner.
+sinon si var.ines_partie
+  > Inès vit à l'autre bout du pays. Vous vous êtes croisés une fois, par hasard, dans une gare. Vous avez souri, et c'est tout.
+si var.yanis_sauve
+  > Yanis a obtenu son diplôme d'éducateur sportif. Il entraîne les gamins de la cité des Tilleuls, ceux du bâtiment D compris.
+sinon si var.yanis_perdu
+  > Yanis a suivi les grands du bâtiment D jusqu'au bout. Tu vas le voir chaque mois. Derrière une vitre.
+si rel.maman >= 50
+  > Ta mère garde toutes les coupures de journaux dans un classeur rouge. Elle te le montre à chaque visite.
+sinon si rel.maman < 15
+  > Ta mère t'aime toujours. Mais il y a entre vous des silences qui ne partent plus.
+[var.promesse_bac et var.bac] > Le diplôme du bac est encadré dans le salon de ta mère. Juste à côté de ton premier maillot.
+[var.promesse_bac et non var.bac] > Le bac, tu ne l'as jamais eu. Ta mère n'en parle plus. C'est presque pire.
+
+=== fin:scandale
+titre: Le scandale
+type: tragique
+quand: var.scandale_revele
+priorite: 100
+resume: Ton nom restera associé à l'affaire qui a éclaboussé le football.
+lieu: salle_presse
+---
+!moment nuit
+> Les gros titres ne parlent plus de tes buts.
+si var.match_arrange
+  > « Paris truqués : le joueur avoue avoir provoqué un carton jaune sur commande. » Suspendu à vie par la commission de discipline.
+sinon si var.affaire_djibril
+  > « Société écran, blanchiment : le footballeur entendu par les enquêteurs. » Les sponsors fuient en une matinée.
+sinon
+  > « Soirées, mensonges et vidéos : la chute d'une idole. » Ton contrat est résilié pour faute grave.
+!rappel clara.enquete
+> Clara Mendès a obtenu le prix du journalisme sportif pour son enquête. Elle a eu la décence de ne jamais en parler devant toi.
+appel epilogue_commun
+> Certains soirs, tu repasses tes plus beaux buts sur ton téléphone. Puis tu éteins l'écran, et le silence revient.
+
+=== fin:blessure
+titre: Le genou brisé
+type: tragique
+quand: var.carriere_brisee
+priorite: 95
+resume: Une blessure a mis fin à ta carrière bien trop tôt.
+lieu: infirmerie
+---
+> Le chirurgien a été honnête : « Vous marcherez normalement. Vous ne jouerez plus au haut niveau. »
+!rappel bruno.alerte
+[mem.bruno.alerte] > Bruno t'avait prévenu. Tu y repenses chaque jour.
+si var.couple
+  > Inès a dirigé ta rééducation, séance après séance. « On ne rejoue pas, d'accord. Mais on remarche. Et après, on verra. »
+appel epilogue_commun
+si stat.etudes >= 50
+  > Deux ans plus tard, tu reprends des études de préparateur physique. Tu sais mieux que personne ce que coûte un genou.
+sinon
+  > Tu as gardé tes crampons dans un placard. Tu n'as jamais réussi à les jeter.
+
+=== fin:le_quartier
+titre: Retour aux Tilleuls
+type: inattendue
+quand: faux
+priorite: 90
+resume: Tu as tout quitté pour rentrer chez toi.
+lieu: quartier
+---
+> Tu as rangé tes crampons et repris le bus pour la cité des Tilleuls. Sans prévenir personne.
+> Le matin, tu travailles à la boulangerie du centre commercial. Le soir, tu tapes dans un ballon au city avec les petits.
+[rel.djibril >= 20] > Djibril a ri en te voyant revenir. Puis il t'a serré dans ses bras plus longtemps que d'habitude.
+si var.yanis_protege >= 1
+  ~ var.yanis_sauve = vrai
+  > Et Yanis ne quitte plus tes baskets. Les grands du bâtiment D ont cessé de l'appeler.
+appel epilogue_commun
+> On ne parle pas de toi dans les journaux. Mais au city stade, tout le monde connaît ton nom.
+
+=== fin:une_autre_vie
+titre: Une autre vie
+type: neutre
+quand: var.retraite == etudes
+priorite: 70
+resume: Le football t'a appris beaucoup. Tu as choisi de vivre autre chose.
+lieu: salle_cours
+---
+si var.arret_foot
+  > À seize ans, tu as fait le choix le plus difficile : arrêter le football pour tes études.
+  ~ var.bac = stat.etudes >= 45
+  [var.bac] > Bac mention bien, puis une école de kinésithérapie. Dix ans plus tard, tu soignes les joueurs du Stade Rivemont.
+  [non var.bac] > Les études ont été plus dures que prévu. Mais tu t'es accroché, et tu as trouvé ta voie : éducateur.
+sinon
+  > Après ta carrière, tu as repris le chemin de l'école. Diplôme de management du sport en poche, tu diriges aujourd'hui le centre de formation où tout a commencé.
+[mem.maman.promesse] !rappel maman.promesse
+[mem.maman.promesse] > Ta mère te l'avait fait promettre. Tu as tenu parole.
+appel epilogue_commun
+
+=== fin:enfant_du_club
+titre: L'enfant du club
+type: secrete
+quand: var.loyal_rivemont et var.club_id == rivemont et var.titres_rivemont >= 2 et rel.vasseur >= 15
+priorite: 88
+resume: Une carrière entière sous le même maillot, et un titre pour l'éternité.
+lieu: stade
+---
+!moment nuit
+!fx foule 1
+> Une seule équipe, toute une vie. Le Stade Rivemont a retiré ton numéro.
+> Une tribune du {var.stade_nom} porte désormais ton nom.
+[rel.moreau >= 40] > Le jour de la cérémonie, Didier Moreau a pleuré. Il niera jusqu'à sa mort.
+[rel.vasseur >= 30] > Le président Vasseur a fait faire une statue. Elle ne te ressemble pas du tout. Tu l'adores.
+appel epilogue_commun
+> Les gamins du centre de formation passent devant ta photo chaque matin. Certains la touchent, pour la chance.
+
+=== fin:legende
+titre: Légende du football
+type: heureuse
+quand: stat.reputation >= 85 et var.trophees_majeurs >= 2 et var.scandale == 0
+priorite: 80
+resume: Trophées, records, respect : ton nom est entré dans l'histoire.
+lieu: stade
+---
+!moment nuit
+!fx confettis
+!fx foule 1
+> {var.buts} buts, {var.trophees} trophées, et un nom que les commentateurs prononcent avec respect.
+> Tu as soulevé les plus grandes coupes. On parle de toi comme d'un des meilleurs joueurs de ta génération.
+[var.ballon_or] > Et ce trophée doré, sur ta cheminée, que des millions de gamins rêvent de toucher.
+appel epilogue_commun
+[rel.maman >= 40] > Au gala de ta retraite, tu as remercié une seule personne : « Ma mère, qui a tout donné pour que j'aie ma chance. »
+
+=== fin:seul_au_sommet
+titre: Seul au sommet
+type: inattendue
+quand: stat.reputation >= 65 et rel.maman < 25 et rel.karim < 20 et non var.couple
+priorite: 82
+resume: Célèbre, riche, admiré… et terriblement seul.
+lieu: appartement
+---
+!moment nuit
+> Ton appartement est immense. Ton téléphone vibre sans arrêt : agents, sponsors, journalistes.
+> Mais quand tu cherches un nom à appeler, juste pour parler, tu ne trouves personne.
+appel epilogue_commun
+> La gloire t'a tout donné. Elle t'a aussi tout pris, si doucement que tu ne l'as pas vu venir.
+
+=== fin:entraineur
+titre: Le maître et l'élève
+type: heureuse
+quand: var.retraite == coach
+priorite: 75
+resume: Tu as raccroché les crampons pour transmettre à ton tour.
+lieu: terrain
+---
+!moment soir
+> Diplôme d'entraîneur en poche, tu reprends l'équipe des moins de 17 ans du Stade Rivemont.
+si rel.moreau >= 30
+  !placer moreau 280 droite
+  moreau (content): Ici, personne ne vous doit rien. Tu te souviens ?
+  > Didier Moreau vient voir chacun de tes entraînements, depuis le bord du terrain, bras croisés. Il ne dit jamais rien. Il n'a pas besoin.
+[var.mentorat >= 2] > Les jeunes que tu as conseillés pendant ta carrière viennent te rendre visite. Deux sont devenus pros.
+appel epilogue_commun
+
+=== fin:grand_frere
+titre: Le grand frère
+type: secrete
+quand: var.retraite == famille et var.yanis_sauve
+priorite: 74
+resume: Ta plus belle victoire ne s'est pas jouée sur un terrain.
+lieu: city
+---
+> Tu as mis fin à ta carrière plus tôt que prévu, pour rentrer près des tiens.
+> Yanis et toi avez ouvert une école de foot au pied des tours. Gratuite, pour tous les gamins de la cité.
+appel epilogue_commun
+> Le samedi matin, cent enfants courent après un ballon au city stade des Tilleuls. Yanis siffle, tu cries. Personne ne regarde l'heure.
+
+=== fin:affaires
+titre: Le businessman
+type: neutre
+quand: var.retraite == business
+priorite: 60
+resume: Après les terrains, les affaires.
+lieu: ville
+---
+si var.affaire_djibril_legale
+  > Djibril et toi avez fondé une marque de vêtements de sport. Elle habille aujourd'hui trois clubs de première division.
+  ~ rel.djibril += 10
+sinon
+  > Tu as investi ton argent dans l'immobilier et les restaurants. Tu ne marques plus de buts, mais tu signes des chèques.
+appel epilogue_commun
+
+=== fin:honorable
+titre: Une belle carrière
+type: neutre
+quand: stat.reputation >= 45
+priorite: 50
+resume: Pas une légende, mais un pro respecté, de ceux que les supporters n'oublient pas.
+lieu: stade
+---
+!moment soir
+> {var.matchs} matchs, {var.buts} buts. Une carrière honnête, faite de saisons solides et de quelques soirs magiques.
+> Les supporters de {var.club} chantent encore ton nom de temps en temps.
+appel epilogue_commun
+
+=== fin:remplacant
+titre: L'éternel remplaçant
+type: neutre
+quand: (var.carriere_banc ou var.titularisations < var.matchs * 0.45) et stat.reputation < 75
+priorite: 55
+resume: Toujours prêt, rarement appelé.
+lieu: vestiaire
+---
+> Tu as passé plus de temps sur le banc que sur la pelouse. Tu connais par cœur le grain des sièges des bancs de touche.
+> Mais chaque fois qu'on t'a appelé, tu as répondu présent. Les coachs t'adoraient pour ça.
+appel epilogue_commun
+
+=== fin:ombre
+titre: Une carrière dans l'ombre
+type: neutre
+priorite: 0
+resume: Le rêve ne s'est pas réalisé comme prévu. La vie continue.
+lieu: quartier
+---
+> Le haut niveau ne t'a jamais vraiment ouvert ses portes. Tu as joué dans des clubs modestes, devant quelques centaines de fidèles.
+> Il y a eu des déceptions. Il y a eu aussi des dimanches heureux, sur des terrains boueux, avec des coéquipiers devenus des amis.
+appel epilogue_commun

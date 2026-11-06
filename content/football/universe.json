@@ -1,0 +1,4052 @@
+{
+ "format": "mille-vies/universe@1",
+ "id": "football",
+ "version": "1.0.0",
+ "name": "Crampons d'Or",
+ "tagline": "Du centre de formation au sommet… ou à la chute.",
+ "description": "Tu as 16 ans et une place au centre de formation du Stade Rivemont. Entraînements, matchs, amitiés, rivalités, agents, transferts, tentations : chaque choix construit ta carrière, parfois des années plus tard.",
+ "author": "Mille Vies",
+ "tags": [
+  "Sport",
+  "Carrière",
+  "Drame"
+ ],
+ "published": true,
+ "theme": {
+  "accent": "#f5c542",
+  "accent2": "#3fb36b",
+  "cover": "stade"
+ },
+ "config": {
+  "tickLabel": "Semaine",
+  "actionsPerTick": 3,
+  "actionsLabel": "Actions",
+  "randomEventChance": 45,
+  "maxStoryEventsPerTick": 2,
+  "checkScale": 11,
+  "hud": [
+   "energie",
+   "moral",
+   "forme",
+   "argent"
+  ],
+  "dateLine": "{var.age} ans",
+  "endTickLabel": "Dormir et terminer la semaine",
+  "showValues": true
+ },
+ "stats": [
+  {
+   "id": "technique",
+   "label": "Technique",
+   "category": "competence",
+   "initial": 42,
+   "color": "#7cb7ff",
+   "description": "Contrôle, dribble, conduite de balle."
+  },
+  {
+   "id": "frappe",
+   "label": "Frappe",
+   "category": "competence",
+   "initial": 38,
+   "color": "#f06a6a",
+   "description": "Puissance et précision devant le but."
+  },
+  {
+   "id": "passe",
+   "label": "Passe",
+   "category": "competence",
+   "initial": 40,
+   "color": "#6ad48a",
+   "description": "Vision du jeu et qualité de passe."
+  },
+  {
+   "id": "defense",
+   "label": "Défense",
+   "category": "competence",
+   "initial": 34,
+   "color": "#b0b8d0",
+   "description": "Tacles, placement, duels."
+  },
+  {
+   "id": "physique",
+   "label": "Physique",
+   "category": "competence",
+   "initial": 45,
+   "color": "#f0a15a",
+   "description": "Endurance, vitesse, puissance."
+  },
+  {
+   "id": "mental",
+   "label": "Mental",
+   "category": "competence",
+   "initial": 40,
+   "color": "#b893ff",
+   "description": "Sang-froid sous la pression."
+  },
+  {
+   "id": "energie",
+   "label": "Énergie",
+   "short": "Énergie",
+   "category": "etat",
+   "initial": 100,
+   "color": "#f5c542",
+   "description": "S'épuise avec les efforts, se recharge avec le repos."
+  },
+  {
+   "id": "moral",
+   "label": "Moral",
+   "short": "Moral",
+   "category": "etat",
+   "initial": 65,
+   "color": "#4fd6c4"
+  },
+  {
+   "id": "forme",
+   "label": "Forme",
+   "short": "Forme",
+   "category": "etat",
+   "initial": 50,
+   "color": "#6ad48a",
+   "description": "Ta forme du moment : monte avec l'entraînement et les bons matchs."
+  },
+  {
+   "id": "sante",
+   "label": "Santé",
+   "category": "etat",
+   "initial": 100,
+   "color": "#f06a6a"
+  },
+  {
+   "id": "confiance",
+   "label": "Confiance",
+   "category": "etat",
+   "initial": 50,
+   "color": "#b893ff"
+  },
+  {
+   "id": "statut",
+   "label": "Statut dans l'équipe",
+   "category": "carriere",
+   "initial": 35,
+   "color": "#ffd25a",
+   "description": "La place que te donne l'entraîneur de ton club actuel."
+  },
+  {
+   "id": "reputation",
+   "label": "Réputation",
+   "category": "carriere",
+   "initial": 5,
+   "color": "#ffd25a",
+   "description": "Ce que le monde du foot pense de toi."
+  },
+  {
+   "id": "notoriete",
+   "label": "Notoriété",
+   "category": "carriere",
+   "initial": 0,
+   "color": "#e477a9",
+   "description": "Ta célébrité auprès du grand public."
+  },
+  {
+   "id": "discipline",
+   "label": "Discipline",
+   "category": "carriere",
+   "initial": 50,
+   "color": "#9aa3b5",
+   "description": "Ton professionnalisme."
+  },
+  {
+   "id": "etudes",
+   "label": "Études",
+   "category": "carriere",
+   "initial": 30,
+   "color": "#7cc3ef",
+   "description": "Ton niveau scolaire (le bac, puis les formations)."
+  },
+  {
+   "id": "argent",
+   "label": "Argent",
+   "short": "€",
+   "category": "carriere",
+   "initial": 300,
+   "format": "argent",
+   "min": 0,
+   "max": 999999999
+  }
+ ],
+ "vars": {
+  "age": 16,
+  "club": "Stade Rivemont",
+  "club_id": "rivemont",
+  "club_couleur": "#1f4e9c",
+  "club_couleur2": "#f2c230",
+  "ville": "Rivemont",
+  "stade_nom": "Stade des Cerisiers",
+  "stade_taille": 1,
+  "ligue": "u17",
+  "niveau": "U17",
+  "force_equipe": 55,
+  "salaire": 0,
+  "matchs": 0,
+  "titularisations": 0,
+  "buts": 0,
+  "passes_d": 0,
+  "notes_total": 0,
+  "trophees": 0,
+  "trophees_majeurs": 0,
+  "titres_rivemont": 0,
+  "selections": 0,
+  "blessures": 0,
+  "blesse": 0,
+  "genou": 0,
+  "saison": true,
+  "match_joue": false,
+  "entraine": false,
+  "titulaire": false,
+  "agent": "",
+  "agent_nom": "",
+  "couple": false,
+  "loyal_rivemont": true,
+  "scandale": 0,
+  "fetes": 0,
+  "victoires": 0,
+  "score_nous": 0,
+  "score_eux": 0,
+  "note_match": 6,
+  "minute": 0,
+  "adversaire": "",
+  "adv_force": 50,
+  "adv_couleur": "#d63c3c",
+  "karim_club": "rivemont",
+  "lucas_club": "rivemont",
+  "coach_nom": "Didier Moreau",
+  "trophees_club": 6,
+  "langues": false,
+  "etudes_actives": true,
+  "formation_entraineur": false,
+  "diplome": 0,
+  "engagement": 0,
+  "bac": false,
+  "club_etranger": false,
+  "karim_renvoye": false,
+  "djibril_prison": false,
+  "maman_partie": false,
+  "ines_partie": false,
+  "vit_ensemble": false,
+  "club_court": "SR",
+  "yanis_protege": 0,
+  "yanis_neglige": 0,
+  "aide_maman": 0,
+  "suspendu": 0,
+  "adv_court": "ADV",
+  "duel_moi": 0,
+  "duel_lucas": 0,
+  "duel_manche": 0,
+  "mentorat": 0,
+  "leadership": 0,
+  "tireur_cf": false,
+  "cartons": 0,
+  "promesse_bac": false,
+  "bagarre_cantine": false,
+  "aide_ines": false,
+  "karim_couvert": false,
+  "karim_accompagne": false,
+  "karim_refuse": false,
+  "karim_denonce": false,
+  "karim_pris": false,
+  "fete_veille_match": false,
+  "djibril_au_match": false,
+  "alerte_yanis": false,
+  "aide_club_demande": false,
+  "carte_marvaux": false,
+  "titulaire_coupe": false,
+  "coupe_espoirs": false,
+  "note_saison": 0,
+  "bonus_karim": 0,
+  "chemin_amateur": false,
+  "arret_foot": false,
+  "retraite": "",
+  "yanis_sauve": false,
+  "yanis_perdu": false,
+  "scandale_revele": false,
+  "carriere_brisee": false,
+  "match_arrange": false,
+  "affaire_djibril": false,
+  "affaire_djibril_legale": false,
+  "ballon_or": false,
+  "adv": 0,
+  "domicile": true,
+  "grand_club": false,
+  "selection": false,
+  "capitaine": false,
+  "soutien_karim": false,
+  "karim_selection": false,
+  "transfert_record": false,
+  "prochain_club": "",
+  "retour_rivemont": false,
+  "pret": false,
+  "denonciation": false,
+  "heritier_keller": false,
+  "clause_fidelite": false,
+  "club_court_sauve": "SR",
+  "nom_finale": "",
+  "bonus_offres": 0,
+  "selections_espoirs": 0,
+  "parrain_ecole": false,
+  "ecole_karim": false,
+  "retour_final": false,
+  "promesse_enfant": false,
+  "sponsor": "",
+  "voiture": false,
+  "maman_demenagee": false,
+  "pret_djibril": false,
+  "rdv_ines": false,
+  "distance": false,
+  "alerte_lucas": false,
+  "conseil_djibril": 0,
+  "carriere_banc": false
+ },
+ "traits": [
+  {
+   "id": "loyal",
+   "label": "Loyal",
+   "description": "N'oublie jamais un service rendu.",
+   "gain": 1.2,
+   "loss": 0.9
+  },
+  {
+   "id": "sensible",
+   "label": "Sensible",
+   "description": "Les mots durs le touchent profondément.",
+   "gain": 1.1,
+   "loss": 1.3
+  },
+  {
+   "id": "ambitieux",
+   "label": "Ambitieux",
+   "description": "Voit souvent les autres comme des rivaux.",
+   "gain": 0.9,
+   "loss": 1.0
+  },
+  {
+   "id": "rancunier",
+   "label": "Rancunier",
+   "description": "Pardonne difficilement.",
+   "gain": 1.0,
+   "loss": 1.5
+  },
+  {
+   "id": "exigeant",
+   "label": "Exigeant",
+   "description": "Sa confiance se gagne lentement et se perd vite.",
+   "gain": 0.8,
+   "loss": 1.2
+  },
+  {
+   "id": "juste",
+   "label": "Juste",
+   "description": "Juge sur les actes, pas sur les mots.",
+   "gain": 1.0,
+   "loss": 1.0
+  },
+  {
+   "id": "franche",
+   "label": "Franche",
+   "description": "Dit ce qu'elle pense et attend la même chose.",
+   "gain": 1.0,
+   "loss": 1.1
+  },
+  {
+   "id": "ambitieuse",
+   "label": "Ambitieuse",
+   "description": "Sait où elle va.",
+   "gain": 1.0,
+   "loss": 1.0
+  },
+  {
+   "id": "protectrice",
+   "label": "Protectrice",
+   "description": "Pardonne beaucoup, s'inquiète encore plus.",
+   "gain": 1.1,
+   "loss": 0.8
+  },
+  {
+   "id": "influencable",
+   "label": "Influençable",
+   "description": "Prend exemple sur ceux qu'il admire.",
+   "gain": 1.2,
+   "loss": 1.2
+  },
+  {
+   "id": "charmeur",
+   "label": "Charmeur",
+   "description": "Sait se rendre indispensable.",
+   "gain": 1.1,
+   "loss": 1.0
+  },
+  {
+   "id": "opportuniste",
+   "label": "Opportuniste",
+   "description": "Voit d'abord son intérêt.",
+   "gain": 1.0,
+   "loss": 1.1
+  },
+  {
+   "id": "cupide",
+   "label": "Cupide",
+   "description": "L'argent passe avant tout.",
+   "gain": 1.2,
+   "loss": 1.3
+  },
+  {
+   "id": "integre",
+   "label": "Intègre",
+   "description": "Ne transige pas avec l'honnêteté.",
+   "gain": 1.0,
+   "loss": 1.2
+  },
+  {
+   "id": "calculateur",
+   "label": "Calculateur",
+   "description": "Te voit comme un investissement.",
+   "gain": 0.9,
+   "loss": 1.1
+  },
+  {
+   "id": "tenace",
+   "label": "Tenace",
+   "description": "Ne lâche jamais une piste.",
+   "gain": 1.0,
+   "loss": 1.0
+  },
+  {
+   "id": "bienveillant",
+   "label": "Bienveillant",
+   "description": "Toujours prêt à aider.",
+   "gain": 1.2,
+   "loss": 0.7
+  },
+  {
+   "id": "orgueilleux",
+   "label": "Orgueilleux",
+   "description": "Supporte mal de partager la lumière.",
+   "gain": 0.9,
+   "loss": 1.3
+  },
+  {
+   "id": "genereux",
+   "label": "Généreux",
+   "description": "Donne sans compter.",
+   "gain": 1.3,
+   "loss": 0.8
+  }
+ ],
+ "characters": [
+  {
+   "id": "karim",
+   "name": "Karim Benali",
+   "role": "Ailier, ton coloc",
+   "traits": [
+    "loyal",
+    "sensible"
+   ],
+   "relation": 10,
+   "relationLabel": "Amitié",
+   "voice": 1.12,
+   "description": "Ailier vif et blagueur. Il cache ses soucis derrière ses blagues.",
+   "goals": "devenir pro pour sortir sa famille de la galère.",
+   "look": {
+    "skin": "peau4",
+    "hair": "bouclecourt",
+    "hairColor": "noir",
+    "top": "survet",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "survet",
+    "bottomColor": "#1d2230",
+    "build": "mince"
+   },
+   "barks": [
+    {
+     "text": "Tranquille, frérot ?",
+     "if": "rel.karim > -10"
+    },
+    {
+     "text": "Le coach m'a encore crié dessus. Normal, quoi.",
+     "if": "rel.karim > -10 et chapitre == ch1"
+    },
+    {
+     "text": "Ce soir, console ? Je te mets trois buts, minimum.",
+     "if": "rel.karim > -10 et chapitre == ch1"
+    },
+    {
+     "text": "On va y arriver. Ensemble.",
+     "if": "rel.karim >= 40"
+    },
+    {
+     "text": "…",
+     "if": "rel.karim <= -10"
+    },
+    {
+     "text": "T'as quelque chose à me dire ? Non ? Alors laisse-moi.",
+     "if": "rel.karim <= -30"
+    }
+   ]
+  },
+  {
+   "id": "lucas",
+   "name": "Lucas Ferrand",
+   "role": "Avant-centre, fils d'un ancien pro",
+   "traits": [
+    "ambitieux",
+    "rancunier"
+   ],
+   "relation": -5,
+   "relationLabel": "Respect",
+   "voice": 0.95,
+   "description": "Talentueux, arrogant, et persuadé que tout lui est dû. Son père a joué en équipe nationale.",
+   "goals": "dépasser son père. Et toi, au passage.",
+   "look": {
+    "skin": "peau1",
+    "hair": "meche",
+    "hairColor": "blond",
+    "top": "survet",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "survet",
+    "bottomColor": "#1d2230"
+   },
+   "barks": [
+    {
+     "text": "Regarde et apprends.",
+     "if": "rel.lucas < 20"
+    },
+    {
+     "text": "Pas mal, ton dernier match. Pas mal.",
+     "if": "rel.lucas >= 20"
+    },
+    {
+     "text": "Tu me fais de l'ombre. J'aime pas l'ombre.",
+     "if": "rel.lucas <= -30"
+    }
+   ]
+  },
+  {
+   "id": "moreau",
+   "name": "Didier Moreau",
+   "role": "Entraîneur",
+   "traits": [
+    "exigeant",
+    "juste"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "voice": 0.75,
+   "description": "Ancien défenseur rugueux devenu formateur. Il a vu passer cent talents et en a vu échouer quatre-vingt-dix.",
+   "goals": "former des joueurs, pas des vedettes.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "gris",
+    "beard": "moustache",
+    "top": "survet",
+    "topColor": "#1d2f5e",
+    "topColor2": "#f2c230",
+    "bottom": "survet",
+    "bottomColor": "#1d2f5e",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Le talent, tout le monde en a ici. La différence, c'est le travail.",
+     "if": "rel.moreau < 30"
+    },
+    {
+     "text": "Continue comme ça. Je te regarde.",
+     "if": "rel.moreau >= 30"
+    },
+    {
+     "text": "Tu veux quelque chose ? Va plutôt t'entraîner.",
+     "if": "rel.moreau <= -20"
+    }
+   ],
+   "short": "Moreau"
+  },
+  {
+   "id": "ines",
+   "name": "Inès Duval",
+   "role": "Élève, future kiné du sport",
+   "traits": [
+    "franche",
+    "ambitieuse"
+   ],
+   "relation": 0,
+   "relationLabel": "Complicité",
+   "voice": 1.3,
+   "description": "Brillante en sciences, elle prépare le concours de kinésithérapie et ne se laisse impressionner par personne.",
+   "goals": "devenir kiné du sport et ouvrir son propre cabinet.",
+   "look": {
+    "skin": "peau3",
+    "hair": "queue",
+    "hairColor": "brun",
+    "top": "chemise",
+    "topColor": "#7cc3ef",
+    "topColor2": "#ffffff",
+    "bottom": "jean",
+    "gender": "f",
+    "build": "mince"
+   },
+   "barks": [
+    {
+     "text": "Tu as révisé, au moins ?",
+     "if": "chapitre == ch1"
+    },
+    {
+     "text": "Content de te voir.",
+     "if": "rel.ines >= 30"
+    },
+    {
+     "text": "Tu es occupé, je sais. Comme toujours.",
+     "if": "rel.ines < 0"
+    }
+   ]
+  },
+  {
+   "id": "maman",
+   "name": "Nadia",
+   "role": "Ta mère",
+   "traits": [
+    "protectrice"
+   ],
+   "relation": 45,
+   "relationLabel": "Lien",
+   "voice": 1.2,
+   "description": "Aide-soignante de nuit, elle a tout sacrifié pour que tu aies ta chance.",
+   "goals": "que ses fils ne manquent de rien… et qu'ils aient un diplôme.",
+   "look": {
+    "skin": "peau4",
+    "hair": "chignon",
+    "hairColor": "noir",
+    "top": "veste",
+    "topColor": "#7c2236",
+    "topColor2": "#efe6cf",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "gender": "f"
+   },
+   "barks": [
+    {
+     "text": "Tu manges bien, au moins ?"
+    },
+    {
+     "text": "Je suis fière de toi, tu sais.",
+     "if": "rel.maman >= 50"
+    },
+    {
+     "text": "Tu ne m'appelles plus beaucoup…",
+     "if": "rel.maman < 20"
+    }
+   ],
+   "short": "Maman"
+  },
+  {
+   "id": "yanis",
+   "name": "Yanis",
+   "role": "Ton petit frère",
+   "traits": [
+    "influencable"
+   ],
+   "relation": 40,
+   "relationLabel": "Admiration",
+   "voice": 1.5,
+   "description": "Douze ans, des étoiles plein les yeux. Il veut tout faire comme toi.",
+   "goals": "être comme son grand frère.",
+   "look": {
+    "skin": "peau4",
+    "hair": "court",
+    "hairColor": "noir",
+    "top": "sweat",
+    "topColor": "#d63c3c",
+    "bottom": "jean",
+    "height": "enfant",
+    "build": "mince"
+   },
+   "barks": [
+    {
+     "text": "Tu me signes un autographe ? Pour rire !",
+     "if": "rel.yanis >= 20"
+    },
+    {
+     "text": "T'es jamais là, de toute façon.",
+     "if": "rel.yanis < 10"
+    }
+   ]
+  },
+  {
+   "id": "djibril",
+   "name": "Djibril Sow",
+   "role": "Ami d'enfance",
+   "traits": [
+    "charmeur",
+    "opportuniste"
+   ],
+   "relation": 20,
+   "relationLabel": "Amitié",
+   "voice": 0.9,
+   "description": "Le roi du quartier. Toujours une combine, toujours le sourire.",
+   "goals": "réussir, peu importe comment.",
+   "look": {
+    "skin": "peau6",
+    "hair": "rase",
+    "hairColor": "noir",
+    "top": "survet",
+    "topColor": "#25222b",
+    "topColor2": "#eef0f4",
+    "bottom": "survet",
+    "bottomColor": "#25222b",
+    "acc": [
+     "casquette",
+     "collier"
+    ]
+   },
+   "barks": [
+    {
+     "text": "La star du quartier ! Ça va, champion ?",
+     "if": "rel.djibril >= 0"
+    },
+    {
+     "text": "Oublie pas d'où tu viens, hein.",
+     "if": "rel.djibril >= 0"
+    },
+    {
+     "text": "Monsieur est trop bien pour nous maintenant.",
+     "if": "rel.djibril < 0"
+    }
+   ]
+  },
+  {
+   "id": "santini",
+   "name": "Marco Santini",
+   "role": "Agent de joueurs",
+   "traits": [
+    "cupide",
+    "charmeur"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "voice": 0.85,
+   "hidden": true,
+   "description": "Montre en or, sourire de vendeur. Il a « fait » trois transferts records.",
+   "goals": "toucher sa commission sur le prochain transfert record.",
+   "look": {
+    "skin": "peau2",
+    "hair": "meche",
+    "hairColor": "noir",
+    "top": "costume",
+    "topColor": "#e8e2d4",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#e8e2d4",
+    "acc": [
+     "lunettes"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Mon champion ! On va faire de grandes choses."
+    }
+   ],
+   "short": "Santini"
+  },
+  {
+   "id": "lambert",
+   "name": "Sophie Lambert",
+   "role": "Agente de joueurs",
+   "traits": [
+    "integre",
+    "ambitieuse"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "voice": 1.15,
+   "hidden": true,
+   "description": "Ancienne avocate du sport. Peu de clients, tous encore en activité.",
+   "goals": "des carrières longues, pas des coups.",
+   "look": {
+    "skin": "peau1",
+    "hair": "carre",
+    "hairColor": "chatain",
+    "top": "costume",
+    "topColor": "#1d2f5e",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#1d2f5e",
+    "gender": "f",
+    "acc": [
+     "lunettes"
+    ]
+   },
+   "barks": [
+    {
+     "text": "On avance pas à pas. C'est comme ça qu'on dure."
+    }
+   ],
+   "short": "Lambert"
+  },
+  {
+   "id": "keller",
+   "name": "Thomas Keller",
+   "role": "Capitaine de l'équipe pro",
+   "traits": [
+    "exigeant",
+    "loyal"
+   ],
+   "relation": 0,
+   "relationLabel": "Respect",
+   "voice": 0.8,
+   "hidden": true,
+   "description": "Seize saisons au club, une tête de bûcheron et un cœur énorme.",
+   "goals": "finir sa carrière avec un titre pour le club de sa vie.",
+   "look": {
+    "skin": "peau1",
+    "hair": "rase",
+    "hairColor": "blond",
+    "beard": "barbe",
+    "top": "survet",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "survet",
+    "bottomColor": "#1d2230",
+    "build": "costaud",
+    "height": "grand"
+   },
+   "barks": [
+    {
+     "text": "Ici, on mouille le maillot."
+    },
+    {
+     "text": "Bien joué, petit.",
+     "if": "rel.keller >= 25"
+    }
+   ],
+   "short": "Keller"
+  },
+  {
+   "id": "vasseur",
+   "name": "Gérard Vasseur",
+   "role": "Président du Stade Rivemont",
+   "traits": [
+    "calculateur"
+   ],
+   "relation": 0,
+   "relationLabel": "Estime",
+   "voice": 0.7,
+   "hidden": true,
+   "description": "Il a racheté le club il y a dix ans. Il parle en millions.",
+   "goals": "un club rentable… et, si possible, un trophée.",
+   "look": {
+    "skin": "peau1",
+    "hair": "chauve",
+    "top": "costume",
+    "topColor": "#3b3e47",
+    "topColor2": "#7c2236",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Mon bureau est toujours ouvert. Enfin, presque."
+    }
+   ],
+   "short": "Le président"
+  },
+  {
+   "id": "clara",
+   "name": "Clara Mendès",
+   "role": "Journaliste sportive",
+   "traits": [
+    "tenace",
+    "juste"
+   ],
+   "relation": 0,
+   "relationLabel": "Estime",
+   "voice": 1.25,
+   "hidden": true,
+   "description": "Plume redoutée de « Ballon & Crampons ». Elle n'a jamais publié une rumeur non vérifiée.",
+   "goals": "la vérité, même quand elle dérange.",
+   "look": {
+    "skin": "peau3",
+    "hair": "boucle",
+    "hairColor": "noir",
+    "top": "veste",
+    "topColor": "#6b7a43",
+    "topColor2": "#efe6cf",
+    "bottom": "jean",
+    "gender": "f"
+   },
+   "barks": [
+    {
+     "text": "Une petite déclaration ?"
+    }
+   ],
+   "short": "Clara"
+  },
+  {
+   "id": "bruno",
+   "name": "Bruno Lefèvre",
+   "role": "Kiné du club",
+   "traits": [
+    "bienveillant"
+   ],
+   "relation": 10,
+   "relationLabel": "Confiance",
+   "voice": 0.9,
+   "description": "Mains d'or et patience d'ange. Il a remis sur pied des générations de joueurs.",
+   "goals": "qu'aucun de ses joueurs ne joue blessé.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "chatain",
+    "beard": "barbe3j",
+    "top": "polo",
+    "topColor": "#eef0f4",
+    "topColor2": "$club_couleur",
+    "bottom": "survet",
+    "bottomColor": "#1d2230",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Tu as mal quelque part ? Dis-le-moi, hein."
+    },
+    {
+     "text": "Étire-toi après l'effort. Toujours."
+    }
+   ],
+   "short": "Bruno"
+  },
+  {
+   "id": "bastide",
+   "name": "Laurent Bastide",
+   "role": "Sélectionneur national",
+   "traits": [
+    "exigeant"
+   ],
+   "relation": 0,
+   "relationLabel": "Estime",
+   "voice": 0.75,
+   "hidden": true,
+   "description": "Il ne convoque que des joueurs en forme. Point.",
+   "goals": "gagner le Mondial.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "gris",
+    "top": "costume",
+    "topColor": "#1d2f5e",
+    "topColor2": "#d63c3c",
+    "bottom": "pantalon",
+    "bottomColor": "#1d2f5e"
+   },
+   "barks": [
+    {
+     "text": "Les places sont chères."
+    }
+   ],
+   "short": "Bastide"
+  },
+  {
+   "id": "hansen",
+   "name": "{var.coach_nom}",
+   "role": "Entraîneur de {var.club}",
+   "traits": [
+    "exigeant",
+    "juste"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "voice": 0.8,
+   "hidden": true,
+   "description": "L'entraîneur de ton club. Tacticien exigeant : ses joueurs l'adorent ou le détestent.",
+   "goals": "gagner la Ligue des Étoiles.",
+   "look": {
+    "skin": "peau1",
+    "hair": "court",
+    "hairColor": "blond",
+    "top": "survet",
+    "topColor": "#25222b",
+    "topColor2": "$club_couleur",
+    "bottom": "survet",
+    "bottomColor": "#25222b",
+    "height": "grand"
+   },
+   "barks": [
+    {
+     "text": "Position. Discipline. Intensité."
+    }
+   ],
+   "short": "Le coach"
+  },
+  {
+   "id": "rinaldi",
+   "name": "Mateo Rinaldi",
+   "role": "Star de {var.club}",
+   "traits": [
+    "orgueilleux",
+    "genereux"
+   ],
+   "relation": 0,
+   "relationLabel": "Respect",
+   "voice": 1.0,
+   "hidden": true,
+   "description": "Le joueur le plus médiatisé du continent. Personne ne lui vole la vedette impunément.",
+   "goals": "le titre de meilleur joueur du monde.",
+   "look": {
+    "skin": "peau3",
+    "hair": "long",
+    "hairColor": "noir",
+    "top": "survet",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "survet",
+    "bottomColor": "#1d2230",
+    "acc": [
+     "bandeau"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Bienvenue chez les grands."
+    }
+   ],
+   "short": "Rinaldi"
+  },
+  {
+   "id": "gomis",
+   "name": "Patrick Gomis",
+   "role": "Entraîneur du FC Valmont",
+   "traits": [
+    "bienveillant",
+    "juste"
+   ],
+   "relation": 10,
+   "relationLabel": "Confiance",
+   "voice": 0.85,
+   "hidden": true,
+   "description": "Il entraîne un club amateur le soir après son travail de chauffeur de bus.",
+   "goals": "voir un de ses joueurs passer pro.",
+   "look": {
+    "skin": "peau5",
+    "hair": "rase",
+    "hairColor": "noir",
+    "top": "survet",
+    "topColor": "#2f9a4c",
+    "topColor2": "#ffffff",
+    "bottom": "survet",
+    "bottomColor": "#2f9a4c",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Ici, on joue pour le plaisir. Et pour gagner, quand même."
+    }
+   ],
+   "short": "Gomis"
+  }
+ ],
+ "locations": [
+  {
+   "id": "chambre_centre",
+   "name": "Chambre du centre",
+   "width": 360,
+   "kind": "interieur",
+   "group": "Centre",
+   "when": "chapitre == ch1",
+   "spawn": 180,
+   "ambient": "interieur",
+   "wall": {
+    "style": "papier",
+    "color": "#c9d6e3",
+    "color2": "#7a9ab8"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#a8794e"
+   },
+   "playerLook": {
+    "top": "tshirt",
+    "topColor": "$club_couleur",
+    "bottom": "jean"
+   },
+   "props": [
+    {
+     "type": "affiche",
+     "x": 52,
+     "y": 46,
+     "color": "#1f4e9c",
+     "color2": "#f2c230"
+    },
+    {
+     "type": "lit",
+     "x": 50,
+     "color": "$club_couleur"
+    },
+    {
+     "type": "lit",
+     "x": 132,
+     "color": "#3f6fb0"
+    },
+    {
+     "type": "fenetre",
+     "x": 205,
+     "rideaux": "#b04848"
+    },
+    {
+     "type": "affiche",
+     "x": 132,
+     "y": 50,
+     "variante": "groupe",
+     "color": "#25222b",
+     "color2": "#e477a9"
+    },
+    {
+     "type": "etagere",
+     "x": 290,
+     "y": 50,
+     "w": 30
+    },
+    {
+     "type": "bureau",
+     "x": 268,
+     "lampe": true
+    },
+    {
+     "type": "chaise",
+     "x": 252
+    },
+    {
+     "type": "porte",
+     "x": 338,
+     "label": "COULOIR"
+    },
+    {
+     "type": "tapis",
+     "x": 190,
+     "w": 56,
+     "color": "#2f5a8a"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 180
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 338,
+     "kind": "porte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "karim",
+     "x": 72,
+     "when": "chapitre == ch1 et non var.karim_renvoye",
+     "face": "droite"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "lit",
+     "x": 132,
+     "label": "Ton lit",
+     "activities": [
+      "repos"
+     ],
+     "endTick": true
+    },
+    {
+     "id": "bureau",
+     "x": 268,
+     "label": "Ton bureau",
+     "activities": [
+      "reviser",
+      "jeux_video",
+      "reseaux"
+     ]
+    },
+    {
+     "id": "telephone",
+     "x": 226,
+     "label": "Ton téléphone",
+     "activities": [
+      "appeler_maman"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "couloir",
+   "name": "{chapitre == 'ch1' ? 'Couloir du centre de formation' : 'Hall du club — ' + var.club}",
+   "width": 600,
+   "kind": "interieur",
+   "group": "Club",
+   "spawn": 300,
+   "ambient": "interieur",
+   "wall": {
+    "style": "lambris",
+    "color": "#e8e2d4",
+    "color2": "#6d4c35"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#c9c2b4",
+    "color2": "#b8b0a2"
+   },
+   "playerLook": {
+    "top": "survet"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 36,
+     "label": "CHAMBRES",
+     "when": "chapitre == ch1"
+    },
+    {
+     "type": "porte",
+     "x": 36,
+     "label": "PRESSE",
+     "when": "chapitre != ch1",
+     "style": "metal",
+     "color": "#5a6070"
+    },
+    {
+     "type": "trophees",
+     "x": 100,
+     "count": "$trophees_club"
+    },
+    {
+     "type": "porte",
+     "x": 160,
+     "label": "COACH"
+    },
+    {
+     "type": "tableau_affichage",
+     "x": 214,
+     "text": "ACTUS"
+    },
+    {
+     "type": "porte",
+     "x": 268,
+     "label": "CANTINE"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 214
+    },
+    {
+     "type": "distributeur",
+     "x": 318
+    },
+    {
+     "type": "porte",
+     "x": 368,
+     "label": "COURS",
+     "when": "chapitre == ch1"
+    },
+    {
+     "type": "porte",
+     "x": 368,
+     "label": "PRESIDENT",
+     "when": "chapitre != ch1",
+     "color": "#5a3e28"
+    },
+    {
+     "type": "porte",
+     "x": 428,
+     "label": "VESTIAIRES",
+     "style": "metal",
+     "color": "$club_couleur"
+    },
+    {
+     "type": "plante",
+     "x": 462
+    },
+    {
+     "type": "porte",
+     "x": 500,
+     "label": "SOINS",
+     "style": "metal",
+     "color": "#e8eef0"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 430
+    },
+    {
+     "type": "porte",
+     "x": 566,
+     "label": "SORTIE",
+     "style": "vitre"
+    },
+    {
+     "type": "drapeau",
+     "x": 532,
+     "y": 22,
+     "color": "$club_couleur",
+     "color2": "$club_couleur2"
+    }
+   ],
+   "exits": [
+    {
+     "to": "chambre_centre",
+     "x": 36,
+     "when": "chapitre == ch1"
+    },
+    {
+     "to": "salle_presse",
+     "x": 36,
+     "when": "chapitre != ch1"
+    },
+    {
+     "to": "bureau_moreau",
+     "x": 160
+    },
+    {
+     "to": "cantine",
+     "x": 268
+    },
+    {
+     "to": "salle_cours",
+     "x": 368,
+     "when": "chapitre == ch1"
+    },
+    {
+     "to": "bureau_president",
+     "x": 368,
+     "when": "chapitre != ch1"
+    },
+    {
+     "to": "vestiaire",
+     "x": 428
+    },
+    {
+     "to": "infirmerie",
+     "x": 500
+    },
+    {
+     "to": "quartier",
+     "x": 566,
+     "label": "Prendre le bus pour le quartier",
+     "when": "chapitre == ch1"
+    },
+    {
+     "to": "ville",
+     "x": 566,
+     "label": "Sortir en ville",
+     "when": "chapitre != ch1"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "lucas",
+     "x": 214,
+     "when": "chapitre == ch1 et temps.semaine % 2 == 0"
+    },
+    {
+     "id": "clara",
+     "x": 80,
+     "when": "chapitre != ch1 et var.club_id == rivemont et temps.semaine % 3 == 1"
+    }
+   ]
+  },
+  {
+   "id": "bureau_moreau",
+   "name": "Bureau de l'entraîneur",
+   "width": 320,
+   "kind": "interieur",
+   "group": "Club",
+   "spawn": 70,
+   "ambient": "interieur",
+   "wall": {
+    "style": "bois",
+    "color": "#8a6a4a"
+   },
+   "floor": {
+    "style": "moquette",
+    "color": "#5a4a5a"
+   },
+   "props": [
+    {
+     "type": "tableau_blanc",
+     "x": 76
+    },
+    {
+     "type": "etagere",
+     "x": 160,
+     "y": 40
+    },
+    {
+     "type": "trophees",
+     "x": 160,
+     "count": 3
+    },
+    {
+     "type": "fenetre",
+     "x": 236,
+     "w": 40
+    },
+    {
+     "type": "bureau",
+     "x": 230,
+     "ordinateur": true,
+     "color": "#5a3e28"
+    },
+    {
+     "type": "fauteuil",
+     "x": 248
+    },
+    {
+     "type": "porte",
+     "x": 26,
+     "label": "HALL"
+    },
+    {
+     "type": "plante",
+     "x": 296,
+     "taille": "grande"
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 26
+    }
+   ],
+   "npcs": [
+    {
+     "id": "moreau",
+     "x": 205,
+     "when": "var.club_id == rivemont",
+     "face": "gauche"
+    },
+    {
+     "id": "gomis",
+     "x": 205,
+     "when": "var.club_id == valmont",
+     "face": "gauche"
+    },
+    {
+     "id": "hansen",
+     "x": 205,
+     "when": "var.club_etranger",
+     "face": "gauche"
+    }
+   ]
+  },
+  {
+   "id": "cantine",
+   "name": "{chapitre == 'ch1' ? 'Cantine du centre' : 'Restaurant du club'}",
+   "width": 440,
+   "kind": "interieur",
+   "group": "Club",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "carrelage",
+    "color": "#f2ead8",
+    "color2": "#c9773a"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#d8cdb8",
+    "color2": "#c9bca4"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "comptoir",
+     "x": 92,
+     "w": 80,
+     "bouteilles": false,
+     "machine": true,
+     "color": "#9aa3ae"
+    },
+    {
+     "type": "ecran",
+     "x": 200,
+     "contenu": "info"
+    },
+    {
+     "type": "table",
+     "x": 200,
+     "w": 52,
+     "plateaux": true
+    },
+    {
+     "type": "table",
+     "x": 300,
+     "w": 52,
+     "plateaux": true
+    },
+    {
+     "type": "fenetre",
+     "x": 300,
+     "w": 46
+    },
+    {
+     "type": "table",
+     "x": 396,
+     "w": 52
+    },
+    {
+     "type": "plante",
+     "x": 430
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 250
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "karim",
+     "x": 210,
+     "when": "chapitre == ch1 et non var.karim_renvoye"
+    },
+    {
+     "id": "ines",
+     "x": 310,
+     "when": "chapitre == ch1 et temps.semaine % 2 == 1"
+    },
+    {
+     "id": "lucas",
+     "x": 390,
+     "when": "chapitre == ch1 et temps.semaine % 2 == 1"
+    },
+    {
+     "id": "keller",
+     "x": 300,
+     "when": "chapitre != ch1 et var.club_id == rivemont et temps.semaine % 2 == 0"
+    },
+    {
+     "id": "rinaldi",
+     "x": 300,
+     "when": "var.club_etranger"
+    }
+   ]
+  },
+  {
+   "id": "salle_cours",
+   "name": "Salle de cours",
+   "width": 360,
+   "kind": "interieur",
+   "group": "Centre",
+   "when": "chapitre == ch1",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "peint",
+    "color": "#e6e0c8",
+    "color2": "#8a7a5a"
+   },
+   "floor": {
+    "style": "lino",
+    "color": "#9aa38c"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "tableau_blanc",
+     "x": 150,
+     "w": 80,
+     "h": 34,
+     "y": 36,
+     "tactique": false
+    },
+    {
+     "type": "horloge",
+     "x": 230
+    },
+    {
+     "type": "bureau",
+     "x": 110,
+     "ordinateur": false,
+     "livres": true,
+     "w": 30
+    },
+    {
+     "type": "bureau",
+     "x": 190,
+     "ordinateur": false,
+     "livres": true,
+     "w": 30
+    },
+    {
+     "type": "bureau",
+     "x": 270,
+     "ordinateur": false,
+     "w": 30
+    },
+    {
+     "type": "fenetre",
+     "x": 316,
+     "w": 34
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 180
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "ines",
+     "x": 196,
+     "when": "temps.semaine % 2 == 0"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "pupitre",
+     "x": 270,
+     "label": "Ton pupitre",
+     "activities": [
+      "reviser"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vestiaire",
+   "name": "Vestiaire",
+   "width": 420,
+   "kind": "interieur",
+   "group": "Club",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "carrelage",
+    "color": "#e8eef0",
+    "color2": "$club_couleur"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#b8c4c8",
+    "color2": "#a8b4b8"
+   },
+   "playerLook": {
+    "top": "maillot",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "short",
+    "bottomColor": "#ffffff",
+    "socks": "$club_couleur"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "casiers",
+     "x": 120,
+     "count": 8,
+     "color": "$club_couleur",
+     "maillots": "$club_couleur"
+    },
+    {
+     "type": "banc",
+     "x": 120,
+     "w": 80,
+     "sacs": true
+    },
+    {
+     "type": "tableau_blanc",
+     "x": 262
+    },
+    {
+     "type": "horloge",
+     "x": 262,
+     "y": 22
+    },
+    {
+     "type": "porte",
+     "x": 330,
+     "label": "MUSCU",
+     "style": "metal",
+     "color": "#5a6070"
+    },
+    {
+     "type": "porte",
+     "x": 396,
+     "label": "TERRAIN",
+     "style": "metal",
+     "color": "$club_couleur"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 200
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 22
+    },
+    {
+     "to": "salle_muscu",
+     "x": 330
+    },
+    {
+     "to": "terrain",
+     "x": 396
+    }
+   ],
+   "npcs": [
+    {
+     "id": "keller",
+     "x": 160,
+     "when": "chapitre != ch1 et var.club_id == rivemont et temps.semaine % 2 == 1",
+     "look": {
+      "top": "maillot",
+      "bottom": "short",
+      "bottomColor": "#ffffff",
+      "socks": "$club_couleur"
+     }
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "tableau",
+     "x": 262,
+     "label": "Tableau tactique",
+     "activities": [
+      "video"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "terrain",
+   "name": "Terrain d'entraînement",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "jour",
+   "group": "Club",
+   "spawn": 70,
+   "ambient": "nature",
+   "floor": {
+    "style": "terrain",
+    "color": "#3f9a45"
+   },
+   "playerLook": {
+    "top": "maillot",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "short",
+    "bottomColor": "#ffffff",
+    "socks": "$club_couleur"
+   },
+   "backdrop": [
+    {
+     "type": "collines",
+     "x": 0
+    },
+    {
+     "type": "arbres",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "centre",
+     "x": 120,
+     "w": 190,
+     "text": "{var.club}",
+     "color2": "$club_couleur"
+    },
+    {
+     "type": "projecteur",
+     "x": 252
+    },
+    {
+     "type": "cloture",
+     "x": 450,
+     "w": 380,
+     "h": 14
+    },
+    {
+     "type": "banc_touche",
+     "x": 300,
+     "color": "$club_couleur"
+    },
+    {
+     "type": "ballons",
+     "x": 352
+    },
+    {
+     "type": "plots",
+     "x": 440,
+     "y": 162
+    },
+    {
+     "type": "but",
+     "x": 610
+    }
+   ],
+   "exits": [
+    {
+     "to": "vestiaire",
+     "x": 70,
+     "label": "Vestiaire"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "moreau",
+     "x": 300,
+     "when": "var.club_id == rivemont",
+     "look": {
+      "top": "survet"
+     }
+    },
+    {
+     "id": "gomis",
+     "x": 300,
+     "when": "var.club_id == valmont"
+    },
+    {
+     "id": "hansen",
+     "x": 300,
+     "when": "var.club_etranger"
+    },
+    {
+     "id": "karim",
+     "x": 400,
+     "when": "var.karim_club == var.club_id et non var.karim_renvoye",
+     "look": {
+      "top": "maillot",
+      "bottom": "short",
+      "bottomColor": "#ffffff",
+      "socks": "$club_couleur"
+     }
+    },
+    {
+     "id": "lucas",
+     "x": 470,
+     "when": "var.lucas_club == var.club_id",
+     "look": {
+      "top": "maillot",
+      "bottom": "short",
+      "bottomColor": "#ffffff",
+      "socks": "$club_couleur"
+     }
+    },
+    {
+     "id": "rinaldi",
+     "x": 520,
+     "when": "var.club_etranger",
+     "look": {
+      "top": "maillot",
+      "bottom": "short",
+      "bottomColor": "#ffffff",
+      "socks": "$club_couleur"
+     }
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "ballons",
+     "x": 352,
+     "label": "Sac de ballons",
+     "activities": [
+      "entrainement_sup"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "salle_muscu",
+   "name": "Salle de musculation",
+   "width": 380,
+   "kind": "interieur",
+   "group": "Club",
+   "spawn": 30,
+   "ambient": "interieur",
+   "wall": {
+    "style": "beton",
+    "color": "#8a8f99"
+   },
+   "floor": {
+    "style": "beton",
+    "color": "#4a4d55"
+   },
+   "playerLook": {
+    "top": "debardeur",
+    "topColor": "$club_couleur",
+    "bottom": "short",
+    "bottomColor": "#25222b"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "VESTIAIRE",
+     "style": "metal"
+    },
+    {
+     "type": "halteres",
+     "x": 96
+    },
+    {
+     "type": "banc_muscu",
+     "x": 170
+    },
+    {
+     "type": "affiche",
+     "x": 230,
+     "y": 40,
+     "variante": "texte",
+     "color": "#d63c3c"
+    },
+    {
+     "type": "tapis_course",
+     "x": 250
+    },
+    {
+     "type": "velo",
+     "x": 320
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 120
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 280
+    }
+   ],
+   "exits": [
+    {
+     "to": "vestiaire",
+     "x": 22
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "poids",
+     "x": 150,
+     "label": "Poids et banc",
+     "activities": [
+      "musculation"
+     ]
+    },
+    {
+     "id": "cardio",
+     "x": 270,
+     "label": "Tapis et vélo",
+     "activities": [
+      "cardio",
+      "etirements"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "infirmerie",
+   "name": "Infirmerie",
+   "width": 320,
+   "kind": "interieur",
+   "group": "Club",
+   "spawn": 30,
+   "ambient": "interieur",
+   "wall": {
+    "style": "carrelage",
+    "color": "#eef4f6",
+    "color2": "#7cc3ef"
+   },
+   "floor": {
+    "style": "lino",
+    "color": "#c8d4d8"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "table_massage",
+     "x": 150
+    },
+    {
+     "type": "armoire",
+     "x": 230,
+     "color": "#e8eef0"
+    },
+    {
+     "type": "affiche",
+     "x": 90,
+     "y": 44,
+     "variante": "texte",
+     "color": "#2f9a4c"
+    },
+    {
+     "type": "fenetre",
+     "x": 290,
+     "w": 30
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 150
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "bruno",
+     "x": 190,
+     "when": "non var.club_etranger"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "table",
+     "x": 150,
+     "label": "Table de soins",
+     "activities": [
+      "soin"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "salle_presse",
+   "name": "Salle de presse",
+   "width": 340,
+   "kind": "interieur",
+   "group": "Club",
+   "when": "chapitre != ch1",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "moderne",
+    "color": "#2c3142",
+    "color2": "$club_couleur"
+   },
+   "floor": {
+    "style": "moquette",
+    "color": "#3a3f52"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL",
+     "style": "metal"
+    },
+    {
+     "type": "mur_sponsors",
+     "x": 190,
+     "w": 140,
+     "color": "$club_couleur",
+     "color2": "$club_couleur2"
+    },
+    {
+     "type": "table_conference",
+     "x": 190,
+     "text": "{var.club}"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 120
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 260
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "clara",
+     "x": 290,
+     "when": "temps.semaine % 2 == 0"
+    }
+   ]
+  },
+  {
+   "id": "bureau_president",
+   "name": "Bureau du président",
+   "width": 340,
+   "kind": "interieur",
+   "group": "Club",
+   "when": "chapitre != ch1 et var.club_id == rivemont",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "lambris",
+    "color": "#d8ccb4",
+    "color2": "#5a3e28"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#7a5232"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "grande_baie",
+     "x": 180,
+     "w": 110,
+     "avion": false
+    },
+    {
+     "type": "trophees",
+     "x": 290,
+     "count": "$trophees_club"
+    },
+    {
+     "type": "bureau",
+     "x": 180,
+     "w": 46,
+     "color": "#4a2f1d",
+     "lampe": true
+    },
+    {
+     "type": "fauteuil",
+     "x": 196,
+     "color": "#4a1f1f"
+    },
+    {
+     "type": "tapis",
+     "x": 180,
+     "w": 90,
+     "color": "#6a2a2a"
+    },
+    {
+     "type": "plante",
+     "x": 70,
+     "taille": "grande"
+    }
+   ],
+   "exits": [
+    {
+     "to": "couloir",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "vasseur",
+     "x": 160,
+     "face": "gauche"
+    }
+   ]
+  },
+  {
+   "id": "stade",
+   "name": "{var.stade_nom}",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "nuit",
+   "when": "faux",
+   "spawn": 320,
+   "ambient": "foule",
+   "floor": {
+    "style": "terrain",
+    "color": "#3f9a45"
+   },
+   "playerLook": {
+    "top": "maillot",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "short",
+    "bottomColor": "#ffffff",
+    "socks": "$club_couleur"
+   },
+   "backdrop": [
+    {
+     "type": "tribune_loin",
+     "x": 0,
+     "couleur": "$club_couleur",
+     "densite": 0.35,
+     "when": "var.stade_taille <= 1"
+    },
+    {
+     "type": "tribune_loin",
+     "x": 0,
+     "couleur": "$club_couleur",
+     "densite": 0.75,
+     "when": "var.stade_taille == 2"
+    },
+    {
+     "type": "tribune_loin",
+     "x": 0,
+     "couleur": "$club_couleur",
+     "densite": 0.97,
+     "when": "var.stade_taille >= 3"
+    }
+   ],
+   "props": [
+    {
+     "type": "projecteur",
+     "x": 40,
+     "when": "var.stade_taille >= 2"
+    },
+    {
+     "type": "projecteur",
+     "x": 600,
+     "when": "var.stade_taille >= 2"
+    },
+    {
+     "type": "panneaux_pub",
+     "x": 320,
+     "w": 640,
+     "base": 134
+    },
+    {
+     "type": "tableau_score",
+     "x": 320,
+     "texte": "{var.club_court} {var.score_nous} - {var.score_eux} {var.adv_court}",
+     "titre": "{var.minute}'"
+    },
+    {
+     "type": "but",
+     "x": 612
+    },
+    {
+     "type": "but",
+     "x": 28,
+     "dir": "gauche"
+    },
+    {
+     "type": "drapeau_corner",
+     "x": 636,
+     "color": "$club_couleur2"
+    },
+    {
+     "type": "drapeau_corner",
+     "x": 4,
+     "color": "$club_couleur2"
+    }
+   ]
+  },
+  {
+   "id": "quartier",
+   "name": "La cité des Tilleuls",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "soir",
+   "group": "Quartier",
+   "spawn": 600,
+   "ambient": "ville",
+   "floor": {
+    "style": "trottoir",
+    "color": "#4a4a52",
+    "color2": "#b9b2a6"
+   },
+   "playerLook": {
+    "top": "sweat",
+    "topColor": "#25222b",
+    "bottom": "jean"
+   },
+   "backdrop": [
+    {
+     "type": "tours",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "immeuble",
+     "x": 90,
+     "w": 100,
+     "h": 100,
+     "text": "BAT. C"
+    },
+    {
+     "type": "mur_tag",
+     "x": 240,
+     "w": 90
+    },
+    {
+     "type": "lampadaire",
+     "x": 330
+    },
+    {
+     "type": "arbre",
+     "x": 380
+    },
+    {
+     "type": "banc_public",
+     "x": 430
+    },
+    {
+     "type": "voiture",
+     "x": 500,
+     "color": "#7c2236"
+    },
+    {
+     "type": "arret_bus",
+     "x": 600
+    },
+    {
+     "type": "poubelle",
+     "x": 160
+    }
+   ],
+   "exits": [
+    {
+     "to": "appart_maman",
+     "x": 90,
+     "label": "Chez maman (bâtiment C)"
+    },
+    {
+     "to": "city",
+     "x": 260,
+     "label": "City stade"
+    },
+    {
+     "to": "couloir",
+     "x": 610,
+     "label": "Bus pour le centre",
+     "when": "chapitre == ch1"
+    },
+    {
+     "to": "ville",
+     "x": 610,
+     "label": "Bus pour le centre-ville",
+     "when": "chapitre != ch1"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "djibril",
+     "x": 430,
+     "when": "non var.djibril_prison"
+    },
+    {
+     "id": "yanis",
+     "x": 210,
+     "when": "temps.semaine % 2 == 0 et var.age < 30"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "asso",
+     "x": 160,
+     "label": "Local associatif",
+     "activities": [
+      "charite"
+     ],
+     "when": "chapitre != ch1"
+    }
+   ]
+  },
+  {
+   "id": "appart_maman",
+   "name": "Chez maman",
+   "width": 340,
+   "kind": "interieur",
+   "group": "Quartier",
+   "spawn": 30,
+   "ambient": "interieur",
+   "wall": {
+    "style": "papier",
+    "color": "#e8d8c0",
+    "color2": "#c9a070"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#b89a7a",
+    "color2": "#a88a6a"
+   },
+   "playerLook": {
+    "top": "sweat",
+    "topColor": "#25222b",
+    "bottom": "jean"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE"
+    },
+    {
+     "type": "cuisine",
+     "x": 96,
+     "w": 76
+    },
+    {
+     "type": "cadre",
+     "x": 180,
+     "y": 46
+    },
+    {
+     "type": "canape",
+     "x": 196,
+     "color": "#8a4a3a",
+     "coussin": "#f2c230"
+    },
+    {
+     "type": "ecran",
+     "x": 286,
+     "y": 70,
+     "w": 30,
+     "h": 18,
+     "contenu": "match"
+    },
+    {
+     "type": "fenetre",
+     "x": 250,
+     "w": 30,
+     "rideaux": "#c9a070"
+    },
+    {
+     "type": "trophees",
+     "x": 318,
+     "w": 30,
+     "count": "{min(8, var.trophees)}"
+    }
+   ],
+   "exits": [
+    {
+     "to": "quartier",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "maman",
+     "x": 120,
+     "when": "non var.maman_partie"
+    },
+    {
+     "id": "yanis",
+     "x": 230,
+     "when": "temps.semaine % 2 == 1 et var.age < 30"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "salon",
+     "x": 196,
+     "label": "Le salon",
+     "activities": [
+      "voir_famille"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "city",
+   "name": "City stade des Tilleuls",
+   "width": 420,
+   "kind": "exterieur",
+   "time": "soir",
+   "group": "Quartier",
+   "spawn": 40,
+   "ambient": "ville",
+   "floor": {
+    "style": "synthetique",
+    "color": "#3a8a4a"
+   },
+   "playerLook": {
+    "top": "tshirt",
+    "topColor": "#eef0f4",
+    "bottom": "short",
+    "bottomColor": "#25222b"
+   },
+   "backdrop": [
+    {
+     "type": "tours",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "city",
+     "x": 210,
+     "w": 420
+    },
+    {
+     "type": "petit_but",
+     "x": 30,
+     "dir": "droite"
+    },
+    {
+     "type": "petit_but",
+     "x": 390,
+     "dir": "gauche"
+    },
+    {
+     "type": "lampadaire",
+     "x": 210
+    },
+    {
+     "type": "mur_tag",
+     "x": 120,
+     "w": 60,
+     "h": 26
+    }
+   ],
+   "exits": [
+    {
+     "to": "quartier",
+     "x": 14,
+     "kind": "bord",
+     "label": "La cité"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "djibril",
+     "x": 300,
+     "when": "temps.semaine % 3 == 0 et non var.djibril_prison"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "match",
+     "x": 210,
+     "label": "Partie entre potes",
+     "activities": [
+      "foot_quartier"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ville",
+   "name": "Centre-ville de {var.ville}",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "soir",
+   "group": "Ville",
+   "when": "chapitre != ch1",
+   "spawn": 320,
+   "ambient": "ville",
+   "floor": {
+    "style": "trottoir",
+    "color": "#3e3e46",
+    "color2": "#c9c2b4"
+   },
+   "playerLook": {
+    "top": "veste",
+    "topColor": "#25222b",
+    "topColor2": "#eef0f4",
+    "bottom": "jean"
+   },
+   "backdrop": [
+    {
+     "type": "ville",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "immeuble",
+     "x": 60,
+     "w": 90,
+     "h": 110,
+     "color": "#d8c8b0",
+     "text": "RESIDENCE"
+    },
+    {
+     "type": "immeuble",
+     "x": 175,
+     "w": 80,
+     "h": 80,
+     "color": "#b85a3a",
+     "text": "LE PHARE"
+    },
+    {
+     "type": "lampadaire",
+     "x": 240
+    },
+    {
+     "type": "immeuble",
+     "x": 310,
+     "w": 76,
+     "h": 96,
+     "color": "#3a3048",
+     "text": "LE NEON"
+    },
+    {
+     "type": "neon",
+     "x": 310,
+     "y": 70,
+     "text": "NEON",
+     "color": "#ff4fd8"
+    },
+    {
+     "type": "arbre",
+     "x": 380
+    },
+    {
+     "type": "immeuble",
+     "x": 450,
+     "w": 84,
+     "h": 120,
+     "color": "#8fa0b0",
+     "text": "AGENCE"
+    },
+    {
+     "type": "voiture",
+     "x": 410,
+     "color": "#e8e2d4",
+     "luxe": true,
+     "when": "stat.argent >= 50000"
+    },
+    {
+     "type": "lampadaire",
+     "x": 520
+    },
+    {
+     "type": "arret_bus",
+     "x": 590
+    }
+   ],
+   "exits": [
+    {
+     "to": "appartement",
+     "x": 60,
+     "label": "Ton appartement"
+    },
+    {
+     "to": "restaurant",
+     "x": 175,
+     "label": "Restaurant Le Phare"
+    },
+    {
+     "to": "boite",
+     "x": 310,
+     "label": "Boîte de nuit Le Néon"
+    },
+    {
+     "to": "agence",
+     "x": 450,
+     "label": "Agence de ton agent",
+     "when": "var.agent != ''"
+    },
+    {
+     "to": "couloir",
+     "x": 560,
+     "label": "Centre d'entraînement"
+    },
+    {
+     "to": "quartier",
+     "x": 610,
+     "label": "Bus pour la cité des Tilleuls"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "djibril",
+     "x": 270,
+     "when": "temps.semaine % 3 == 2 et non var.djibril_prison"
+    }
+   ]
+  },
+  {
+   "id": "appartement",
+   "name": "Ton appartement",
+   "width": 400,
+   "kind": "interieur",
+   "group": "Ville",
+   "when": "chapitre != ch1",
+   "spawn": 30,
+   "ambient": "interieur",
+   "wall": {
+    "style": "moderne",
+    "color": "#d8dde4",
+    "color2": "$club_couleur"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#8a6a4a"
+   },
+   "playerLook": {
+    "top": "tshirt",
+    "topColor": "#25222b",
+    "bottom": "jean"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE"
+    },
+    {
+     "type": "cuisine",
+     "x": 90,
+     "w": 70,
+     "color": "#f4f4f4",
+     "color2": "#c9d6e3"
+    },
+    {
+     "type": "affiche",
+     "x": 170,
+     "y": 40,
+     "color": "$club_couleur",
+     "color2": "$club_couleur2"
+    },
+    {
+     "type": "canape",
+     "x": 190,
+     "color": "#3a4a6a"
+    },
+    {
+     "type": "canape",
+     "x": 190,
+     "w": 64,
+     "color": "#e8e2d4",
+     "coussin": "#f2c230",
+     "when": "stat.argent >= 80000"
+    },
+    {
+     "type": "ecran",
+     "x": 270,
+     "y": 58,
+     "w": 44,
+     "h": 26,
+     "contenu": "match"
+    },
+    {
+     "type": "trophees",
+     "x": 270,
+     "w": 46,
+     "count": "{min(8, var.trophees)}",
+     "when": "var.trophees > 0"
+    },
+    {
+     "type": "grande_baie",
+     "x": 350,
+     "w": 60,
+     "avion": false,
+     "when": "stat.argent >= 30000"
+    },
+    {
+     "type": "fenetre",
+     "x": 350,
+     "when": "stat.argent < 30000"
+    },
+    {
+     "type": "lit",
+     "x": 352,
+     "color": "#25222b"
+    },
+    {
+     "type": "plante",
+     "x": 120,
+     "taille": "grande",
+     "when": "stat.argent >= 30000"
+    },
+    {
+     "type": "lampadaire_int",
+     "x": 236
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "ines",
+     "x": 210,
+     "when": "var.couple et var.vit_ensemble"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "lit",
+     "x": 352,
+     "label": "Ton lit",
+     "activities": [
+      "repos"
+     ],
+     "endTick": true
+    },
+    {
+     "id": "canape",
+     "x": 190,
+     "label": "Le canapé",
+     "activities": [
+      "jeux_video",
+      "reseaux",
+      "appeler_maman"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "restaurant",
+   "name": "Restaurant Le Phare",
+   "width": 360,
+   "kind": "interieur",
+   "time": "soir",
+   "group": "Ville",
+   "when": "chapitre != ch1",
+   "spawn": 30,
+   "ambient": "interieur",
+   "wall": {
+    "style": "briques",
+    "color": "#9a4a3a"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#5a3e28"
+   },
+   "playerLook": {
+    "top": "chemise",
+    "topColor": "#eef0f4",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE"
+    },
+    {
+     "type": "cadre",
+     "x": 100,
+     "y": 44
+    },
+    {
+     "type": "table",
+     "x": 110,
+     "w": 44,
+     "nappe": "#f4f0e6",
+     "verres": true
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 110,
+     "color": "#e2b440"
+    },
+    {
+     "type": "table",
+     "x": 210,
+     "w": 44,
+     "nappe": "#f4f0e6",
+     "verres": true
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 210,
+     "color": "#e2b440"
+    },
+    {
+     "type": "comptoir",
+     "x": 310,
+     "w": 70
+    },
+    {
+     "type": "plante",
+     "x": 160
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "ines",
+     "x": 230,
+     "when": "var.couple et temps.semaine % 2 == 0"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "table",
+     "x": 210,
+     "label": "Une table",
+     "activities": [
+      "diner",
+      "voir_ines"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "boite",
+   "name": "Le Néon",
+   "width": 420,
+   "kind": "interieur",
+   "time": "nuit",
+   "group": "Ville",
+   "when": "chapitre != ch1",
+   "spawn": 30,
+   "ambient": "club",
+   "wall": {
+    "style": "sombre",
+    "color": "#1d1428"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#221a2e",
+    "color2": "#2c2240"
+   },
+   "playerLook": {
+    "top": "chemise",
+    "topColor": "#25222b",
+    "topColor2": "#25222b",
+    "bottom": "jean"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE",
+     "style": "metal",
+     "color": "#3a3048"
+    },
+    {
+     "type": "neon",
+     "x": 210,
+     "y": 34,
+     "text": "LE NEON",
+     "color": "#ff4fd8"
+    },
+    {
+     "type": "comptoir",
+     "x": 96,
+     "w": 76,
+     "color": "#2a1f3a"
+    },
+    {
+     "type": "piste_danse",
+     "x": 250,
+     "w": 140
+    },
+    {
+     "type": "dj",
+     "x": 370
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "djibril",
+     "x": 120,
+     "when": "temps.semaine % 2 == 1 et non var.djibril_prison"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "piste",
+     "x": 250,
+     "label": "La piste",
+     "activities": [
+      "boite_nuit"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "agence",
+   "name": "Agence {var.agent_nom}",
+   "width": 320,
+   "kind": "interieur",
+   "group": "Ville",
+   "when": "var.agent != ''",
+   "spawn": 30,
+   "ambient": "interieur",
+   "wall": {
+    "style": "vitre",
+    "color": "#c9d0d8"
+   },
+   "floor": {
+    "style": "moquette",
+    "color": "#3a3f52"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE",
+     "style": "vitre"
+    },
+    {
+     "type": "bureau",
+     "x": 200,
+     "w": 44,
+     "color": "#25222b",
+     "lampe": true
+    },
+    {
+     "type": "fauteuil",
+     "x": 216,
+     "color": "#25222b"
+    },
+    {
+     "type": "plante",
+     "x": 290,
+     "taille": "grande"
+    },
+    {
+     "type": "cadre",
+     "x": 110,
+     "y": 46
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22
+    }
+   ],
+   "npcs": [
+    {
+     "id": "santini",
+     "x": 180,
+     "when": "var.agent == santini",
+     "face": "gauche"
+    },
+    {
+     "id": "lambert",
+     "x": 180,
+     "when": "var.agent == lambert",
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "rdv",
+     "x": 150,
+     "label": "Rendez-vous",
+     "activities": [
+      "rencontre_agent"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "aeroport",
+   "name": "Aéroport",
+   "width": 420,
+   "kind": "interieur",
+   "when": "faux",
+   "spawn": 60,
+   "ambient": "interieur",
+   "wall": {
+    "style": "moderne",
+    "color": "#d8dde4",
+    "color2": "#2f62c9"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#c9ced6",
+    "color2": "#bcc2cb"
+   },
+   "playerLook": {
+    "top": "veste",
+    "topColor": "#25222b",
+    "bottom": "jean"
+   },
+   "props": [
+    {
+     "type": "grande_baie",
+     "x": 230,
+     "w": 220
+    },
+    {
+     "type": "panneau_depart",
+     "x": 80,
+     "y": 30
+    },
+    {
+     "type": "sieges",
+     "x": 160,
+     "count": 4
+    },
+    {
+     "type": "sieges",
+     "x": 300,
+     "count": 4
+    },
+    {
+     "type": "bagages",
+     "x": 380
+    }
+   ]
+  }
+ ],
+ "activities": [
+  {
+   "id": "entrainement_sup",
+   "label": "Entraînement supplémentaire",
+   "description": "Rester après la séance pour bosser tes gestes.",
+   "cost": {
+    "actions": 1,
+    "energie": 20
+   },
+   "effects": "stat.technique += hasard(0, 2); stat.frappe += joueur.poste == 'attaquant' ? hasard(1, 2) : hasard(0, 1); stat.passe += joueur.poste == 'milieu' ? hasard(1, 2) : hasard(0, 1); stat.defense += joueur.poste == 'defenseur' ? hasard(1, 2) : 0; stat.forme += 3; stat.discipline += 1; stat.statut += 1",
+   "feedback": "Tu restes seul sous les projecteurs jusqu'à la nuit."
+  },
+  {
+   "id": "musculation",
+   "label": "Musculation",
+   "description": "Puissance et résistance aux chocs.",
+   "cost": {
+    "actions": 1,
+    "energie": 20
+   },
+   "effects": "stat.physique += hasard(1, 3); stat.defense += joueur.poste == 'defenseur' ? 1 : 0; stat.forme += 2; stat.sante += 1",
+   "feedback": "Les muscles brûlent. C'est bon signe."
+  },
+  {
+   "id": "cardio",
+   "label": "Course et cardio",
+   "description": "Endurance et forme.",
+   "cost": {
+    "actions": 1,
+    "energie": 15
+   },
+   "effects": "stat.physique += 1; stat.forme += 5; stat.sante += 2",
+   "feedback": "Dix kilomètres. Tes poumons te détestent."
+  },
+  {
+   "id": "etirements",
+   "label": "Étirements et prévention",
+   "description": "Protéger ton corps. Réduit le risque de blessure.",
+   "cost": {
+    "actions": 1,
+    "energie": 5
+   },
+   "effects": "stat.sante += 6; var.genou = max(0, var.genou - 1); stat.discipline += 1",
+   "feedback": "Bruno serait fier de toi."
+  },
+  {
+   "id": "video",
+   "label": "Analyse vidéo",
+   "description": "Étudier tes matchs et les adversaires.",
+   "cost": {
+    "actions": 1,
+    "energie": 5
+   },
+   "effects": "stat.mental += hasard(1, 2); stat.passe += hasard(0, 1); stat.defense += hasard(0, 1); stat.statut += 1",
+   "feedback": "Tu repères trois erreurs de placement. Les tiennes."
+  },
+  {
+   "id": "repos",
+   "label": "Se reposer",
+   "description": "Recharger les batteries.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie += 35; stat.sante += 5; stat.moral += 2",
+   "feedback": "Une sieste réparatrice."
+  },
+  {
+   "id": "reviser",
+   "label": "Réviser",
+   "description": "Le bac, ou une formation. Ta mère y tient.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "when": "var.etudes_actives ou var.formation_entraineur",
+   "lockedText": "Tu n'as plus de cours à suivre",
+   "effects": "stat.etudes += hasard(3, 6); stat.mental += 1; stat.moral -= 2; var.diplome += var.formation_entraineur ? 1 : 0",
+   "feedback": "Les équations, c'est presque aussi dur que les sprints."
+  },
+  {
+   "id": "jeux_video",
+   "label": "Jouer à la console",
+   "description": "Décompresser.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.moral += 6; stat.energie += 6; stat.discipline -= 1",
+   "feedback": "Une victoire 4–0 à la console. Si seulement."
+  },
+  {
+   "id": "reseaux",
+   "label": "Poster sur les réseaux",
+   "description": "Soigner ton image.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.notoriete += hasard(1, 3) + (stat.reputation > 50 ? 1 : 0)",
+   "feedback": "Les notifications pleuvent.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "appeler_maman",
+   "label": "Appeler maman",
+   "description": "Prendre des nouvelles de la famille.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "rel.maman += 3; stat.moral += 4",
+   "maxPerTick": 1
+  },
+  {
+   "id": "voir_famille",
+   "label": "Passer du temps en famille",
+   "description": "Un repas, des rires, des nouvelles.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "rel.maman += 4; rel.yanis += 4; stat.moral += 6",
+   "maxPerTick": 1
+  },
+  {
+   "id": "foot_quartier",
+   "label": "Foot avec les potes",
+   "description": "Le plaisir pur, comme avant.",
+   "cost": {
+    "actions": 1,
+    "energie": 15
+   },
+   "effects": "stat.technique += hasard(0, 1); stat.moral += 7; rel.djibril += 3; stat.notoriete += 1",
+   "feedback": "Sur le synthétique, tu redeviens un gamin."
+  },
+  {
+   "id": "soin",
+   "label": "Séance de soins",
+   "description": "Massage, récupération, prévention.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.sante += 14; stat.energie += 10; var.genou = max(0, var.genou - 1); var.blesse = max(0, var.blesse - 1); rel.bruno += 2",
+   "feedback": "Les mains de Bruno font des miracles."
+  },
+  {
+   "id": "sortir",
+   "label": "Sortir avec des amis",
+   "description": "Une soirée en ville.",
+   "cost": {
+    "actions": 1,
+    "energie": 15,
+    "argent": 40
+   },
+   "effects": "stat.moral += 8; stat.discipline -= 2; var.fetes += 1"
+  },
+  {
+   "id": "boite_nuit",
+   "label": "Faire la fête",
+   "description": "Musique, lumières… et photographes.",
+   "cost": {
+    "actions": 1,
+    "energie": 30,
+    "argent": 150
+   },
+   "effects": "stat.moral += 10; stat.notoriete += 2; stat.discipline -= 4; stat.forme -= 4; var.fetes += 1"
+  },
+  {
+   "id": "voir_ines",
+   "label": "Passer du temps avec Inès",
+   "description": "Rien que vous deux.",
+   "cost": {
+    "actions": 1,
+    "argent": 40
+   },
+   "when": "rel.ines >= 15 et non var.ines_partie",
+   "lockedText": "Il faudrait d'abord mieux connaître Inès",
+   "effects": "rel.ines += 6; stat.moral += 6",
+   "maxPerTick": 1
+  },
+  {
+   "id": "diner",
+   "label": "Dîner au restaurant",
+   "description": "Bien manger, c'est aussi s'entraîner.",
+   "cost": {
+    "actions": 1,
+    "argent": 60
+   },
+   "effects": "stat.moral += 5; stat.energie += 8"
+  },
+  {
+   "id": "rencontre_agent",
+   "label": "Faire le point avec ton agent",
+   "description": "Contrats, offres, image.",
+   "cost": {
+    "actions": 1
+   },
+   "when": "var.agent != ''",
+   "effects": "stat.moral += 1"
+  },
+  {
+   "id": "charite",
+   "label": "Aider l'association du quartier",
+   "description": "Rendre un peu de ce qu'on t'a donné.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.reputation += 1; stat.moral += 5; var.engagement += 1; rel.yanis += 2"
+  }
+ ],
+ "chapters": [
+  {
+   "id": "ch1",
+   "title": "Le Centre",
+   "subtitle": "16 ans · Centre de formation du Stade Rivemont",
+   "weeks": 7,
+   "location": "chambre_centre",
+   "onStart": "var.age = 16"
+  },
+  {
+   "id": "ch2",
+   "title": "Premiers pas",
+   "subtitle": "18 ans · {var.club}",
+   "weeks": 6,
+   "onStart": "var.age = 18; var.etudes_actives = faux"
+  },
+  {
+   "id": "ch3",
+   "title": "L'éclosion",
+   "subtitle": "21 ans · {var.club}",
+   "weeks": 6,
+   "onStart": "var.age = 21"
+  },
+  {
+   "id": "ch4",
+   "title": "Sous les projecteurs",
+   "subtitle": "25 ans · {var.club}",
+   "weeks": 6,
+   "onStart": "var.age = 25"
+  },
+  {
+   "id": "ch5",
+   "title": "Le crépuscule",
+   "subtitle": "31 ans · {var.club}",
+   "weeks": 4,
+   "onStart": "var.age = 31"
+  }
+ ],
+ "creation": {
+  "nameLabel": "Ton prénom",
+  "defaultName": "Sami",
+  "look": true,
+  "baseLook": {
+   "skin": "peau3",
+   "hair": "court",
+   "hairColor": "noir",
+   "top": "survet",
+   "topColor": "$club_couleur",
+   "topColor2": "$club_couleur2",
+   "bottom": "survet",
+   "bottomColor": "#1d2230",
+   "shoes": "#f4f4f4"
+  },
+  "fields": [
+   {
+    "id": "poste",
+    "label": "Ton poste",
+    "options": [
+     {
+      "id": "attaquant",
+      "label": "Attaquant",
+      "description": "Le but, rien que le but. Frappe et technique.",
+      "effects": "stat.frappe += 10; stat.technique += 4"
+     },
+     {
+      "id": "milieu",
+      "label": "Milieu offensif",
+      "description": "Le cerveau du jeu. Passe, vision, sang-froid.",
+      "effects": "stat.passe += 10; stat.mental += 4; stat.technique += 2"
+     },
+     {
+      "id": "defenseur",
+      "label": "Défenseur central",
+      "description": "Le mur. Défense, physique, placement.",
+      "effects": "stat.defense += 14; stat.physique += 5"
+     }
+    ]
+   },
+   {
+    "id": "origine",
+    "label": "D'où tu viens",
+    "options": [
+     {
+      "id": "cite",
+      "label": "La cité des Tilleuls",
+      "description": "Tu as appris le foot entre deux tours. Tu ne lâches rien.",
+      "effects": "stat.mental += 5; stat.technique += 3; rel.djibril += 15"
+     },
+     {
+      "id": "village",
+      "label": "Saint-Aubin, petit village",
+      "description": "Club de village, école sérieuse. Discipliné, un peu naïf.",
+      "effects": "stat.discipline += 10; stat.etudes += 15; stat.argent += 200"
+     },
+     {
+      "id": "etranger",
+      "label": "Une enfance à Lisbonne",
+      "description": "Foot de rue et trois langues. Créatif, moins cadré.",
+      "effects": "stat.technique += 6; stat.discipline -= 5; var.langues = vrai"
+     }
+    ]
+   },
+   {
+    "id": "caractere",
+    "label": "Ton caractère",
+    "options": [
+     {
+      "id": "leader",
+      "label": "Leader",
+      "description": "Tu prends la parole, les autres te suivent.",
+      "effects": "stat.confiance += 12"
+     },
+     {
+      "id": "bosseur",
+      "label": "Bosseur",
+      "description": "Le talent, ça se travaille.",
+      "effects": "stat.discipline += 10; stat.physique += 3"
+     },
+     {
+      "id": "artiste",
+      "label": "Artiste",
+      "description": "Le beau geste avant tout.",
+      "effects": "stat.technique += 6; stat.notoriete += 3"
+     },
+     {
+      "id": "calme",
+      "label": "Calme",
+      "description": "Rien ne te fait trembler.",
+      "effects": "stat.mental += 10"
+     }
+    ]
+   }
+  ]
+ },
+ "start": {
+  "location": "terrain",
+  "event": "intro"
+ },
+ "onTickStart": "var.match_joue = faux; var.entraine = faux",
+ "onTickEnd": "stat.energie += 28; stat.sante += 4; stat.argent += var.salaire; stat.forme -= 2; stat.statut -= chapitre == ch1 ? 0 : var.grand_club ? 4 : 3; stat.moral += stat.moral < 40 ? 2 : 0; var.blesse = max(0, var.blesse - 1); eloigner(maman, 1); eloigner(yanis, 1); eloigner(djibril, rel.djibril > 10 ? 1 : 0); eloigner(karim, rel.karim > 10 ? 1 : 0); eloigner(ines, var.couple ? 1 : 0)",
+ "lists": {
+  "adversaires_u17": [
+   {
+    "nom": "Olympique Marvaux U17",
+    "court": "OM",
+    "force": 60,
+    "couleur": "#d63c3c"
+   },
+   {
+    "nom": "FC Lanvaux U17",
+    "court": "FCL",
+    "force": 48,
+    "couleur": "#2f9a4c"
+   },
+   {
+    "nom": "AS Port-Lumière U17",
+    "court": "ASP",
+    "force": 53,
+    "couleur": "#ec8a2e"
+   },
+   {
+    "nom": "Racing Valbourg U17",
+    "court": "RV",
+    "force": 46,
+    "couleur": "#7d4bc4"
+   },
+   {
+    "nom": "US Saint-Aubin U17",
+    "court": "USA",
+    "force": 40,
+    "couleur": "#eef0f4"
+   },
+   {
+    "nom": "Stade Brévannes U17",
+    "court": "SB",
+    "force": 56,
+    "couleur": "#25222b"
+   }
+  ],
+  "adversaires_d3": [
+   {
+    "nom": "AS Montclar",
+    "court": "ASM",
+    "force": 42,
+    "couleur": "#d63c3c"
+   },
+   {
+    "nom": "US Cormeilles",
+    "court": "USC",
+    "force": 38,
+    "couleur": "#2f62c9"
+   },
+   {
+    "nom": "Entente Belvès",
+    "court": "EB",
+    "force": 45,
+    "couleur": "#ec8a2e"
+   },
+   {
+    "nom": "Racing Club Haute-Lande",
+    "court": "RCH",
+    "force": 48,
+    "couleur": "#25222b"
+   },
+   {
+    "nom": "FC Port-Sainte-Anne",
+    "court": "FCP",
+    "force": 40,
+    "couleur": "#7d4bc4"
+   }
+  ],
+  "adversaires_d2": [
+   {
+    "nom": "Athletic Montclar",
+    "court": "ATM",
+    "force": 55,
+    "couleur": "#d63c3c"
+   },
+   {
+    "nom": "Union Sud-Rivage",
+    "court": "USR",
+    "force": 58,
+    "couleur": "#2fb5b0"
+   },
+   {
+    "nom": "Stade Brévannes",
+    "court": "SB",
+    "force": 60,
+    "couleur": "#25222b"
+   },
+   {
+    "nom": "FC Valbourg",
+    "court": "FCV",
+    "force": 52,
+    "couleur": "#7d4bc4"
+   },
+   {
+    "nom": "Olympique Calvane",
+    "court": "OC",
+    "force": 57,
+    "couleur": "#ec8a2e"
+   }
+  ],
+  "adversaires_d1": [
+   {
+    "nom": "Paris Étoile FC",
+    "court": "PEF",
+    "force": 82,
+    "couleur": "#1d2f5e"
+   },
+   {
+    "nom": "Olympique Marvaux",
+    "court": "OM",
+    "force": 72,
+    "couleur": "#d63c3c"
+   },
+   {
+    "nom": "AS Port-Lumière",
+    "court": "ASP",
+    "force": 66,
+    "couleur": "#ec8a2e"
+   },
+   {
+    "nom": "Racing Valbourg",
+    "court": "RV",
+    "force": 60,
+    "couleur": "#7d4bc4"
+   },
+   {
+    "nom": "Étoile du Sud",
+    "court": "EDS",
+    "force": 64,
+    "couleur": "#2fb5b0"
+   },
+   {
+    "nom": "FC Lanvaux",
+    "court": "FCL",
+    "force": 56,
+    "couleur": "#2f9a4c"
+   },
+   {
+    "nom": "Athletic Montclar",
+    "court": "ATM",
+    "force": 58,
+    "couleur": "#eef0f4"
+   }
+  ],
+  "adversaires_top": [
+   {
+    "nom": "Northbury United",
+    "court": "NU",
+    "force": 86,
+    "couleur": "#c23b3b"
+   },
+   {
+    "nom": "Real Solaria",
+    "court": "RS",
+    "force": 90,
+    "couleur": "#eef0f4"
+   },
+   {
+    "nom": "AC Ventara",
+    "court": "ACV",
+    "force": 84,
+    "couleur": "#1d2f5e"
+   },
+   {
+    "nom": "Kaiserburg 04",
+    "court": "K04",
+    "force": 85,
+    "couleur": "#d63c3c"
+   },
+   {
+    "nom": "Sporting Alvorada",
+    "court": "SA",
+    "force": 78,
+    "couleur": "#2f9a4c"
+   },
+   {
+    "nom": "Atlético Brisa",
+    "court": "AB",
+    "force": 80,
+    "couleur": "#7c2236"
+   },
+   {
+    "nom": "Dynamo Kovar",
+    "court": "DK",
+    "force": 74,
+    "couleur": "#2f62c9"
+   }
+  ],
+  "adversaires_exo": [
+   {
+    "nom": "Desert Falcons",
+    "court": "DF",
+    "force": 58,
+    "couleur": "#e2b440"
+   },
+   {
+    "nom": "Coastal Stars",
+    "court": "CS",
+    "force": 54,
+    "couleur": "#7cc3ef"
+   },
+   {
+    "nom": "Golden Palms SC",
+    "court": "GP",
+    "force": 60,
+    "couleur": "#2f9a4c"
+   },
+   {
+    "nom": "Al-Nour Club",
+    "court": "AN",
+    "force": 56,
+    "couleur": "#eef0f4"
+   }
+  ]
+ },
+ "sheet": [
+  {
+   "title": "Carrière",
+   "rows": [
+    {
+     "label": "Club",
+     "value": "{var.club}"
+    },
+    {
+     "label": "Matchs joués",
+     "value": "{var.matchs}"
+    },
+    {
+     "label": "Titularisations",
+     "value": "{var.titularisations}"
+    },
+    {
+     "label": "Buts",
+     "value": "{var.buts}"
+    },
+    {
+     "label": "Passes décisives",
+     "value": "{var.passes_d}"
+    },
+    {
+     "label": "Note moyenne",
+     "value": "{var.matchs > 0 ? arrondi(var.notes_total / var.matchs * 10) / 10 : '—'}"
+    },
+    {
+     "label": "Trophées",
+     "value": "{var.trophees}"
+    },
+    {
+     "label": "Sélections nationales",
+     "value": "{var.selections}",
+     "when": "var.selections > 0"
+    },
+    {
+     "label": "Blessures",
+     "value": "{var.blessures}"
+    },
+    {
+     "label": "Agent",
+     "value": "{var.agent_nom}",
+     "when": "var.agent != ''"
+    },
+    {
+     "label": "Salaire hebdomadaire",
+     "value": "{nombre(var.salaire)} €",
+     "when": "var.salaire > 0"
+    }
+   ]
+  }
+ ],
+ "presets": {
+  "attaque": [
+   {
+    "actor": "moi",
+    "x": 400,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "def1",
+    "team": "eux",
+    "x": 444,
+    "face": "gauche"
+   },
+   {
+    "actor": "def2",
+    "team": "eux",
+    "x": 486,
+    "lane": 2,
+    "face": "gauche"
+   },
+   {
+    "actor": "co1",
+    "team": "nous",
+    "x": 452,
+    "lane": 1,
+    "face": "droite"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 592,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "face_a_face": [
+   {
+    "actor": "moi",
+    "x": 500,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "def1",
+    "team": "eux",
+    "x": 470,
+    "lane": 1,
+    "face": "droite"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 590,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "centre": [
+   {
+    "actor": "moi",
+    "x": 548,
+    "face": "droite"
+   },
+   {
+    "actor": "co1",
+    "team": "nous",
+    "x": 470,
+    "lane": 2,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "def1",
+    "team": "eux",
+    "x": 558,
+    "lane": 1,
+    "face": "gauche"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 594,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "milieu": [
+   {
+    "actor": "moi",
+    "x": 300,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "co1",
+    "team": "nous",
+    "x": 392,
+    "lane": 1,
+    "face": "droite"
+   },
+   {
+    "actor": "co2",
+    "team": "nous",
+    "x": 452,
+    "lane": 2,
+    "face": "droite"
+   },
+   {
+    "actor": "adv1",
+    "team": "eux",
+    "x": 336,
+    "face": "gauche"
+   },
+   {
+    "actor": "adv2",
+    "team": "eux",
+    "x": 430,
+    "lane": 1,
+    "face": "gauche"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 594,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "defense": [
+   {
+    "actor": "moi",
+    "x": 120,
+    "face": "droite"
+   },
+   {
+    "actor": "att1",
+    "team": "eux",
+    "x": 168,
+    "ball": true,
+    "face": "gauche"
+   },
+   {
+    "actor": "att2",
+    "team": "eux",
+    "x": 210,
+    "lane": 2,
+    "face": "gauche"
+   },
+   {
+    "actor": "co1",
+    "team": "nous",
+    "x": 96,
+    "lane": 1,
+    "face": "droite"
+   },
+   {
+    "actor": "gkn",
+    "team": "nous",
+    "x": 44,
+    "face": "droite",
+    "role": "gardien"
+   }
+  ],
+  "corner": [
+   {
+    "actor": "moi",
+    "x": 560,
+    "lane": 1,
+    "face": "droite"
+   },
+   {
+    "actor": "def1",
+    "team": "eux",
+    "x": 570,
+    "face": "gauche"
+   },
+   {
+    "actor": "co1",
+    "team": "nous",
+    "x": 630,
+    "lane": 2,
+    "ball": true,
+    "face": "gauche"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 594,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "coup_franc": [
+   {
+    "actor": "moi",
+    "x": 430,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "mur1",
+    "team": "eux",
+    "x": 470,
+    "face": "gauche"
+   },
+   {
+    "actor": "mur2",
+    "team": "eux",
+    "x": 476,
+    "lane": 1,
+    "face": "gauche"
+   },
+   {
+    "actor": "mur3",
+    "team": "eux",
+    "x": 482,
+    "lane": 2,
+    "face": "gauche"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 594,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "penalty": [
+   {
+    "actor": "moi",
+    "x": 530,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "gk",
+    "team": "eux",
+    "x": 600,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "exercice": [
+   {
+    "actor": "moi",
+    "x": 380,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "karim",
+    "x": 452,
+    "lane": 2,
+    "face": "gauche"
+   },
+   {
+    "actor": "lucas",
+    "x": 470,
+    "lane": 1,
+    "face": "gauche"
+   },
+   {
+    "actor": "plot1",
+    "team": "chasubles",
+    "x": 424,
+    "face": "gauche"
+   },
+   {
+    "actor": "gk",
+    "team": "chasubles",
+    "x": 592,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ],
+  "exercice_seul": [
+   {
+    "actor": "moi",
+    "x": 400,
+    "ball": true,
+    "face": "droite"
+   },
+   {
+    "actor": "plot1",
+    "team": "chasubles",
+    "x": 450,
+    "face": "gauche"
+   },
+   {
+    "actor": "co1",
+    "team": "nous",
+    "x": 480,
+    "lane": 2,
+    "face": "gauche"
+   },
+   {
+    "actor": "gk",
+    "team": "chasubles",
+    "x": 592,
+    "face": "gauche",
+    "role": "gardien"
+   }
+  ]
+ },
+ "events": [],
+ "endings": []
+}

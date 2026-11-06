@@ -1,0 +1,324 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  RELATIONS — conversations avec les personnages et moments partagés
+//  (déclenchés en parlant aux personnages ou via certaines activités)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== karim_console
+titre: Soirée console
+declencheur: activity:jeux_video
+chapitres: ch1
+quand: non var.karim_renvoye
+recharge: 2
+---
+!placer karim 100 droite
+karim (rire): Toi contre moi. Le perdant range la chambre pendant une semaine.
+* Jouer sérieusement pour gagner #ambition
+  test stat.mental vs 50
+  si reussite
+    > 3–2 dans les arrêts de jeu. Karim jette la manette sur le lit.
+    ~ rel.karim += 2
+  sinon
+    > 4–0. Karim fait le tour de la chambre en criant.
+    ~ rel.karim += 4
+* Le laisser gagner discrètement #ami
+  ~ rel.karim += 5
+  karim: T'es nul, frérot. Mais je t'aime bien quand même.
+* Lui demander comment il va, vraiment #ecoute
+  karim (pensif): …Pas fort. La famille, l'argent. Si je ne signe pas pro, je ne sais pas ce qu'on fera.
+  ~ rel.karim += 6
+
+=== karim_conversation
+titre: Discussion avec Karim
+declencheur: talk:karim
+quand: rel.karim > -20 et non var.karim_renvoye
+recharge: 3
+---
+si chapitre == ch1
+  karim: Tu crois qu'on va y arriver, nous deux ?
+  * « On n'a pas le choix. » #ambition
+    ~ rel.karim += 3; stat.confiance += 2
+  * « Peu importe, tant qu'on est ensemble. » #ami
+    ~ rel.karim += 5
+sinon si rel.karim >= 40
+  karim (content): T'as vu le dernier but que j'ai mis ? Dis-moi qu'il était plus beau que le tien.
+  * Le chambrer gentiment #ami
+    ~ rel.karim += 3
+  * Lui dire que tu es fier de lui #sincere
+    ~ rel.karim += 5
+sinon
+  karim: Ça va ? …Bon. On se voit.
+  * Lui proposer un resto, comme avant #reconciliation
+    ~ rel.karim += 6
+  * Le laisser tranquille
+    ~ rel.karim += 0
+
+=== lucas_conversation
+titre: Lucas
+declencheur: talk:lucas
+quand: temps.semaine >= 2
+recharge: 4
+---
+si rel.lucas >= 20
+  lucas: Tu veux bosser les frappes après la séance ? Pas pour toi, hein. Pour moi.
+  * Accepter #collectif
+    ~ rel.lucas += 5; stat.frappe += 1
+  * Décliner
+    ~ rel.lucas -= 1
+sinon si rel.lucas <= -25
+  lucas (colere): Qu'est-ce que tu regardes ?
+  [mem.lucas.humiliation] !rappel lucas.humiliation
+  * Lui proposer d'enterrer la hache de guerre #fairplay
+    test 40 + rel.lucas / 2 + stat.mental / 4 vs 45
+    si reussite
+      lucas (pensif): …On verra. Peut-être.
+      ~ rel.lucas += 12
+    sinon
+      lucas: Tu rêves.
+  * Le provoquer #provoc
+    ~ rel.lucas -= 6
+sinon
+  lucas: Mon père dit que tu as un bon pied gauche. Venant de lui, c'est un compliment. Ne t'emballe pas.
+  * Lui demander comment c'est, d'être « le fils de » #ecoute
+    lucas (triste): Tout le monde attend que je sois lui. Personne ne m'a jamais demandé ce que je voulais être.
+    ~ rel.lucas += 8
+    ~ souvenir(lucas, confidence, "Le jour où il t'a parlé de son père")
+  * Le remercier sans plus
+    ~ rel.lucas += 1
+
+=== ines_conversation
+titre: Inès
+declencheur: talk:ines
+recharge: 3
+---
+si chapitre == ch1
+  ines: Tu bloques sur quoi, cette semaine ? Les fonctions ou les probabilités ?
+  * Réviser avec elle #etudes
+    ~ stat.etudes += 5; rel.ines += 4; stat.energie -= 5
+    ines (content): Tu vois, quand tu veux !
+  * Lui parler d'autre chose #romance
+    ~ rel.ines += 3
+    ines: Toi, tu essaies de te débarrasser des maths. …Bon. Raconte, alors.
+sinon si var.couple
+  ines (content): Tu as l'air fatigué. Viens là. Ne bouge pas, je vais dénouer ce trapèze.
+  ~ stat.sante += 5; stat.moral += 5; rel.ines += 3
+sinon
+  ines: Ça va, la star ?
+  * Lui proposer un café #romance
+    ~ rel.ines += 4
+  * Rester bref
+    ~ rel.ines += 0
+
+=== maman_visite
+titre: Chez maman
+declencheur: activity:voir_famille
+recharge: 2
+---
+!placer maman 140 droite
+si chapitre == ch1
+  maman: Tu manges bien, au centre ? Tu dors assez ? Tu révises ?
+  [var.promesse_bac] maman: Tu te souviens de ta promesse, hein ?
+  [var.promesse_bac] ~ stat.etudes += 2
+sinon si stat.argent >= 50000 et non var.maman_demenagee
+  maman: Les voisins disent que tu gagnes beaucoup d'argent maintenant. Ne laisse pas ça te changer.
+  * Lui proposer de lui acheter une maison #famille #cle
+    ~ stat.argent -= 40000; rel.maman += 15; var.maman_demenagee = vrai; var.yanis_protege += 1
+    ~ souvenir(maman, maison, "Tu lui as offert une maison")
+    maman (emu): Une maison… avec un jardin ? Mon Dieu.
+  * La rassurer : tu restes le même #famille
+    ~ rel.maman += 4
+sinon
+  maman: Raconte-moi ta semaine. Tout. Même les trucs pas intéressants.
+  ~ rel.maman += 2
+[temps.semaine % 2 == 1 et var.age < 30] yanis: Tu viens jouer au city après ?
+[temps.semaine % 2 == 1 et var.age < 30] ~ rel.yanis += 3; var.yanis_protege += 0.5
+
+=== yanis_city
+titre: Le city avec Yanis
+declencheur: activity:foot_quartier
+quand: var.age < 30
+recharge: 3
+---
+!placer yanis 160 droite
+yanis (content): Montre-moi ton crochet ! Celui de la télé !
+* Passer l'après-midi à lui apprendre #famille
+  ~ rel.yanis += 6; var.yanis_protege += 1
+  > Il le rate trente fois. À la trente et unième, il hurle de joie.
+* Jouer avec les grands, Yanis regarde
+  ~ rel.yanis += 1
+
+=== djibril_conversation
+titre: Djibril
+declencheur: talk:djibril
+quand: non var.djibril_prison
+recharge: 4
+---
+si var.affaire_djibril_legale
+  djibril (content): Patron ! On a reçu la commande de trois clubs. Trois ! Ma mère croit que je vends de la drogue tellement je gagne bien.
+  ~ rel.djibril += 4; stat.argent += 5000
+sinon si var.affaire_djibril
+  djibril: Ça tourne bien, ça tourne bien. T'inquiète pas pour les détails.
+  ~ rel.djibril += 2
+sinon si chapitre == ch1
+  djibril: Alors, le centre ? Ils vous nourrissent aux brocolis, c'est ça ?
+  * Rire avec lui #ami
+    ~ rel.djibril += 3; stat.moral += 3
+  * Lui conseiller de reprendre une formation #conseil
+    ~ rel.djibril -= 1; var.conseil_djibril += 1
+    djibril (pensif): Une formation… Ouais. Peut-être. Un jour.
+sinon
+  djibril: Tu te souviens quand on faisait des matchs jusqu'à minuit en bas des tours ?
+  ~ rel.djibril += 3; stat.moral += 2
+
+=== moreau_conversation
+titre: Le coach
+declencheur: talk:moreau
+quand: temps.semaine >= 2
+recharge: 4
+---
+si rel.moreau >= 40
+  moreau: Tu sais ce que je vois quand je te regarde jouer ? Un garçon qui a compris. C'est rare.
+  ~ stat.confiance += 3; rel.moreau += 2
+sinon si rel.moreau <= -15
+  moreau: Je n'ai rien à te dire que je ne t'aie déjà dit. Travaille.
+  * Lui demander une seconde chance #humble
+    ~ rel.moreau += 6
+    moreau: Les secondes chances, ça se gagne sur le terrain.
+  * Hausser les épaules
+    ~ rel.moreau -= 3
+sinon
+  moreau: Une question ?
+  * Lui demander comment progresser #discipline
+    ~ rel.moreau += 3; stat.mental += 1
+    moreau: Regarde les matchs. Pas les buts : les déplacements sans ballon.
+  * Lui demander s'il a été un bon joueur #ecoute
+    moreau (pensif): Un bon défenseur, oui. Pas un grand. Les grands, je les entraîne.
+    ~ rel.moreau += 4
+
+=== bruno_soins
+titre: Bruno
+declencheur: talk:bruno
+recharge: 3
+---
+si var.genou >= 2
+  bruno (inquiet): Ton genou me fait peur. Fais tes étirements, viens aux soins. Je ne plaisante pas.
+  ~ souvenir(bruno, alerte, "Il t'avait prévenu pour ton genou")
+  * Promettre de faire attention #prudent
+    ~ rel.bruno += 4; var.genou = max(0, var.genou - 0.5)
+  * « Ça va, Bruno, je suis jeune. »
+    ~ rel.bruno -= 3
+sinon
+  bruno: Viens, je te masse les mollets. Gratuitement, en plus.
+  ~ stat.sante += 6; stat.energie += 6; rel.bruno += 2
+
+=== keller_conseils
+titre: Le capitaine
+declencheur: talk:keller
+quand: temps.semaine >= 2
+recharge: 4
+---
+si rel.keller >= 15
+  keller: Tu veux un conseil de vieux ? Garde des amis en dehors du foot. Ceux d'ici partiront tous un jour.
+  ~ rel.keller += 3; stat.mental += 1
+sinon
+  keller: Tu cours beaucoup. Pas toujours au bon endroit.
+  ~ stat.mental += 1
+
+=== clara_entretien
+titre: Clara Mendès
+declencheur: talk:clara
+quand: connu.clara
+recharge: 4
+---
+clara: Une question rapide : qu'est-ce que le football vous a appris, en dehors du terrain ?
+* « La patience. » #humble
+  ~ rel.clara += 3; stat.reputation += 1
+* « Que tout le monde veut quelque chose de toi. » #sincere
+  ~ rel.clara += 5
+* « Rien. Je joue, c'est tout. »
+  ~ rel.clara -= 2
+
+=== vasseur_rendezvous
+titre: Le président
+declencheur: talk:vasseur
+quand: vu(ch3_vasseur_prolongation) ou chapitre != ch3
+recharge: 5
+---
+vasseur: Vous savez combien vous valez sur le marché ? Moi, oui. Alors continuez comme ça.
+~ rel.vasseur += 2
+
+=== gomis_conversation
+titre: Gomis
+declencheur: talk:gomis
+quand: vu(ch2_valmont_gomis)
+recharge: 3
+---
+gomis: Le bus de 6 h 40 était plein ce matin. Tous les gamins de la ligne parlaient de toi.
+~ rel.gomis += 3; stat.moral += 3
+
+=== hansen_conversation
+titre: L'entraîneur
+declencheur: talk:hansen
+quand: vu(ch3_hansen_poste) ou chapitre == ch2
+recharge: 4
+---
+hansen: Ton positionnement défensif est une catastrophe. Mais tu as faim. Ça, je peux travailler avec.
+~ rel.hansen += 2; stat.statut += 1
+
+=== rinaldi_conversation
+titre: Rinaldi
+declencheur: talk:rinaldi
+quand: vu(ch4_rinaldi)
+recharge: 4
+---
+si rel.rinaldi >= 10
+  rinaldi (content): Ce soir, dîner chez moi. Ma mère fait les meilleures pâtes de la planète.
+  ~ rel.rinaldi += 3; stat.moral += 4
+sinon
+  rinaldi: Tu me fais de l'ombre, tu sais. J'ai horreur de l'ombre.
+  ~ rel.rinaldi -= 1
+
+=== agent_point
+titre: Point avec ton agent
+declencheur: activity:rencontre_agent
+recharge: 2
+---
+si var.agent == santini
+  !placer santini 200 gauche
+  santini: Champion ! J'ai une marque de boissons énergisantes qui veut ta tête sur ses canettes. Deux jours de tournage.
+  * Accepter #argent
+    ~ stat.argent += 15000; stat.notoriete += 3; stat.energie -= 20
+  * Refuser, tu as besoin de repos #discipline
+    ~ rel.santini -= 3
+sinon
+  !placer lambert 200 gauche
+  lambert: Votre épargne est bien placée. Et j'ai inscrit votre nom pour une formation en management du sport, à distance. Pour plus tard.
+  * T'inscrire #etudes
+    ~ stat.etudes += 6; var.etudes_actives = vrai; rel.lambert += 3
+  * Plus tard
+    ~ rel.lambert += 0
+
+=== ines_soiree
+titre: Soirée avec Inès
+declencheur: activity:voir_ines
+recharge: 2
+---
+!placer ines 230 gauche
+si var.couple
+  ines (content): Ce soir, interdiction de parler foot. Tu tiens combien de temps, à ton avis ?
+  ~ rel.ines += 3; stat.moral += 4
+sinon si rel.ines >= 30
+  ines: C'est drôle… Avec toi, je ne vois pas le temps passer.
+  * Lui avouer tes sentiments #romance #cle
+    test rel.ines vs 38
+    si reussite
+      ines (emu): …Enfin. J'attendais que tu le dises.
+      ~ var.couple = vrai; rel.ines += 10
+      ~ souvenir(ines, aveu, "Le soir où tu lui as dit ce que tu ressentais")
+    sinon
+      ines (pensif): Je t'aime beaucoup… mais je ne suis pas prête. Pas encore.
+      ~ rel.ines -= 2
+  * Profiter de la soirée, simplement
+    ~ rel.ines += 4
+sinon
+  ines: Merci pour le dîner. C'était sympa.
+  ~ rel.ines += 3

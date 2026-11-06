@@ -1,0 +1,316 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ENTRAÎNEMENTS — séance collective hebdomadaire + réserve d'exercices
+// ═══════════════════════════════════════════════════════════════════════
+
+=== entrainement_semaine
+titre: Entraînement collectif
+declencheur: enter:terrain
+quand: non var.entraine et var.blesse == 0 et var.saison
+priorite: 40
+tags: important
+---
+~ var.entraine = vrai
+!equipe chasubles orange #ffffff #25222b orange
+> Séance collective avec {var.coach_nom}.
+tirer exercice 1
+~ stat.forme += 4; stat.energie -= 12; stat.statut += 1
+!ballon cacher
+
+=== absence_entrainement
+titre: Absent à l'entraînement
+declencheur: tick_end
+quand: non var.entraine et var.blesse == 0 et var.saison
+priorite: 90
+---
+> Tu n'as pas mis les pieds à l'entraînement collectif cette semaine.
+si var.club_id == rivemont
+  ~ rel.moreau -= 6
+~ stat.statut -= 8; stat.discipline -= 4; stat.forme -= 6
+> {var.coach_nom} l'a noté. Ta place dans l'équipe en souffre.
+~ actu("{var.coach_nom} s'interroge sur ton implication après une semaine sans entraînement.")
+
+// ── Réserve d'exercices ────────────────────────────────────────────────
+
+=== ex_trois_contre_deux
+titre: Trois contre deux
+declencheur: pool:exercice
+poids: 3
+---
+!preset exercice_seul
+!camera moi
+> Trois contre deux. Le ballon arrive dans tes pieds, un coéquipier se démarque, un défenseur fonce sur toi.
+* Passer au coéquipier démarqué #collectif
+  test stat.passe vs 44
+  !ballon vers co1 passe
+  si reussite
+    !anim co1 frappe
+    !ballon vers but tir
+    > Passe parfaite, but facile.
+    ~ stat.passe += 1; stat.statut += 2
+  sinon
+    > Ta passe traîne, le défenseur intercepte.
+* Éliminer le défenseur #individuel
+  test stat.technique vs 50
+  si reussite
+    !courir moi 470
+    !anim moi frappe
+    !ballon vers but tir
+    > Grand pont et frappe : le coach applaudit discrètement.
+    ~ stat.technique += 1; stat.confiance += 3
+  sinon
+    !anim plot1 tacle
+    !ballon vers plot1 passe
+    > Le défenseur t'arrête net.
+    ~ stat.confiance -= 2
+* Frapper tout de suite #frappe
+  test stat.frappe vs 54
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    > Sous la barre.
+    ~ stat.frappe += 1; stat.confiance += 2
+  sinon
+    !ballon vers dessus tir
+    > Dans le grillage.
+* Garder le ballon, attendre le soutien #prudent
+  > Le jeu ralentit. Prudent, mais efficace.
+  ~ stat.mental += 1
+
+=== ex_atelier_frappes
+titre: Atelier frappes
+declencheur: pool:exercice
+poids: joueur.poste == 'attaquant' ? 3 : 1.5
+---
+!preset exercice_seul
+!retirer plot1
+!retirer co1
+> Atelier finition : vingt ballons, un gardien, et le coach qui compte.
+* Tout en puissance #frappe
+  test stat.frappe + stat.physique / 4 vs 58
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    > Quinze sur vingt. Le gardien secoue les mains, douloureux.
+    ~ stat.frappe += 2; stat.statut += 2
+  sinon
+    !ballon vers dessus tir
+    > Huit sur vingt. Les filets de protection ont beaucoup travaillé.
+    ~ stat.frappe += 1
+* Tout en placement #technique
+  test stat.technique + stat.mental / 4 vs 56
+  !anim moi passe
+  si reussite
+    !ballon vers but passe
+    > Petit filet, opposé, encore petit filet. Chirurgical.
+    ~ stat.frappe += 1; stat.technique += 1; stat.statut += 2
+  sinon
+    !ballon vers gk passe
+    > Le gardien lit chacune de tes intentions.
+* Tester des gestes improbables #artiste
+  test stat.technique vs 66
+  !anim moi frappe
+  si reussite
+    !ballon vers but lob
+    > Une aile de pigeon, une reprise de volée en ciseau. Le groupe hurle.
+    ~ stat.technique += 2; stat.notoriete += 1; stat.confiance += 4
+  sinon
+    !ballon vers dessus lob
+    > Personne ne sait où est parti le ballon. Le coach soupire.
+    ~ stat.statut -= 2; stat.discipline -= 1
+
+=== ex_rondo
+titre: Toro
+declencheur: pool:exercice
+poids: joueur.poste == 'milieu' ? 3 : 1.5
+---
+!preset milieu
+!camera moi
+> Toro à huit : deux joueurs au milieu essaient de récupérer le ballon.
+* Passes rapides, une touche #collectif
+  test stat.passe + stat.mental / 5 vs 52
+  !ballon vers co1 passe
+  si reussite
+    > Ta circulation de balle rend les chasseurs fous.
+    ~ stat.passe += 2; stat.statut += 1
+  sinon
+    > Une passe molle. Tu passes au milieu.
+    ~ stat.passe += 1
+* Tenter le petit pont #artiste
+  test stat.technique vs 58
+  si reussite
+    > Le petit pont fait rire tout le monde… sauf la victime.
+    ~ stat.technique += 1; stat.confiance += 3
+  sinon
+    > Raté. Au milieu, et sous les moqueries.
+    ~ stat.confiance -= 3
+* Jouer sûr, sans risque #prudent
+  > Pas de faute, pas d'éclat.
+  ~ stat.passe += 1
+
+=== ex_tactique
+titre: Séance tactique
+declencheur: pool:exercice
+poids: 2
+---
+> Séance tactique au tableau : pressing haut, sorties de balle, coups de pied arrêtés.
+* Écouter et prendre des notes #discipline
+  ~ stat.mental += 2; stat.discipline += 2; stat.statut += 2
+  > Tu remplis deux pages. Le coach le remarque.
+* Proposer une idée de jeu #leader
+  test stat.mental + stat.confiance / 3 vs 58
+  si reussite
+    > Ton idée de décrochage du milieu séduit le staff. Elle sera testée samedi.
+    ~ stat.statut += 5; stat.confiance += 4
+    [var.club_id == rivemont] ~ rel.moreau += 4
+  sinon
+    > Le coach te coupe : « Quand tu auras entraîné, on en reparlera. »
+    ~ stat.confiance -= 3
+* Rêvasser au fond de la salle
+  ~ stat.statut -= 3; stat.discipline -= 2
+  > « Tu peux répéter ce que je viens de dire ? » Non.
+
+=== ex_test_physique
+titre: Test physique
+declencheur: pool:exercice
+poids: 2
+---
+> Test d'endurance par paliers. Le bip s'accélère à chaque minute.
+* Aller jusqu'au bout de tes limites #physique
+  test stat.physique + stat.energie / 5 vs 60
+  si reussite
+    > Dernier debout. Le préparateur physique note ton score en rouge.
+    ~ stat.physique += 3; stat.statut += 3; stat.energie -= 15
+  sinon
+    > Tu t'écroules au palier 11, les poumons en feu. Une douleur te pince la cuisse.
+    ~ stat.physique += 1; stat.sante -= 10; var.genou += 1; stat.energie -= 20
+* Gérer ton effort #prudent
+  > Un score correct, sans te mettre dans le rouge.
+  ~ stat.physique += 1
+* Tricher en coupant les virages #triche
+  test stat.mental vs 50
+  si reussite
+    > Personne n'a rien vu. Score flatteur.
+    ~ stat.statut += 1; stat.discipline -= 3
+  sinon
+    > Le préparateur t'a vu. « Recommence. Seul. Devant tout le monde. »
+    ~ stat.statut -= 6; stat.discipline -= 4; stat.moral -= 5
+
+=== ex_coups_francs
+titre: Coups francs
+declencheur: pool:exercice
+poids: 1.5
+---
+!preset coup_franc
+> Atelier coups francs, à vingt-cinq mètres. Le mur est en mousse, le gardien est bien réel.
+* Enroulé par-dessus le mur #technique
+  test stat.technique + stat.frappe / 3 vs 66
+  !anim moi frappe
+  si reussite
+    !ballon vers but lob
+    > Le ballon tourne, plonge, entre. Magnifique.
+    ~ stat.technique += 2; var.tireur_cf = vrai
+  sinon
+    !ballon vers dessus lob
+    > Trop haut.
+* Frappe puissante sous le mur #frappe
+  test stat.frappe vs 62
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    > Le mur saute, le ballon passe dessous. Malin.
+    ~ stat.frappe += 2; var.tireur_cf = vrai
+  sinon
+    !ballon vers mur1 tir
+    > En plein dans le mur.
+
+=== ex_opposition
+titre: Opposition
+declencheur: pool:exercice
+quand: var.lucas_club == var.club_id
+poids: 2
+---
+!placer lucas 420 gauche
+!placer moi 380 droite
+> Match d'opposition. Lucas en face de toi, et il n'est pas là pour faire des passes.
+lucas: Fais attention à tes chevilles.
+* Rentrer dans le duel à fond #physique
+  test stat.physique + stat.defense / 3 vs 56
+  !anim moi tacle
+  si reussite
+    > Tu gagnes le ballon proprement. Lucas reste au sol, vexé.
+    ~ stat.statut += 3; rel.lucas -= 3
+  sinon
+    !anim lucas joie
+    > Lucas t'efface d'un crochet et marque.
+    ~ stat.confiance -= 3
+* Jouer juste, sans te laisser provoquer #fairplay
+  ~ stat.mental += 2; rel.lucas += 3
+  > Tu restes concentré. Lucas finit par se calmer, lui aussi.
+* [rel.lucas <= -25] Lui mettre un coup en douce #violent
+  test stat.mental vs 55
+  !anim moi tacle
+  !anim lucas chute
+  si reussite
+    > Personne n'a rien vu. Lucas boite jusqu'au vestiaire.
+    ~ rel.lucas -= 15; stat.discipline -= 6
+    ~ souvenir(lucas, coup, "Ton coup en douce à l'entraînement")
+  sinon
+    > Le coach a tout vu. Exclu de la séance.
+    ~ rel.lucas -= 15; stat.statut -= 10; stat.discipline -= 8
+    ~ souvenir(lucas, coup, "Ton coup en douce à l'entraînement")
+
+=== ex_defense
+titre: Atelier défensif
+declencheur: pool:exercice
+poids: joueur.poste == 'defenseur' ? 3 : 1
+---
+!preset defense
+> Atelier défensif : un attaquant lancé face à toi, dix fois de suite.
+* Rester debout, temporiser #prudent
+  test stat.defense + stat.mental / 4 vs 52
+  si reussite
+    > Tu l'obliges à reculer à chaque fois.
+    ~ stat.defense += 2; stat.statut += 2
+  sinon
+    > Il t'élimine sur sa vitesse.
+    ~ stat.defense += 1
+* Tacler dès que possible #physique
+  test stat.defense + stat.physique / 4 vs 58
+  !anim moi tacle
+  si reussite
+    > Des tacles nets, au millimètre.
+    ~ stat.defense += 2; stat.physique += 1
+  sinon
+    !anim moi chute
+    > Tu glisses dans le vide trois fois sur quatre.
+    ~ stat.sante -= 4
+
+=== ex_jeune_pousse
+titre: Le jeune qui t'admire
+declencheur: pool:exercice
+quand: temps.chapitre >= 3
+poids: 1.5
+---
+> Un gamin du centre de formation, quinze ans à peine, te demande des conseils après la séance.
+* Prendre du temps pour lui #mentor
+  ~ stat.mental += 1; stat.reputation += 1; var.mentorat += 1
+  > Tu lui montres ton contrôle orienté pendant une demi-heure. Il a les yeux qui brillent.
+* « Pas le temps, petit. »
+  > Il repart, tête basse.
+  ~ var.mentorat -= 1
+
+=== ex_capitaine_seance
+titre: Mener l'échauffement
+declencheur: pool:exercice
+quand: temps.chapitre >= 4
+poids: 1.5
+---
+> Le coach te demande de mener l'échauffement du groupe.
+* Donner de la voix, motiver tout le monde #leader
+  ~ stat.statut += 3; stat.confiance += 2; var.leadership += 1
+  > Le groupe répond. Tu sens que ta voix porte désormais.
+* Faire le minimum
+  ~ stat.statut -= 1

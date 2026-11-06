@@ -1,0 +1,419 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 3 — L'ÉCLOSION (21 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch3_debut
+titre: Trois ans plus tard
+declencheur: chapter_start
+chapitres: ch3
+unique: oui
+priorite: 100
+---
+> Trois ans ont passé.
+~ stat.technique += 6; stat.frappe += 6; stat.passe += 6; stat.defense += 5; stat.physique += 6; stat.mental += 7
+~ stat.technique += stat.discipline >= 60 ? 3 : 0; stat.mental += stat.discipline >= 60 ? 2 : 0
+~ stat.energie = 100; stat.forme = 60
+~ eloigner(maman, rel.maman >= 60 ? 3 : 10); eloigner(karim, rel.karim >= 50 ? 2 : 10); eloigner(djibril, rel.djibril >= 40 ? 2 : 8); eloigner(yanis, var.yanis_protege >= 2 ? 2 : 8)
+si var.prochain_club == lanvaux
+  appel club_lanvaux
+  ~ var.salaire = 2500; stat.statut = 62
+  > Le FC Lanvaux, deuxième division. Tu es titulaire indiscutable, et le public t'a adopté.
+sinon si var.prochain_club == valmont
+  appel club_valmont
+  ~ var.salaire = 600; stat.statut = 72; var.ligue = "d3"
+  > Toujours à Valmont, toujours au magasin le matin. Mais le club est monté d'une division, grâce à toi.
+sinon si var.club_id == marvaux
+  appel club_marvaux
+  ~ var.salaire = 9000; stat.statut = max(stat.statut, 44)
+  > Trois saisons à Marvaux. Le Vélodrome des Pins scande ton nom les soirs de victoire.
+sinon
+  appel club_rivemont
+  ~ var.salaire = var.retour_rivemont ? 5000 : 6500; stat.statut = max(stat.statut, 46)
+  > Tu es désormais un joueur qui compte au Stade Rivemont.
+[var.pret] > Ton année de prêt à Lanvaux t'a endurci : temps de jeu, coups, terrains impossibles. Tu es revenu transformé.
+[var.pret] ~ stat.statut += 16; stat.mental += 4; stat.physique += 3
+~ stat.reputation += 6
+[var.club_id == rivemont et rel.keller >= 20] > Thomas Keller a pris sa retraite. Avant de partir, il t'a confié son brassard d'entraînement « pour les jours où il faudra parler fort ».
+[var.club_id == rivemont et rel.keller >= 20] ~ var.heritier_keller = vrai
+~ objectif(selection, "Être sélectionné en équipe nationale")
+
+=== ch3_derby
+titre: Le derby
+declencheur: tick_end
+chapitres: ch3
+quand: temps.semaine == 3 et (var.club_id == rivemont ou var.club_id == marvaux)
+unique: oui
+priorite: 80
+---
+~ var.match_joue = vrai; var.score_nous = 0; var.score_eux = 0; var.minute = 0; var.note_match = 6; var.stade_taille = 3
+si var.club_id == rivemont
+  ~ var.adversaire = "Olympique Marvaux"; var.adv_court = "OM"; var.adv_couleur = "#d63c3c"
+sinon
+  ~ var.adversaire = "Stade Rivemont"; var.adv_court = "SR"; var.adv_couleur = "#1f4e9c"
+!lieu stade 320 nuit
+!equipe nous {var.club_couleur} {var.club_couleur2} #ffffff {var.club_couleur}
+!equipe eux {var.adv_couleur} #ffffff #ffffff {var.adv_couleur}
+!fx foule 0.95
+> Le derby. Quarante mille personnes, des fumigènes, des chants qui font trembler les tribunes.
+[var.club_id == marvaux] > À chaque ballon que tu touches, la tribune de Rivemont siffle : « Traître ! Traître ! »
+~ var.titularisations += 1; var.matchs += 1
+~ var.minute = 34
+!preset attaque
+si var.lucas_club == rivemont et var.club_id == marvaux
+  !placer lucas 444 gauche
+  > {var.minute}e minute. Lucas Ferrand te fait face. Il te souffle : « Ce soir, on règle nos comptes. »
+  [mem.lucas.interview] !rappel lucas.interview
+sinon si var.lucas_club == rivemont
+  !placer lucas 452 droite 1
+  > {var.minute}e minute. Lucas se démarque à côté de toi.
+  [rel.lucas <= -20] > Il ne t'a pas adressé la parole de la semaine.
+sinon
+  > {var.minute}e minute. Le ballon arrive dans tes pieds, aux abords de la surface.
+* Frapper en force #frappe
+  test stat.frappe + stat.forme / 5 vs 68
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    !fx filet
+    !son but
+    !fx foule 1
+    !titre BUT !
+    ~ var.score_nous += 1; var.buts += 1; var.note_match += 1.4; stat.reputation += 4; stat.notoriete += 4
+    > Le stade explose !
+  sinon
+    !ballon vers dessus tir
+    ~ var.note_match -= 0.3
+    > Au-dessus.
+* [var.lucas_club == var.club_id] Servir Lucas #collectif
+  !ballon vers lucas passe
+  test 55 + rel.lucas / 5 vs 50
+  si reussite
+    !anim lucas frappe
+    !ballon vers but tir
+    !fx filet
+    ~ var.score_nous += 1; var.passes_d += 1; var.note_match += 0.9; rel.lucas += 10
+    > Lucas marque. Il court vers toi, hésite… et te tape dans la main.
+  sinon
+    > Lucas manque le cadre.
+* Provoquer un penalty en entrant dans la surface #malin
+  test stat.technique + stat.mental / 4 vs 64
+  si reussite
+    !anim def1 tacle
+    !anim moi chute
+    > Penalty ! Tu te relèves, tu prends le ballon, tu transformes.
+    !ballon vers but tir
+    !fx filet
+    ~ var.score_nous += 1; var.buts += 1; var.note_match += 1.1
+  sinon
+    !anim moi chute
+    > L'arbitre ne siffle rien. Carton jaune pour simulation.
+    ~ var.note_match -= 0.6; var.cartons += 1
+~ var.minute = 89
+!preset defense
+> {var.minute}e minute. Dernière attaque adverse.
+!ballon vers but_gauche tir
+si chance(45)
+  !fx filet
+  ~ var.score_eux += 1
+  > But adverse dans les derniers instants.
+sinon
+  > Le poteau ! Le ballon ressort.
+~ var.score_nous += poisson(0.6); var.score_eux += poisson(0.6)
+!son sifflet
+si var.score_nous > var.score_eux
+  !fx confettis
+  !anim moi joie boucle
+  > Victoire dans le derby, {var.score_nous}–{var.score_eux} ! La ville est à vous pour une semaine.
+  ~ stat.moral += 12; stat.reputation += 5; stat.statut += 5
+  [var.club_id == rivemont] ~ rel.vasseur += 8
+sinon si var.score_nous == var.score_eux
+  > Match nul, {var.score_nous}–{var.score_eux}. Personne n'est content.
+sinon
+  !anim moi triste
+  > Défaite {var.score_nous}–{var.score_eux}. La plus douloureuse de la saison.
+  ~ stat.moral -= 10
+~ var.notes_total += var.note_match
+!anim moi idle
+!ballon cacher
+!fx foule 0.3
+
+=== ch3_espoirs
+titre: L'appel des Espoirs
+declencheur: tick_start
+chapitres: ch3
+quand: stat.reputation >= 32
+unique: oui
+priorite: 65
+---
+!son telephone
+> Un numéro inconnu. « Bonjour, ici le staff de l'équipe nationale Espoirs. Le sélectionneur Laurent Bastide suit vos performances. Vous êtes convoqué pour le prochain rassemblement. »
+~ var.selections_espoirs += 1; stat.reputation += 5; stat.confiance += 6; rel.maman += 4
+~ rencontrer(bastide)
+> Une semaine plus tard, tu marques ton premier but sous le maillot national, chez les Espoirs.
+~ var.buts += 1; stat.notoriete += 4; stat.energie -= 15
+* Envoyer le maillot à ta mère #famille
+  ~ rel.maman += 8
+  > Elle l'accroche dans l'entrée. Elle le montre à tous les voisins.
+* L'offrir à Yanis #famille
+  ~ rel.yanis += 10; var.yanis_protege += 1
+  > Yanis dort avec, paraît-il.
+* Le garder pour toi #fier
+  ~ stat.confiance += 3
+
+=== ch3_sponsor
+titre: Le contrat de sponsoring
+declencheur: tick_start
+chapitres: ch3
+quand: stat.reputation >= 26 et temps.semaine >= 2
+unique: oui
+priorite: 60
+---
+!lieu ville 300 jour
+si var.agent == santini
+  !placer santini 344 gauche
+  santini (content): Champion ! Deux offres. Vortex, la marque de chaussures. Et PariMax, le site de paris en ligne. PariMax paie trois fois plus.
+sinon si var.agent == lambert
+  !placer lambert 344 gauche
+  lambert: Deux propositions. Vortex, qui veut faire de vous l'image de sa nouvelle chaussure. Et PariMax, un site de paris sportifs. Je vous déconseille le second.
+sinon
+  > Deux marques te contactent directement : Vortex, l'équipementier, et PariMax, un site de paris sportifs.
+* Signer avec Vortex #image
+  ~ stat.argent += 40000; stat.notoriete += 6; var.sponsor = "vortex"; stat.reputation += 2
+  > Ton visage sur des panneaux de quatre mètres. Yanis t'envoie des photos de chaque affiche qu'il croise.
+* Signer avec PariMax (trois fois plus d'argent) #argent #cle
+  ~ stat.argent += 120000; stat.notoriete += 4; var.sponsor = "parimax"; stat.reputation -= 3; rel.santini += 10; rel.lambert -= 10
+  ~ souvenir(clara, parimax, "Ton contrat avec un site de paris sportifs")
+  > Le chèque est énorme. Quelques journalistes froncent les sourcils.
+* Refuser les deux, rester discret #humble
+  ~ stat.reputation += 1; rel.lambert += 4; rel.santini -= 8
+
+=== ch3_karim_blessure
+titre: Le genou de Karim
+declencheur: tick_start
+chapitres: ch3
+quand: non var.karim_renvoye et temps.semaine >= 3
+unique: oui
+priorite: 70
+---
+!son telephone
+> Un message de la mère de Karim : « Karim s'est rompu les ligaments croisés à l'entraînement. Il ne veut voir personne. Peut-être toi ? »
+* Aller le voir tout de suite, et revenir chaque semaine #loyal #cle
+  ~ var.soutien_karim = vrai; rel.karim += 20; stat.energie -= 15; stat.statut -= 2
+  ~ souvenir(karim, soutien, "Tu étais là chaque semaine pendant sa rééducation")
+  !lieu infirmerie 150
+  !placer karim 190 gauche
+  karim (triste): Neuf mois, ils disent. Peut-être plus. Peut-être jamais comme avant.
+  moi: Alors on fera neuf mois ensemble. Un jour après l'autre.
+  [mem.karim.couvert ou mem.karim.accompagne] karim (emu): Encore toi. Toujours toi.
+* [stat.argent >= 30000] Lui payer le meilleur chirurgien du pays #genereux
+  ~ stat.argent -= 30000; var.chirurgien_karim = vrai; rel.karim += 12
+  > Karim t'appelle, la voix cassée. « T'avais pas à faire ça. …Merci. »
+* Lui envoyer un message, sans plus
+  ~ rel.karim += 2
+  > « Courage frérot. » Deux mots. Tu sais que ce n'est pas assez.
+* Tu as trop de matchs en ce moment
+  ~ rel.karim -= 12
+  ~ souvenir(karim, absence, "Tu n'es jamais venu pendant sa blessure")
+
+=== ch3_djibril_affaire
+titre: Le projet de Djibril
+declencheur: enter:quartier
+chapitres: ch3
+quand: temps.semaine >= 2
+unique: oui
+priorite: 60
+---
+!placer djibril 400 gauche
+!placer moi 360 droite
+djibril (content): Frère ! J'ai un plan. Le plan de ma vie.
+si var.pret_djibril
+  djibril: Ton argent, je l'ai fait fructifier. Des montres, des sacs… qui arrivent par bateau. Pas de facture, pas de taxe. Tu vois ?
+sinon
+  djibril: Des montres, des sacs… qui arrivent par bateau. Pas de facture, pas de taxe. Il me manque juste un associé avec un peu d'argent. Et un nom.
+* Investir avec lui #argent #cle
+  ~ var.affaire_djibril = vrai; stat.argent -= min(stat.argent, 20000); rel.djibril += 15
+  ~ souvenir(djibril, associe, "Tu as investi dans son trafic")
+  djibril (rire): Associés ! Comme quand on avait dix ans !
+* [stat.argent >= 15000 et rel.djibril >= 25] Lui proposer de monter une vraie marque de vêtements, légale, ensemble #ami #cle
+  ~ var.affaire_djibril_legale = vrai; stat.argent -= 15000; rel.djibril += 20
+  ~ souvenir(djibril, marque, "Tu l'as sorti des combines pour monter une vraie marque")
+  djibril (pensif): Une vraie boîte ? Avec des papiers, un comptable et tout ? …Pourquoi pas. Avec toi, pourquoi pas.
+* Refuser et lui demander de laisser tomber ces combines #honnete
+  ~ rel.djibril -= 10
+  djibril (colere): T'as oublié d'où tu viens, toi.
+  [var.pret_djibril] ~ stat.argent += 3000
+  [var.pret_djibril] > Il te rend ton argent le lendemain, en liquide, sans un mot.
+* Refuser, mais rester son ami #ami
+  ~ rel.djibril -= 2
+  djibril: Ok, ok. T'es une star maintenant, faut faire attention, je comprends.
+
+=== ch3_yanis_police
+titre: Un appel du commissariat
+declencheur: tick_start
+chapitres: ch3
+quand: var.yanis_neglige >= var.yanis_protege et temps.semaine >= 2
+unique: oui
+priorite: 72
+---
+!son telephone
+maman (inquiet): C'est Yanis. Il est au commissariat. Ils l'ont trouvé avec les grands du bâtiment D, dans une voiture volée.
+!lieu quartier 300 soir
+* Tout lâcher et y aller, même si tu rates l'entraînement #famille #cle
+  ~ var.yanis_protege += 2; rel.yanis += 15; rel.maman += 10; stat.statut -= 6
+  ~ souvenir(yanis, commissariat, "Tu as tout lâché pour venir le chercher au commissariat")
+  !placer yanis 340 gauche
+  yanis (triste): Je voulais juste qu'ils me respectent… comme ils te respectent toi.
+  moi: Ils ne te respectent pas, Yanis. Ils t'utilisent. Moi, je te respecte.
+  [mem.yanis.promesse] !rappel yanis.promesse
+* Payer un avocat, mais rester avec l'équipe #argent
+  ~ stat.argent -= min(stat.argent, 8000); var.yanis_protege += 1; rel.maman += 2; rel.yanis -= 4
+  > L'avocat règle l'affaire. Yanis t'envoie un message : « Merci pour l'avocat. » Juste ça.
+* Lui dire qu'il doit assumer ses actes #dur
+  ~ var.yanis_neglige += 2; rel.yanis -= 15; rel.maman -= 8
+  ~ souvenir(yanis, abandon, "Tu l'as laissé seul au commissariat")
+  maman (triste): C'est ton frère…
+
+=== ch3_photos_boite
+titre: Les photos
+declencheur: activity:boite_nuit
+chapitres: ch3, ch4
+quand: stat.notoriete >= 15
+unique: oui
+priorite: 60
+---
+> Trois heures du matin. Un flash. Puis un autre.
+!fx flashs
+> Le lendemain, la photo fait la une des sites people : toi, debout sur une banquette, une bouteille à la main, la veille d'un match.
+~ stat.reputation -= 6; stat.statut -= 8; stat.notoriete += 6; var.scandale += 1
+[var.couple] ~ rel.ines -= 12
+[var.couple] ines (colere): Tu m'avais dit que tu dormais tôt. Tu me prends pour qui ?
+~ souvenir(clara, photos, "Les photos de ta nuit au Néon")
+* Présenter des excuses publiques #humble
+  ~ stat.reputation += 3; stat.discipline += 3
+* Ne rien dire et attendre que ça passe
+  ~ stat.discipline -= 2
+* Attaquer les paparazzis sur les réseaux #impulsif
+  ~ stat.notoriete += 4; stat.reputation -= 3
+
+=== ch3_changement_poste
+titre: Un nouveau rôle
+declencheur: talk:moreau
+chapitres: ch3
+quand: var.club_id == rivemont
+unique: oui
+priorite: 55
+---
+moreau: J'ai besoin de toi ailleurs. Notre milieu défensif est blessé pour trois mois. Tu as le volume, l'intelligence. Je veux t'y essayer.
+[mem.moreau.signature] !rappel moreau.signature
+* Accepter pour le bien de l'équipe #collectif #cle
+  ~ rel.moreau += 10; stat.statut += 8; stat.defense += 4; stat.passe += 2; stat.notoriete -= 2
+  ~ souvenir(moreau, sacrifice, "Tu as accepté de changer de poste pour l'équipe")
+  moreau: Je savais que je pouvais compter sur toi.
+* Refuser : tu veux jouer à ton poste #individuel
+  ~ rel.moreau -= 8; stat.confiance += 3
+  moreau (colere): Le poste, c'est moi qui le décide. Mais bon. On fera sans toi, là-bas.
+* Proposer un compromis : quelques matchs, puis retour à ton poste #malin
+  ~ rel.moreau += 3; stat.statut += 3
+  moreau: Marché conclu.
+
+=== ch3_hansen_poste
+titre: Les exigences du coach
+declencheur: talk:hansen
+chapitres: ch3, ch4
+unique: oui
+priorite: 55
+---
+hansen: Je vais être direct. Tu as du talent, mais tu joues pour toi. Ici, on joue pour le système.
+* Promettre de te plier au système #collectif
+  ~ rel.hansen += 10; stat.statut += 6
+* Défendre ton style : « Je fais gagner l'équipe à ma façon. » #individuel
+  test stat.statut + stat.confiance / 3 vs 60
+  si reussite
+    hansen: …Prouve-le. Je te laisse cinq matchs.
+    ~ rel.hansen += 2; stat.confiance += 4
+  sinon
+    hansen: Banc, ce week-end. On reparlera de ta façon.
+    ~ rel.hansen -= 8; stat.statut -= 8
+
+=== ch3_ines_diplome
+titre: Le diplôme d'Inès
+declencheur: tick_start
+chapitres: ch3
+quand: var.couple et temps.semaine >= 4
+unique: oui
+priorite: 60
+---
+!lieu restaurant 180 soir
+!placer ines 230 gauche
+!placer moi 190 droite
+ines (content): J'ai mon diplôme. Kinésithérapeute. Officiellement.
+* Lui proposer d'emménager ensemble #romance #cle
+  ~ var.vit_ensemble = vrai; rel.ines += 15; stat.moral += 10
+  ~ souvenir(ines, emmenagement, "Tu lui as proposé de vivre ensemble le soir de son diplôme")
+  ines (emu): …Oui. Évidemment, oui.
+* Lui offrir un cadeau somptueux #flambeur
+  ~ stat.argent -= min(stat.argent, 5000); rel.ines += 5
+  ines (pensif): C'est… beaucoup. Merci. J'aurais préféré du temps, mais merci.
+* Fêter ça avec ses amis à elle #ecoute
+  ~ rel.ines += 10
+  > Tu passes la soirée avec des étudiants en kiné qui te demandent des autographes pour leurs pères.
+
+=== ch3_vasseur_prolongation
+titre: La prolongation
+declencheur: talk:vasseur
+chapitres: ch3
+unique: oui
+priorite: 55
+---
+vasseur: Asseyez-vous. Je vais droit au but : je veux prolonger votre contrat. Cinq ans. Avec une clause de fidélité.
+vasseur: Vous gagnez plus. Mais si vous partez avant la fin, vous laissez une partie de vos primes au club.
+~ rencontrer(vasseur)
+* Signer la prolongation avec la clause #loyal #cle
+  ~ var.clause_fidelite = vrai; var.salaire += 3000; rel.vasseur += 15; var.loyal_rivemont = vrai
+  ~ souvenir(vasseur, prolongation, "Tu as signé une prolongation de cinq ans avec clause de fidélité")
+  vasseur (content): Voilà un garçon qui comprend ce qu'est un club.
+* Signer, mais sans clause #prudent
+  ~ var.salaire += 1500; rel.vasseur += 4
+* Refuser de prolonger pour garder tes options ouvertes #ambition
+  ~ rel.vasseur -= 10
+  vasseur (pensif): Je vois. Vous avez déjà la tête ailleurs.
+
+=== ch3_mercato
+titre: Le mercato
+declencheur: chapter_end
+chapitres: ch3
+unique: oui
+priorite: 100
+---
+!lieu {var.agent != "" ? "agence" : "appartement"} 160 jour
+~ var.bonus_offres = var.agent == santini ? 10 : var.agent == lambert ? 4 : 0
+> Le mercato d'été s'ouvre. Ton téléphone ne s'arrête plus de vibrer.
+[var.agent == santini] santini (content): Champion, tout le monde te veut. TOUT LE MONDE.
+[var.agent == lambert] lambert: Les offres sont là. Prenons le temps d'y réfléchir ensemble.
+si stat.reputation + var.bonus_offres >= 58
+  > Real Solaria, Northbury United et l'AC Ventara se sont manifestés. Des montants qui donnent le vertige.
+sinon si stat.reputation + var.bonus_offres >= 40
+  > Quelques clubs de première division s'intéressent à toi.
+sinon
+  > Peu d'offres. Le mercato sera calme pour toi.
+* [stat.reputation + var.bonus_offres >= 64] Signer au Real Solaria #ambition #cle
+  ~ var.prochain_club = "solaria"; var.transfert_record = vrai
+* [stat.reputation + var.bonus_offres >= 58] Signer à Northbury United #ambition #cle
+  ~ var.prochain_club = "northbury"; var.transfert_record = vrai
+* [stat.reputation + var.bonus_offres >= 58] Signer à l'AC Ventara #ambition #cle
+  ~ var.prochain_club = "ventara"; var.transfert_record = vrai
+* [stat.reputation + var.bonus_offres >= 40 et var.club_id != rivemont et var.club_id != marvaux] Rejoindre le Stade Rivemont en D1 #retour
+  ~ var.prochain_club = "rivemont"
+* [var.agent == santini] Accepter l'offre colossale d'Al-Nour Club #argent #cle
+  ~ var.prochain_club = "alnour"
+  santini (fier): Là, tu parles ! Ma commission… pardon, ton avenir est assuré !
+* [var.club_id == rivemont] Rester à Rivemont : c'est ton club #loyal #cle
+  ~ var.prochain_club = "rivemont"; rel.vasseur += 10; rel.moreau += 6
+  [mem.vasseur.prolongation] !rappel vasseur.prolongation
+  ~ souvenir(moreau, fidele, "Tu as refusé les plus grands clubs pour rester à Rivemont")
+* [var.club_id != rivemont] Rester dans ton club actuel
+  ~ var.prochain_club = var.club_id
+[var.clause_fidelite et var.prochain_club != rivemont et var.club_id == rivemont] !rappel vasseur.prolongation
+[var.clause_fidelite et var.prochain_club != rivemont et var.club_id == rivemont] > La clause de fidélité s'applique : tu laisses une grosse partie de tes primes au club. Le président ne te serre pas la main.
+[var.clause_fidelite et var.prochain_club != rivemont et var.club_id == rivemont] ~ stat.argent -= min(stat.argent, 60000); rel.vasseur -= 30

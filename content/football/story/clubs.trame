@@ -1,0 +1,52 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CLUBS — « fonctions » appelées par les scripts (appel club_xxx)
+//  Chaque club définit son identité visuelle, son niveau et son entraîneur.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== club_rivemont
+titre: Club : Stade Rivemont
+declencheur: manual
+---
+~ var.club = "Stade Rivemont"; var.club_id = "rivemont"; var.club_court = "SR"; var.club_couleur = "#1f4e9c"; var.club_couleur2 = "#f2c230"; var.stade_nom = "Stade des Cerisiers"; var.ville = "Rivemont"; var.coach_nom = "Didier Moreau"; var.club_etranger = faux; var.ligue = "d1"; var.stade_taille = 2; var.force_equipe = 62
+
+=== club_marvaux
+titre: Club : Olympique Marvaux
+declencheur: manual
+---
+~ var.club = "Olympique Marvaux"; var.club_id = "marvaux"; var.club_court = "OM"; var.club_couleur = "#d63c3c"; var.club_couleur2 = "#ffffff"; var.stade_nom = "Vélodrome des Pins"; var.ville = "Marvaux"; var.coach_nom = "Viktor Hansen"; var.club_etranger = vrai; var.ligue = "d1"; var.stade_taille = 3; var.force_equipe = 70; var.loyal_rivemont = faux
+
+=== club_valmont
+titre: Club : FC Valmont
+declencheur: manual
+---
+~ var.club = "FC Valmont"; var.club_id = "valmont"; var.club_court = "FCV"; var.club_couleur = "#2f9a4c"; var.club_couleur2 = "#ffffff"; var.stade_nom = "Stade Municipal de Valmont"; var.ville = "Valmont"; var.coach_nom = "Patrick Gomis"; var.club_etranger = faux; var.ligue = "d3"; var.stade_taille = 1; var.force_equipe = 46
+
+=== club_lanvaux
+titre: Club : FC Lanvaux
+declencheur: manual
+---
+~ var.club = "FC Lanvaux"; var.club_id = "lanvaux"; var.club_court = "FCL"; var.club_couleur = "#2fb5b0"; var.club_couleur2 = "#1d2f5e"; var.stade_nom = "Stade de la Lande"; var.ville = "Lanvaux"; var.coach_nom = "Hervé Lacombe"; var.club_etranger = vrai; var.ligue = "d2"; var.stade_taille = 1; var.force_equipe = 56; var.loyal_rivemont = faux
+
+=== club_northbury
+titre: Club : Northbury United
+declencheur: manual
+---
+~ var.club = "Northbury United"; var.club_id = "northbury"; var.club_court = "NU"; var.club_couleur = "#c23b3b"; var.club_couleur2 = "#ffffff"; var.stade_nom = "Northbury Park"; var.ville = "Northbury"; var.coach_nom = "Graham Holt"; var.club_etranger = vrai; var.ligue = "top"; var.stade_taille = 3; var.force_equipe = 86; var.loyal_rivemont = faux; var.grand_club = vrai
+
+=== club_solaria
+titre: Club : Real Solaria
+declencheur: manual
+---
+~ var.club = "Real Solaria"; var.club_id = "solaria"; var.club_court = "RS"; var.club_couleur = "#eef0f4"; var.club_couleur2 = "#7d4bc4"; var.stade_nom = "Estadio del Sol"; var.ville = "Solaria"; var.coach_nom = "Álvaro Reyes"; var.club_etranger = vrai; var.ligue = "top"; var.stade_taille = 3; var.force_equipe = 90; var.loyal_rivemont = faux; var.grand_club = vrai
+
+=== club_ventara
+titre: Club : AC Ventara
+declencheur: manual
+---
+~ var.club = "AC Ventara"; var.club_id = "ventara"; var.club_court = "ACV"; var.club_couleur = "#1d2f5e"; var.club_couleur2 = "#e2b440"; var.stade_nom = "Stadio Ventara"; var.ville = "Ventara"; var.coach_nom = "Lorenzo Bianchi"; var.club_etranger = vrai; var.ligue = "top"; var.stade_taille = 3; var.force_equipe = 84; var.loyal_rivemont = faux; var.grand_club = vrai
+
+=== club_alnour
+titre: Club : Al-Nour Club
+declencheur: manual
+---
+~ var.club = "Al-Nour Club"; var.club_id = "alnour"; var.club_court = "AN"; var.club_couleur = "#eef0f4"; var.club_couleur2 = "#2f9a4c"; var.stade_nom = "Al-Nour Arena"; var.ville = "Al-Nour"; var.coach_nom = "Rafael Duarte"; var.club_etranger = vrai; var.ligue = "exo"; var.stade_taille = 2; var.force_equipe = 60; var.loyal_rivemont = faux; var.grand_club = faux

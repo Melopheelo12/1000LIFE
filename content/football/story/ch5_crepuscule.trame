@@ -1,0 +1,219 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 5 — LE CRÉPUSCULE (31 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch5_debut
+titre: Six ans plus tard
+declencheur: chapter_start
+chapitres: ch5
+unique: oui
+priorite: 100
+---
+> Six ans ont passé. Six saisons, des victoires, des défaites, des matins où le corps grince un peu plus.
+~ stat.physique -= 8; stat.technique += 2; stat.mental += 8; stat.passe += 3; stat.energie = 90; stat.forme = 55
+~ stat.physique -= var.genou * 2
+~ eloigner(maman, rel.maman >= 60 ? 3 : 12); eloigner(karim, rel.karim >= 50 ? 2 : 12); eloigner(yanis, var.yanis_protege >= 2 ? 2 : 10)
+~ var.carriere_banc = stat.statut < 45
+~ var.matchs += 180; var.titularisations += arrondi(180 * (var.carriere_banc ? 0.3 : min(0.95, stat.statut / 100 * (var.grand_club ? 0.7 : 1.1)))); var.buts += arrondi(stat.frappe / 2 + (joueur.poste == "attaquant" ? 40 : joueur.poste == "milieu" ? 15 : 5)); var.notes_total += 180 * (5.6 + stat.reputation / 50)
+si var.grand_club
+  ~ var.trophees += 3 + plancher(stat.reputation / 40); var.trophees_majeurs += stat.reputation >= 75 ? 1 : 0
+  > Avec {var.club}, tu as accumulé les titres nationaux. Ton armoire déborde.
+sinon si var.club_id == rivemont
+  ~ var.trophees += stat.reputation >= 55 ? 2 : 1; var.titres_rivemont += stat.reputation >= 55 ? 1 : 0
+  > Avec Rivemont, tu as vécu des soirs de gloire{var.titres_rivemont >= 1 ? ", et même un titre de champion" : ""}.
+sinon
+  ~ var.trophees += 1
+  > Tu as joué, beaucoup. Gagné, parfois.
+~ stat.reputation += 4; var.salaire = arrondi(var.salaire * 0.7)
+[var.carriere_banc] > Tu as passé une bonne partie de ces années sur le banc. Toujours prêt, rarement appelé.
+[var.affaire_djibril_legale] > La marque que tu as lancée avec Djibril habille désormais trois clubs. Il t'appelle « patron » pour rire.
+[var.djibril_prison] > Djibril est sorti de prison l'an dernier. Il ne t'a jamais rappelé.
+~ objectif(sortie, "Réussir ta sortie")
+
+=== ch5_derniere_decision
+titre: La dernière décision
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 1
+unique: oui
+priorite: 85
+---
+!lieu appartement 250 soir
+> À 31 ans, tu sais que la fin approche. Trois options s'offrent à toi.
+[var.agent == santini] santini: Al-Nour Club t'offre un dernier contrat. Deux ans. Une fortune.
+[var.agent == lambert] lambert: Je vous connais : vous savez déjà ce que vous voulez. Je vous suivrai.
+* [var.club_id != alnour] Partir à Al-Nour Club pour un dernier gros contrat #argent
+  appel club_alnour
+  ~ var.salaire = 180000; stat.argent += 800000; stat.reputation -= 4
+  > Un salaire hallucinant, un stade à moitié vide et beaucoup de temps libre.
+* [var.club_id != rivemont] Revenir au Stade Rivemont pour une dernière saison #loyal #cle
+  appel club_rivemont
+  ~ var.salaire = 15000; var.retour_final = vrai; stat.statut = 65
+  ~ souvenir(moreau, dernier_retour, "Tu es revenu finir ta carrière à Rivemont")
+  > Les supporters ont accroché une banderole immense : « BIENVENUE À LA MAISON ».
+  [rel.moreau >= 20] moreau (emu): Je t'ai gardé ton ancien casier.
+* Rester dans ton club actuel #constance
+  ~ stat.statut += 5
+
+=== ch5_karim
+titre: Karim
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 2 et non var.karim_renvoye
+unique: oui
+priorite: 65
+---
+!lieu city 200 soir
+!placer karim 250 gauche
+!placer moi 200 droite
+si rel.karim >= 40
+  karim (content): Le city des Tilleuls… Tu te rappelles ? C'est ici qu'on rêvait de tout ça.
+  karim: Moi, j'arrête à la fin de la saison. J'ouvre une école de foot. Et je veux que tu en sois le parrain.
+  [mem.karim.couvert] !rappel karim.couvert
+  [mem.karim.accompagne] !rappel karim.accompagne
+  * Accepter, ému #loyal
+    ~ rel.karim += 15; var.parrain_ecole = vrai
+    karim (emu): Je t'avais dit que je te revaudrais ça. Ça fait quinze ans que j'essaie.
+  * Lui proposer de la monter ensemble #ami
+    ~ rel.karim += 15; var.ecole_karim = vrai
+sinon si rel.karim >= 0
+  karim: Salut. Ça fait longtemps. Je voulais juste… te dire bravo. Pour tout.
+  * Lui proposer d'aller boire un verre, comme avant #reconciliation
+    ~ rel.karim += 20
+    > Vous parlez jusqu'à deux heures du matin. Les vieilles blessures se referment un peu.
+  * Le remercier poliment
+    ~ rel.karim += 3
+sinon
+  > Karim est là, au bord du terrain. Il te regarde. Puis il s'en va.
+  [mem.karim.trahison] !rappel karim.trahison
+  [mem.karim.refus] !rappel karim.refus
+  * Le rattraper et t'excuser, enfin #reconciliation #cle
+    test 50 + rel.karim / 3 + stat.mental / 5 vs 50
+    si reussite
+      !courir moi 300
+      karim (triste): Quinze ans que j'attends ces mots. Quinze ans.
+      ~ rel.karim += 35
+      > Il te prend dans ses bras. Brièvement. Mais il le fait.
+    sinon
+      > Il ne se retourne pas.
+  * Le laisser partir
+    ~ stat.moral -= 6
+
+=== ch5_yanis
+titre: Yanis
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 3
+unique: oui
+priorite: 64
+---
+si var.yanis_protege > var.yanis_neglige
+  ~ var.yanis_sauve = vrai
+  !lieu quartier 300 jour
+  !placer yanis 340 gauche
+  > Yanis a vingt-quatre ans. Il vient de réussir son diplôme d'éducateur sportif.
+  yanis (content): Tu sais pourquoi je fais ça ? À cause d'un grand frère qui venait me chercher au commissariat et me traînait au city le dimanche.
+  [mem.yanis.commissariat] !rappel yanis.commissariat
+  [mem.yanis.promesse] !rappel yanis.promesse
+  ~ rel.yanis += 10
+sinon
+  ~ var.yanis_perdu = vrai
+  > Ta mère t'appelle en pleurs. Yanis a été condamné. Deux ans de prison ferme.
+  [mem.yanis.abandon] !rappel yanis.abandon
+  ~ stat.moral -= 15; rel.maman -= 6
+  * Lui rendre visite chaque mois #famille
+    ~ rel.yanis += 10; rel.maman += 6
+    > Derrière la vitre, Yanis baisse les yeux. « Pardon. » Tu poses ta main contre la vitre.
+  * Payer les meilleurs avocats pour l'appel #argent
+    ~ stat.argent -= min(stat.argent, 50000); rel.maman += 4
+    > L'appel réduit la peine. Un peu.
+
+=== ch5_formation
+titre: Le diplôme d'entraîneur
+declencheur: tick_start
+chapitres: ch5
+quand: rel.moreau >= 20 et temps.semaine == 2
+unique: oui
+priorite: 60
+---
+!son telephone
+moreau: Allô ? C'est Didier Moreau. J'ai une proposition. La fédération ouvre une session du diplôme d'entraîneur. J'en suis l'un des formateurs. Je t'ai inscrit. Enfin, si tu veux.
+[mem.moreau.sacrifice] !rappel moreau.sacrifice
+* Accepter : transmettre, c'est la suite logique #mentor #cle
+  ~ var.formation_entraineur = vrai; var.diplome += 2; rel.moreau += 10
+  moreau (content): Alors au travail. Révise chaque semaine. Je ne te ferai aucun cadeau.
+* Refuser poliment : ce n'est pas pour toi
+  ~ rel.moreau -= 2
+
+=== ch5_formation_appel
+titre: Une formation pour l'après
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 2 et rel.moreau < 20 et stat.etudes >= 45
+unique: oui
+priorite: 50
+---
+!son telephone
+> La fédération propose aux joueurs en fin de carrière un diplôme d'entraîneur. Tu as le niveau scolaire pour t'inscrire.
+* T'inscrire #mentor
+  ~ var.formation_entraineur = vrai; var.diplome += 1
+* Pas pour l'instant
+
+=== ch5_jubile
+titre: Le dernier match
+declencheur: tick_end
+chapitres: ch5
+quand: temps.semaine == 4
+unique: oui
+priorite: 95
+---
+~ var.match_joue = vrai; var.stade_taille = 3; var.score_nous = 0; var.score_eux = 0; var.minute = 0
+~ var.adversaire = "les légendes du club"; var.adv_court = "LEG"; var.adv_couleur = "#eef0f4"
+!lieu stade 320 nuit
+!equipe nous {var.club_couleur} {var.club_couleur2} #ffffff {var.club_couleur}
+!equipe eux #eef0f4 #25222b #25222b #eef0f4
+!fx foule 1
+> Ton jubilé. Ton dernier match. Le stade est plein, et pas seulement de supporters.
+[rel.maman >= 25] > Au premier rang, ta mère, avec la vieille écharpe qu'elle portait lors de ta finale de la Coupe des Espoirs.
+[rel.maman < 25] > La place réservée à ta mère est vide. Elle t'a envoyé un message : « Je n'ai pas pu. Je regarderai à la télé. »
+[var.couple] > Inès est là. Elle a fait cinq cents kilomètres et elle a déjà les yeux rouges.
+[var.yanis_sauve] > Yanis est venu avec quinze gamins de la cité, tous en maillot floqué à ton nom.
+[rel.karim >= 30 et non var.karim_renvoye] > Karim a demandé à jouer dans l'équipe adverse. « Pour te marquer une dernière fois. »
+[rel.moreau >= 30] > Didier Moreau est sur le banc. Il a accepté de coacher ton équipe pour un soir.
+[rel.lucas >= 30] > Même Lucas Ferrand est venu. Il te fait un signe de tête. Ça vaut tous les discours.
+[rel.djibril >= 30 et non var.djibril_prison] > Djibril a apporté un drapeau géant. À l'endroit, cette fois.
+!son sifflet
+~ var.minute = 89
+!preset penalty
+> 89e minute. L'arbitre siffle un penalty. Tes coéquipiers te poussent vers le point blanc.
+* Tirer en force, comme à tes 16 ans #frappe
+  !anim moi frappe
+  !son frappe
+  !ballon vers but tir
+  !fx filet
+* Panenka, pour la légende #artiste
+  !anim moi passe
+  !ballon vers but lob
+  !fx filet
+* Laisser le ballon au plus jeune du groupe #mentor
+  > Tu tends le ballon à un gamin de dix-sept ans. Il marque. Le stade t'applaudit encore plus fort.
+  ~ var.mentorat += 2
+!son but
+!fx confettis
+!titre MERCI !
+!anim moi joie boucle
+> Le stade entier chante ton nom. Tu fais le tour du terrain, lentement, pour graver chaque visage.
+~ var.buts += 1
+!anim moi idle
+> Et maintenant ?
+* [var.formation_entraineur et var.diplome >= 2] Devenir entraîneur #mentor #cle
+  ~ var.retraite = "coach"
+* [var.yanis_sauve] Rentrer à la cité et créer une école de foot avec Yanis #famille #cle
+  ~ var.retraite = "famille"
+* [stat.argent >= 200000] Te lancer dans les affaires #argent #cle
+  ~ var.retraite = "business"
+* [stat.etudes >= 45] Reprendre des études #etudes #cle
+  ~ var.retraite = "etudes"
+* Prendre du temps pour toi, et voir venir
+  ~ var.retraite = "repos"
+!fx foule 0.4

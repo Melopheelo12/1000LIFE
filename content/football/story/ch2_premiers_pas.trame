@@ -1,0 +1,385 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 2 — PREMIERS PAS (18 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch2_debut
+titre: Deux ans plus tard
+declencheur: chapter_start
+chapitres: ch2
+unique: oui
+priorite: 100
+---
+> Deux ans ont passé.
+~ var.bac = stat.etudes >= 55
+si var.bac
+  > Tu as obtenu ton bac{stat.etudes >= 72 ? ", avec mention" : ""}.
+  [var.promesse_bac] !rappel maman.promesse
+  [var.promesse_bac] > Ta mère a pleuré au téléphone. Elle a fait encadrer le diplôme.
+  [var.promesse_bac] ~ rel.maman += 10
+sinon
+  > Le bac, tu l'as raté.
+  [var.promesse_bac] !rappel maman.promesse
+  [var.promesse_bac] > Ta mère n'a rien dit. C'était pire que des cris.
+  [var.promesse_bac] ~ rel.maman -= 12
+~ stat.technique += 6; stat.frappe += 5; stat.passe += 5; stat.defense += 4; stat.physique += 8; stat.mental += 5
+~ stat.technique += stat.discipline >= 60 ? 3 : 0; stat.physique += stat.discipline >= 60 ? 3 : 0
+~ stat.energie = 100; stat.forme = 55
+~ eloigner(maman, rel.maman >= 60 ? 3 : 10); eloigner(karim, rel.karim >= 50 ? 2 : 10); eloigner(djibril, rel.djibril >= 40 ? 2 : 8); eloigner(yanis, var.yanis_protege >= 2 ? 2 : 8)
+si var.club_id == rivemont
+  appel club_rivemont
+  ~ var.salaire = 1200; stat.statut = 32; var.niveau = "Pro"
+  > Contrat stagiaire pro au Stade Rivemont. Tu t'entraînes avec l'équipe première, où Didier Moreau vient d'être nommé entraîneur.
+sinon si var.club_id == marvaux
+  appel club_marvaux
+  ~ var.salaire = 1600; stat.statut = 30
+  > Tu as rejoint l'Olympique Marvaux. Meilleures installations, plus gros salaire… et des supporters de Rivemont qui t'ont rebaptisé « le traître ».
+sinon
+  appel club_valmont
+  ~ var.salaire = 350; stat.statut = 55
+  > Tu joues au FC Valmont, en National 3. La semaine, tu travailles dans un magasin de sport. Le soir, tu t'entraînes sous les ordres de Patrick Gomis.
+si non var.karim_renvoye
+  si var.karim_couvert ou var.karim_accompagne
+    ~ var.karim_club = "rivemont"
+    > Karim a signé pro au Stade Rivemont.{var.club_id == rivemont ? " Vous partagez toujours le même vestiaire." : ""}
+  sinon
+    ~ var.karim_club = "valmont"
+    > Karim n'a pas été conservé par Rivemont. Il joue maintenant au FC Valmont, en amateur.
+    [var.club_id == valmont] > Votre premier entraînement ensemble a été… glacial.
+~ var.lucas_club = "rivemont"
+> Lucas Ferrand, lui, a signé pro au Stade Rivemont. Évidemment.
+~ objectif(titulaire, "Gagner ta place de titulaire")
+!lieu {var.club_id == valmont ? "quartier" : "ville"} 300 jour
+
+=== ch2_agents
+titre: Les agents
+declencheur: tick_start
+chapitres: ch2
+quand: var.club_id != valmont
+unique: oui
+priorite: 80
+---
+!lieu ville 300 jour
+!placer santini 344 gauche
+> Une berline s'arrête à ta hauteur. Un homme en costume crème en sort, lunettes de soleil sur le nez.
+santini (content): Mon champion ! Marco Santini. J'ai négocié trois des dix plus gros transferts de l'histoire. Avec moi, dans trois ans, tu gagnes en une semaine ce que ta mère gagne en dix ans.
+!entrer lambert gauche 262
+lambert: Bonjour. Sophie Lambert. Pardon de m'imposer : j'ai cru comprendre que vous cherchiez un agent.
+lambert: Je n'ai que six joueurs. Tous jouent encore, tous ont fini leurs études ou presque. Je ne promets pas des millions. Je promets des carrières longues.
+santini (moqueur): Des carrières longues… et pauvres.
+~ rencontrer(santini); rencontrer(lambert)
+* Signer avec Marco Santini #ambition #cle
+  ~ var.agent = "santini"; var.agent_nom = "Santini & Associés"; rel.santini += 20; stat.argent += 5000
+  ~ souvenir(santini, signature, "Tu as signé avec lui à 18 ans")
+  santini (fier): Excellent choix ! Voilà une petite avance pour fêter ça.
+* Signer avec Sophie Lambert #prudent #cle
+  ~ var.agent = "lambert"; var.agent_nom = "Lambert Conseil"; rel.lambert += 20
+  ~ souvenir(lambert, signature, "Tu l'as choisie à 18 ans, plutôt que Santini")
+  lambert: Merci de votre confiance. On avance pas à pas.
+* [rel.maman >= 40] Laisser ta mère gérer tes contrats #famille
+  ~ var.agent = ""; rel.maman += 10
+  > Ta mère éclate de rire au téléphone. Puis elle accepte, très sérieusement.
+* Personne pour l'instant
+  ~ var.agent = ""
+  santini: Tu reviendras. Ils reviennent tous.
+
+=== ch2_keller_tradition
+titre: Le capitaine
+declencheur: enter:vestiaire
+chapitres: ch2
+quand: var.club_id == rivemont
+unique: oui
+priorite: 70
+---
+!placer keller 200 gauche
+!placer moi 160 droite
+keller: C'est toi, le gamin du centre ? Thomas Keller. Capitaine.
+~ rencontrer(keller)
+keller: Ici, les jeunes portent les sacs de ballons, ramassent les plots et chantent devant tout le monde au premier repas. C'est la tradition.
+* Accepter avec le sourire #humble
+  ~ rel.keller += 12; stat.statut += 3
+  > Le soir même, tu chantes un vieux tube devant trente joueurs hilares.
+  keller (rire): Tu chantes comme une casserole. Mais t'as du cran.
+  ~ souvenir(keller, chanson, "Tu as accepté la tradition sans broncher")
+* Refuser : « Je suis là pour jouer, pas pour porter des sacs. » #fier
+  ~ rel.keller -= 15; stat.confiance += 3
+  keller (colere): Comme tu veux, petit. On verra combien de temps tu tiens.
+  ~ souvenir(keller, refus, "Tu as refusé la tradition des jeunes")
+* Négocier : porter les sacs, mais ne pas chanter #malin
+  test stat.mental + stat.confiance / 4 vs 52
+  si reussite
+    keller: …Ha. Un négociateur. D'accord. Mais tu porteras les sacs pendant un an.
+    ~ rel.keller += 5
+  sinon
+    keller: Ici, on ne négocie pas avec le capitaine. Tu chanteras deux fois.
+    ~ rel.keller -= 3
+
+=== ch2_premier_salaire
+titre: Le premier salaire
+declencheur: tick_start
+chapitres: ch2
+quand: temps.semaine == 2 et var.salaire >= 1000
+unique: oui
+priorite: 75
+---
+!lieu appartement 200 soir
+> Ton premier vrai salaire vient de tomber, avec la prime de signature. Plus d'argent que ta mère n'en gagne en six mois.
+~ stat.argent += 4000
+* Aider maman à quitter la cité des Tilleuls #famille #cle
+  ~ stat.argent -= 3500; rel.maman += 15; rel.yanis += 10; var.maman_demenagee = vrai; var.yanis_protege += 1
+  ~ souvenir(maman, demenagement, "Tu l'as aidée à quitter la cité des Tilleuls")
+  > Au téléphone, ta mère ne parvient pas à finir ses phrases.
+* T'offrir une voiture de sport #flambeur #cle
+  ~ stat.argent -= 3800; stat.notoriete += 4; stat.moral += 8; var.voiture = vrai; rel.maman -= 4
+  > Rouge, bruyante, magnifique. Ta mère a vu la photo sur les réseaux. Elle n'a rien dit.
+* Prêter de l'argent à Djibril pour son « projet » #ami
+  ~ stat.argent -= 3000; rel.djibril += 15; var.pret_djibril = vrai
+  > Djibril t'envoie un message : « Je te le rends au centuple, frère. Tu verras. »
+* Tout mettre de côté #prudent
+  ~ stat.discipline += 3
+  > Tu ouvres un livret d'épargne. Un jour, tu seras content de l'avoir fait.
+
+=== ch2_debut_pro
+titre: Les débuts en première division
+declencheur: tick_end
+chapitres: ch2
+quand: var.club_id != valmont et temps.semaine >= 3 et (stat.statut >= 40 ou temps.semaine >= 5)
+unique: oui
+priorite: 80
+---
+~ var.match_joue = vrai; var.score_nous = 0; var.score_eux = 1; var.minute = 74; var.note_match = 6
+~ var.adversaire = "Paris Étoile FC"; var.adv_court = "PEF"; var.adv_couleur = "#1d2f5e"; var.stade_taille = 3
+!lieu stade 320 nuit
+!equipe nous {var.club_couleur} {var.club_couleur2} #ffffff {var.club_couleur}
+!equipe eux #1d2f5e #d63c3c #ffffff #1d2f5e
+!fx foule 0.8
+> Première division. Vingt-cinq mille spectateurs. Paris Étoile mène 1–0. 74e minute.
+[var.club_id == rivemont] moreau: {joueur.nom}. Échauffé ? Tu entres. Montre-leur.
+[var.club_id != rivemont] hansen: Tu entres. Sans peur.
+!son sifflet
+> Tu poses le pied sur la pelouse. Tes jambes tremblent.
+[var.club_id == rivemont et rel.keller >= 10] keller: Respire, petit. Un ballon à la fois.
+~ var.matchs += 1
+!preset attaque
+~ var.minute = 81
+> {var.minute}e minute. Premier ballon dans tes pieds.
+* Jouer simple : une passe, un appel #prudent
+  test stat.passe vs 45
+  !ballon vers co1 passe
+  si reussite
+    ~ var.note_match += 0.5; stat.confiance += 4
+    > Propre. Le public applaudit poliment. Tu respires enfin.
+  sinon
+    ~ var.note_match -= 0.3
+    > Passe ratée. Quelques sifflets.
+* Tenter ta chance, frappe directe #ambition
+  test stat.frappe + stat.confiance / 4 vs 64
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    !fx filet
+    !son but
+    !fx foule 1
+    !titre BUT !
+    ~ var.score_nous += 1; var.buts += 1; var.note_match += 1.5; stat.reputation += 6; stat.notoriete += 6; stat.confiance += 8
+    > Pour ton premier ballon en pro, tu égalises ! Le stade est debout.
+    ~ actu("Premier ballon, premier but : le jeune {joueur.nom} sauve {var.club} face à Paris Étoile !")
+  sinon
+    !ballon vers dessus tir
+    ~ var.note_match -= 0.5
+    > Ta frappe s'envole. En tribune de presse, quelqu'un écrit « précipité ».
+* Dribbler le meilleur défenseur du pays #artiste
+  test stat.technique + stat.confiance / 4 vs 66
+  si reussite
+    !courir moi 470
+    > Tu l'effaces d'un passement de jambes. Le stade rugit.
+    ~ var.note_match += 1; stat.notoriete += 4; stat.reputation += 3
+  sinon
+    !anim def1 tacle
+    > Il te prend le ballon comme on prend un bonbon à un enfant.
+    ~ var.note_match -= 0.5; stat.confiance -= 4
+!ballon cacher
+!son sifflet
+~ var.notes_total += var.note_match; stat.statut += arrondi((var.note_match - 6) * 4) + 3
+> Coup de sifflet final. Tu es officiellement un joueur de première division.
+!fx foule 0.3
+
+=== ch2_retrouvailles_ines
+titre: Inès
+declencheur: enter:ville
+chapitres: ch2
+quand: connu.ines
+unique: oui
+priorite: 55
+---
+!placer ines 344 gauche
+!placer moi 300 droite
+ines (surpris): {joueur.nom} ? Ça alors ! Tu as grandi. Et on parle de toi dans le journal, maintenant.
+ines: Moi, j'ai eu mon concours. Kiné, deuxième année. Je fais mon stage dans un centre de rééducation.
+[var.bac] ines (content): Et ton bac ? …Tu l'as eu ? Je savais que les maths finiraient par rentrer !
+* L'inviter à dîner au Phare #romance #cle
+  test rel.ines + stat.confiance / 2 vs 30
+  si reussite
+    ines (content): …D'accord. Mais c'est moi qui choisis le dessert.
+    ~ var.rdv_ines = vrai; rel.ines += 10
+    ~ planifier(ch2_diner_ines, 1)
+  sinon
+    ines: C'est gentil… mais je ne sais pas. On se recroisera ?
+    ~ rel.ines += 2
+* Lui proposer de rester en contact #ami
+  ~ rel.ines += 5
+  ines: Avec plaisir. Et si un jour tu te blesses, tu sais qui appeler.
+* Prétexter un rendez-vous et filer
+  ~ rel.ines -= 4
+  ines (pensif): Ah. Bon. Bonne chance, alors, la star.
+
+=== ch2_diner_ines
+titre: Dîner au Phare
+declencheur: scheduled
+---
+!lieu restaurant 180 soir
+!placer ines 230 gauche
+!placer moi 190 droite
+> Une table près de la fenêtre. Inès commande pour vous deux sans hésiter.
+ines: Alors, raconte. Ça fait quoi, d'entendre vingt mille personnes crier ton nom ?
+* Être honnête : la pression, la peur de décevoir #sincere
+  ~ rel.ines += 12
+  ines (emu): Merci de ne pas me faire le numéro de la star. C'est ça que je préfère, chez toi.
+* Frimer : les filles, l'argent, la célébrité #frime
+  ~ rel.ines -= 8
+  ines (pensif): …D'accord. Je vois.
+* Retourner la question et parler de ses études à elle #ecoute
+  ~ rel.ines += 10
+  ines (content): Personne ne me pose jamais la question.
+si rel.ines >= 28
+  > À la fin du repas, elle pose sa main sur la tienne.
+  ines: On remet ça ? Disons… tous les jeudis ?
+  ~ var.couple = vrai
+  ~ souvenir(ines, premier_diner, "Votre premier dîner au Phare")
+  ~ actu("Inès et toi, c'est officiel.")
+sinon
+  ines: C'était sympa. On s'appelle ?
+
+=== ch2_karim_situation
+titre: Des nouvelles de Karim
+declencheur: tick_start
+chapitres: ch2
+quand: temps.semaine == 3
+unique: oui
+priorite: 60
+---
+si var.karim_renvoye
+  !lieu ville 300 soir
+  > À la sortie d'un fast-food, tu croises Karim. Il porte un uniforme de livreur.
+  !rappel karim.trahison
+  > Il te reconnaît. Il fait demi-tour sans un mot.
+  ~ stat.moral -= 6
+sinon si var.karim_club == var.club_id
+  !lieu terrain 300
+  !placer karim 340 gauche
+  si rel.karim >= 30
+    karim (content): Tu te rends compte ? Nous deux, pros. Comme on l'avait dit, dans notre chambre pourrie du centre.
+    ~ rel.karim += 4
+  sinon
+    karim: Salut. …Bon entraînement.
+sinon
+  > Karim t'envoie un message : « Valmont a gagné 3–0. J'ai mis un doublé. Toujours là, toujours debout. »
+  * Le féliciter chaleureusement #ami
+    ~ rel.karim += 8
+    > « Merci, frère. Ça me touche. »
+  * Ne pas répondre
+    ~ rel.karim -= 6
+
+=== ch2_premiere_interview
+titre: Première interview
+declencheur: enter:salle_presse
+chapitres: ch2, ch3
+unique: oui
+priorite: 60
+---
+!placer clara 290 gauche
+!placer moi 230 droite
+clara: Clara Mendès, « Ballon & Crampons ». On dit que vous êtes le grand espoir du club. Vous le pensez aussi ?
+~ rencontrer(clara)
+* « Je suis là pour travailler. Le reste, ce sont des mots. » #humble
+  ~ rel.clara += 6; stat.reputation += 2
+  clara: Réponse sage. Rare, à votre âge.
+* « Dans deux ans, je serai le meilleur joueur du pays. » #ambition
+  ~ stat.notoriete += 6; rel.clara -= 2; stat.confiance += 4
+  clara (pensif): Je le note. Je vous le ressortirai dans deux ans.
+* [var.lucas_club == var.club_id] « Lucas Ferrand ? Il joue grâce au nom de son père. » #provoc #cle
+  ~ stat.notoriete += 8; rel.lucas -= 20; rel.clara += 2; stat.discipline -= 3
+  ~ souvenir(lucas, interview, "Tu l'as humilié dans la presse")
+  clara (surpris): …Vous savez que je vais publier ça ?
+
+=== ch2_valmont_magasin
+titre: Le magasin de sport
+declencheur: tick_start
+chapitres: ch2
+quand: var.club_id == valmont et temps.semaine == 2
+unique: oui
+priorite: 70
+---
+!lieu ville 300 jour
+> Ton patron au magasin de sport te demande de travailler le samedi matin… le jour du match.
+* Accepter : la famille a besoin de cet argent #famille
+  ~ stat.argent += 600; stat.energie -= 20; stat.forme -= 6; rel.gomis -= 4; rel.maman += 4
+* Refuser : le foot passe avant #ambition
+  ~ stat.discipline += 2; rel.gomis += 4
+  > Ton patron grogne, puis cède.
+* Demander à Gomis d'en parler à ton patron #debrouillard
+  ~ rel.gomis += 6
+  > Gomis passe au magasin avec un maillot dédicacé de toute l'équipe. Problème réglé.
+
+=== ch2_valmont_gomis
+titre: Le discours de Gomis
+declencheur: talk:gomis
+chapitres: ch2, ch3
+unique: oui
+priorite: 60
+---
+gomis: Tu sais pourquoi je fais ça, petit ? Chauffeur de bus le jour, entraîneur le soir ?
+gomis: Il y a dix ans, un gamin comme toi est passé ici. Rejeté par tous les centres. Aujourd'hui, il joue en équipe nationale. Je veux revoir ça une fois dans ma vie.
+* Lui promettre de lui faire honneur #loyal
+  ~ rel.gomis += 12; stat.moral += 6
+  ~ souvenir(gomis, promesse, "Tu lui as promis de réussir")
+* Lui dire que tu ne resteras pas longtemps ici #ambition
+  ~ rel.gomis -= 2; stat.confiance += 3
+  gomis (rire): J'espère bien ! C'est tout l'intérêt.
+
+=== ch2_bilan
+titre: Fin de saison
+declencheur: chapter_end
+chapitres: ch2
+unique: oui
+priorite: 100
+---
+si var.club_id == valmont
+  !lieu quartier 400 soir
+  si stat.reputation >= 20 ou var.buts >= 5
+    > Ton téléphone sonne. Le FC Lanvaux, en deuxième division, te propose un contrat professionnel.
+    [rel.moreau >= 12 et stat.reputation >= 28] > Second appel : Didier Moreau. « Le Stade Rivemont veut te récupérer. Moi aussi. »
+    * Signer à Lanvaux, en D2 #ambition
+      ~ var.prochain_club = "lanvaux"
+    * [rel.moreau >= 12 et stat.reputation >= 28] Revenir au Stade Rivemont #loyal #cle
+      ~ var.prochain_club = "rivemont"; rel.moreau += 8; var.retour_rivemont = vrai; var.loyal_rivemont = vrai
+      !rappel moreau.valmont
+      ~ souvenir(moreau, retour, "Il t'a fait revenir à Rivemont après Valmont")
+    * Rester à Valmont avec Gomis #loyal
+      ~ var.prochain_club = "valmont"; rel.gomis += 15
+      [mem.gomis.promesse] !rappel gomis.promesse
+  sinon
+    > Une saison correcte à Valmont. Personne n'appelle. Gomis te pose la main sur l'épaule : « La saison prochaine, petit. »
+    ~ var.prochain_club = "valmont"
+sinon
+  !lieu couloir 300
+  si stat.statut >= 50
+    > Fin de saison. Tu as gagné ta place dans le groupe pro.
+    ~ objectifReussi(titulaire); var.prochain_club = var.club_id
+  sinon
+    > Fin de saison. Le club te propose un prêt d'un an au FC Lanvaux, en D2, pour gagner du temps de jeu.
+    * Accepter le prêt #humble
+      ~ var.prochain_club = var.club_id; var.pret = vrai
+      > Une saison en D2, loin des projecteurs. Tu y apprendras beaucoup.
+    * Refuser et te battre pour ta place #ambition
+      ~ var.prochain_club = var.club_id; stat.confiance += 4

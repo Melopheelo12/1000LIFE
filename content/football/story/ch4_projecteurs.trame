@@ -1,0 +1,517 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 4 — SOUS LES PROJECTEURS (25 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch4_debut
+titre: Quatre ans plus tard
+declencheur: chapter_start
+chapitres: ch4
+unique: oui
+priorite: 100
+---
+> Quatre ans ont passé.
+~ stat.technique += 5; stat.frappe += 5; stat.passe += 5; stat.defense += 4; stat.physique += 3; stat.mental += 6
+~ stat.technique += stat.discipline >= 60 ? 2 : 0; stat.physique -= var.fetes >= 8 ? 4 : 0
+~ stat.energie = 100; stat.forme = 62
+~ eloigner(maman, rel.maman >= 60 ? 3 : 10); eloigner(karim, rel.karim >= 50 ? 2 : 10); eloigner(djibril, rel.djibril >= 40 ? 2 : 8); eloigner(yanis, var.yanis_protege >= 2 ? 2 : 8)
+si var.prochain_club == solaria
+  appel club_solaria
+  ~ var.salaire = 90000; stat.statut = 40; stat.notoriete += 15; stat.argent += 500000
+  > Real Solaria. Le plus grand club du monde. Le transfert le plus cher de l'histoire de ton pays.
+sinon si var.prochain_club == northbury
+  appel club_northbury
+  ~ var.salaire = 75000; stat.statut = 44; stat.notoriete += 12; stat.argent += 400000
+  > Northbury United. Pelouse parfaite, stade mythique, presse anglaise impitoyable.
+sinon si var.prochain_club == ventara
+  appel club_ventara
+  ~ var.salaire = 65000; stat.statut = 46; stat.notoriete += 10; stat.argent += 350000
+  > L'AC Ventara. Une ville entière qui vit et respire pour son club.
+sinon si var.prochain_club == alnour
+  appel club_alnour
+  ~ var.salaire = 160000; stat.statut = 80; stat.reputation -= 8; stat.argent += 900000
+  > Al-Nour Club. Un salaire indécent, un stade climatisé à moitié vide, et des journalistes qui parlent de « retraite dorée ».
+sinon si var.prochain_club == rivemont
+  appel club_rivemont
+  ~ var.salaire = 25000; stat.statut = max(stat.statut, 60); var.capitaine = rel.moreau >= 10 ou var.heritier_keller
+  > Le Stade Rivemont. Ton club.
+  [var.capitaine] > Didier Moreau t'a remis le brassard de capitaine devant tout le vestiaire.
+  [var.capitaine] ~ stat.reputation += 4; stat.confiance += 6
+sinon si var.prochain_club == marvaux ou var.club_id == marvaux
+  appel club_marvaux
+  ~ var.salaire = 30000; stat.statut = max(stat.statut, 58)
+  > Toujours à Marvaux, dont tu es devenu l'un des piliers.
+sinon si var.prochain_club == lanvaux
+  appel club_lanvaux
+  ~ var.salaire = 6000; stat.statut = 70; var.ligue = "d1"; var.force_equipe = 58
+  > Lanvaux est monté en première division. Tu es l'âme de l'équipe.
+sinon
+  appel club_valmont
+  ~ var.salaire = 1500; stat.statut = 80; var.ligue = "d2"; var.force_equipe = 52
+  > Le FC Valmont a gravi les divisions jusqu'en D2. Gomis pleure à chaque victoire.
+[non var.karim_renvoye et var.soutien_karim] > Karim s'est remis de sa blessure. Il est revenu plus fort, et il a même été appelé en équipe nationale.
+[non var.karim_renvoye et var.soutien_karim] ~ var.karim_selection = vrai
+[non var.karim_renvoye et non var.soutien_karim] > Karim n'a jamais retrouvé son niveau après sa blessure. Il joue en D2.
+~ objectif(trophee, "Remporter un trophée majeur")
+
+=== ch4_aeroport
+titre: L'arrivée
+declencheur: tick_start
+chapitres: ch4
+quand: var.transfert_record
+unique: oui
+priorite: 85
+---
+!lieu aeroport 120 jour
+!figurant fan1 foule 220
+!figurant fan2 foule 250 1
+!figurant fan3 foule 300
+!figurant journaliste foule 180 2
+!fx flashs
+!son flash
+> Des centaines de supporters de {var.club} t'attendent à l'aéroport. Écharpes, banderoles, flashs.
+!emote fan1 coeur
+* Prendre le temps de signer des autographes à tout le monde #fans
+  ~ stat.reputation += 3; stat.notoriete += 5; stat.energie -= 10
+  > Deux heures de selfies. Une gamine pleure en te serrant la main.
+* Répondre en quelques mots dans la langue locale #intelligent
+  test (var.langues ? 75 : 40) + stat.mental / 4 vs 55
+  si reussite
+    > Trois phrases maladroites mais sincères. Les supporters t'adorent déjà.
+    ~ stat.reputation += 5; stat.statut += 4
+  sinon
+    > Ton accent fait rire tout le monde. Une vidéo devient un mème national. Pas méchant, mais gênant.
+    ~ stat.notoriete += 6; stat.confiance -= 3
+* Filer directement à la voiture #discret
+  ~ stat.reputation -= 2
+  > Les journaux titrent sur « l'arrogance » de la recrue.
+
+=== ch4_rinaldi
+titre: La star
+declencheur: talk:rinaldi
+chapitres: ch4
+unique: oui
+priorite: 60
+---
+rinaldi: Alors c'est toi, le petit génie qu'ils ont payé une fortune. Dans ce vestiaire, il n'y a qu'un numéro 10. C'est moi.
+~ rencontrer(rinaldi)
+* « Je suis là pour gagner avec toi, pas contre toi. » #collectif
+  ~ rel.rinaldi += 15; stat.statut += 4
+  rinaldi (content): …Bonne réponse. Viens, je t'invite à dîner.
+* « Le meilleur jouera. On verra qui. » #ambition #cle
+  ~ rel.rinaldi -= 15; stat.confiance += 5
+  ~ souvenir(rinaldi, defi, "Tu l'as défié dès ton arrivée")
+  rinaldi (colere): Tu vas apprendre, petit.
+* Lui demander des conseils #humble
+  ~ rel.rinaldi += 10; stat.mental += 2
+  rinaldi: Personne ne m'a jamais demandé ça. Bon. Premier conseil : dors.
+
+=== ch4_mal_du_pays
+titre: Le mal du pays
+declencheur: tick_start
+chapitres: ch4
+quand: var.club_etranger et temps.semaine == 2
+unique: oui
+priorite: 65
+---
+!lieu appartement 300 nuit
+> Un appartement immense, une ville que tu ne connais pas, une langue que tu comprends à moitié. Le soir, le silence est assourdissant.
+~ stat.moral -= 10
+* Appeler la famille tous les soirs #famille
+  ~ rel.maman += 8; rel.yanis += 6; stat.moral += 6
+* Prendre des cours de langue intensifs #intelligent
+  ~ var.langues = vrai; stat.mental += 3; stat.statut += 3
+* [var.couple] Demander à Inès de te rejoindre quelques semaines #romance
+  ~ rel.ines += 8; stat.moral += 10
+  ines: J'arrive vendredi. Je prends mes congés.
+* Sortir tous les soirs pour oublier #fete
+  ~ var.fetes += 3; stat.moral += 4; stat.forme -= 8; stat.discipline -= 5
+
+=== ch4_proposition
+titre: Une proposition
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine == 3 et (var.agent == santini ou var.affaire_djibril)
+unique: oui
+priorite: 75
+---
+!lieu agence 160 soir
+si var.agent == santini
+  !placer santini 200 gauche
+  santini: Champion, j'ai des amis… généreux. Samedi, tu prends un carton jaune avant la 20e minute. C'est tout. Un carton. Et ça, c'est pour toi.
+  > Il fait glisser une enveloppe épaisse sur le bureau.
+sinon
+  > Djibril t'appelle. Sa voix est tendue. « Des gars avec qui je bosse… ils veulent un service. Un carton jaune avant la 20e minute, samedi. Ils paient bien. Et… ils insistent. »
+* Accepter : un carton, ce n'est rien #argent #cle
+  ~ var.match_arrange = vrai; stat.argent += 50000; var.scandale += 2
+  ~ souvenir(clara, enquete, "Le carton jaune « sur commande »")
+  > Samedi, 17e minute, tu fauches un adversaire sans raison. Carton jaune. Personne ne remarque rien. Pour l'instant.
+* Refuser net #integrite #cle
+  ~ stat.discipline += 4
+  [var.agent == santini] ~ rel.santini -= 30
+  [var.agent == santini] santini (colere): Tu fais une erreur, champion. Une grosse erreur.
+  [var.affaire_djibril] ~ rel.djibril -= 10
+* Refuser et tout dénoncer aux autorités #integrite #cle
+  ~ stat.reputation += 6; stat.discipline += 6; var.denonciation = vrai
+  [var.agent == santini] ~ rel.santini -= 100; var.agent = "lambert"; var.agent_nom = "Lambert Conseil"
+  [var.agent == lambert] > Sophie Lambert accepte de te représenter dans la foulée. « Je savais que ce jour arriverait. »
+  [var.affaire_djibril] ~ var.djibril_prison = vrai; rel.djibril -= 40
+  [var.affaire_djibril] > Djibril est arrêté une semaine plus tard. Il ne veut plus jamais te parler.
+  ~ actu("Un joueur dénonce une tentative de corruption. La fédération ouvre une enquête.")
+
+=== ch4_selection
+titre: Le sélectionneur
+declencheur: tick_start
+chapitres: ch4
+quand: stat.reputation >= 52 et temps.semaine >= 2
+unique: oui
+priorite: 70
+---
+!lieu couloir 300
+!placer bastide 340 gauche
+bastide: Laurent Bastide. Je vais faire court : je vous veux pour le Mondial.
+~ rencontrer(bastide)
+[var.scandale >= 2] bastide (pensif): À condition que vos frasques nocturnes restent derrière vous.
+* « C'est l'honneur de ma vie. » #fierte
+  ~ var.selection = vrai; var.selections += 8; stat.reputation += 6; rel.bastide += 10; rel.maman += 8
+  ~ objectifReussi(selection)
+  [var.karim_selection] > Et dans la liste des 23, juste sous ton nom : Karim Benali.
+* « Je ne serai pas un remplaçant. » #ambition
+  test stat.reputation vs 70
+  si reussite
+    bastide: Vous ne le serez pas. Si vous êtes en forme.
+    ~ var.selection = vrai; var.selections += 8; rel.bastide += 2
+    ~ objectifReussi(selection)
+  sinon
+    bastide (colere): Alors vous ne serez rien. Au revoir.
+    ~ rel.bastide -= 20
+
+=== ch4_blessure_grave
+titre: Le craquement
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine >= 3 et temps.semaine <= 5
+unique: oui
+priorite: 68
+chance: 20 + var.genou * 15 + (stat.sante < 60 ? 20 : 0) + (var.fetes >= 6 ? 10 : 0)
+---
+!lieu infirmerie 150
+> Un appui, une torsion, un craquement sec. Tu sais avant même de toucher le sol.
+~ var.blessures += 1; var.genou += 2; stat.sante = 30
+!placer bruno 190 gauche
+bruno (inquiet): Les ligaments croisés. Il faut opérer.
+[var.genou >= 3] bruno: Et ton genou a déjà beaucoup souffert. Écoute-moi bien, cette fois.
+[var.genou >= 3] ~ souvenir(bruno, alerte, "Il t'avait prévenu que ton genou ne supporterait plus d'excès")
+* Rééducation complète, sans brûler les étapes #patience #cle
+  ~ var.blesse = 4; stat.statut -= 10; stat.moral -= 8; var.genou -= 1
+  > Quatre semaines d'absence. Le Mondial s'éloigne peut-être, mais ta carrière, non.
+  [var.couple] > Inès supervise ta rééducation elle-même, matin et soir.
+  [var.couple] ~ rel.ines += 10
+* Revenir le plus vite possible, à tout prix #risque #cle
+  si var.genou >= 3
+    > Tu reviens en trois semaines contre l'avis de tous. Au premier match, ton genou lâche à nouveau. Cette fois, pour de bon.
+    ~ var.carriere_brisee = vrai
+    ~ fin("blessure")
+  sinon
+    ~ var.blesse = 2; var.genou += 1
+    > Tu brûles les étapes. Ça tient… pour l'instant.
+
+=== ch4_ines_carrefour
+titre: Le carrefour
+declencheur: tick_start
+chapitres: ch4
+quand: var.couple et temps.semaine >= 3
+unique: oui
+priorite: 62
+---
+!lieu appartement 250 soir
+!placer ines 210 droite
+ines: On m'offre de diriger le pôle rééducation d'une grande clinique du sport. À l'autre bout du pays.
+ines: C'est le poste de mes rêves. Mais ça veut dire vivre loin de toi.
+* Lui dire d'accepter : vous ferez la distance #soutien #cle
+  ~ rel.ines += 15; var.distance = vrai
+  ~ souvenir(ines, clinique, "Tu l'as poussée à accepter le poste de ses rêves")
+  ines (emu): Tu sais à quel point je t'aime, toi ?
+* Lui demander de refuser, pour rester avec toi #egoiste #cle
+  test rel.ines vs 70
+  si reussite
+    ines (triste): …D'accord. Je reste.
+    ~ rel.ines -= 10
+    ~ souvenir(ines, renoncement, "Elle a renoncé au poste de ses rêves pour toi")
+  sinon
+    ines (triste): Je ne peux pas. Pas cette fois.
+    ~ var.couple = faux; var.ines_partie = vrai; rel.ines -= 20
+    > Elle part trois semaines plus tard.
+* [var.club_etranger] Lui proposer de venir travailler dans ton club #romance
+  test stat.reputation vs 60
+  si reussite
+    > Ton club accepte de l'engager dans son staff médical. Inès hésite… puis dit oui.
+    ~ rel.ines += 12; var.vit_ensemble = vrai
+  sinon
+    > Le club refuse. Inès part pour la clinique. Vous essaierez la distance.
+    ~ var.distance = vrai; rel.ines += 2
+
+=== ch4_lucas
+titre: Lucas
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine >= 2 et (rel.lucas >= 25 ou rel.lucas <= -35)
+unique: oui
+priorite: 58
+---
+si rel.lucas >= 25
+  !son telephone
+  > Un message de Lucas Ferrand. « Je ne sais pas si on est amis, mais tu es réglo. Alors je te préviens : ton agent fréquente des gens louches. Méfie-toi. »
+  [mem.lucas.passe_finale] !rappel lucas.passe_finale
+  ~ var.alerte_lucas = vrai; rel.lucas += 5
+sinon
+  > Une vidéo circule : toi, il y a des années, en train d'insulter un arbitre à l'entraînement. Qui a pu la filmer ? Tu reconnais le rire en fond sonore.
+  !rappel lucas.{mem.lucas.interview ? "interview" : mem.lucas.humiliation ? "humiliation" : "chambrage"}
+  ~ stat.reputation -= 5; stat.notoriete += 3; var.scandale += 1
+
+=== ch4_enquete_clara
+titre: L'enquête
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine >= 4 et (var.match_arrange ou var.affaire_djibril) et non var.denonciation
+unique: oui
+priorite: 80
+---
+!lieu salle_presse 230
+!placer clara 290 gauche
+clara: Je vais être honnête avec vous. J'enquête depuis six mois. J'ai des relevés de paris, des messages, des noms.
+[var.match_arrange] clara: Un carton jaune à la 17e minute. Vous voulez me dire quelque chose avant que je publie ?
+[var.affaire_djibril et non var.match_arrange] clara: Une société d'import à votre nom et à celui de Djibril Sow. Des conteneurs qui n'existent pas sur le papier.
+* Tout avouer et coopérer #honnete #cle
+  ~ stat.reputation -= 15; var.scandale += 1; rel.clara += 15
+  > L'article paraît. Six mois de suspension. Ta carrière vacille… mais tient debout.
+  ~ var.blesse = 2; stat.statut -= 15; stat.moral -= 15
+* Nier en bloc #mensonge #cle
+  test 30 + rel.clara / 4 vs 60
+  si reussite
+    > Clara te regarde longuement. « Je publierai quand j'aurai tout. » Elle n'a jamais publié. Le doute te ronge.
+  sinon
+    ~ var.scandale_revele = vrai
+    > L'article paraît trois jours plus tard, avec les preuves.
+    ~ fin("scandale")
+* [stat.argent >= 100000] Lui proposer de l'argent pour qu'elle oublie #corruption
+  ~ var.scandale_revele = vrai; rel.clara -= 50
+  clara (colere): Vous venez d'écrire la conclusion de mon article.
+  ~ fin("scandale")
+
+=== ch4_finale
+titre: La grande finale
+declencheur: tick_end
+chapitres: ch4
+quand: temps.semaine == 6
+unique: oui
+priorite: 85
+---
+~ var.match_joue = vrai; var.score_nous = 0; var.score_eux = 0; var.minute = 0; var.note_match = 6; var.stade_taille = 3
+si var.grand_club
+  ~ var.nom_finale = "finale de la Ligue des Étoiles"; var.adversaire = "Northbury United"; var.adv_court = "NU"; var.adv_couleur = "#c23b3b"
+  [var.club_id == northbury] ~ var.adversaire = "Real Solaria"; var.adv_court = "RS"; var.adv_couleur = "#eef0f4"
+sinon
+  ~ var.nom_finale = "finale de la Coupe Nationale"; var.adversaire = "Paris Étoile FC"; var.adv_court = "PEF"; var.adv_couleur = "#1d2f5e"
+!lieu stade 320 nuit
+!equipe nous {var.club_couleur} {var.club_couleur2} #ffffff {var.club_couleur}
+!equipe eux {var.adv_couleur} #ffffff #25222b {var.adv_couleur}
+!fx foule 1
+> La {var.nom_finale}. Le monde entier regarde.
+si var.blesse > 0
+  > Blessé, tu regardes la finale depuis la tribune, le cœur au bord des lèvres.
+  ~ var.score_nous = poisson(1.3); var.score_eux = poisson(1.2)
+  si var.score_nous > var.score_eux
+    ~ var.trophees += 1; var.trophees_majeurs += 1
+    [var.club_id == rivemont] ~ var.titres_rivemont += 1
+    !fx confettis
+    > Victoire {var.score_nous}–{var.score_eux} ! Tes coéquipiers t'apportent la coupe en tribune.
+  sinon
+    > Défaite {var.score_nous}–{var.score_eux}.
+  -> fin
+~ var.matchs += 1; var.titularisations += 1
+~ var.minute = 63
+!preset attaque
+> {var.minute}e minute. 0–0. Le ballon arrive dans tes pieds.
+[var.capitaine] > Le brassard pèse lourd sur ton bras. Tout le stade attend que tu fasses quelque chose.
+* Frapper #frappe
+  test stat.frappe + stat.forme / 4 + stat.confiance / 6 vs 74
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    -> but_finale
+  sinon
+    !anim gk plongeon
+    !ballon vers gk tir
+    > Parade fantastique du gardien.
+* Accélérer et dribbler #technique
+  test stat.technique + stat.forme / 4 + stat.confiance / 6 vs 74
+  si reussite
+    !courir moi 560
+    !anim moi frappe
+    !ballon vers but tir
+    -> but_finale
+  sinon
+    !anim def1 tacle
+    > Le défenseur central te fauche net. Pas de faute.
+* [rel.rinaldi >= 15] Servir Rinaldi, mieux placé #collectif
+  !placer rinaldi 520 droite 1
+  !ballon vers rinaldi passe
+  !anim rinaldi frappe
+  !ballon vers but tir
+  !fx filet
+  !son but
+  ~ var.score_nous += 1; var.passes_d += 1; var.note_match += 1; rel.rinaldi += 10
+  > Rinaldi marque, et vient te chercher pour célébrer. Le vestiaire te le rendra.
+* [var.karim_club == var.club_id et non var.karim_renvoye] Chercher Karim dans la profondeur #collectif
+  !placer karim 520 droite 1
+  !ballon vers karim passe
+  [mem.karim.soutien] !rappel karim.soutien
+  !anim karim frappe
+  !ballon vers but tir
+  !fx filet
+  !son but
+  ~ var.score_nous += 1; var.passes_d += 1; var.note_match += 1; rel.karim += 10
+  > Karim marque ! Vous tombez dans les bras l'un de l'autre.
+-> suite
+
+@but_finale
+!fx filet
+!son but
+!fx foule 1
+!titre BUT !
+!anim moi joie
+~ var.score_nous += 1; var.buts += 1; var.note_match += 1.5; stat.reputation += 6
+> Tu marques en finale !
+-> suite
+
+@suite
+~ var.minute = 88
+!preset defense
+> {var.minute}e minute. Ils poussent, ils poussent…
+~ var.score_eux += chance(var.score_nous > 0 ? 38 : 30) ? 1 : 0
+[var.score_eux > 0] !ballon vers but_gauche tir
+[var.score_eux > 0] !fx filet
+[var.score_eux > 0] > But adverse.
+si var.score_nous == var.score_eux
+  > Prolongations, puis tirs au but. Le dernier tir est pour toi.
+  !preset penalty
+  test stat.frappe + stat.mental / 3 + stat.confiance / 6 vs 70
+  !anim moi frappe
+  si reussite
+    !ballon vers but tir
+    ~ var.score_nous += 1
+  sinon
+    !anim gk plongeon
+    !ballon vers gk tir
+!son sifflet
+si var.score_nous > var.score_eux
+  !fx confettis
+  !fx foule 1
+  !titre VICTOIRE !
+  !anim moi joie boucle
+  > Tu as gagné la {var.nom_finale} !
+  ~ var.trophees += 1; var.trophees_majeurs += 1; stat.reputation += 10; stat.moral += 20
+  [var.club_id == rivemont] ~ var.titres_rivemont += 1; rel.vasseur += 15; rel.moreau += 10
+  ~ objectifReussi(trophee)
+  ~ actu("{var.club} remporte la {var.nom_finale} ! {joueur.nom} héros de la soirée.")
+sinon
+  !anim moi triste
+  > Défaite. Tu restes assis au milieu de la pelouse pendant que les autres célèbrent.
+  ~ stat.moral -= 15
+~ var.notes_total += var.note_match
+!anim moi idle
+!ballon cacher
+!fx foule 0.3
+
+=== ch4_mondial
+titre: Le Mondial
+declencheur: chapter_end
+chapitres: ch4
+quand: var.selection
+unique: oui
+priorite: 90
+---
+~ var.score_nous = 0; var.score_eux = 0; var.minute = 0
+~ var.club_court_sauve = var.club_court; var.club_court = "NAT"; var.adversaire = "la sélection adverse"; var.adv_court = "ADV"; var.stade_taille = 3
+!lieu stade 320 nuit
+!equipe nous #1d2f5e #eef0f4 #eef0f4 #d63c3c
+!equipe eux #f0c63a #2f9a4c #2f62c9 #f0c63a
+!tenue moi maillot #1d2f5e #eef0f4
+!fx foule 1
+> Finale du Mondial. Quatre-vingt mille personnes. Un milliard de téléspectateurs.
+[rel.maman >= 30] > Quelque part dans la tribune, ta mère porte le maillot que tu lui as envoyé il y a des années.
+~ var.selections += 7
+~ var.minute = 78
+!preset attaque
+> {var.minute}e minute. 0–0. Tu reçois le ballon à l'entrée de la surface.
+si var.karim_selection et rel.karim >= 40
+  !placer karim 460 droite 1
+  karim (content): À toi, frère ! Comme au centre !
+  [mem.karim.soutien] !rappel karim.soutien
+  [mem.karim.couvert] !rappel karim.couvert
+  ~ var.bonus_karim = 12
+sinon
+  ~ var.bonus_karim = 0
+* Frapper du gauche, d'instinct #frappe
+  test stat.frappe + var.bonus_karim + stat.confiance / 5 vs 76
+  !anim moi frappe
+  !son frappe
+  si reussite
+    !ballon vers but tir
+    -> champion
+  sinon
+    !ballon vers dessus tir
+    > Au-dessus, de rien du tout.
+* Feinter et ouvrir son pied #technique
+  test stat.technique + var.bonus_karim + stat.mental / 5 vs 76
+  si reussite
+    !courir moi 540
+    !anim moi passe
+    !ballon vers but passe
+    -> champion
+  sinon
+    !anim def1 tacle
+    > Contré.
+> La finale s'achève sur un 0–0. Tirs au but… perdus.
+~ stat.moral -= 15; stat.reputation += 4
+-> fin_mondial
+
+@champion
+!fx filet
+!son but
+!fx confettis
+!fx foule 1
+!titre CHAMPION DU MONDE !
+!anim moi joie boucle
+~ var.score_nous = 1; var.buts += 1; var.trophees += 1; var.trophees_majeurs += 1; stat.reputation += 15; stat.notoriete += 20
+> Tu marques le but du titre. Champion du monde.
+~ actu("{joueur.nom} offre le Mondial à son pays !")
+-> fin_mondial
+
+@fin_mondial
+~ var.club_court = var.club_court_sauve
+!anim moi idle
+!fx foule 0.3
+
+=== ch4_crampon_or
+titre: Le Crampon d'Or
+declencheur: chapter_end
+chapitres: ch4
+quand: stat.reputation >= 85 et var.trophees_majeurs >= 1
+unique: oui
+priorite: 80
+---
+!lieu salle_presse 190 nuit
+> Un gala, des smokings, des centaines de photographes. On annonce le Crampon d'Or, le trophée du meilleur joueur du monde.
+> « … Et le Crampon d'Or est attribué à… {joueur.nom} ! »
+~ var.ballon_or = vrai; stat.reputation += 6; stat.notoriete += 10
+!fx flashs
+* Dédier le trophée à ta mère #famille
+  ~ rel.maman += 15
+  > Dans la salle, ta mère ne retient pas ses larmes.
+* Le dédier à Didier Moreau, qui t'a tout appris #reconnaissance
+  ~ rel.moreau += 15
+  > Moreau, devant sa télévision, éteint la lumière pour que personne ne le voie pleurer.
+* « Je le dédie à moi-même. Je l'ai mérité. » #ego
+  ~ stat.notoriete += 5; stat.reputation -= 4

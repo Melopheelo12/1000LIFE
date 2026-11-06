@@ -401,10 +401,12 @@ export class GameSession {
     const f = FN_ALIASES[name] ?? name;
     const s = this.s;
     const str = (i: number) => toStr(a[i]);
+    // textes affichés au joueur : « {var.club} », « {joueur.nom} »… sont interpolés
+    const txt = (i: number) => this.render(str(i));
     const stamp = { tick: s.time.tick, ch: s.time.chapter + 1, wk: s.time.week };
     switch (f) {
       case 'souvenir': {
-        const c = str(0); const key = str(1); const text = a.length > 2 ? str(2) : key;
+        const c = str(0); const key = str(1); const text = a.length > 2 ? txt(2) : key;
         if (!this.u.chars.has(c)) { this.issue(`Personnage inconnu « ${c} »`); return; }
         (s.mem[c] ??= {})[key] = { text, ...stamp };
         s.met[c] = true;
@@ -429,13 +431,13 @@ export class GameSession {
       }
       case 'annuler': { const ev = str(0); s.scheduled = s.scheduled.filter((x) => x.event !== ev); return; }
       case 'fin': s.pendingEnding = a.length ? str(0) || '*' : '*'; return;
-      case 'notifier': this.note({ kind: 'info', text: str(0) }); return;
-      case 'actu': this.addJournal('actu', str(0)); this.note({ kind: 'actu', text: str(0) }); return;
-      case 'journal': this.addJournal('journal', str(0)); return;
+      case 'notifier': this.note({ kind: 'info', text: txt(0) }); return;
+      case 'actu': { const t = txt(0); this.addJournal('actu', t); this.note({ kind: 'actu', text: t }); return; }
+      case 'journal': this.addJournal('journal', txt(0)); return;
       case 'objectif':
-        s.objectives[str(0)] = { text: str(1), status: 'actif', tick: s.time.tick };
-        this.note({ kind: 'objectif', text: `Nouvel objectif : ${str(1)}` });
-        this.addJournal('objectif', `Objectif : ${str(1)}`);
+        s.objectives[str(0)] = { text: txt(1), status: 'actif', tick: s.time.tick };
+        this.note({ kind: 'objectif', text: `Nouvel objectif : ${s.objectives[str(0)].text}` });
+        this.addJournal('objectif', `Objectif : ${s.objectives[str(0)].text}`);
         return;
       case 'objectifReussi': case 'objectifEchoue': {
         const o = s.objectives[str(0)];

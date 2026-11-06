@@ -297,3 +297,17 @@ test('simulateur : parties complètes sans plantage', async () => {
   assert.equal(total, 40);
   assert.ok(rep.endings.fin_normale || rep.endings.fin_riche);
 });
+
+test('effets : les textes d\'actu, de journal, d\'objectif et de souvenir sont interpolés', () => {
+  const u = compileUniverse(testUniverse());
+  const g = GameSession.create(u, { name: 'Lina', seed: 3 });
+  g.s.vars.club = 'Le Club';
+  const charId = u.def.characters[0].id;
+  g.exec(parseEffects(`actu("{var.club} gagne ! {joueur.nom} héros."); journal("Note de {joueur.nom}"); objectif("o1", "Battre {var.club}"); souvenir(${charId}, k, "Souvenir de {joueur.nom}")`));
+  const texts = g.s.journal.map((j) => j.text);
+  assert.ok(texts.includes('Le Club gagne ! Lina héros.'), texts.join(' | '));
+  assert.ok(texts.includes('Note de Lina'));
+  assert.equal(g.s.objectives.o1.text, 'Battre Le Club');
+  assert.equal(g.s.mem[charId].k.text, 'Souvenir de Lina');
+  assert.ok(!texts.some((t) => t.includes('{')), 'plus aucune accolade brute');
+});

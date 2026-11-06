@@ -12,6 +12,9 @@ const fonts = `
 @font-face { font-family: 'Pixelify Sans'; font-weight: 400; font-display: swap; src: url(${pixelify400}) format('woff2'); }
 @font-face { font-family: 'Pixelify Sans'; font-weight: 700; font-display: swap; src: url(${pixelify700}) format('woff2'); }
 @font-face { font-family: 'Silkscreen'; font-weight: 400; font-display: swap; src: url(${silkscreen}) format('woff2'); }
+/* Le « € » de Pixelify ressemble à un 0 en petit : on prend celui de Silkscreen, plus lisible. */
+@font-face { font-family: 'Pixelify Sans'; font-weight: 400; font-display: swap; src: url(${silkscreen}) format('woff2'); unicode-range: U+20AC; }
+@font-face { font-family: 'Pixelify Sans'; font-weight: 700; font-display: swap; src: url(${silkscreen}) format('woff2'); unicode-range: U+20AC; }
 `;
 const style = document.createElement('style');
 style.textContent = fonts + css + editorCss;

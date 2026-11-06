@@ -27,7 +27,7 @@ Les univers sont enregistrés dans le navigateur, ou dans le compte de l'utilisa
 | Statistiques | Identifiant, nom, catégorie, bornes, valeur de départ, format (nombre, argent, %), couleur, visibilité, présence dans le HUD |
 | Traits de personnalité | Multiplicateurs des gains et pertes de relation (rancunier, généreux…) |
 | Personnages | Identité, rôle, objectif, traits, relation de départ, voix, répliques d'ambiance, apparence avec **aperçu animé** (sprite et portrait, émotions), lieux où il apparaît, conversations prévues |
-| Lieux | **Aperçu du décor en direct** avec défilement, moment de la journée et repères. Murs, sols, arrière-plans, objets (environ 70 types), sorties, personnages présents, éléments interactifs, tenue du joueur. Le bouton 📍 place un élément **en cliquant dans l'aperçu**. |
+| Lieux | **Aperçu du décor en direct** avec défilement, moment de la journée et repères. Murs, sols, arrière-plans, objets (une centaine de types), sorties, personnages présents, éléments interactifs, tenue du joueur. Le bouton 📍 place un élément **en cliquant dans l'aperçu**. |
 | Activités | Coût (actions ou statistiques), effets, message, condition, limite par semaine, où elle est proposée |
 | Chapitres | Ordre, durée, lieu de départ, texte d'introduction, effets de début et de fin |
 | Création du joueur | Prénom, apparence de base, choix de départ (origine, poste…) avec leurs effets |
@@ -131,7 +131,7 @@ Les couleurs acceptent `#rrggbb`, un nom de couleur (`rouge`, `bleu_nuit`…) ou
 - le délai `cooldown` est écoulé ;
 - le tirage de `chance` est réussi.
 
-On garde ensuite la **priorité** la plus haute, puis on tire au sort selon le **poids**. Les événements `once` ou étiquetés `important` sont signalés comme nouveautés, sur la carte et au-dessus des personnages.
+On garde ensuite la **priorité** la plus haute, puis on tire au sort selon le **poids**. Les événements `once` ou étiquetés `important` sont signalés comme nouveautés, sur la carte et au-dessus des personnages. Le simulateur considère aussi qu'un joueur fait en priorité les activités qui ont un événement `important` en attente : c'est l'équivalent d'un joueur qui suit ses objectifs (ex. « Distiller la Larme de Lune (préparer des potions) »).
 
 ### Fins
 
@@ -153,4 +153,8 @@ content/mon_univers/
 - **Converger plutôt que bifurquer** : après les choix, l'histoire reprend un fil commun ; la différence vit dans les variables, les souvenirs et les relations, puis réapparaît plus tard dans des conditions.
 - **Différer** : `planifier(evt, 4)` fait payer une promesse non tenue un mois plus tard.
 - **Un « filet » de sécurité** : une fin sans condition, et au moins un élément interactif qui termine la semaine. La validation le vérifie.
+- **Toujours une sortie** : chaque lieu doit avoir au moins une porte ou un bord de scène (`exits`), sinon le joueur ne peut le quitter qu'avec la carte. La validation le signale.
+- **Verrouiller vraiment** : une porte conditionnelle (`exits[].when`) ne suffit pas, car la carte permet d'aller partout. Si toutes les portes vers un lieu sont verrouillées, donne la même condition au lieu (`when`) ; la validation le signale aussi.
+- **Un rythme hebdomadaire** : un événement `tick_end` (recharge 1) qui tire dans une réserve (`tirer cours 1`) donne une scène récurrente variée, comme le match de foot ou le cours de la semaine à Ombrelune.
+- **Des décors qui évoluent** : un objet de décor peut avoir une condition (`props[].when`). À Ombrelune, les pierres dressées n'apparaissent dans la forêt qu'une fois le cercle découvert, et les disciples encapuchonnés seulement la dernière nuit.
 - **Simuler souvent** : un événement « jamais déclenché » a presque toujours une condition trop stricte.

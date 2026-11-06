@@ -7,6 +7,7 @@ import { offerDownload, pickTextFile } from '../../platform/storage';
 import { audio } from '../../engine/audio';
 import { toStr } from '../../core/expr/expr';
 import { Meter, PanelShell, PortraitView, fmtStat, fmtTime } from '../components';
+import { Wardrobe } from '../appearance';
 
 export function Panels({ c, panel }: { c: GameController; panel: Panel }) {
   const close = () => c.closePanel();
@@ -19,6 +20,7 @@ export function Panels({ c, panel }: { c: GameController; panel: Panel }) {
     case 'options': return <PanelShell title="Options" onClose={close}><Options c={c} /></PanelShell>;
     case 'debug': return <PanelShell title="Débogage (mode test)" onClose={close} wide><Debug c={c} /></PanelShell>;
     case 'menu': return <PanelShell title="Pause" onClose={close}><Menu c={c} /></PanelShell>;
+    case 'apparence': return <PanelShell title="Apparence" onClose={close} wide><Wardrobe look={c.g.s.look} base={c.u.def.creation?.baseLook} resolve={(l) => c.resolveLook(l)} onSave={(l) => { c.setPlayerLook(l); audio.play('confirm'); close(); }} onCancel={close} note={c.u.def.locations.some((l) => l.playerLook) ? 'Certains lieux imposent leur tenue (par exemple une tenue de sport à l\'entraînement) : ton look revient dès que tu en sors.' : undefined} /></PanelShell>;
   }
   return null;
 }
@@ -79,6 +81,7 @@ function Stats({ c }: { c: GameController }) {
           <div style={{ fontSize: 22, fontWeight: 700 }}>{toStr(g.s.player.nom)}</div>
           <div class="muted">{fields.map((f) => f.options.find((o) => o.id === g.s.player[f.id])?.label).filter(Boolean).join(' · ')}</div>
           <div class="muted">{g.chapter.def.title} — {c.u.def.config?.tickLabel ?? 'Semaine'} {g.s.time.week} · temps de jeu {fmtTime(g.s.playtime)}</div>
+          {def.creation?.look !== false && <div><button class="pbtn small" onClick={() => c.ui.set({ panel: 'apparence' })}>Modifier mon apparence</button></div>}
         </div>
       </div>
       {[...cats.entries()].map(([cat, list]) => (
@@ -243,6 +246,7 @@ function Menu({ c }: { c: GameController }) {
     <div class="col" style={{ maxWidth: 380 }}>
       <button class="pbtn primary" onClick={() => c.closePanel()}>Reprendre</button>
       <button class="pbtn" disabled={!inHub} onClick={() => c.ui.set({ panel: 'saves' })}>Sauvegarder / exporter{!inHub ? ' (après la scène)' : ''}</button>
+      {c.u.def.creation?.look !== false && <button class="pbtn" disabled={!inHub} onClick={() => c.ui.set({ panel: 'apparence' })}>Garde-robe (apparence)</button>}
       <button class="pbtn" onClick={() => c.ui.set({ panel: 'options' })}>Options</button>
       <button class="pbtn" onClick={() => c.ui.set({ panel: 'journal' })}>Journal</button>
       {c.opts.test && <button class="pbtn" onClick={() => c.ui.set({ panel: 'debug' })}>Débogage</button>}

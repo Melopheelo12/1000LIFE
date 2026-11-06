@@ -19,7 +19,7 @@ import { unlockEnding, writeSave, type Settings } from './saves';
 
 export interface Toast { id: number; kind: Note['kind']; text: string; good?: boolean }
 export interface LineView { who: string | null; name: string; emo: string; text: string; look: Look | null; color: string; bark?: boolean }
-export type Panel = 'journal' | 'stats' | 'relations' | 'map' | 'saves' | 'menu' | 'debug' | 'options' | null;
+export type Panel = 'journal' | 'stats' | 'relations' | 'map' | 'saves' | 'menu' | 'debug' | 'options' | 'apparence' | null;
 
 export interface GameUI {
   mode: 'loading' | 'hub' | 'busy' | 'line' | 'choices' | 'echo' | 'summary' | 'chapter' | 'ending';
@@ -120,6 +120,12 @@ export class GameController {
     if (!c) return null;
     return this.resolveLook({ ...c.look, ...(override ?? {}) });
   }
+  /** Garde-robe : nouvelle apparence du joueur, appliquée immédiatement et sauvegardée avec la partie. */
+  setPlayerLook(look: Look) {
+    this.g.s.look = look;
+    if (this.world.loc) this.world.player.setLook(this.playerLook(this.world.loc));
+  }
+
   playerLook(loc?: LocationDef): Look {
     return this.resolveLook({ ...this.g.s.look, ...(loc?.playerLook ?? {}) });
   }
@@ -415,12 +421,15 @@ export class GameController {
   }
 
   async chooseHotspot(o: HubOption) {
+    // Un double-clic ne doit jamais lancer deux fois la même action (ni sauter une semaine) :
+    // le premier clic ferme le menu de l'élément, le second est ignoré.
+    if (this.busy || this.ui.get().mode !== 'hub' || !this.ui.get().hotspot) return;
     if (!o.enabled) { audio.play('back'); return; }
     this.ui.set({ hotspot: null });
     if (o.kind === 'end') {
       if (this.g.s.actions > 0) {
         const ok = await this.confirm(`Il te reste ${this.g.s.actions} action${this.g.s.actions > 1 ? 's' : ''} cette ${this.u.def.config?.tickLabel?.toLowerCase() ?? 'semaine'}. Passer à la suite quand même ?`, 'Oui, continuer', 'Non');
-        if (!ok) return;
+        if (!ok || this.busy) return;
       }
       this.g.endTick();
       await this.pump();

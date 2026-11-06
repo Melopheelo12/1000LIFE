@@ -1,0 +1,542 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  TROISIÈME ANNÉE — L'ÉPREUVE (13 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch3_rentree
+titre: La petite nouvelle
+declencheur: tick_start
+chapitres: ch3
+quand: temps.semaine == 1
+unique: oui
+priorite: 20
+---
+!lieu quai 200 nuit
+!placer lia 240 gauche
+> Le soir de la rentrée, sur le quai, une toute petite fille en robe verte pleure en serrant sa valise.
+lia (triste): Je me suis perdue… Tout le monde est parti… Je ne sais même pas où est le château…
+* Viens, je te montre. Moi aussi, j'étais perdu, la première fois. #genereux
+  ~ rel.lia += 12; var.mentor_lia = vrai; stat.reputation += 2
+  ~ souvenir(lia, quai, "Tu l'as accompagnée jusqu'au château le soir de son arrivée")
+  lia (content): Merci… Je m'appelle Lia. Lia Kade. Je suis en Racine.
+  > Lia vient désormais te voir dans la salle commune pour que tu l'aides à réviser.
+* Le château, c'est la grosse chose éclairée, là-haut. #humour
+  ~ rel.lia += 3
+  lia (rire): …Ah. Oui. Merci.
+* (Passer ton chemin, tu es en retard) #indifference
+  ~ rel.lia -= 5
+  > Derrière toi, un sanglot. Puis plus rien. Un préfet s'occupera d'elle.
+~ objectif("troisieme_annee", "Réussir la troisième année")
+si var.qualifie
+  ~ objectif("tournoi", "Remporter le Tournoi des Duels")
+
+=== ch3_tournoi_premier
+titre: Tournoi — premier tour
+declencheur: enter:arene
+chapitres: ch3
+quand: var.qualifie et temps.semaine >= 2
+unique: oui
+priorite: 9
+---
+!placer brax 470 gauche
+!placer sera 330 gauche
+!fx foule 0.8
+> L'arène est pleine. Des bannières de toutes les affinités claquent dans le vent.
+brax: Premier tour du Tournoi des Duels ! {joueur.nom} contre Séraphine de Valcourt !
+si mem.sera.confidence ou rel.sera >= 25
+  sera: Pas de cadeau, hein ? Je ne t'en ferai pas non plus.
+sinon
+  sera (fier): J'attendais ce moment depuis deux ans.
+* Duel loyal. #duel
+  test stat.duel + stat.sortileges / 3 + stat.puissance / 4 vs 34
+  si reussite
+    !fx sort moi sera
+    !fx foule 1
+    > Un échange fulgurant, sorts croisés, étincelles. Puis Séraphine pose un genou à terre. Elle a perdu.
+    ~ var.tour1 = vrai; var.duel_victoires += 1; stat.reputation += 6
+    sera: …Gagne la finale. Sinon, c'est que je t'ai surestimé.
+    ~ rel.sera += rel.sera >= 0 ? 5 : -3
+  sinon
+    !fx sort sera moi
+    > Séraphine danse autour de toi. Tu es désarmé avant d'avoir compris.
+    ~ var.duel_defaites += 1; stat.moral -= 8; var.elimine = vrai
+    ~ objectifEchoue("tournoi")
+    sera (content): Désolée. Enfin… pas vraiment.
+* [var.pacte] Laisser Malrik guider ta main. #ombre
+  !fx eclair
+  > Ta baguette crache une flamme noire. Séraphine est projetée hors du cercle. La foule se tait d'un coup.
+  ~ var.tour1 = vrai; var.duel_victoires += 1; stat.ombre += 8; rel.sera -= 15; stat.reputation -= 3
+  ~ souvenir(sera, flamme_noire, "Tu l'as frappée avec une flamme noire pendant le tournoi")
+  brax (colere): …Victoire. Mais je t'ai à l'œil.
+
+=== ch3_tournoi_demi
+titre: Tournoi — demi-finale
+declencheur: enter:arene
+chapitres: ch3
+quand: var.tour1 et temps.semaine >= 3
+unique: oui
+priorite: 9
+---
+!placer brax 470 gauche
+!placer tobias 330 gauche
+!fx foule 0.9
+brax: Demi-finale ! {joueur.nom} contre Tobias Wren !
+tobias: Cette fois, je ne suis plus le gros benêt qui rit des blagues de Séraphine. Je me suis entraîné tout l'été.
+* Duel loyal. #duel
+  test stat.duel + stat.courage / 3 vs 36
+  si reussite
+    !fx sort moi tobias
+    > Tobias est plus fort qu'avant. Bien plus fort. Mais tu trouves la faille.
+    ~ var.demi = vrai; var.duel_victoires += 1; stat.reputation += 6; rel.tobias += 6
+    tobias (content): …Tu m'as eu. Mais j'ai tenu, hein ? Dis que j'ai tenu.
+  sinon
+    !fx sort tobias moi
+    > Un sort de force pure. Tu décolles du sol et retombes hors du cercle.
+    ~ var.duel_defaites += 1; stat.moral -= 8; var.elimine = vrai
+    ~ objectifEchoue("tournoi")
+    tobias (rire): Je l'ai fait ! Je l'ai fait !
+* [var.pacte] (Laisser la flamme noire répondre) #ombre
+  !fx eclair
+  ~ var.demi = vrai; var.duel_victoires += 1; stat.ombre += 8; rel.tobias -= 10
+  > Tobias reste à terre longtemps. On l'emmène à l'infirmerie.
+
+=== ch3_tournoi_finale
+titre: Tournoi — la finale
+declencheur: enter:arene
+chapitres: ch3
+quand: var.demi et temps.semaine >= 4
+unique: oui
+priorite: 10
+---
+!placer brax 490 gauche
+!placer orin 350 gauche
+!fx foule 1
+brax: Finale du Tournoi des Duels ! {joueur.nom} contre Orin Kael, champion en titre !
+orin (content): Quel honneur. Montre-moi ce que tu as appris. Avec moi… ou sans moi.
+* Duel loyal, de toutes tes forces. #duel
+  test stat.duel + stat.sortileges / 3 + stat.puissance / 3 vs 46
+  si reussite
+    !fx sort moi orin
+    !fx confettis
+    > Orin est brillant, rapide, presque parfait. Presque. Ton dernier sort lui arrache la baguette des mains.
+    ~ var.champion = vrai; var.duel_victoires += 1; stat.reputation += 15; stat.moral += 10; rel.brax += 10
+    ~ objectifReussi("tournoi")
+    orin (colere): …Bravo. Profite de ta coupe.
+    > Pour la première fois, tu vois quelque chose de froid dans ses yeux.
+    ~ rel.orin -= 6
+    brax (fier): Champion. Je le savais depuis le premier jour. Ne le répète à personne.
+  sinon
+    !fx sort orin moi
+    > Orin te désarme avec une élégance presque cruelle, puis il te tend la main pour te relever.
+    ~ var.duel_defaites += 1; stat.moral -= 6; stat.duel += 3; stat.reputation += 6
+    ~ objectifEchoue("tournoi")
+    orin: Tu seras peut-être champion un jour. Avec un bon professeur.
+* [var.pacte] Tout donner à la flamme noire. #ombre
+  !fx eclair
+  !fx tremblement
+  > La flamme noire t'envahit. Orin sourit en la voyant… et baisse sa garde volontairement.
+  ~ var.champion = vrai; var.duel_victoires += 1; stat.ombre += 12; stat.reputation += 8
+  ~ objectifReussi("tournoi")
+  orin (fier): Il a choisi le bon élève.
+  ~ souvenir(orin, flamme, "Il t'a laissé gagner la finale quand il a vu la flamme noire")
+  > Personne n'a compris pourquoi le champion en titre a baissé sa garde. Toi, si.
+
+=== ch3_malrik_pacte
+titre: La proposition de Malrik
+declencheur: tick_start
+chapitres: ch3
+quand: var.grimoire_trouve et non var.grimoire_ferme et rel.malrik >= 10
+unique: oui
+priorite: 9
+---
+!lieu section_interdite 200 nuit
+> Tu ne te souviens pas d'être venu ici. Tu étais dans ton lit, et maintenant le grimoire est ouvert devant toi.
+!entrer malrik droite 280
+malrik (content): Ne crains rien. Je t'ai seulement appelé. Tu entends mieux que les autres. Tu es… comme moi.
+malrik: Le tournoi approche. Je peux t'aider à le gagner. Un peu de ma force contre un peu de ta confiance. Rien de plus.
+* Marché conclu. #ombre
+  ~ var.pacte = vrai; stat.puissance += 8; stat.duel += 8; stat.ombre += 15; rel.malrik += 15
+  ~ souvenir(malrik, pacte, "Tu as accepté son pacte")
+  !fx magie moi
+  malrik (fier): Tu ne le regretteras pas. Ou alors… si tard que ça n'aura plus d'importance.
+* Qui es-tu vraiment ? #curiosite
+  malrik (triste): Un élève qui a eu peur de mourir. Qui a cherché un moyen de ne jamais disparaître. Et qui a réussi, d'une certaine façon.
+  ~ var.malrik_nom = vrai
+  malrik: Réfléchis à mon offre. Je ne suis pas pressé. Je n'ai que ça, du temps.
+* Non. Sors de ma tête. #lumiere
+  ~ stat.courage += 4; stat.ombre -= 5; rel.malrik -= 10
+  ~ souvenir(malrik, refus, "Tu as refusé son pacte")
+  malrik (colere): Tu reviendras. Ils reviennent tous.
+!sortir malrik droite
+
+=== ch3_noe_foret
+titre: Noé dans la forêt
+declencheur: tick_start
+chapitres: ch3
+quand: temps.semaine == 3 et non var.noe_perdu
+unique: oui
+priorite: 8
+---
+!lieu cabane 150 soir
+!placer gaspard 200 gauche
+gaspard (inquiet): Ton ami, le rouquin. Il est parti dans la forêt il y a deux heures. Seul. Il disait qu'il allait « prouver qu'il valait quelque chose ».
+* J'y vais. #courage
+  ~ var.foret_ok = vrai
+  !lieu foret 300 nuit
+  > La nuit, la forêt de Brume ne ressemble à rien de connu. Des yeux brillent entre les troncs.
+  > Puis un cri. La voix de Noé.
+  !placer noe 450 gauche
+  > Il est acculé contre un arbre. Devant lui, la silhouette noire sans visage.
+  * (Lancer un sort de toutes tes forces) #duel
+    test stat.puissance + stat.duel / 2 vs 40
+    si reussite
+      !fx sort moi
+      > La silhouette se disperse comme de la fumée au vent.
+      ~ rel.noe += 15; stat.courage += 5; stat.reputation += 4
+      ~ souvenir(noe, sauve_foret, "Tu l'as sauvé de la silhouette noire dans la forêt")
+      noe (emu): Tu es venu… Tu es vraiment venu…
+    sinon
+      !fx fumee
+      > Ton sort la traverse sans effet. Elle griffe le bras de Noé avant de disparaître.
+      ~ rel.noe += 8; var.noe_blesse = vrai; stat.moral -= 6
+      ~ souvenir(noe, sauve_foret, "Tu es venu le chercher dans la forêt, même si ça a mal tourné")
+  * [var.familier] Appeler {var.familier_nom}. #creature
+    test stat.creatures vs 35
+    si reussite
+      > Le renardeau de brume surgit en grondant. Sa lumière argentée fait reculer la silhouette, qui s'évanouit.
+      ~ rel.noe += 15; stat.creatures += 5; rel.gaspard += 5
+      ~ souvenir(noe, sauve_foret, "Toi et ton renardeau l'avez sauvé dans la forêt")
+    sinon
+      > Le renardeau hésite, terrifié. La silhouette frappe Noé avant de fondre dans la nuit.
+      ~ rel.noe += 8; var.noe_blesse = vrai
+  * [stat.ombre >= 30] Lui parler dans la langue du grimoire. #ombre
+    > Tu prononces un mot que tu ne connaissais pas il y a une minute. La silhouette s'incline devant toi. Et s'en va.
+    ~ rel.noe += 4; stat.ombre += 8
+    noe (inquiet): …C'était quoi, ce mot ? Pourquoi elle t'a obéi ?
+    ~ souvenir(noe, obeissance, "Il t'a vu donner un ordre à la silhouette noire")
+* Gaspard, allez-y, vous connaissez la forêt mieux que moi. #prudence
+  ~ rel.noe -= 6; rel.gaspard -= 2
+  > Gaspard revient à l'aube, Noé sur l'épaule, inconscient, le bras couvert de marques noires.
+  ~ var.noe_blesse = vrai
+  ~ souvenir(noe, pas_venu, "Tu n'es pas venu le chercher dans la forêt")
+si var.noe_blesse
+  ~ planifier(ch3_noe_infirmerie, 1)
+
+=== ch3_noe_infirmerie
+titre: Au chevet de Noé
+declencheur: scheduled
+---
+!lieu infirmerie 150 jour
+!placer noe 130 droite
+> Noé est allongé, le bras bandé. Les marques noires remontent jusqu'à l'épaule.
+noe (triste): La guérisseuse dit que ça partira. Peut-être. Un jour.
+noe: Tu sais ce qui est bizarre ? Depuis que la chose m'a touché, j'entends une voix. Elle dit que je pourrais devenir fort. Comme toi.
+* Ne l'écoute pas. Jamais. C'est le grimoire. #lumiere
+  ~ rel.noe += 6; var.noe_prevenu = vrai
+  ~ souvenir(noe, prevenu, "Tu l'as prévenu de ne pas écouter la voix")
+* Tu es déjà fort, Noé. Tu n'as pas besoin de ça. #loyal
+  ~ rel.noe += 10; var.noe_prevenu = vrai
+* Qu'est-ce qu'elle te dit exactement ? #curiosite
+  noe: Qu'Orin peut m'aider. Qu'il a des réponses.
+  ~ var.noe_orin = vrai; stat.ruse += 1
+
+=== ch3_cercle_pierres
+titre: Le cercle de pierres
+declencheur: enter:foret
+chapitres: ch3, ch4
+unique: oui
+priorite: 6
+---
+> Au fond de la forêt, derrière un rideau de brume, une clairière parfaite. Douze pierres dressées, couvertes de runes à demi effacées.
+> Au centre, le sol est marqué d'un cercle qui brille faiblement.
+~ var.cercle_trouve = vrai
+* Déchiffrer les runes. #etude
+  test stat.savoir vs 40
+  si reussite
+    > « Ici fut lié celui qui voulut lier la mort. Par le sang de son sang, il sera délié. Par la lune et l'argent, il sera scellé. »
+    ~ var.runes_lues = vrai; stat.savoir += 4
+  sinon
+    > Les runes sont trop anciennes. Tu ne comprends que deux mots : « sang » et « sceau ».
+    ~ stat.savoir += 2
+* (Entrer dans le cercle) #courage
+  !fx magie moi
+  > Une chaleur douce. Puis un murmure, très loin : « …pas encore… »
+  ~ stat.puissance += 2; stat.ombre -= 3
+
+=== ch3_ayla_crise
+titre: Les visions d'Ayla
+declencheur: talk:ayla
+chapitres: ch3
+unique: oui
+priorite: 7
+---
+ayla (inquiet): Je n'arrive plus à dormir. Chaque nuit, je vois le château en feu. Et des élèves en robe noire qui chantent.
+ayla (triste): Et toi. Toujours toi, au milieu. Je ne sais pas si tu es celui qui allume le feu ou celui qui l'éteint.
+* Alors on va le découvrir ensemble. Viens méditer avec moi à la tour. #romance
+  ~ rel.ayla += 12; var.ayla_proche = vrai
+  ~ souvenir(ayla, ensemble, "Tu lui as promis de comprendre ses visions avec elle")
+  ayla (emu): Ensemble ? …D'accord.
+* [stat.ombre >= 25] Peut-être que je serai celui qui l'allume. #ombre
+  ~ rel.ayla -= 10
+  ayla (inquiet): Ne dis pas ça. Même pour rire.
+* Ce ne sont que des rêves, Ayla. #rationnel
+  ~ rel.ayla -= 4
+  ayla (triste): Pour toi, peut-être.
+
+=== ch3_ayla_aveu
+titre: Sous les étoiles
+declencheur: enter:tour_ouest
+chapitres: ch3, ch4
+quand: var.ayla_proche et rel.ayla >= 35
+unique: oui
+priorite: 8
+---
+!placer ayla 230 gauche
+> Il est tard. Le vitrail de la tour projette des étoiles de couleur sur le sol. Ayla est là, comme si elle t'attendait.
+ayla: J'ai enfin vu la fin de mon rêve, cette nuit. Le château brûle, mais quelqu'un tient ma main. C'est toi.
+* (Lui prendre la main) #romance
+  ~ var.couple = vrai; rel.ayla += 15; stat.moral += 10
+  ~ souvenir(ayla, main, "Tu lui as pris la main sous le vitrail de la tour")
+  ayla (content): …Ah. Donc c'était ça.
+  > Vous restez longtemps sans parler, à regarder les étoiles bouger sur les dalles.
+* Ayla… je tiens à toi, mais comme une amie. #honnete
+  ~ rel.ayla -= 3; var.ayla_amie = vrai
+  ayla (triste): Je sais. Je l'avais vu aussi. Je voulais juste… vérifier.
+  ~ souvenir(ayla, amie, "Tu lui as dit que tu tenais à elle comme à une amie")
+
+=== ch3_orin_vol
+titre: Une petite faveur
+declencheur: tick_start
+chapitres: ch3
+quand: var.cercle_orin et temps.semaine >= 2
+unique: oui
+priorite: 7
+---
+!lieu grand_hall 400 nuit
+!placer orin 450 gauche
+orin: J'ai besoin d'un service. Maîtresse Varn garde une fiole de Larme de Lune dans son armoire. Il me la faut.
+orin (content): Tu as la clé de la Réserve, tu as déjà prouvé que tu savais te faufiler. Ce sera un jeu d'enfant.
+* D'accord. #ombre
+  test stat.ruse vs 36
+  si reussite
+    > Le cachot, minuit. L'armoire grince à peine. La fiole brille dans ta main comme un morceau de ciel.
+    ~ var.larme_volee = vrai; stat.ombre += 6; rel.orin += 8
+    ~ souvenir(orin, larme, "Tu as volé la Larme de Lune pour lui")
+    ~ planifier(ch3_vol_decouvert, 1)
+  sinon
+    > Un bocal tombe. Le bruit résonne dans tout le cachot. Tu t'enfuis, mais tu as laissé ta trace.
+    ~ var.larme_volee = vrai; stat.ombre += 4; var.trace_vol = vrai
+    ~ planifier(ch3_vol_decouvert, 1)
+* Pourquoi as-tu besoin de Larme de Lune ? #ruse
+  orin (pensif): Pour soigner un ami. Un très vieil ami, très malade.
+  > Tu penses au grimoire. Au jeune homme pâle. Un frisson.
+  ~ var.mefiance_orin = vrai
+  * Je ne peux pas faire ça. #lumiere
+    ~ rel.orin -= 8; var.cercle_orin = faux
+    orin (colere): Alors tu n'as plus ta place dans le cercle. Rends-moi la clé.
+    ~ souvenir(orin, refus_vol, "Tu as refusé de voler pour lui")
+  * Bon… d'accord. #ombre
+    ~ var.larme_volee = vrai; stat.ombre += 6; rel.orin += 6
+    ~ planifier(ch3_vol_decouvert, 1)
+* Non. Et je quitte ton cercle. #lumiere
+  ~ rel.orin -= 10; var.cercle_orin = faux; stat.courage += 3
+  ~ souvenir(orin, refus_vol, "Tu as refusé de voler pour lui et tu as quitté le cercle")
+  orin: Tu fais une erreur. Une grosse erreur.
+
+=== ch3_vol_decouvert
+titre: Le voleur de Larme de Lune
+declencheur: scheduled
+---
+!lieu cachot_potions 200 jour
+!placer varn 300 gauche
+!placer noe 150 droite
+varn (colere): Quelqu'un a volé la Larme de Lune. Une fiole qui vaut plus que ce château. Et j'ai trouvé ceci près de l'armoire.
+> Elle brandit une écharpe bleue. Celle de Noé, prêtée la semaine dernière… à toi.
+noe (inquiet): C'est… c'est mon écharpe, mais je n'ai rien fait ! Je le jure !
+* C'est moi. Noé n'y est pour rien. #honnete
+  ~ var.avertissements += 1; stat.discipline -= 15; rel.varn -= 10; rel.noe += 12
+  ~ souvenir(noe, avoue, "Tu as avoué le vol pour qu'il ne soit pas accusé")
+  varn: …Un avertissement, et vous récurerez les chaudrons jusqu'à Noël. Mais vous avez avoué. C'est plus que ce que font la plupart des voleurs.
+  ~ rel.varn += 3
+* (Se taire) #ombre
+  ~ rel.noe -= 20; var.noe_accuse = vrai; stat.ombre += 5
+  ~ souvenir(noe, accuse, "Tu l'as laissé accuser du vol à ta place")
+  varn: Lambert. Un avertissement. Et vous êtes privé de sorties pour l'année.
+  noe (triste): …
+  > Noé te regarde. Il sait. Il ne dit rien. C'est pire que s'il criait.
+* [var.trace_vol] (Accuser Orin) C'est le préfet qui m'a obligé ! #courage
+  ~ var.avertissements += 1; stat.discipline -= 8; rel.noe += 6; rel.orin -= 15
+  varn (pensif): Kael ? Le préfet modèle ? …Sans preuve, je ne peux rien contre lui. Mais je vais le surveiller.
+  ~ var.varn_mefiante = vrai
+
+=== ch3_sera_alliee
+titre: Une alliée inattendue
+declencheur: talk:sera
+chapitres: ch3, ch4
+quand: rel.sera >= 15
+unique: oui
+priorite: 7
+---
+sera: Écoute. Je ne vais pas le dire deux fois. Tu es la seule personne ici qui ne me traite pas comme une Valcourt.
+sera (pensif): Alors je te dois la vérité. Orin réunit des élèves la nuit, sous la tapisserie. Ils parlent d'un « maître » qui va revenir. Tobias y allait. Il a arrêté. Il a eu peur.
+~ var.sera_alliee = vrai; var.mefiance_orin = vrai
+* Merci, Séraphine. On est alliés, alors ? #loyal
+  ~ rel.sera += 10
+  ~ souvenir(sera, alliance, "Vous avez scellé une alliance")
+  sera (fier): Alliés. Mais ne le dis à personne. J'ai une réputation.
+* Pourquoi tu me dis ça maintenant ? #ruse
+  sera: Parce que j'ai vu ta tête quand Orin te parle. Tu as peur de lui, toi aussi.
+  ~ rel.sera += 5
+
+=== ch3_brax_eleve
+titre: L'élève de Brax
+declencheur: activity:entrainement_duel
+chapitres: ch3, ch4
+quand: stat.duel >= 40
+unique: oui
+priorite: 7
+---
+!placer brax 380 gauche
+brax: Toi. Reste après l'entraînement.
+brax: J'ai été champion trois fois. Personne ne m'a jamais battu en finale. Tu sais pourquoi ?
+* Parce que vous êtes le meilleur ?
+  brax (rire): Parce que je n'avais peur de rien. Erreur. La peur, c'est ce qui te garde en vie.
+* Parce que vous travailliez plus que les autres ?
+  brax: Aussi. Mais surtout parce que je savais perdre. À l'entraînement. Mille fois.
+brax: Je vais t'apprendre la parade miroir. Le sort de l'adversaire lui revient en pleine figure. Ça demande du sang-froid.
+~ stat.duel += 6; var.sorts += 1; rel.brax += 10; var.parade_miroir = vrai
+~ souvenir(brax, eleve, "Il t'a appris la parade miroir")
+
+=== ch3_lia_harcelee
+titre: Lia en larmes
+declencheur: enter:salle_commune
+chapitres: ch3, ch4
+quand: var.mentor_lia et temps.semaine >= 2
+unique: oui
+priorite: 7
+---
+!placer lia 120 droite
+!placer tobias 220 gauche
+> Lia est recroquevillée sur le canapé. Tobias rit, son cahier de runes à la main.
+tobias (rire): « Mon rêve est de devenir archimage. » Elle a écrit ça. Archimage ! Une naine de Racine !
+* Rends-lui son cahier, Tobias. Tout de suite. #courage
+  si rel.tobias >= 0
+    tobias (inquiet): …Ok, ok. C'était pour rire.
+    > Il lui rend son cahier. Puis, plus bas : « Désolé, petite. »
+    ~ rel.lia += 10; rel.tobias += 3
+  sinon
+    test stat.courage + stat.duel / 3 vs 38
+    si reussite
+      > Tu n'as même pas besoin de sortir ta baguette. Ton regard suffit.
+      ~ rel.lia += 12; stat.reputation += 4; rel.tobias -= 5
+    sinon
+      > Tobias te bouscule en ricanant. Lia récupère son cahier toute seule, en tremblant.
+      ~ rel.lia += 6; stat.moral -= 4
+  ~ souvenir(lia, defendue, "Tu l'as défendue contre Tobias")
+* Lia, ne pleure pas. Montre-lui ce que tu sais faire. #mentor
+  !fx magie lia
+  > Lia sèche ses larmes, pointe sa baguette, et le cahier s'envole des mains de Tobias pour revenir dans les siennes.
+  ~ rel.lia += 14; stat.reputation += 3
+  ~ souvenir(lia, confiance, "Tu lui as donné confiance en elle face à Tobias")
+  tobias (surpris): …Pas mal, la naine.
+
+=== ch3_gaspard_histoire
+titre: L'histoire de Malrik
+declencheur: talk:gaspard
+chapitres: ch3, ch4
+quand: rel.gaspard >= 30
+unique: oui
+priorite: 7
+---
+gaspard (pensif): Assieds-toi. Il est temps que quelqu'un te raconte.
+gaspard: Il y a quarante ans, j'étais élève ici. Comme toi. Dans ma classe, il y avait un garçon. Malrik. Le plus doué de tous.
+gaspard (triste): Sa petite sœur est morte d'une fièvre. Il ne l'a pas supporté. Il a cherché un moyen de vaincre la mort. Il a fini par enfermer sa propre âme dans un livre pour ne jamais mourir.
+gaspard: Halloran l'a scellé dans le cercle de pierres de la forêt. Mais le sceau s'use. Et Malrik a des disciples. Des élèves qui l'entendent.
+~ var.malrik_nom = vrai
+si var.grimoire_trouve et non var.grimoire_ferme
+  gaspard (inquiet): Toi, tu l'entends. Je le vois à tes yeux. Fais attention, petit. Il ne veut pas un ami. Il veut un corps.
+  ~ stat.moral -= 3
+
+=== ch3_maman_malade
+titre: Mauvaise nouvelle
+declencheur: tick_start
+chapitres: ch3
+quand: temps.semaine == 4
+unique: oui
+priorite: 7
+---
+> Un corbeau, en pleine nuit. Pas l'écriture de ta mère : celle de la voisine.
+> « Ta maman est tombée malade. Les médecins ne comprennent pas. Elle demande après toi. »
+* Préparer un remède et l'envoyer par corbeau. #soin
+  test stat.potions vs 40
+  si reussite
+    > Tu passes la nuit au cachot. Au matin, une fiole dorée s'envole vers chez toi. Trois jours plus tard, une lettre : « Je vais mieux. Je ne sais pas ce que tu m'as envoyé, mais merci. »
+    ~ rel.claire += 15; stat.potions += 3; stat.moral += 6
+    ~ souvenir(claire, remede, "Tu lui as envoyé un remède quand elle était malade")
+  sinon
+    > Ta potion vire au gris. Ratée. Tu en envoies une autre, plus simple. Elle guérira, lentement, sans toi.
+    ~ rel.claire += 5; stat.moral -= 4
+* [stat.ecus >= 30] Envoyer tous tes écus pour payer un guérisseur. #genereux
+  ~ stat.ecus -= 30; rel.claire += 12
+  ~ souvenir(claire, ecus, "Tu as envoyé toutes tes économies pour la soigner")
+* [stat.ombre >= 35] Demander au grimoire un sort de guérison. #ombre
+  > Le grimoire te donne le sort. Ta mère guérit en une nuit. Mais depuis, ses lettres sont… différentes. Plus froides.
+  ~ stat.ombre += 10; rel.malrik += 8; rel.claire -= 5
+  ~ souvenir(claire, sort_noir, "Tu l'as guérie avec un sort du grimoire")
+
+=== ch3_halloran_sceau
+titre: Le sceau
+declencheur: enter:grand_hall
+chapitres: ch3, ch4
+quand: rel.halloran >= 15 et temps.semaine >= 3
+unique: oui
+priorite: 7
+---
+!placer halloran 380 gauche
+halloran: {joueur.nom}. Viens. J'ai besoin de te parler, et le hall a trop d'oreilles.
+!lieu bureau_archimage 120 soir
+!placer halloran 250 gauche
+halloran (pensif): Je suis vieux. Le sceau qui retient Malrik est lié à ma propre vie. Quand je mourrai, il se brisera.
+halloran: Il faudra quelqu'un pour le refaire. Quelqu'un qui connaît le cercle, les runes et les trois ingrédients du rituel.
+halloran (inquiet): Je ne te demande rien aujourd'hui. Mais réfléchis. Le moment venu, il faudra choisir.
+~ var.sceau_connu = vrai; rel.halloran += 5
+
+=== ch3_somnambule
+titre: Somnambule
+declencheur: tick_end
+chapitres: ch3, ch4, ch5
+quand: var.grimoire_trouve et stat.ombre >= 30
+unique: oui
+priorite: 6
+---
+> Tu te réveilles debout, pieds nus, dans la bibliothèque. Il fait nuit. Ta main est posée sur la porte de la Réserve.
+> Tu ne te souviens pas d'être venu.
+* (Retourner au lit et ne plus jamais y penser)
+  ~ stat.moral -= 6; stat.ombre += 3
+* (Aller méditer à la tour jusqu'à l'aube) #lumiere
+  ~ stat.ombre -= 8; stat.energie -= 20; stat.moral += 2
+* (En parler à Ayla, demain) #ecoute
+  ~ rel.ayla += 6; stat.ombre -= 3
+  ayla (inquiet): Il t'appelle. Il te veut, toi. Il faut que tu résistes.
+
+=== ch3_fin
+titre: Fin de la troisième année
+declencheur: chapter_end
+chapitres: ch3
+unique: oui
+priorite: 100
+---
+!lieu grand_hall 300 jour
+~ var.note_annee3 = (stat.sortileges + stat.potions + stat.savoir) / 3 + stat.discipline / 6
+si var.note_annee3 >= 46
+  > Troisième année : Mention Excellence. Ton nom est gravé sur la plaque des meilleurs élèves.
+  ~ stat.reputation += 8; stat.moral += 5
+sinon si var.note_annee3 >= 30
+  > Troisième année : admis.
+sinon
+  > Troisième année : admis de justesse. Une lettre de mise en garde est envoyée à ta famille.
+  ~ rel.claire -= 4; stat.moral -= 4
+~ objectifReussi("troisieme_annee")
+si var.champion
+  > Lors du banquet, la coupe du Tournoi des Duels trône devant toi. Tout le monde scande ton nom.
+  ~ stat.moral += 6
+> Pendant l'été, deux anciens élèves disparaissent de chez eux. Leurs familles reçoivent la même carte : un livre noir, dessiné à l'encre.

@@ -1,0 +1,324 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ÉVÉNEMENTS ALÉATOIRES — la vie quotidienne au château
+// ═══════════════════════════════════════════════════════════════════════
+
+=== al_lettre_maman
+titre: Une lettre de la maison
+declencheur: random
+quand: chapitre != ch1
+recharge: 4
+---
+> Un corbeau tapote à la vitre. Une lettre de ta mère, qui sent la lessive et le pain grillé.
+si rel.claire >= 50
+  > « Je relis tes lettres le soir. Je ne comprends pas la moitié des mots, mais je suis si fière. »
+sinon si rel.claire >= 20
+  > « Tout va bien ici. Tu nous manques. Écris un peu plus, s'il te plaît. »
+sinon
+  > « Je sais que tu es occupé. Juste un mot, de temps en temps. Pour savoir que tu vas bien. »
+* (Répondre tout de suite, longuement) #famille
+  ~ rel.claire += 6; stat.moral += 3
+* (Répondre plus tard… et oublier)
+  ~ rel.claire -= 3
+
+=== al_escalier
+titre: L'escalier capricieux
+declencheur: random
+recharge: 5
+---
+> En montant au dortoir, l'escalier pivote d'un coup. Tu te retrouves dans un couloir que tu ne connais pas, face à trois portes.
+* Porte de gauche. #curiosite
+  > Une pièce pleine de cartes anciennes du château. Tu en mémorises une.
+  ~ stat.savoir += 2; stat.ruse += 1
+* Porte du milieu. #courage
+  > Un placard à balais. Avec, à l'intérieur, un fantôme vexé d'avoir été dérangé.
+  ~ stat.courage += 1; stat.moral += 2
+* Porte de droite. #prudence
+  > La salle des trophées. Tu y croises Brax, qui astique sa propre coupe, gêné.
+  ~ rel.brax += 2
+
+=== al_fantome
+titre: Le fantôme bavard
+declencheur: random
+recharge: 6
+---
+> Un fantôme en collerette flotte à travers le mur du couloir. Il s'appelle Sire Bertold et il adore les ragots.
+* Raconte-moi un secret du château. #curiosite
+  si chapitre == ch1 ou chapitre == ch2
+    > « Le grimoire de la Réserve ? Il appartenait à un élève brillant. Il est mort, mais il ne s'en est pas rendu compte. »
+    ~ stat.savoir += 2; var.rumeur_grimoire = vrai
+  sinon
+    > « Le préfet Kael parle tout seul dans la tour, la nuit. Enfin, pas tout seul. »
+    ~ var.mefiance_orin = vrai; stat.savoir += 1
+* (Passer à travers lui, pour voir) #humour
+  > Brr. C'est comme plonger dans un lac en hiver. Sire Bertold est outré.
+  ~ stat.moral += 2
+
+=== al_potion_couloir
+titre: Explosion dans le couloir
+declencheur: random
+recharge: 6
+---
+> BOUM ! Un élève de première année, couvert de suie violette, sort en toussant d'une salle de classe. Ses sourcils ont disparu.
+* L'aider à se nettoyer avec un sort. #genereux
+  ~ stat.reputation += 2; stat.sortileges += 1
+* Éclater de rire. #moquerie
+  ~ stat.moral += 2; stat.reputation -= 1
+* Lui expliquer son erreur de dosage. #etude
+  test stat.potions vs 25
+  si reussite
+    > Il t'écoute, ébahi, puis repart vers son chaudron avec un air déterminé.
+    ~ stat.reputation += 3; stat.potions += 1
+  sinon
+    > Ton explication est fausse. Il le découvre en faisant exploser une deuxième fois la salle.
+
+=== al_devoir_oublie
+titre: Le devoir oublié
+declencheur: random
+recharge: 5
+---
+> Horreur : le devoir de théorie des runes est à rendre dans une heure. Tu ne l'as même pas commencé.
+* Le faire en vitesse, à la table du petit-déjeuner. #etude
+  test stat.savoir vs 30
+  si reussite
+    > Rédigé entre deux tartines. Et pourtant, la note est correcte.
+    ~ stat.savoir += 1
+  sinon
+    > Un torchon. Avec une tache de confiture au milieu.
+    ~ stat.discipline -= 4
+* Copier sur Noé. #ruse
+  si non var.noe_perdu
+    noe (inquiet): Prends. Mais change quelques mots, hein.
+    ~ rel.noe += 1; stat.discipline -= 2
+  sinon
+    > Noé n'est plus là pour te sauver. Tu rends une copie blanche.
+    ~ stat.discipline -= 6; stat.moral -= 3
+* Aller voir le professeur et avouer. #honnete
+  ~ stat.discipline += 2; rel.selene += 2
+
+=== al_creature_echappee
+titre: Une créature s'échappe
+declencheur: random
+quand: stat.creatures >= 18
+recharge: 5
+---
+> Un hurlement dans le grand hall. Un lutin à plumes s'est échappé de la cabane et jette des tartes à la crème sur les professeurs.
+* L'attraper doucement. #creature
+  test stat.creatures vs 30
+  si reussite
+    > Tu lui tends une noisette. Il descend de la poutre et se blottit dans ta manche.
+    ~ stat.creatures += 2; rel.gaspard += 3; stat.reputation += 3
+  sinon
+    > Il t'envoie une tarte en pleine figure. Toute l'école applaudit.
+    ~ stat.moral -= 2; stat.reputation += 1
+* Le figer d'un sort. #duel
+  ~ stat.sortileges += 1; rel.gaspard -= 2
+  > Il tombe comme une pierre. Gaspard arrive en courant et te regarde de travers.
+
+=== al_orage
+titre: L'orage magique
+declencheur: random
+recharge: 6
+---
+!moment nuit
+> Un orage violet éclate au-dessus du lac. Les éclairs dessinent des runes dans le ciel. Tout le château reste éveillé.
+* Observer et noter les runes. #etude
+  ~ stat.savoir += 2; var.visions += 1
+* Aller rassurer les premières années. #genereux
+  ~ stat.reputation += 2; stat.moral += 2
+* [stat.ombre >= 20] Écouter le tonnerre. Il prononce ton nom. #ombre
+  ~ stat.ombre += 4; stat.puissance += 2
+
+=== al_colis
+titre: Le colis anonyme
+declencheur: random
+quand: chapitre != ch1
+recharge: 8
+---
+> Sur ton lit, un paquet emballé de papier noir. Pas de nom, pas de mot. Il est tiède.
+* L'ouvrir. #curiosite
+  > Une plume de corbeau et un parchemin : un sort que tu ne connais pas, écrit à l'encre violette.
+  ~ stat.sortileges += 3; stat.ombre += 4
+* Le porter à l'Archimage. #regle
+  ~ rel.halloran += 4; stat.discipline += 2
+* Le jeter dans la cheminée. #prudence
+  > Il brûle avec une flamme verte. Et une odeur de vieux livre.
+
+=== al_epuisement
+titre: À bout de forces
+declencheur: random
+quand: stat.energie <= 50
+recharge: 3
+---
+> Tu t'endors debout en cours. Ta tête cogne la table. Toute la classe se retourne.
+* Sécher l'après-midi pour dormir. #repos
+  ~ stat.energie += 25; stat.discipline -= 5
+* Tenir bon avec une potion revigorante. #potions
+  test stat.potions vs 30
+  si reussite
+    ~ stat.energie += 20
+    > Ça a le goût de fraise et de bitume. Mais ça marche.
+  sinon
+    ~ stat.energie += 5; stat.moral -= 4
+    > Tu passes l'après-midi avec le hoquet. Un hoquet qui fait des bulles.
+
+=== al_rumeur
+titre: La rumeur
+declencheur: random
+quand: stat.reputation >= 30
+recharge: 6
+---
+> Une rumeur court dans les couloirs : tu serais l'élève préféré de l'Archimage, et tu aurais un sort secret.
+* Démentir. #humble
+  ~ stat.reputation -= 2; stat.discipline += 1
+* Laisser courir, en souriant mystérieusement. #ruse
+  ~ stat.reputation += 4; stat.ruse += 1
+* [stat.ombre >= 25] Montrer un petit sort sombre pour impressionner. #ombre
+  ~ stat.reputation += 6; stat.ombre += 4; stat.discipline -= 3
+
+=== al_pari
+titre: Le pari de Tobias
+declencheur: random
+quand: chapitre == ch1 ou chapitre == ch2
+recharge: 6
+---
+!placer tobias 200 gauche
+tobias: Je te parie dix écus que tu n'oses pas toucher la statue de la cour à minuit. Il paraît qu'elle mord.
+* Pari tenu. #rebelle
+  test stat.courage vs 30
+  si reussite
+    > Minuit. Tu touches la statue. Elle ne mord pas. Elle éternue.
+    ~ stat.ecus += 10; stat.courage += 2; rel.tobias += 3
+  sinon
+    > Tu t'approches… et un hibou te fonce dessus. Tu cours jusqu'au dortoir.
+    ~ stat.ecus -= 10; rel.tobias += 1
+* Non merci. #prudence
+  tobias (rire): Poule mouillée.
+  ~ stat.discipline += 1
+
+=== al_etoiles_filantes
+titre: La pluie d'étoiles
+declencheur: random
+quand: chapitre != ch1
+recharge: 8
+---
+!moment nuit
+> Des centaines d'étoiles filantes traversent le ciel au-dessus du lac. Le château entier est aux fenêtres.
+* [rel.ayla >= 15] Monter sur le toit avec Ayla. #romance
+  > Elle compte les étoiles à voix basse. À la centième, elle pose sa tête sur ton épaule.
+  ~ rel.ayla += 8; stat.moral += 6
+* Faire un vœu avec Noé. #loyal
+  ~ rel.noe += 4; stat.moral += 4
+* Observer seul. #solitude
+  ~ stat.moral += 3; stat.savoir += 1
+
+=== al_marche
+titre: Jour de marché
+declencheur: random
+quand: chapitre != ch1 et stat.ecus >= 10
+recharge: 6
+---
+> Pierrelune est en fête : jour de marché. Des étals de bonbons qui crient, de plumes qui écrivent seules, de pierres de lune.
+* Acheter un cadeau pour Noé. #genereux
+  ~ stat.ecus -= 8; rel.noe += 6
+* [rel.ayla >= 10] Acheter un cadeau pour Ayla. #romance
+  ~ stat.ecus -= 8; rel.ayla += 7
+* Acheter des ingrédients rares. #etude
+  ~ stat.ecus -= 10; stat.potions += 3
+* Ne rien acheter.
+
+=== al_cauchemar
+titre: Le cauchemar
+declencheur: random
+quand: stat.ombre >= 20
+recharge: 4
+---
+> Tu rêves d'une bibliothèque sans fin. Chaque livre a ton visage sur la couverture. L'un d'eux s'ouvre et murmure : « Bientôt. »
+* (Te réveiller et aller méditer) #lumiere
+  ~ stat.ombre -= 5; stat.energie -= 10
+* (Rester dans le rêve, écouter) #ombre
+  ~ stat.ombre += 5; stat.puissance += 2; rel.malrik += 4
+
+=== al_harcelement
+titre: Dans le couloir
+declencheur: random
+recharge: 5
+---
+> Trois élèves plus âgés encerclent un petit de première année et lui prennent son goûter.
+* Intervenir. #courage
+  test stat.courage + stat.duel / 3 vs 32
+  si reussite
+    > Ils détalent. Le petit te regarde comme si tu étais un héros.
+    ~ stat.reputation += 4; stat.courage += 2
+  sinon
+    > Ils rient et repartent avec le goûter. Et le tien.
+    ~ stat.moral -= 3; stat.courage += 1
+* Prévenir un professeur. #regle
+  ~ stat.discipline += 2
+* Passer son chemin.
+  ~ stat.moral -= 2
+
+=== al_interro
+titre: Interrogation surprise
+declencheur: random
+recharge: 4
+---
+!lieu classe_sorts 200 jour
+!placer selene 300 gauche
+selene (content): Surprise, mes astres ! Petite interrogation. Rangez vos grimoires, sortez vos neurones.
+test stat.savoir + stat.sortileges / 2 vs 30 + temps.chapitre * 6
+si reussite
+  > Tu remplis la feuille sans hésiter. Sélène te gratifie d'un « Brillant ! » en rouge.
+  ~ stat.reputation += 3; rel.selene += 3; stat.discipline += 2
+sinon
+  > Tu rends une feuille couverte de ratures et d'un dessin de dragon.
+  ~ stat.discipline -= 3; stat.moral -= 2
+
+=== al_duel_couloir
+titre: Duel dans le couloir
+declencheur: random
+quand: chapitre != ch1
+recharge: 5
+---
+!placer tobias 220 gauche
+> Un élève d'une autre affinité te bouscule exprès, baguette à la main. « Alors, il paraît que tu te bats bien ? »
+* Accepter le duel. #duel
+  test stat.duel vs 30 + temps.chapitre * 5
+  si reussite
+    !fx sort moi
+    > Trois secondes. Il est assis par terre, sa baguette sur tes genoux.
+    ~ var.duel_victoires += 1; stat.reputation += 3; stat.discipline -= 3
+  sinon
+    > Tu finis avec des oreilles d'âne pendant tout l'après-midi.
+    ~ var.duel_defaites += 1; stat.moral -= 4; stat.discipline -= 2
+* Refuser calmement. #sagesse
+  ~ stat.discipline += 2; stat.reputation -= 1
+* Lui faire une blague magique et s'enfuir. #ruse
+  ~ stat.ruse += 2; stat.moral += 2
+
+=== al_couvre_feu
+titre: Après le couvre-feu
+declencheur: random
+quand: stat.discipline < 50
+recharge: 4
+---
+!moment nuit
+> Minuit passé. Tu rentres au dortoir sur la pointe des pieds quand une lanterne s'allume au bout du couloir.
+* Inventer une excuse. #ruse
+  test stat.ruse vs 35
+  si reussite
+    > « Une crise de somnambulisme, professeur. Ça me prend depuis tout petit. » On te raccompagne au lit avec une tisane.
+    ~ stat.ruse += 2
+  sinon
+    > Ton excuse ne tient pas dix secondes. Avertissement.
+    ~ var.avertissements += 1; stat.discipline -= 6
+* Courir te cacher derrière une armure. #rebelle
+  test stat.ruse + stat.courage / 3 vs 40
+  si reussite
+    > La lanterne passe à un mètre de toi. Puis s'éloigne. Ton cœur bat jusque dans tes oreilles.
+    ~ stat.moral += 2; stat.discipline -= 2
+  sinon
+    > L'armure s'effondre dans un fracas épouvantable. Tout l'étage se réveille. Avertissement, et une semaine de corvée de chaudrons.
+    ~ var.avertissements += 1; stat.discipline -= 8; stat.energie -= 10
+* Avouer tout de suite. #honnete
+  > « Au moins, vous êtes franc. » Une heure de retenue, pas d'avertissement.
+  ~ stat.discipline += 3; stat.energie -= 5

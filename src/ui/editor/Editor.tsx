@@ -359,7 +359,7 @@ function Workspace({ draft, onDraft, onExit, onTest }: { draft: Draft; onDraft: 
         {strVars.map((k) => <option key={k} value={k} />)}
       </datalist>
       <datalist id="ed-prop-keys">
-        {['color', 'color2', 'text', 'texte', 'label', 'rideaux', 'lampe', 'variante', 'contenu', 'count', 'dir', 'coussin'].map((k) => <option key={k} value={k} />)}
+        {['color', 'color2', 'text', 'texte', 'label', 'rideaux', 'lampe', 'variante', 'contenu', 'count', 'dir', 'coussin', 'lueur', 'taille', 'nombre', 'motif', 'niveau', 'lumiere', 'creature', 'nappe'].map((k) => <option key={k} value={k} />)}
       </datalist>
       <div class={`ed-toast ${toastMsg ? 'on' : ''}`} role="status" aria-live="polite">{toastMsg}</div>
     </div>

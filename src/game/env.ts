@@ -37,8 +37,9 @@ export function resolveLookWith(g: GameSession, l: Look | undefined): Look {
 }
 
 /** Session « vitrine » (état initial) pour les aperçus hors partie. */
-export function previewSession(def: UniverseDef, vars?: Record<string, Value>): GameSession {
-  const g = GameSession.create(compiled(def), { name: def.creation?.defaultName ?? 'Joueur', seed: 1, look: def.creation?.baseLook });
+export function previewSession(def: UniverseDef, vars?: Record<string, Value>, fields?: Record<string, string>): GameSession {
+  // Avec « fields », les effets des choix de création (ex. couleur de robe selon l'affinité) sont appliqués.
+  const g = GameSession.create(compiled(def), { name: def.creation?.defaultName ?? 'Joueur', seed: 1, look: def.creation?.baseLook, fields });
   if (vars) Object.assign(g.s.vars, vars);
   return g;
 }

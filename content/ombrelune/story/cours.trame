@@ -1,0 +1,228 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  COURS ET ACTIVITÉS — ce qui arrive quand on s'entraîne, étudie, explore
+// ═══════════════════════════════════════════════════════════════════════
+
+=== co_sort_rate
+titre: Le sort qui rebondit
+declencheur: activity:pratiquer_sorts
+chance: 25
+recharge: 3
+---
+!fx fumee moi
+> Ton sort rebondit sur le mur, sur le plafond, sur le pupitre… et finit par transformer tes chaussures en grenouilles.
+* Rire et recommencer. #humour
+  ~ stat.moral += 2; stat.sortileges += 1
+* Recommencer encore et encore jusqu'à réussir. #etude
+  ~ stat.sortileges += 2; stat.energie -= 10
+
+=== co_sort_avance
+titre: Un sort de haut niveau
+declencheur: activity:pratiquer_sorts
+quand: stat.sortileges >= 45
+unique: oui
+priorite: 6
+---
+!placer selene 300 gauche
+selene (surpris): Attends, refais ça.
+> Tu refais le geste. Une sphère de lumière dorée naît au bout de ta baguette et flotte au-dessus du cercle.
+selene (emu): Un Soleil Captif. On ne l'enseigne qu'en dernière année. Tu l'as trouvé tout seul.
+~ var.sorts += 1; stat.reputation += 5; rel.selene += 8; stat.sortileges += 3
+
+=== co_potion_explosion
+titre: Le chaudron explose
+declencheur: activity:preparer_potion
+quand: stat.potions < 35
+chance: 25
+recharge: 3
+---
+!fx tremblement
+!fx fumee moi
+> BOUM. Ton chaudron se transforme en geyser vert. Le plafond du cachot en garde une tache en forme de grenouille.
+varn (colere): Récurez. Tout. Et notez ce que vous avez mal fait. Trois fois.
+~ stat.moral -= 3; stat.potions += 1; rel.varn -= 1
+
+=== co_potion_parfaite
+titre: La potion parfaite
+declencheur: activity:preparer_potion
+quand: stat.potions >= 40
+recharge: 4
+---
+> Ta potion prend exactement la couleur décrite dans le livre : un bleu de nuit, avec des reflets d'argent.
+varn: …Correct.
+> Venant d'elle, c'est un discours.
+~ rel.varn += 3; stat.potions += 1; stat.ecus += 5
+
+=== co_varn_talent
+titre: Le talent
+declencheur: activity:preparer_potion
+quand: stat.potions >= 28
+unique: oui
+priorite: 5
+---
+varn: Vous. Restez une minute.
+varn (pensif): Vous avez le nez. Ça ne s'apprend pas. Ne le gâchez pas en faisant le pitre avec Lambert.
+~ rel.varn += 6
+~ souvenir(varn, talent, "Elle t'a dit que tu avais le nez pour les potions")
+
+=== co_brax_conseil
+titre: Le conseil de Brax
+declencheur: activity:entrainement_duel
+quand: stat.duel < 25
+unique: oui
+priorite: 5
+---
+!placer brax 380 gauche
+brax: Ton problème, c'est les pieds. Un duel se gagne avec les pieds. La baguette, c'est pour finir.
+~ stat.duel += 3; rel.brax += 4
+
+=== co_brax_defi
+titre: Brax te teste
+declencheur: activity:entrainement_duel
+quand: stat.duel >= 30
+recharge: 5
+---
+!placer brax 380 gauche
+brax: Montre-moi ce que tu vaux. Contre moi. Trois sorts.
+test stat.duel + stat.courage / 4 vs 40 + temps.chapitre * 4
+si reussite
+  !fx sort moi brax
+  > Ton troisième sort touche son épaule. Il hausse un sourcil.
+  ~ rel.brax += 6; stat.duel += 2; stat.reputation += 2
+sinon
+  !fx sort brax moi
+  > Tu te retrouves la tête dans le sable. Il te tend la main.
+  ~ rel.brax += 2; stat.duel += 1
+
+=== co_bebe_creature
+titre: La naissance
+declencheur: activity:soigner_creatures
+unique: oui
+priorite: 5
+---
+!placer gaspard 150 droite
+gaspard (content): Chut. Regarde.
+> Dans la paille, un œuf doré se fendille. Un minuscule griffon en sort, tout mouillé, et ouvre le bec vers toi.
+gaspard: Le premier visage qu'il voit, c'est sa mère pour la vie. Félicitations.
+~ stat.creatures += 4; stat.moral += 5; rel.gaspard += 5
+
+=== co_creature_ami
+titre: Ton familier
+declencheur: activity:soigner_creatures
+quand: var.familier
+recharge: 5
+---
+> {var.familier_nom} saute sur ton épaule dès que tu entres. Il a grandi. Ses yeux de lune brillent plus fort qu'avant.
+~ stat.creatures += 1; stat.moral += 3
+si stat.ombre >= 30
+  > Mais il gronde doucement en reniflant tes mains. Il sent quelque chose qu'il n'aime pas.
+  ~ stat.moral -= 2
+
+=== co_passage_secret
+titre: Le passage secret
+declencheur: activity:explorer
+unique: oui
+priorite: 5
+---
+> L'escalier s'arrête net entre deux étages. Tu pousses une pierre qui dépasse… et un pan de mur pivote.
+> Un passage étroit, qui sent la cire et la poussière. Il mène directement à la cour, derrière la statue.
+~ stat.ruse += 3; var.passage = vrai
+
+=== co_carte
+titre: La carte vivante
+declencheur: activity:explorer
+quand: chapitre != ch1
+unique: oui
+priorite: 5
+---
+> Dans une salle oubliée, une carte du château peinte sur le mur. Des petits points se déplacent dessus : tous les habitants du château, en temps réel.
+> Un point immobile, au fond de la Réserve, porte un nom effacé.
+~ stat.savoir += 3; var.carte_vue = vrai
+si var.malrik_nom
+  > Tu sais quel nom c'était.
+
+=== co_cerf_premier
+titre: Une silhouette d'argent
+declencheur: activity:cueillette_foret
+unique: oui
+priorite: 5
+---
+> Entre les arbres, un éclair d'argent. Un cerf immense te regarde un instant, puis s'évanouit dans la brume.
+~ stat.creatures += 2; stat.moral += 4; var.cerf_vu = vrai
+
+=== co_foret_danger
+titre: Les yeux dans la brume
+declencheur: activity:cueillette_foret
+chance: 30
+recharge: 3
+---
+> La brume s'épaissit. Des yeux rouges s'allument entre les troncs. Puis d'autres.
+* Rester calme et reculer lentement. #creature
+  test stat.creatures + stat.courage / 3 vs 35
+  si reussite
+    > Les yeux s'éteignent un à un. Tu rentres sans un bruit.
+    ~ stat.creatures += 2
+  sinon
+    > Une meute de loups-brume te poursuit jusqu'à la cabane. Gaspard les chasse en hurlant.
+    ~ stat.energie -= 25; rel.gaspard -= 1
+* Courir ! #peur
+  ~ stat.energie -= 15; stat.courage -= 1
+
+=== co_vision_lumiere
+titre: La lumière du cercle
+declencheur: activity:mediter
+quand: stat.ombre >= 15
+recharge: 4
+---
+> Au cœur de la méditation, une lumière d'argent t'entoure. La voix du grimoire s'éloigne, comme un bruit de l'autre côté d'une porte.
+~ stat.ombre -= 4; stat.moral += 3
+
+=== co_vision_future
+titre: Une vision
+declencheur: activity:divination
+recharge: 3
+---
+si var.visions >= 6
+  > Les étoiles te montrent une clairière, douze pierres, une lumière violette. Et ta propre main, tendue vers un livre.
+  ~ var.vision_cercle = vrai
+sinon si var.visions >= 3
+  > Les étoiles te montrent Noé, seul, dans une robe noire. Il pleure.
+  ~ var.vision_noe = vrai
+sinon
+  > Les étoiles te montrent une silhouette en robe violette, au sommet d'une tour. Est-ce toi ?
+~ stat.savoir += 1
+
+=== co_grimoire_premiere
+titre: Ce que dit le grimoire
+declencheur: activity:lire_grimoire
+unique: oui
+priorite: 6
+---
+> Les lettres se réarrangent sous tes yeux pour former ta langue. La voix est douce, polie, presque timide.
+malrik: Merci de revenir. Tu es le premier à me lire depuis si longtemps. Je vais t'apprendre des choses merveilleuses.
+~ rel.malrik += 6; rencontrer(malrik)
+
+=== co_grimoire_prix
+titre: Le prix
+declencheur: activity:lire_grimoire
+quand: stat.ombre >= 35
+unique: oui
+priorite: 6
+---
+> Tu lèves les yeux du grimoire. Il fait nuit. Tu étais venu à midi. Et tu ne te souviens de rien.
+> Sur ton bras, une marque noire en forme de lettre que tu ne sais pas lire.
+~ stat.moral -= 8; var.marque = vrai
+* (Cacher la marque sous ta manche)
+  ~ stat.ruse += 1
+* (Aller voir Sélène, ou Halloran) #lumiere
+  ~ rel.selene += 6; stat.ombre -= 6
+  selene (inquiet): Oh, mon petit astre… Viens méditer à la tour. Tous les jours. Promets-le.
+
+=== co_auberge_client
+titre: Le client mystérieux
+declencheur: activity:travailler_auberge
+unique: oui
+priorite: 5
+---
+> Un vieux voyageur encapuchonné te laisse un pourboire énorme : une pièce d'argent gravée d'un cerf.
+> « Pour celui qui saura parler aux bêtes. » Quand tu relèves la tête, il a disparu.
+~ stat.ecus += 20; stat.creatures += 2

@@ -5,7 +5,7 @@ import type {
   ActivityDef, ChapterDef, CharacterDef, ExitDef, HotspotDef, LocationDef, Look, NpcPlacement, PropDef, StatDef, TraitDef, UniverseDef,
 } from '../../core/model/types';
 import {
-  ACCESSORIES, ANIMS, BEARDS, BOTTOM_STYLES, HAIR_COLORS, HAIR_STYLES, SKINS, SPR_H, TOP_STYLES, getFrame, randomLook,
+  ACCESSORIES, ANIMS, BEARD_STYLES, BOTTOM_STYLES, HAIR_COLORS, HAIR_STYLES, SKINS, SPR_H, TOP_STYLES, getFrame, lookLabel, randomLook,
 } from '../../engine/gfx/character';
 import { EMOTIONS } from '../../engine/gfx/portrait';
 import { BACKDROP_TYPES, FLOOR_STYLES, PROP_TYPES, WALL_STYLES, renderLocation, type TimeOfDay } from '../../engine/gfx/scenery';
@@ -193,7 +193,7 @@ export function LookEditor({ look, onChange, resolve, allowEmpty }: { look: Look
     onChange(n);
   };
   const sel = (key: keyof Look, options: Opt[], label: string, empty = '(par défaut)') => (
-    <F label={label}><Sel value={look[key] as string | undefined} onChange={(v) => up({ [key]: v } as Partial<Look>)} options={options} empty={empty} /></F>
+    <F label={label}><Sel value={look[key] as string | undefined} onChange={(v) => up({ [key]: v } as Partial<Look>)} options={options.map((o) => (Array.isArray(o) ? o : [o, lookLabel(o)] as [string, string]))} empty={empty} /></F>
   );
   return (
     <div class="ed-look">
@@ -220,9 +220,10 @@ export function LookEditor({ look, onChange, resolve, allowEmpty }: { look: Look
         <F label="Cheveux" group>
           <div class="swatches">{Object.entries(HAIR_COLORS).map(([k, v]) => <button type="button" key={k} class={`swatch ${look.hairColor === k ? 'on' : ''}`} style={{ background: v }} aria-label={`Cheveux ${k}`} aria-pressed={look.hairColor === k} onClick={() => up({ hairColor: k })} />)}</div>
         </F>
-        {sel('beard', BEARDS.filter(Boolean), 'Pilosité', '(aucune)')}
+        {sel('beard', BEARD_STYLES.filter(Boolean), 'Pilosité', '(aucune)')}
         <F label="Yeux"><ColorIn value={look.eyes} onChange={(v) => up({ eyes: v })} /></F>
-        <F label="Accessoires" span={2} group><Chips options={ACCESSORIES.map((a) => [a, a])} value={look.acc} onChange={(v) => up({ acc: v })} /></F>
+        <F label="Accessoires et signes particuliers" span={2} group><Chips options={ACCESSORIES.map((a) => [a, lookLabel(a)])} value={look.acc} onChange={(v) => up({ acc: v })} /></F>
+        <F label="Couleur des accessoires"><ColorIn value={look.accColor} onChange={(v) => up({ accColor: v })} placeholder="automatique" /></F>
         {sel('top', TOP_STYLES, 'Haut')}
         <F label="Couleur du haut"><ColorIn value={look.topColor} onChange={(v) => up({ topColor: v })} /></F>
         <F label="Couleur secondaire"><ColorIn value={look.topColor2} onChange={(v) => up({ topColor2: v })} /></F>

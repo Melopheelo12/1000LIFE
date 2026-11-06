@@ -1,0 +1,512 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  PREMIÈRE ANNÉE — L'ÉVEIL (11 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== intro
+titre: La lettre violette
+declencheur: manual
+---
+!lieu quai 60 nuit
+!placer moi 70 droite
+> Il y a trois semaines, un corbeau a déposé une lettre sur ta table de petit-déjeuner. Cire violette, encre argentée, ton nom écrit à la main.
+> « L'Académie d'Ombrelune a l'honneur de vous informer que vous possédez le Don. »
+> Ce soir, une barque t'a déposé sur ce quai, au pied d'un château plus grand qu'une montagne.
+!entrer noe gauche 120
+noe (inquiet): Toi aussi, tu viens d'arriver ? Je… je m'appelle Noé. Mon père fait du pain. Il a cru que la lettre était une pub.
+* Moi, c'est {joueur.nom}. On n'a qu'à rester ensemble. #loyal
+  ~ rel.noe += 8
+  ~ souvenir(noe, quai, "Tu lui as proposé de rester ensemble, le premier soir")
+  noe (content): Oh, merci. Vraiment. J'avais peur de passer la soirée tout seul.
+* Une pub pour une école de sorcellerie ? Ton père a de l'humour. #humour
+  ~ rel.noe += 4
+  noe (rire): Il a ri pendant une heure. Puis la lettre a pris feu toute seule. Il a arrêté de rire.
+* (Lui faire un signe de tête et regarder le château)
+  ~ rel.noe -= 2
+  noe: …Bon. Il est impressionnant, hein.
+!entrer sera droite 230
+!entrer tobias droite 260
+sera: Tiens donc. Les nouveaux sans lignée se reconnaissent entre eux.
+tobias (rire): Ils sentent encore la farine.
+noe (triste): …
+* Laisse-le tranquille. #courage
+  ~ stat.courage += 3; rel.sera -= 6; rel.noe += 5
+  ~ souvenir(sera, defi_quai, "Tu lui as tenu tête dès le premier soir")
+  sera (colere): Pardon ? Tu sais à qui tu parles ?
+  moi: À quelqu'un de mal élevé, apparemment.
+  sera: On se reverra, toi.
+* Ma famille vaut bien la tienne. #fierte
+  ~ rel.sera -= 3; stat.courage += 1
+  sera (fier): Permets-moi d'en douter.
+* (Ignorer et entraîner Noé plus loin) #prudence
+  ~ stat.ruse += 2; rel.noe += 2
+  sera: C'est ça, fuyez.
+!sortir sera droite
+!sortir tobias droite
+!entrer halloran droite 300
+> Un très vieil homme descend les marches. Sa barbe blanche lui arrive à la ceinture et l'air autour de lui scintille.
+halloran (content): Bienvenue à Ombrelune, jeunes gens. Je suis l'Archimage Halloran. Ce soir, la Flamme d'Éveil va dire à chacun de vous qui il est.
+halloran (pensif): …
+> Son regard s'arrête sur toi un instant de trop. Comme s'il te reconnaissait.
+!lieu grand_hall 300 soir
+!placer moi 260 droite
+!placer halloran 380 gauche
+> Le grand hall. Des centaines de bougies flottent sous la voûte. Au centre, une vasque de pierre où danse une flamme blanche.
+halloran: Approche. Tends la main au-dessus de la flamme.
+!fx magie moi
+> La flamme bondit, s'enroule autour de ton poignet… et prend la couleur de l'{var.affinite_nom}.
+halloran (fier): L'{var.affinite_nom}. Très bien. Très bien, vraiment.
+si joueur.origine == trouve
+  halloran (inquiet): Et… tes parents, mon enfant ?
+  * Je n'en ai pas. On m'a trouvé devant un orphelinat.
+    ~ rel.halloran += 3
+    halloran (pensif): Je vois. Nous en reparlerons un jour, peut-être.
+    ~ souvenir(halloran, orphelin, "Tu lui as dit que tu étais un enfant trouvé")
+  * Ça ne vous regarde pas.
+    ~ rel.halloran -= 2; stat.ruse += 1
+    halloran: Tu as raison. Pardonne un vieil homme trop curieux.
+halloran: Le dortoir de ton affinité est au bout de la salle commune. Dors bien. Demain, tout commence.
+~ objectif("premiere_annee", "Réussir les examens de première année")
+!lieu dortoir 120 nuit
+> Ton lit a des rideaux à la couleur de ton affinité. Sur l'oreiller, un emploi du temps qui change d'écriture quand on le regarde.
+> Déplace-toi avec ← → ou en touchant l'écran. Interagis avec E. Chaque semaine, tu as 3 actions : étudier, t'entraîner, explorer… Ton lit termine la semaine. Le PLAN permet de se déplacer plus vite.
+
+=== ch1_premier_sort
+titre: Le premier sort
+declencheur: enter:classe_sorts
+chapitres: ch1
+unique: oui
+priorite: 6
+---
+!placer selene 300 gauche
+selene (content): Entrez, entrez, mes petits astres ! Aujourd'hui : faire léviter une plume. Rien de plus simple. Rien de plus difficile.
+!placer sera 160 droite
+selene: {joueur.nom}, à toi l'honneur.
+* Se concentrer, respirer, essayer. #etude
+  test stat.sortileges + stat.puissance / 2 vs 18
+  si reussite
+    !fx magie moi
+    > La plume frémit, hésite… puis s'élève jusqu'au plafond.
+    ~ stat.reputation += 4; stat.sortileges += 2; var.sorts += 1; rel.selene += 5
+    selene (fier): Magnifique ! Du premier coup !
+    sera (colere): Coup de chance.
+  sinon
+    !fx fumee moi
+    > La plume prend feu. Puis la manche de ta robe.
+    ~ stat.moral -= 4; stat.sortileges += 1
+    selene (rire): Ah ! Le feu, c'est déjà de la magie. On recommencera.
+    sera (rire): Bravo, le petit génie.
+* Laisser Séraphine passer avant toi. #prudence
+  ~ stat.ruse += 1
+  sera (fier): Regardez et apprenez.
+  > Sa plume monte droit, élégante. Elle te jette un regard satisfait.
+  > Quand vient ton tour, tu as eu le temps d'observer son geste.
+  ~ stat.sortileges += 2
+selene: Pratiquez dans le cercle d'entraînement quand vous voulez. Les sortilèges, c'est comme le piano : ça s'use si on ne s'en sert pas.
+
+=== ch1_varn
+titre: Le cachot des potions
+declencheur: enter:cachot_potions
+chapitres: ch1
+unique: oui
+priorite: 6
+---
+!placer varn 300 gauche
+varn: Asseyez-vous. Ne touchez à rien. Ne respirez pas trop fort.
+varn: Ici, une erreur de dosage ne fait pas exploser un chaudron. Elle tue quelqu'un. Est-ce bien compris ?
+varn (colere): Vous, là. Que se passe-t-il si l'on ajoute de la poudre de lune à une infusion de mandragore ?
+* Répondre en réfléchissant. #etude
+  test stat.savoir + stat.potions / 2 vs 20
+  si reussite
+    moi: Ça neutralise le poison… mais seulement si l'infusion est froide.
+    ~ rel.varn += 6; stat.reputation += 2
+    varn: …Exact. Quelqu'un a ouvert un livre avant de venir. C'est rare.
+  sinon
+    moi: Ça… fait des bulles ?
+    ~ rel.varn -= 3; stat.moral -= 2
+    varn: Ça fait un mort, en général. Révisez.
+* Avouer que tu n'en sais rien. #humble
+  ~ rel.varn += 1
+  varn: L'honnêteté ne remplace pas le travail, mais c'est un début.
+* Dire que c'est la question de Séraphine, pas la tienne. #humour
+  ~ rel.varn -= 4; stat.discipline -= 3; rel.noe += 2
+  varn (colere): Un avertissement oral. Le prochain sera écrit.
+varn: Vos chaudrons vous attendent. Préparez des potions dès que vous le pouvez. La main apprend plus vite que la tête.
+
+=== ch1_gaspard
+titre: Le gardien
+declencheur: enter:cabane
+chapitres: ch1, ch2
+unique: oui
+priorite: 6
+---
+!placer gaspard 150 droite
+gaspard: Hm. Un élève qui vient jusqu'ici de lui-même. Ça faisait longtemps.
+gaspard (content): Je suis Gaspard. Je m'occupe des bêtes, des arbres et de tout ce que les professeurs ne veulent pas toucher.
+> Dans la cage, une petite boule de fourrure grise te fixe avec des yeux couleur de lune.
+gaspard: Un renardeau de brume. Sa mère a été tuée par quelque chose de… pas naturel. Il ne mange plus. Tu veux essayer ?
+* (Tendre doucement la main) #creature
+  test stat.creatures + stat.courage / 3 vs 15
+  si reussite
+    > Le renardeau renifle tes doigts, puis grimpe sur ton bras et s'enroule autour de ton cou.
+    ~ stat.creatures += 4; rel.gaspard += 8; var.familier = vrai
+    gaspard (surpris): Ça alors. Il t'a choisi. Il faut lui donner un nom.
+    * Luciole.
+      ~ var.familier_nom = "Luciole"
+    * Braise.
+      ~ var.familier_nom = "Braise"
+    * Pip.
+      ~ var.familier_nom = "Pip"
+    gaspard (content): {var.familier_nom}. Ça lui va. Il dormira ici, mais il viendra te voir. Ces bêtes-là sentent quand on a besoin d'elles.
+    ~ souvenir(gaspard, renardeau, "Le renardeau de brume t'a choisi")
+  sinon
+    > Le renardeau feule et se cache au fond de la cage.
+    ~ stat.creatures += 1; rel.gaspard += 2
+    gaspard: Pas grave. Il faut du temps. Reviens le voir.
+* Ce n'est pas un peu dangereux ?
+  ~ rel.gaspard -= 1
+  gaspard (rire): Lui ? Le plus dangereux ici, c'est ma soupe.
+gaspard: Si tu veux aider, viens soigner les bêtes quand tu as un moment. Et ne t'approche pas de la forêt sans moi. Jamais.
+
+=== ch1_sera_noe
+titre: Fils de boulanger
+declencheur: enter:grand_hall
+chapitres: ch1
+quand: temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+!placer noe 260 droite
+!placer sera 330 gauche
+!placer tobias 360 gauche
+> Un attroupement. Au milieu, Noé, les joues rouges, ramasse ses livres éparpillés par terre.
+sera (rire): Pétrir, il sait. Lire un grimoire, c'est autre chose.
+tobias (rire): Retourne à ton four, Lambert !
+* (S'interposer) Ramasse-les toi-même, Tobias. #courage
+  test stat.courage vs 30
+  si reussite
+    > Ton ton est si calme que Tobias recule d'un pas. Puis, sous les regards, il se baisse et ramasse un livre.
+    ~ stat.reputation += 5; rel.noe += 10; rel.tobias -= 5; rel.sera -= 4
+    ~ souvenir(noe, defendu, "Tu l'as défendu devant tout le monde, dans le grand hall")
+    sera (colere): Viens, Tobias. On s'en va.
+  sinon
+    > Tobias te pousse. Tu tombes à côté de Noé, sous les rires.
+    ~ stat.moral -= 5; rel.noe += 8
+    ~ souvenir(noe, defendu, "Tu as essayé de le défendre, même si ça a mal tourné")
+    noe (emu): T'étais pas obligé…
+* (Aider Noé à ramasser ses livres sans un mot) #loyal
+  ~ rel.noe += 6; rel.sera -= 1
+  sera: Comme c'est touchant.
+* Lancer une blague qui fait rire tout le monde… aux dépens de Séraphine. #ruse
+  test stat.ruse vs 25
+  si reussite
+    moi: Dis donc, Séraphine, ta mère t'écrit toujours pour te dire qu'elle est déçue ?
+    > Le silence est terrible. Puis quelqu'un pouffe. Séraphine devient blanche comme un linge.
+    ~ stat.reputation += 3; rel.noe += 5; rel.sera -= 15
+    ~ souvenir(sera, humiliee, "Tu l'as humiliée en parlant de sa mère devant tout le monde")
+    ~ var.sera_humiliee = vrai
+  sinon
+    > Ta blague tombe à plat. Séraphine hausse un sourcil, méprisante.
+    ~ stat.reputation -= 2
+!sortir sera droite
+!sortir tobias droite
+noe: Merci. Je te revaudrai ça.
+
+=== ch1_brax
+titre: La garde haute
+declencheur: enter:arene
+chapitres: ch1
+unique: oui
+priorite: 6
+---
+!placer brax 380 gauche
+!placer tobias 330 gauche
+brax: Silence ! Le duel, ce n'est pas de la magie de salon. C'est des réflexes, du sang-froid et de la sueur.
+brax: Toi, le nouveau. Contre Wren. Sort de désarmement uniquement. Le premier qui lâche sa baguette a perdu.
+* Attaquer tout de suite. #courage
+  test stat.duel + stat.courage / 3 vs 16
+  si reussite
+    !fx sort moi tobias
+    > Ton sort part avant même que Tobias ait levé le bras. Sa baguette roule dans le sable.
+    ~ stat.duel += 3; var.duel_victoires += 1; rel.brax += 6; stat.reputation += 3
+    brax: Rapide. Brouillon, mais rapide.
+  sinon
+    !fx sort tobias moi
+    > Tobias esquive et te désarme d'un geste lourd.
+    ~ stat.duel += 2; var.duel_defaites += 1; stat.moral -= 3
+    brax: Tu cours avant de savoir marcher. Recommence.
+* Attendre son attaque pour la contrer. #ruse
+  test stat.duel + stat.ruse / 3 vs 16
+  si reussite
+    !fx sort tobias moi
+    > Tobias attaque en force. Tu pivotes, et son sort frappe le mur. Le tien ne le rate pas.
+    ~ stat.duel += 3; var.duel_victoires += 1; rel.brax += 8; stat.reputation += 3
+    brax (surpris): Patience et contre. Ça, ça ne s'apprend pas.
+  sinon
+    > Tu attends… trop longtemps. Tobias te désarme pendant que tu réfléchis encore.
+    ~ stat.duel += 2; var.duel_defaites += 1; stat.moral -= 2
+brax: Le cercle de duel est ouvert tous les jours. Ceux qui s'y entraînent finissent par gagner. Les autres finissent à l'infirmerie.
+
+=== ch1_voix
+titre: La voix derrière la porte
+declencheur: enter:bibliotheque
+chapitres: ch1
+quand: temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+!placer pell 330 gauche
+> La bibliothèque est si calme qu'on entend les pages tourner toutes seules.
+> Tu passes devant une lourde porte de fer, au fond. Une plaque : « RÉSERVE — ACCÈS INTERDIT ».
+> Et derrière, à peine un souffle…
+> « … {joueur.nom}… »
+* (Coller l'oreille contre la porte) #curiosite
+  > « … enfin… je t'attendais… »
+  ~ stat.ombre += 2; var.voix_entendue = vrai
+  pell (colere): Éloignez-vous de cette porte. Immédiatement.
+  ~ rel.pell -= 3
+* (Reculer et faire comme si de rien n'était) #prudence
+  ~ stat.ruse += 1; var.voix_entendue = vrai
+* Madame Pell ! Il y a quelqu'un derrière la porte ! #honnete
+  ~ rel.pell += 3; var.voix_entendue = vrai
+  pell (inquiet): …Il n'y a personne, derrière cette porte. Il n'y a jamais personne.
+  > Elle ment. Ses mains tremblent.
+  ~ souvenir(pell, voix, "Tu lui as signalé la voix derrière la porte de la Réserve")
+!placer ayla 160 droite
+ayla: Tu l'as entendue aussi, hein ?
+ayla (pensif): Moi, c'est Ayla. Je suis en Souffle. Je rêve de cette porte toutes les nuits.
+~ rencontrer(ayla)
+ayla: Un jour, tu trouveras un livre qui parle. Ne lui réponds pas.
+
+=== ch1_escapade
+titre: L'escapade nocturne
+declencheur: tick_start
+chapitres: ch1
+quand: temps.semaine == 3
+unique: oui
+priorite: 4
+---
+!lieu dortoir 150 nuit
+!placer noe 100 droite
+noe (content): Psst ! Tu dors ? On dit qu'il y a un passage secret derrière la tapisserie du hall. On va voir ?
+* Allez, on y va. #rebelle
+  ~ rel.noe += 5; stat.courage += 2
+  !lieu grand_hall 395 nuit
+  !placer noe 360 droite
+  > La tapisserie à la lune d'argent bouge doucement, comme si elle respirait.
+  noe (inquiet): Tu entends ? Des pas !
+  !entrer orin droite 520
+  orin: Deux premières années hors du dortoir après le couvre-feu. Vous savez ce que ça coûte ?
+  * Pardon. C'est de ma faute, c'est moi qui ai insisté. #loyal
+    ~ rel.noe += 8; rel.orin += 4
+    orin (content): Courageux. J'aime ça. Allez, filez. Je n'ai rien vu.
+    ~ souvenir(orin, couvert, "Il t'a couvert la nuit où tu es sorti du dortoir")
+    ~ var.dette_orin = vrai
+  * On cherchait juste le passage secret.
+    ~ rel.orin += 6
+    orin (rire): Le passage ? Il ne s'ouvre qu'avec un mot de passe. Un jour, je vous le dirai peut-être. Filez.
+    ~ souvenir(orin, couvert, "Il t'a couvert la nuit où tu es sorti du dortoir")
+    ~ var.dette_orin = vrai
+  * (Prendre Noé par le bras et s'enfuir en courant) #ruse
+    test stat.ruse vs 28
+    si reussite
+      !courir moi 40
+      > Vous filez entre les colonnes. Le préfet ne vous a même pas reconnus.
+      ~ stat.ruse += 2; rel.noe += 3
+    sinon
+      > Vous trébuchez sur une armure. Le vacarme réveille la moitié du château.
+      ~ var.avertissements += 1; stat.discipline -= 10; rel.varn -= 4
+      varn (colere): Un avertissement. Chacun. Et dix heures de récurage des chaudrons.
+      > Noé ne te reproche rien, mais il fait la tête pendant deux jours.
+      ~ rel.noe -= 2
+* Non, Noé. On va se faire prendre. #regle
+  ~ stat.discipline += 3; rel.noe -= 3
+  noe (triste): T'es pas drôle…
+  > Il y va seul. Il revient une heure plus tard, ravi, avec une histoire de préfet très gentil qui l'a laissé filer.
+  ~ var.noe_orin = vrai
+
+=== ch1_halloran
+titre: Les rêves
+declencheur: enter:grand_hall
+chapitres: ch1
+quand: temps.semaine >= 3
+unique: oui
+priorite: 4
+---
+!placer halloran 380 gauche
+halloran: Ah, {joueur.nom}. Marche un peu avec moi.
+halloran (pensif): Dis-moi… depuis que tu es ici, fais-tu des rêves étranges ? Une voix, peut-être ? Un livre ?
+* Oui. J'ai entendu une voix derrière la porte de la Réserve. #honnete
+  ~ rel.halloran += 8
+  ~ souvenir(halloran, confiance_voix, "Tu lui as parlé de la voix de la Réserve")
+  halloran (inquiet): Je vois. Écoute-moi bien : si cette voix te propose quelque chose, quoi que ce soit, viens me trouver. Promis ?
+  * Promis.
+    ~ var.promesse_halloran = vrai; rel.halloran += 3
+  * Pourquoi ? Qu'est-ce qu'il y a derrière cette porte ?
+    halloran: Un très vieux chagrin. Va, maintenant.
+* Non, rien de spécial. #ruse
+  ~ stat.ruse += 1
+  si var.voix_entendue
+    ~ stat.ombre += 2
+    halloran (pensif): Bien. Tant mieux.
+    > Il ne te croit pas. Tu le vois dans ses yeux.
+  sinon
+    halloran (content): Tant mieux. Dors bien, alors.
+
+=== ch1_noe_doute
+titre: Je ne suis pas fait pour ça
+declencheur: talk:noe
+chapitres: ch1
+quand: temps.semaine >= 3
+unique: oui
+priorite: 5
+---
+noe (triste): J'ai raté mon devoir de potions. Et celui de sortilèges. Varn a dit que je ferais mieux de rentrer chez moi.
+noe: Elle a peut-être raison. Mon père a besoin de quelqu'un à la boulangerie…
+* On révise ensemble tous les soirs jusqu'aux examens. Tu vas y arriver. #loyal
+  ~ rel.noe += 10; stat.savoir += 2; stat.energie -= 10
+  ~ var.aide_noe = vrai
+  ~ souvenir(noe, revisions, "Tu as révisé avec lui tous les soirs quand il voulait abandonner")
+  ~ planifier(ch1_noe_reussite, 2)
+  noe (emu): Tu ferais ça ? Pour moi ?
+* Si tu n'es pas fait pour ça, il vaut mieux le savoir maintenant. #franchise
+  ~ rel.noe -= 8
+  ~ souvenir(noe, abandon, "Tu lui as dit qu'il n'était peut-être pas fait pour la magie")
+  noe: …Ouais. Merci pour ta franchise.
+* Varn dit ça à tout le monde. Elle me l'a dit aussi. #humour
+  ~ rel.noe += 4; stat.moral += 2
+  noe (rire): Sérieux ? Bon… je reste encore un peu, alors.
+
+=== ch1_noe_reussite
+titre: Le devoir de Noé
+declencheur: scheduled
+---
+!placer noe 150 droite
+noe (rire): {joueur.nom} ! Regarde ! Un « Acceptable » en potions ! Varn a même dit « hm » en me rendant ma copie !
+noe (emu): Sans toi, je serais déjà dans le bateau du retour.
+~ rel.noe += 6; stat.moral += 4
+!rappel noe.revisions
+
+=== ch1_renardeau_perdu
+titre: Le renardeau a disparu
+declencheur: enter:cour
+chapitres: ch1
+quand: var.familier et temps.semaine >= 3
+unique: oui
+priorite: 5
+---
+!placer gaspard 470 gauche
+gaspard (inquiet): {joueur.nom} ! {var.familier_nom} s'est sauvé. Il est parti vers la forêt. Je dois y aller, mais seul, il ne viendra pas.
+* Je viens avec vous. #courage
+  !lieu foret 120 soir
+  !placer gaspard 70 droite
+  > La forêt de Brume. Les arbres sont si serrés que la lumière ne passe presque plus.
+  gaspard: Appelle-le. Doucement.
+  test stat.creatures + stat.courage / 2 vs 22
+  si reussite
+    > Un éclair gris jaillit d'un buisson et saute dans tes bras en tremblant.
+    ~ stat.creatures += 4; rel.gaspard += 10; stat.courage += 3
+    gaspard (fier): Tu as du cran, petit. Et les bêtes le savent.
+    ~ souvenir(gaspard, foret, "Tu l'as suivi dans la forêt pour retrouver ton renardeau")
+  sinon
+    > Quelque chose bouge entre les arbres. Une silhouette noire, sans visage. Elle te regarde.
+    !fx fumee
+    > Puis elle disparaît. {var.familier_nom} revient seul, la queue basse, comme s'il avait vu un fantôme.
+    ~ stat.courage += 2; stat.moral -= 4; rel.gaspard += 6; var.silhouette_vue = vrai
+    gaspard (inquiet): Tu as vu ça aussi ? …N'en parle à personne.
+* La forêt est interdite. Je préviens l'Archimage. #regle
+  ~ stat.discipline += 4; rel.gaspard -= 3
+  gaspard: …Si tu veux. Mais le temps qu'il descende, la bête sera morte de froid.
+  > Gaspard revient à la nuit tombée, épuisé, le renardeau sous sa veste.
+
+=== ch1_sera_duel
+titre: Le défi
+declencheur: enter:arene
+chapitres: ch1
+quand: temps.semaine >= 4
+unique: oui
+priorite: 6
+---
+!placer sera 330 gauche
+!placer brax 450 gauche
+sera: {joueur.nom}. Duel. Maintenant. Devant tout le monde.
+si mem.sera.humiliee
+  sera (colere): Tu vas payer pour ce que tu as dit sur ma mère.
+brax: Un duel d'entraînement ? Pourquoi pas. Règles habituelles.
+* Accepter le duel. #courage
+  test stat.duel + stat.puissance / 4 vs 20
+  si reussite
+    !fx sort moi sera
+    > Séraphine est rapide, précise, redoutable. Mais ton dernier sort la prend de vitesse. Sa baguette vole par-dessus le cercle.
+    ~ var.duel_victoires += 1; stat.reputation += 8; stat.duel += 3; var.sera_battue = vrai
+    sera (colere): …
+    * (Lui tendre sa baguette) Bien joué. Tu m'as fait peur. #humble
+      ~ rel.sera += 10
+      ~ souvenir(sera, respect, "Tu l'as battue et tu lui as rendu sa baguette avec respect")
+      sera (surpris): …Tu te moques de moi ?
+      moi: Non. C'était serré.
+      sera: …Hm.
+    * (Lever les bras vers la foule) #fierte
+      ~ rel.sera -= 10; stat.reputation += 3
+      ~ souvenir(sera, humiliation_duel, "Tu as célébré ta victoire sur elle devant tout le monde")
+      sera (triste): Profite. Ça ne durera pas.
+  sinon
+    !fx sort sera moi
+    > Elle te désarme en trois sorts parfaits. Tu n'as rien vu venir.
+    ~ var.duel_defaites += 1; stat.moral -= 6; stat.duel += 2; rel.sera += 3
+    sera (fier): Voilà ce qu'est une vraie lignée.
+* Refuser : je n'ai rien à te prouver. #sagesse
+  ~ rel.sera -= 2; stat.reputation -= 3; rel.brax -= 2
+  sera (rire): Évidemment. Les lâches ont toujours de bonnes excuses.
+  > Mais plus tard, en passant, tu l'entends demander à Tobias : « Pourquoi il n'a pas peur de moi, celui-là ? »
+
+=== ch1_lettre
+titre: Une lettre de maman
+declencheur: tick_end
+chapitres: ch1
+quand: temps.semaine == 2
+unique: oui
+---
+> Un corbeau frappe à la fenêtre du dortoir. Une lettre, l'écriture de ta mère.
+> « Mon trésor, la maison est bien vide sans toi. Est-ce qu'on te nourrit correctement ? Est-ce que tu t'es fait des amis ? Ici, le chat dort sur ton lit. Je t'embrasse fort. Maman. »
+* (Répondre longuement, tout raconter) #famille
+  ~ rel.claire += 8; stat.moral += 4
+  ~ souvenir(claire, lettre1, "Tu lui as tout raconté dans ta première lettre")
+* (Répondre en deux lignes) « Tout va bien. Bisous. »
+  ~ rel.claire -= 2
+* (Garder la lettre sous ton oreiller sans répondre)
+  ~ rel.claire -= 5; stat.moral += 1
+
+=== ch1_examens
+titre: Les examens de l'Éveil
+declencheur: chapter_end
+chapitres: ch1
+unique: oui
+priorite: 100
+---
+!lieu grand_hall 300 jour
+> Fin de la première année. Les examens se déroulent dans le grand hall, sous l'œil des portraits qui chuchotent.
+> Sortilèges, potions, théorie : trois épreuves, trois matinées.
+~ var.note_annee1 = (stat.sortileges + stat.potions + stat.savoir) / 3 + stat.discipline / 6
+si var.note_annee1 >= 34
+  > Résultat : Mention Excellence. Ton nom est lu à voix haute devant toute l'académie.
+  ~ stat.reputation += 10; stat.moral += 8; rel.halloran += 4
+  ~ objectifReussi("premiere_annee")
+  ~ var.mention1 = vrai
+sinon si var.note_annee1 >= 22
+  > Résultat : Admis. Sans éclat, mais tu passes en deuxième année.
+  ~ stat.moral += 3
+  ~ objectifReussi("premiere_annee")
+sinon
+  > Résultat : Admis de justesse, sous condition. Maîtresse Varn te regarde comme on regarde une potion ratée.
+  ~ stat.moral -= 5; rel.varn -= 3
+  ~ objectifReussi("premiere_annee")
+!placer noe 260 droite
+si var.aide_noe
+  noe (content): On passe tous les deux ! On passe tous les deux !
+  ~ rel.noe += 4
+sinon si mem.noe.abandon
+  noe: J'ai réussi. Tout seul.
+  > Il ne te regarde pas en le disant.
+sinon
+  noe (content): Je passe ! De justesse, mais je passe !
+halloran: Bonnes vacances à tous. Et souvenez-vous : la magie ne s'arrête pas quand on quitte le château. Les ennuis non plus.

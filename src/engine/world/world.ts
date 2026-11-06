@@ -581,6 +581,33 @@ export class World {
       case 'pluie': this.weather = 'pluie'; break;
       case 'neige': this.weather = 'neige'; break;
       case 'foule': (globalThis as unknown as { __crowdHype?: number }).__crowdHype = Math.max(0, Math.min(1, Number(arg ?? 0.9))); break;
+      case 'magie': {
+        // Tourbillon d'étincelles autour d'un acteur (ou du joueur)
+        const src = arg && arg !== 'moi' ? this.actors.get(arg) ?? this.player : this.player;
+        const sx = src.x - this.camX;
+        const cols = ['#b46aff', '#7ad8ff', '#ffffff', '#ffd86a'];
+        for (let i = 0; i < 46; i++) { const a = Math.random() * Math.PI * 2; const r = 6 + Math.random() * 14; this.particles.push({ x: sx + Math.cos(a) * r, y: 150 - Math.random() * 34, vx: -Math.sin(a) * 30, vy: -18 - Math.random() * 30, life: 0.8 + Math.random() * 0.8, color: cols[i % cols.length], kind: 'p' }); }
+        break;
+      }
+      case 'sort': {
+        // Rayon de sort : de l'acteur arg vers la cible (« !fx sort moi lucas »)
+        const [from, to, colr] = (arg ?? 'moi').split(/[|,]/);
+        const a0 = from && from !== 'moi' ? this.actors.get(from) ?? this.player : this.player;
+        const tx = this.posOf(to || '+60', a0);
+        const x0 = a0.x - this.camX + a0.face * 8; const x1 = tx - this.camX;
+        const c0 = colr ? this.env.color(colr, '#7ad8ff') : '#7ad8ff';
+        for (let i = 0; i < 40; i++) { const k = i / 40; this.particles.push({ x: x0 + (x1 - x0) * k, y: 142 + Math.sin(k * 12) * 3, vx: (x1 - x0) * 0.4, vy: (Math.random() - 0.5) * 12, life: 0.25 + k * 0.5, color: i % 3 ? c0 : '#ffffff', kind: 'p' }); }
+        for (let i = 0; i < 18; i++) this.particles.push({ x: x1, y: 140, vx: (Math.random() - 0.5) * 90, vy: (Math.random() - 0.8) * 70, life: 0.9, color: c0, kind: 'p' });
+        this.flash = Math.max(this.flash, 0.25);
+        break;
+      }
+      case 'fumee': {
+        const src = arg && arg !== 'moi' ? this.actors.get(arg) ?? this.player : this.player;
+        const sx = src.x - this.camX;
+        for (let i = 0; i < 34; i++) this.particles.push({ x: sx + (Math.random() - 0.5) * 22, y: 160 - Math.random() * 30, vx: (Math.random() - 0.5) * 20, vy: -10 - Math.random() * 18, life: 1 + Math.random(), color: i % 2 ? '#9a9aa8' : '#c8c8d0', kind: 'p' });
+        break;
+      }
+      case 'eclair': this.flash = 1; this.shake = 0.8; break;
     }
   }
 
@@ -636,7 +663,7 @@ export class World {
       case 'preset': this.applyPreset(a[0]); return;
       case 'ballon': case 'objet': await this.ballCmd(cmd === 'objet' ? a.slice(1) : a); return;
       case 'camera': await this.cameraTo(a[0]); return;
-      case 'fx': this.fx(a[0], a[1]); if (a[0] === 'flash' || a[0] === 'tremblement') await wait(220); return;
+      case 'fx': this.fx(a[0], a[0] === 'sort' ? a.slice(1).join('|') : a[1]); if (['flash', 'tremblement', 'sort', 'eclair'].includes(a[0])) await wait(260); return;
       case 'meteo': this.weather = a[0] === 'clair' ? null : a[0]; if (!this.weather) this.particles = []; return;
       case 'pause': await wait(Math.min(5000, Number(a[0] ?? 500) || 500) / this.timeScale); return;
       case 'fondu': await this.fadeTo(1); await wait(200); await this.fadeTo(0); return;

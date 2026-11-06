@@ -1,0 +1,323 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  FINS — évaluées par priorité à la fin de la cinquième année (ou forcées)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== epilogue_commun
+titre: Ce qu'ils sont devenus
+declencheur: manual
+---
+> Et les autres ?
+si var.noe_sauve et rel.noe >= 40
+  > Noé a repris la boulangerie de son père, à Pierrelune. Ses brioches lévitent légèrement. Il t'en garde toujours une, la plus dorée.
+sinon si var.noe_sauve
+  > Noé est rentré chez lui. Il t'écrit à chaque solstice, des lettres courtes, maladroites, qui finissent toujours par « merci ».
+sinon si var.noe_perdu
+  > Personne ne sait ce qu'est devenu Noé. Certains disent l'avoir vu sur les routes du Nord, en robe noire, seul.
+sinon si rel.noe >= 20
+  > Noé et toi, vous vous croisez de temps en temps. Les souvenirs de la barque, la première nuit, vous font encore rire.
+sinon
+  > Noé et toi vous êtes perdus de vue. Une amitié d'enfance qui n'a pas survécu aux secrets.
+si var.couple
+  > Ayla a appris à apprivoiser ses visions. Elle dit qu'elle ne voit plus l'avenir : elle te voit, toi, et ça lui suffit.
+sinon si rel.ayla >= 40
+  > Ayla est devenue astronome à l'observatoire des Cimes. Elle a donné ton nom à une petite étoile, sans te le dire.
+sinon si rel.ayla < 0
+  > Ayla est partie sans dire au revoir. Elle l'avait sans doute vu venir.
+si var.sera_alliee
+  > Séraphine de Valcourt a renoncé à son héritage pour ouvrir une école gratuite. Sa mère ne lui parle plus. Elle n'a jamais été aussi heureuse.
+sinon si rel.sera <= -30
+  > Séraphine de Valcourt siège au Conseil des mages. Elle a voté contre chacune de tes demandes. Par principe.
+si var.lia_sauvee
+  > Lia Kade est entrée en deuxième année avec les meilleures notes de sa promotion. Elle raconte à qui veut l'entendre que tu lui as appris à ne pas avoir peur.
+si var.orin_vaincu
+  > Orin Kael a été jugé par le Conseil. On l'a envoyé dans une tour sans fenêtre, au bord de la mer. Il écrit des lettres que personne n'ouvre.
+sinon si var.issue == "scelle" ou var.issue == "detruit"
+  > Orin Kael s'est enfui avant l'aube. Sa robe noire a été retrouvée au bord du lac.
+si var.familier
+  > {var.familier_nom} ne t'a jamais quitté. Il dort au pied de ton lit, une patte sur ta chaussure, au cas où tu partirais sans lui.
+si rel.claire >= 50
+  > Ta mère garde toutes tes lettres dans une boîte à biscuits. Elle les relit le dimanche, en faisant semblant de comprendre les mots compliqués.
+sinon si rel.claire < 15
+  > Ta mère t'aime toujours. Mais entre vous, il y a cinq années de lettres trop courtes, et des silences qui ne partent plus.
+[var.halloran_parti et rel.halloran >= 30] > Sur la tombe de l'Archimage Halloran, quelqu'un dépose chaque année une bougie violette. C'est toi.
+
+=== fin:exil
+titre: L'Exil
+type: tragique
+quand: var.expulse
+priorite: 100
+resume: Renvoyé d'Ombrelune, baguette brisée, tu as dû apprendre à vivre sans magie.
+lieu: quai
+---
+!moment soir
+> La barque glisse sur le lac. Derrière toi, les tours d'Ombrelune disparaissent dans la brume. Sur tes genoux, les deux morceaux de ta baguette.
+si var.noe_perdu
+  > Personne n'est venu te dire au revoir. Pas même Noé. Surtout pas Noé.
+sinon si rel.noe >= 30
+  > Sur le quai, une silhouette rousse agite les bras jusqu'à ce que tu ne la voies plus. Noé.
+!rappel noe.quai
+> Les années passent. Tu travailles à la boulangerie de Pierrelune, puis dans une imprimerie, puis ailleurs.
+> Parfois, en pétrissant la pâte, une étincelle jaillit de tes doigts. Une toute petite. Tu la regardes s'éteindre, et tu souris quand même.
+si var.issue != "scelle" et var.issue != "detruit" et var.grimoire_trouve
+  > On raconte qu'une nuit, au cercle de pierres, quelque chose s'est réveillé. Tu n'étais pas là pour l'arrêter.
+appel epilogue_commun
+> La magie ne t'a pas quitté. C'est toi qu'on a obligé à la quitter. Ce n'est pas la même chose.
+
+=== fin:ombre
+titre: Le Mage noir
+type: tragique
+quand: var.issue == "ombre"
+priorite: 90
+resume: Tu as accepté l'héritage de Malrik. Ombrelune porte désormais ton nom… et le craint.
+lieu: foret
+---
+!moment nuit
+!placer orin 420 gauche
+> Les disciples s'agenouillent un par un dans l'herbe brûlée. Orin te tend le grimoire, les mains tremblantes de joie.
+orin (fier): Maître.
+> Le mot ne te fait rien. Ou peut-être que si. Une chaleur froide, au fond de la poitrine, là où il y avait autrefois autre chose.
+!rappel malrik.ultimatum
+> La voix de Malrik ne parle plus dans ta tête. Elle n'en a plus besoin : elle est ta voix, maintenant.
+si var.couple
+  > Ayla t'attend à l'orée de la forêt. Elle te regarde longtemps. Puis elle recule d'un pas, et un autre. Elle avait vu ce soir-là. Elle avait espéré se tromper.
+si var.noe_sauve
+  > Noé ne viendra plus jamais à la boulangerie quand tu y passes. On dit qu'il ferme les volets.
+> Les années qui suivent, on parle de toi à voix basse dans les tavernes. On cache les enfants. On ferme les portes.
+appel epilogue_commun
+> Tu es devenu le plus puissant mage de ta génération. Tu es aussi le plus seul. Les deux vont souvent ensemble, disait Halloran. Tu ne l'avais pas cru.
+
+=== fin:sacrifice
+titre: Le Sceau vivant
+type: inattendue
+quand: var.issue == "sacrifice"
+priorite: 85
+resume: Ton propre sang a scellé Malrik pour toujours. Le prix : ta magie.
+lieu: infirmerie
+---
+!moment jour
+!placer pell 140 droite
+> Tu te réveilles à l'infirmerie. Il y a des fleurs partout. Et un silence étrange, comme une pièce dont on aurait retiré la musique.
+pell (triste): Tu as dormi neuf jours. Et… mon petit, essaie d'allumer la bougie.
+> Tu tends la main. Rien. Pas une étincelle. Le sang d'Ilyana a refermé le cercle, et il a emporté ta magie avec lui.
+si var.couple
+  !placer ayla 230 gauche
+  ayla (emu): Je l'avais vu. Je t'ai laissé faire quand même. Pardonne-moi.
+  > Elle prend ta main. Elle ne lâche plus.
+si var.noe_sauve
+  > Noé passe chaque jour avec un panier de brioches. Il ne parle pas de magie. Il parle de pain, de farine, du temps qu'il fait. C'est exactement ce qu'il te faut.
+> Tu reçois ton diplôme à titre honorifique. Le premier diplôme d'Ombrelune décerné à quelqu'un qui ne peut plus faire de magie.
+> Sur le mur du grand hall, on grave ton nom, sous celui d'Ilyana. Les élèves des siècles suivants passeront devant sans savoir. C'est très bien comme ça.
+appel epilogue_commun
+> Le grimoire ne murmure plus. Plus personne ne murmure, dans ta tête. Pour la première fois depuis cinq ans, tu dors toute la nuit.
+
+=== fin:chute
+titre: La Chute d'Ombrelune
+type: tragique
+quand: var.issue == "echec" ou var.issue == "fuite"
+priorite: 80
+resume: Malrik s'est relevé. Ombrelune a brûlé, et le monde des mages ne sera plus jamais le même.
+lieu: cour
+---
+!moment nuit
+!fx fumee
+> La cour est jonchée de vitraux brisés. Les tours fument encore. La flamme d'Éveil, dans le grand hall, ne s'est jamais rallumée.
+si var.issue == "fuite"
+  > Tu t'es enfui. Tu te répètes que personne n'aurait pu tenir. Tu te le répéteras toute ta vie.
+sinon
+  > Tu as tenu jusqu'au bout. Ce n'était pas assez. Parfois, rien n'est assez.
+> Malrik a quitté la forêt à l'aube, entouré de ses disciples. On dit qu'il a pris le visage d'un jeune homme pâle, et qu'il cherche sa sœur, partout, dans chaque ville.
+si var.noe_sauve
+  !placer noe 260 droite
+  noe (triste): On recommencera. Ailleurs. Avec les petits qui restent. Il faudra bien que quelqu'un leur apprenne.
+  > Il a raison. Il faudra bien.
+appel epilogue_commun
+> Ombrelune n'est plus qu'une ruine au bord d'un lac. Mais les ruines, ça se reconstruit. C'est ce que disait ta mère, en pétrissant la pâte.
+
+=== fin:renoncement
+titre: La Vie ordinaire
+type: neutre
+quand: var.renonce
+priorite: 75
+resume: Tu as rendu ta baguette après le diplôme pour une vie simple, loin de la magie.
+lieu: village
+---
+!moment jour
+!placer claire 220 gauche
+> Le lendemain du diplôme, tu poses ta baguette sur le bureau de l'Archimage. Personne ne te retient. Personne n'ose.
+!rappel claire.retour
+claire (emu): Tu es rentré. Pour de bon ?
+> Pour de bon. Tu ouvres une petite librairie à Pierrelune, avec des livres qui ne parlent pas et ne mordent pas.
+si var.issue == "scelle" ou var.issue == "detruit"
+  > Personne, au village, ne sait que tu as sauvé le monde des mages une nuit d'été. Tu ne le dis à personne. Tu n'en as pas besoin.
+si var.couple
+  > Ayla vient te voir chaque dimanche. Elle dit que la librairie sent le papier et la paix. Un jour, elle ne repart plus.
+> Le soir, quand la boutique est fermée, il t'arrive d'allumer une bougie d'un claquement de doigts. Juste une. Juste pour te souvenir.
+appel epilogue_commun
+> On dit que la magie, c'est le pouvoir. Toi, tu as découvert que c'était aussi le pouvoir de dire non.
+
+=== fin:archimage
+titre: L'Héritier de la tour
+type: heureuse
+quand: (var.issue == "scelle" ou var.issue == "detruit") et stat.savoir >= 60 et stat.reputation >= 50 et rel.halloran >= 20
+priorite: 70
+resume: Des années plus tard, tu deviens Archimage d'Ombrelune, le plus jeune de son histoire.
+lieu: bureau_archimage
+---
+!moment soir
+> Quinze ans plus tard. Le bureau de l'Archimage n'a pas changé : les mêmes livres, le même feu, la même odeur de cire et de vieux parchemin.
+> Seulement, maintenant, c'est ton nom qui est gravé sur la porte.
+!rappel halloran.confiance_voix
+> Sur le bureau, une lettre jaunie, trouvée dans un tiroir le jour de ta nomination : « Pour celui qui viendra après moi. Il saura quoi faire. Ou il ne saura pas, et il fera quand même. — C. H. »
+si var.noe_sauve
+  > Noé livre le pain du château chaque matin. Il entre dans ton bureau sans frapper, comme quand vous aviez onze ans.
+si var.lia_sauvee
+  > Lia enseigne la botanique. Ses élèves la trouvent sévère. Elle dit que c'est toi qui lui as appris.
+> Ce soir, une barque arrive sur le lac. Des enfants qui ont peur, les yeux écarquillés devant les tours illuminées. Tu descends les accueillir.
+appel epilogue_commun
+> « Bienvenue à Ombrelune », dis-tu. Et tu penses : moi aussi, j'étais à votre place. Moi aussi, j'avais peur.
+
+=== fin:deux_etoiles
+titre: Deux étoiles
+type: heureuse
+quand: var.couple et rel.ayla >= 45
+priorite: 65
+resume: Ayla et toi, main dans la main, au-delà des visions et des sceaux.
+lieu: tour_ouest
+---
+!moment nuit
+!placer ayla 230 gauche
+> Le soir du diplôme, vous montez au sommet de la tour ouest. Comme la première fois. Il y a encore une tache de cire de la lanterne que tu avais fait tomber.
+!rappel ayla.lanternes
+ayla (content): Tu sais ce que je vois, là, maintenant ?
+* Notre avenir ? #romance
+  ayla (rire): Non. Je vois un idiot qui a de la cire sur sa robe. Et c'est la plus belle vision que j'aie jamais eue.
+* Rien. Et c'est très bien. #paix
+  ayla (emu): Rien. Pas de futur, pas de cercle, pas de grimoire. Juste maintenant. Je ne savais pas que c'était possible.
+> Des années plus tard, vous vivez dans une maison au bord d'une falaise, avec une lunette astronomique sur le toit et beaucoup trop de chats.
+si var.issue == "scelle" ou var.issue == "detruit"
+  > Le monde des mages vous doit tout. Vous n'en parlez jamais. Le soir, vous comptez les étoiles, et vous ne vous mettez jamais d'accord sur le chiffre.
+appel epilogue_commun
+> Elle n'a jamais retrouvé ses visions. Elle dit qu'elle n'en a plus besoin, puisque tu es là.
+
+=== fin:professeur
+titre: Maître des potions
+type: secrete
+quand: var.offre_prof
+priorite: 60
+resume: Apprenti puis successeur de Maîtresse Varn, tu règnes sur les cachots d'Ombrelune.
+lieu: cachot_potions
+---
+!moment soir
+> Dix ans plus tard. Les cachots d'Ombrelune sentent toujours la menthe brûlée et le soufre. Le chaudron de Varn trône au centre. C'est le tien, maintenant.
+!rappel varn.apprenti
+> Le jour de son départ, Varn t'a tendu une petite clé de cuivre : celle de son armoire personnelle. À l'intérieur, une seule fiole, et une étiquette : « Pour les jours où ils te rendent fou. Chocolat chaud, trois gouttes. »
+> Tu as ri pendant une heure. Tu n'avais jamais imaginé que Varn puisse aimer le chocolat.
+> Tes élèves te trouvent terrifiant. Ils ont tort, un peu. Mais tu entretiens soigneusement la légende. Tu as une réputation à tenir.
+si var.noe_sauve
+  > Noé te fournit en farine de lune pour les potions de sommeil. Il refuse d'être payé.
+appel epilogue_commun
+> Le premier jour de chaque année, tu fais exploser un chaudron devant les nouveaux. Exprès. Pour qu'ils sachent qu'on a le droit de rater.
+
+=== fin:gardien
+titre: Le Gardien de la forêt
+type: secrete
+quand: var.offre_gardien
+priorite: 58
+resume: Tu as succédé à Gaspard. La forêt d'Ombrelune et toutes ses créatures sont à toi.
+lieu: cabane
+---
+!moment soir
+!placer gaspard 160 droite
+> L'hiver suivant le diplôme, Gaspard t'a remis les clés de la cabane. Elles sont attachées à une plume de griffon et à un bout de ficelle.
+!rappel gaspard.successeur
+gaspard (emu): Les bêtes t'ont choisi bien avant moi. Je n'ai fait que leur obéir.
+> Il est parti vivre au village, à côté de l'auberge de Marthe. Il vient le dimanche. Il prétend que c'est pour vérifier ton travail. C'est pour le Cerf.
+si var.cerf_vu
+  > Le Cerf d'argent se montre à toi, parfois, à la lisière de la clairière. Il ne fuit plus. Il te regarde comme on regarde un vieil ami.
+si var.familier
+  > {var.familier_nom} est devenu le chef de toutes les créatures de la forêt. Personne ne lui a demandé son avis. Il l'a décidé tout seul.
+appel epilogue_commun
+> Le cercle de pierres, tu le gardes aussi. Chaque nuit de pleine lune, tu viens vérifier qu'il dort. Il dort.
+
+=== fin:champion
+titre: Le Champion
+type: heureuse
+quand: var.champion et stat.duel >= 38
+priorite: 55
+resume: Champion d'Ombrelune, puis de tout le royaume : ta baguette est la plus rapide de ta génération.
+lieu: arene
+---
+!moment jour
+!placer brax 380 gauche
+> Trois ans après le diplôme, la Grande Arène de la capitale. Quarante mille spectateurs. En face de toi, le champion en titre, invaincu depuis dix ans.
+!rappel brax.eleve
+brax (fier): Les pieds. N'oublie pas les pieds.
+> Tu n'oublies pas les pieds. Trois sorts. Le troisième touche son épaule. Il hausse un sourcil, exactement comme Brax autrefois. Puis il s'incline.
+> La foule hurle ton nom. Tu cherches un visage dans les tribunes.
+si var.noe_sauve
+  > Noé est au premier rang. Il a peint ton nom sur une banderole, avec une faute d'orthographe. Tu ne la corrigeras jamais.
+sinon si var.couple
+  > Ayla est au premier rang. Elle ne regarde pas le duel : elle te regarde, toi. Elle savait déjà comment ça finirait.
+appel epilogue_commun
+> Des années plus tard, tu ouvres une école de duel à Pierrelune. La première leçon est toujours la même : « Un duel se gagne avec les pieds. La baguette, c'est pour finir. »
+
+=== fin:explorateur
+titre: Au-delà des cartes
+type: inattendue
+quand: var.offre_explorer
+priorite: 50
+resume: Avec la Guilde des Arpenteurs, tu cartographies les terres sauvages du Nord.
+lieu: quai
+---
+!moment jour
+> Le lendemain du diplôme, un navire aux voiles bleues t'attend au bout du lac. La Guilde des Arpenteurs. Les terres sauvages du Nord.
+> Tu montes à bord avec une malle, une baguette, et un carnet vide.
+> Les années suivantes, le carnet se remplit : des dragons de glace qui chantent, des forêts qui changent de place pendant la nuit, une cité engloutie où les poissons portent des couronnes.
+si var.familier
+  > {var.familier_nom} voyage dans ta capuche. Il a mordu un dragon. Le dragon s'est excusé.
+si var.couple
+  > Ayla t'écrit à chaque escale. Ses lettres arrivent toujours la veille du jour où tu en as besoin. Elle sait.
+> Ta carte du Nord est aujourd'hui accrochée dans toutes les écoles de magie. Dans un coin, en tout petit, tu as dessiné une barque sur un lac, et deux enfants dedans.
+!rappel noe.quai
+appel epilogue_commun
+> Le monde est bien plus grand qu'un château. Tu l'as toujours su. Maintenant, tu l'as vu.
+
+=== fin:seul
+titre: Le Mage solitaire
+type: neutre
+quand: var.allies == 0
+priorite: 45
+resume: Tu as tout affronté seul. Tu as survécu, mais personne n'était là pour le voir.
+lieu: dortoir
+---
+!moment nuit
+> Le soir du diplôme, le dortoir est vide. Les autres sont à la fête, dans la cour. Tu entends les rires à travers la fenêtre.
+si var.issue == "scelle" ou var.issue == "detruit"
+  > Tu as sauvé l'école, cette nuit-là. Seul. Personne ne t'a vu le faire. Personne ne te croirait.
+sinon
+  > Tu as traversé cinq années sans jamais t'appuyer sur personne. C'était plus sûr. C'était aussi plus froid.
+> Les années suivantes, tu deviens un mage respecté, discret, efficace. On vient te consulter pour les sorts difficiles. On repart sans te connaître.
+si var.noe_perdu
+  > Parfois, tu penses à Noé. À ce que tu aurais pu dire, ce soir-là, dans la forêt.
+appel epilogue_commun
+> Un jour, une petite fille frappe à ta porte, la baguette tremblante. « On m'a dit que vous saviez tout faire seul. Moi, je ne veux pas être seule. » Tu la fais entrer. C'est un début.
+
+=== fin:diplome
+titre: Diplômé d'Ombrelune
+type: heureuse
+priorite: 0
+resume: Cinq années, un sceau, des amis et des ennemis : tu quittes Ombrelune en mage accompli.
+lieu: cour
+---
+!moment jour
+> Le soir du diplôme, tu restes un long moment dans la cour, devant la statue qui éternue. Tes affaires sont déjà dans la barque.
+si var.mention_or
+  > Le diplôme d'or pèse étrangement lourd dans ta main. Cinq ans de nuits blanches, de chaudrons explosés et de sorts ratés, résumés en une feuille de parchemin.
+sinon si var.issue == "scelle" ou var.issue == "detruit"
+  > Ton diplôme n'a rien de spécial. Mais tout le monde sait ce que tu as fait au cercle de pierres. Ça, aucun parchemin ne le dira.
+sinon
+  > Ton diplôme est un peu froissé. Tu l'as rangé dans ta poche avec un bonbon qui crie. Ça ira.
+!rappel noe.quai
+> La barque glisse sur le lac, comme le premier soir, mais dans l'autre sens. Derrière toi, les fenêtres du château s'allument une à une.
+appel epilogue_commun
+> Ombrelune ne te quittera jamais tout à fait. On ne quitte pas l'endroit où l'on a appris qui l'on était.

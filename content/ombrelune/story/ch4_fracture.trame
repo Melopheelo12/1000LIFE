@@ -1,0 +1,475 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  QUATRIÈME ANNÉE — LA FRACTURE (14 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch4_rentree
+titre: L'inspecteur
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine == 1
+unique: oui
+priorite: 20
+---
+!lieu grand_hall 300 jour
+!placer daval 420 gauche
+!placer halloran 480 gauche
+> Le banquet de rentrée est silencieux. À côté de l'Archimage, un homme en costume sombre, qui ne mange rien.
+daval: Je suis l'inspecteur Daval, envoyé du Conseil des Mages. Deux anciens élèves ont disparu. Des créatures meurent dans la forêt. Des livres interdits circulent.
+daval (colere): Je trouverai les responsables. Et croyez-moi : je trouve toujours.
+halloran (triste): L'inspecteur a tous les pouvoirs cette année. Je vous demande de coopérer.
+> L'Archimage a vieilli d'un coup. Ses mains tremblent en levant son verre.
+~ objectif("quatrieme_annee", "Survivre à la quatrième année")
+
+=== ch4_attaque
+titre: L'attaque de la cour
+declencheur: enter:cour
+chapitres: ch4
+quand: temps.semaine >= 1
+unique: oui
+priorite: 9
+---
+!placer noe 200 droite
+!placer lia 160 droite
+> Des cris. Au milieu de la cour, une créature faite de fumée noire, haute comme deux hommes. Les élèves fuient dans tous les sens.
+!fx tremblement
+noe (inquiet): {joueur.nom} ! Lia est coincée près de la statue !
+* (Attaquer la créature) #courage
+  test stat.duel + stat.puissance / 2 vs 48
+  si reussite
+    !fx sort moi
+    !fx eclair
+    > Ton sort frappe la créature en plein cœur. Elle hurle et se disperse en lambeaux de brume.
+    ~ stat.reputation += 10; stat.courage += 4; rel.lia += 8; var.heros_cour = vrai
+    ~ souvenir(lia, sauvee_cour, "Tu l'as sauvée de la créature de fumée dans la cour")
+  sinon
+    !fx fumee
+    > La créature te projette contre un banc. Brax arrive en courant et la chasse d'un sort terrible.
+    ~ stat.energie -= 30; stat.moral -= 6; stat.reputation += 3
+* [var.parade_miroir] (Parade miroir !) #duel
+  !fx sort moi
+  > La créature crache un trait de ténèbres. Ta parade le lui renvoie. Elle se dissout dans un cri.
+  ~ stat.reputation += 12; rel.brax += 6; rel.lia += 8; var.heros_cour = vrai
+  ~ souvenir(lia, sauvee_cour, "Tu l'as sauvée de la créature de fumée dans la cour")
+* (Courir chercher Lia et la mettre à l'abri) #genereux
+  test stat.courage vs 45
+  si reussite
+    > Tu traverses la cour sous les griffes de fumée, attrapes Lia et plonges derrière la statue. Elle tremble contre toi.
+    ~ rel.lia += 14; stat.courage += 3
+    ~ souvenir(lia, sauvee_cour, "Tu l'as protégée de ton corps pendant l'attaque")
+  sinon
+    > Tu trébuches. C'est Noé qui attrape Lia. Il te regarde, surpris d'avoir été le plus rapide.
+    ~ rel.noe += 4; stat.moral -= 3
+* [stat.ombre >= 40] (Ordonner à la créature de partir) #ombre
+  > Tu dis le mot. La créature s'immobilise… puis s'incline devant toi et se dissout. Dans la cour, tout le monde t'a vu.
+  ~ stat.ombre += 10; stat.reputation -= 10; var.vu_ordonner = vrai
+  ~ planifier(ch4_daval_interrogatoire, 1)
+
+=== ch4_daval_interrogatoire
+titre: L'interrogatoire
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine >= 2 et (stat.ombre >= 25 ou var.vu_ordonner ou var.larme_volee ou joueur.origine == trouve)
+unique: oui
+priorite: 9
+---
+!lieu bureau_archimage 120 soir
+!placer daval 260 gauche
+daval: Assis. Je vais être bref. Des témoins vous ont vu près de la Réserve. Votre aura est… trouble. Expliquez-vous.
+si var.vu_ordonner
+  daval (colere): Et ne niez pas l'incident de la cour. La moitié de l'école vous a vu donner un ordre à cette chose.
+* Dire toute la vérité : le grimoire, Malrik, Orin. #honnete
+  ~ rel.daval += 10; stat.discipline += 5
+  daval (pensif): …Malrik. Ce nom ne devait plus jamais être prononcé. Vous êtes soit très courageux, soit très inconscient.
+  ~ var.daval_sait = vrai
+  ~ souvenir(daval, verite, "Tu lui as dit toute la vérité sur Malrik")
+  si var.mefiance_orin
+    daval: Kael ? Le fils du conseiller Kael ? Je vais avoir besoin de preuves.
+* Mentir avec aplomb. #ruse
+  test stat.ruse vs 45
+  si reussite
+    > Tu inventes une histoire parfaite. Daval prend des notes, puis te congédie d'un geste.
+    ~ stat.ruse += 3; stat.ombre += 2
+  sinon
+    daval: Vous mentez mal. Avertissement officiel. Au prochain, c'est l'expulsion.
+    ~ var.avertissements += 1; stat.discipline -= 15; rel.daval -= 10
+* Je ne dirai rien sans l'Archimage. #courage
+  ~ rel.daval -= 5; rel.halloran += 4; stat.courage += 2
+  daval: Votre Archimage ne sera pas toujours là pour vous protéger.
+
+=== ch4_heritage
+titre: L'héritage
+declencheur: tick_start
+chapitres: ch4
+quand: joueur.origine == trouve et temps.semaine >= 2
+unique: oui
+priorite: 10
+---
+!lieu bureau_archimage 120 nuit
+!placer halloran 250 gauche
+halloran (triste): Assieds-toi. J'aurais dû te le dire il y a longtemps. Le soir de ton arrivée, j'ai reconnu tes yeux.
+halloran: Malrik avait une sœur, Ilyana. Elle n'est pas morte de la fièvre, comme on l'a raconté. Elle a fui. Elle a eu un enfant, qui a eu un enfant…
+halloran (inquiet): Tu es du sang de Malrik, {joueur.nom}. Le dernier.
+~ var.heritier = vrai
+halloran: Les runes du cercle disent : « Par le sang de son sang, il sera délié. » Ton sang peut le libérer. Mais il peut aussi le sceller pour toujours.
+* Pourquoi ne pas me l'avoir dit avant ? #colere
+  ~ rel.halloran -= 5
+  halloran (triste): Parce que j'avais peur. Peur que tu fasses le même choix que lui.
+* Alors c'est à moi de le sceller. #lumiere
+  ~ rel.halloran += 10; stat.courage += 5
+  halloran (emu): Pas encore. Pas seul. Mais oui. Peut-être.
+* [stat.ombre >= 30] …Alors c'est pour ça qu'il m'appelle. Il est ma famille. #ombre
+  ~ stat.ombre += 8; rel.malrik += 10
+  halloran (inquiet): Il n'est la famille de personne. Il a mangé tout ce qu'il y avait d'humain en lui.
+
+=== ch4_orin_masque
+titre: Le masque tombe
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine >= 3
+unique: oui
+priorite: 9
+---
+!lieu grand_hall 395 nuit
+!placer orin 440 gauche
+> Minuit, devant la tapisserie à la lune. Orin t'attend. Il ne sourit plus.
+orin: Assez joué. Le maître revient. Le sceau de Halloran se fissure un peu plus chaque nuit.
+orin (fier): Quand Malrik reviendra, ceux qui l'auront servi seront récompensés. Les autres… disparaîtront, comme les deux idiots de l'été.
+si var.pacte ou var.cercle_orin
+  orin: Toi, tu es déjà des nôtres. Il te veut à sa droite.
+  * Je suis avec vous. #ombre
+    ~ var.disciple = vrai; stat.ombre += 12; rel.orin += 10; rel.malrik += 10
+    ~ souvenir(orin, disciple, "Tu as juré fidélité à Malrik")
+    orin (content): Je savais que tu ferais le bon choix.
+  * Non. C'est fini, Orin. #lumiere
+    ~ var.cercle_orin = faux; rel.orin -= 20; stat.courage += 4
+    orin (colere): Alors tu seras le premier à tomber.
+sinon
+  * Tu es complètement fou. #courage
+    ~ rel.orin -= 10; stat.courage += 2
+    orin (rire): Fou ? Non. Simplement en avance.
+  * (Faire semblant de s'intéresser, pour en savoir plus) #ruse
+    test stat.ruse vs 44
+    si reussite
+      orin: Le rituel aura lieu au cercle de pierres. Le dernier soir de l'année. Il ne manque que le sang de son sang.
+      ~ var.infos_rituel = vrai; stat.ruse += 3
+    sinon
+      orin (pensif): Tu me prends pour un idiot ? Dégage.
+!sortir orin droite
+si var.daval_sait ou var.sera_alliee
+  > Le lendemain, Daval fait fouiller la chambre d'Orin. Il n'y trouve rien. Orin a disparu du château pendant la nuit.
+  ~ var.orin_demasque = vrai
+sinon
+  > Le lendemain, Orin te salue dans le hall avec son plus beau sourire de préfet. Comme si de rien n'était.
+
+=== ch4_noe_tentation
+titre: La tentation de Noé
+declencheur: talk:noe
+chapitres: ch4
+quand: temps.semaine >= 3
+unique: oui
+priorite: 9
+---
+noe (inquiet): Il faut que je te dise un truc. Orin est venu me voir. Il dit que le maître peut me rendre fort. Plus besoin de rater mes sorts. Plus jamais.
+si var.noe_accuse
+  noe (colere): Et franchement, depuis que tu m'as laissé accuser du vol, je ne sais plus trop à qui faire confiance.
+si mem.noe.revisions ou mem.noe.sauve_foret ou mem.noe.defendu
+  > Il te regarde, et tu sais qu'il se souvient de tout ce que tu as fait pour lui.
+* Tu n'as pas besoin de lui. Tu m'as, moi. #loyal
+  test rel.noe vs 40
+  si reussite
+    noe (emu): …Ouais. Je t'ai, toi. J'avais besoin de l'entendre.
+    ~ rel.noe += 10; var.noe_sauve = vrai
+    ~ souvenir(noe, choix, "Tu l'as retenu quand Orin voulait le recruter")
+  sinon
+    noe (triste): C'est facile à dire. Tu es champion, tu es le chouchou des profs. Moi, je suis juste « le fils du boulanger ».
+    ~ var.noe_perdu = vrai
+    > Le lendemain, le lit de Noé est vide. Il a laissé un mot : « Pardon. »
+* C'est un piège, Noé. Les deux disparus de l'été, c'était ses recrues. #honnete
+  test stat.savoir + rel.noe / 2 vs 40
+  si reussite
+    noe (inquiet): …Tu es sûr ? Alors j'ai failli… Merci.
+    ~ var.noe_sauve = vrai; rel.noe += 6
+  sinon
+    noe: Tu dis ça parce que tu ne veux pas que je devienne aussi fort que toi.
+    ~ var.noe_perdu = vrai
+    > Le lendemain, le lit de Noé est vide.
+* Fais ce que tu veux, Noé. #indifference
+  ~ var.noe_perdu = vrai; rel.noe -= 15
+  > Le lendemain, le lit de Noé est vide. Sur ton oreiller, l'écharpe bleue qu'il t'avait prêtée.
+si var.noe_perdu
+  ~ souvenir(noe, perdu, "Il est parti rejoindre Orin")
+
+=== ch4_sera_mere
+titre: La mère de Séraphine
+declencheur: enter:grand_hall
+chapitres: ch4
+quand: var.sera_alliee et temps.semaine >= 2
+unique: oui
+priorite: 8
+---
+!placer sera 300 droite
+sera (colere): Ma mère siège au Conseil. Elle a demandé à Daval d'expulser tous les élèves « de sang douteux ». Les enfants sans lignée. Les orphelins.
+sera (triste): Et elle veut que je témoigne contre eux. Contre toi, peut-être.
+* Tu n'as pas à faire ce qu'elle veut. Tu n'es pas elle. #ecoute
+  ~ rel.sera += 12; var.sera_rebelle = vrai
+  ~ souvenir(sera, liberte, "Tu lui as dit qu'elle n'était pas obligée d'obéir à sa mère")
+  sera (fier): …Non. Je ne suis pas elle. Je vais lui écrire. Et elle ne va pas aimer ma lettre.
+* Fais ce qu'il faut pour te protéger. Je comprendrais. #genereux
+  ~ rel.sera += 6
+  sera (surpris): Tu… tu ne m'en voudrais pas ? Pourquoi tu es comme ça ?
+
+=== ch4_mission_sceau
+titre: La mission
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine >= 3 et (var.sceau_connu ou var.heritier ou var.malrik_nom)
+unique: oui
+priorite: 8
+---
+!lieu bureau_archimage 120 soir
+!placer halloran 250 gauche
+halloran (triste): Je n'ai plus le temps d'attendre que tu sois prêt. Le sceau se brise.
+halloran: Pour le refaire, il faut trois choses. La Larme de Lune, distillée de ta main. Une plume du Cerf d'argent, offerte, jamais prise. Et la rune du sceau, retrouvée dans les étoiles.
+halloran: Veux-tu m'aider ?
+* Oui. Dites-moi quoi faire. #lumiere
+  ~ var.mission = vrai; rel.halloran += 8
+  ~ objectif("larme", "Distiller la Larme de Lune (préparer des potions)")
+  ~ objectif("plume", "Obtenir une plume du Cerf d'argent (soigner les créatures ou explorer la forêt)")
+  ~ objectif("rune", "Retrouver la rune du sceau (étudier ou lire les étoiles)")
+* [var.disciple] (Accepter… pour mieux trahir) #ombre
+  ~ var.mission = vrai; var.double_jeu = vrai; stat.ombre += 6
+  ~ objectif("larme", "Distiller la Larme de Lune (préparer des potions)")
+  ~ objectif("plume", "Obtenir une plume du Cerf d'argent (soigner les créatures ou explorer la forêt)")
+  ~ objectif("rune", "Retrouver la rune du sceau (étudier ou lire les étoiles)")
+* Je ne suis pas prêt. Je suis désolé. #peur
+  ~ rel.halloran -= 4; stat.moral -= 4
+  halloran (triste): Personne ne l'est jamais.
+
+=== ch4_larme
+titre: La Larme de Lune
+declencheur: activity:preparer_potion
+chapitres: ch4, ch5
+quand: var.mission et non var.larme_ok
+priorite: 9
+recharge: 1
+tags: important
+---
+!placer varn 300 gauche
+> La recette de la Larme de Lune tient sur une page. Il faut pourtant douze heures, une main qui ne tremble pas, et une lune pleine dans la fenêtre du cachot.
+si var.varn_mefiante ou rel.varn >= 15
+  varn: Laissez-moi vous aider. Je sais pour quoi c'est faire.
+  ~ rel.varn += 4
+test stat.potions + stat.savoir / 4 + (rel.varn >= 15 ? 10 : 0) vs 45
+si reussite
+  > Au petit matin, une goutte d'argent liquide repose au fond de la fiole. Elle chante.
+  ~ var.larme_ok = vrai; stat.potions += 5
+  ~ objectifReussi("larme")
+  varn (fier): …Je n'ai réussi la mienne qu'au troisième essai. À vingt-cinq ans.
+sinon
+  > La potion tourne au noir à la onzième heure. Il faudra recommencer.
+  ~ stat.potions += 2; stat.moral -= 3
+
+=== ch4_cerf
+titre: Le Cerf d'argent
+declencheur: activity:cueillette_foret
+chapitres: ch4, ch5
+quand: var.mission et non var.plume_ok
+priorite: 9
+recharge: 1
+tags: important
+---
+> La brume s'écarte. Au milieu de la clairière, un cerf immense, au pelage d'argent. Il te regarde sans peur.
+* (Tendre la main, paume ouverte, et attendre) #creature
+  test stat.creatures + rel.gaspard / 3 + stat.courage / 5 vs 45
+  si reussite
+    > Le cerf s'approche, incline la tête, et une plume d'argent se détache de sa crinière pour tomber dans ta main.
+    ~ var.plume_ok = vrai; stat.creatures += 5
+    ~ objectifReussi("plume")
+  sinon
+    > Le cerf recule et s'évanouit dans la brume. Il reviendra peut-être.
+    ~ stat.creatures += 2
+* [stat.ombre >= 40] (Le figer d'un sort et prendre la plume de force) #ombre
+  > Le cerf s'effondre, figé. Tu arraches la plume. Elle noircit dans ta main.
+  ~ stat.ombre += 15; rel.gaspard -= 20; var.plume_noire = vrai
+  ~ souvenir(gaspard, cerf, "Tu as blessé le Cerf d'argent pour lui voler une plume")
+
+=== ch4_cerf_gaspard
+titre: Le Cerf d'argent
+declencheur: activity:soigner_creatures
+chapitres: ch4, ch5
+quand: var.mission et non var.plume_ok et rel.gaspard >= 30
+unique: oui
+priorite: 9
+tags: important
+---
+!placer gaspard 150 droite
+gaspard: Tu cherches le Cerf, hein ? Halloran m'a dit. Il ne se montre qu'à ceux qu'il a déjà vus aider les bêtes.
+gaspard (content): Il te connaît. Viens.
+!lieu foret 300 soir
+> Il siffle doucement. La brume s'écarte, et le Cerf d'argent apparaît. Il marche droit vers toi et dépose une plume à tes pieds.
+~ var.plume_ok = vrai; stat.creatures += 4; rel.gaspard += 6
+~ objectifReussi("plume")
+!rappel gaspard.biche
+
+=== ch4_rune
+titre: La rune du sceau
+declencheur: activity:divination
+chapitres: ch4, ch5
+quand: var.mission et non var.rune_ok
+priorite: 9
+recharge: 1
+tags: important
+---
+> Les étoiles s'alignent dans le vitrail de la tour. Une forme se dessine, puis s'efface. Il faut la saisir au vol.
+si var.couple ou var.ayla_proche
+  !placer ayla 250 gauche
+  ayla: Je la vois aussi. Regarde, là. Trois traits et un cercle.
+  ~ rel.ayla += 4
+test stat.savoir + (var.couple ? 12 : 0) + (var.runes_lues ? 10 : 0) vs 48
+si reussite
+  > Tu la vois. Tu la dessines. La rune du sceau brille un instant sur le papier, puis se grave dans ta mémoire.
+  ~ var.rune_ok = vrai; stat.savoir += 5
+  ~ objectifReussi("rune")
+sinon
+  > Les étoiles bougent trop vite. Il faudra revenir.
+  ~ stat.savoir += 2
+
+=== ch4_rune_etude
+titre: La rune dans les livres
+declencheur: activity:etudier
+chapitres: ch4, ch5
+quand: var.mission et non var.rune_ok et (var.pell_alliee ou rel.pell >= 5)
+unique: oui
+priorite: 9
+---
+!placer pell 300 gauche
+pell: Vous cherchez la rune du sceau. Ne niez pas. J'ai quelque chose pour vous.
+> Elle pose devant toi un carnet relié de cuir. L'écriture de Halloran, jeune. Une page marquée : la rune, dessinée en entier.
+~ var.rune_ok = vrai; stat.savoir += 3
+~ objectifReussi("rune")
+pell (triste): Il me l'avait confié il y a quarante ans. « Pour le jour où ce ne sera plus moi. »
+
+=== ch4_lia_disparue
+titre: Lia a disparu
+declencheur: tick_start
+chapitres: ch4
+quand: var.mentor_lia et temps.semaine >= 4 et rel.lia >= 20
+unique: oui
+priorite: 9
+---
+!lieu salle_commune 200 nuit
+> Panique dans la salle commune. Lia a disparu. Son lit n'a pas été défait.
+> Sur son oreiller, un livre noir dessiné à l'encre. La signature des disciples.
+si var.noe_perdu
+  > Et sous le dessin, une écriture que tu connais trop bien. Celle de Noé.
+* Partir à sa recherche, cette nuit. #courage
+  !lieu grand_hall 395 nuit
+  > Le passage derrière la tapisserie. L'escalier. La salle ronde. Lia est là, ligotée par des fils de fumée.
+  test stat.duel + stat.courage / 2 vs 50
+  si reussite
+    !fx sort moi
+    > Deux disciples encagoulés. Tes sorts les renversent avant qu'ils aient compris. Tu libères Lia.
+    ~ rel.lia += 15; stat.reputation += 8; var.lia_sauvee = vrai
+    ~ souvenir(lia, sauvee, "Tu es venu la chercher dans la salle secrète")
+    lia (emu): Je savais que tu viendrais. Je le savais.
+  sinon
+    > Ils sont trop nombreux. Tu parviens à arracher Lia à leurs fils, mais un sort t'atteint au dos.
+    ~ rel.lia += 12; stat.energie -= 40; var.lia_sauvee = vrai; var.blessure_dos = vrai
+* Prévenir Daval et Halloran. #regle
+  ~ rel.daval += 6; stat.discipline += 4
+  > Les professeurs fouillent le château toute la nuit. Ils retrouvent Lia à l'aube, endormie, sans souvenir. Saine et sauve.
+  ~ var.lia_sauvee = vrai; rel.lia += 4
+
+=== ch4_menace_expulsion
+titre: Le conseil de discipline
+declencheur: tick_start
+chapitres: ch4, ch5
+quand: var.avertissements >= 3 ou stat.discipline <= 10
+unique: oui
+priorite: 15
+---
+!lieu bureau_archimage 120 jour
+!placer daval 220 gauche
+!placer halloran 300 gauche
+daval: {var.avertissements} avertissements. Un comportement inacceptable. Je demande l'expulsion immédiate.
+si rel.halloran >= 25 et non mem.halloran.mensonge
+  halloran (colere): Refusé. Cet élève a plus fait pour cette école que vous n'en ferez jamais, inspecteur.
+  ~ var.avertissements = 1; stat.discipline = 30
+  daval: …Comme vous voudrez. Mais je consigne mon désaccord.
+sinon si var.champion ou stat.reputation >= 60
+  halloran: Un champion du tournoi ne s'expulse pas comme un voleur de pommes. Dernier avertissement.
+  ~ var.avertissements = 2; stat.discipline = 25
+sinon
+  halloran (triste): …Je ne peux plus te protéger, {joueur.nom}.
+  * Supplier qu'on me laisse une dernière chance. #humble
+    test stat.reputation + rel.halloran / 2 vs 40
+    si reussite
+      daval: Une seule. La dernière.
+      ~ var.avertissements = 2; stat.discipline = 20
+    sinon
+      > On te remet ta baguette brisée en deux. Ton nom est effacé des registres.
+      ~ var.expulse = vrai
+      ~ fin(exil)
+  * (Partir la tête haute) #fierte
+    > On te remet ta baguette brisée en deux. Tu ne te retournes pas en descendant vers le quai.
+    ~ var.expulse = vrai
+    ~ fin(exil)
+
+=== ch4_marthe_refuge
+titre: La cave de la Comète
+declencheur: enter:auberge
+chapitres: ch4
+unique: oui
+priorite: 7
+---
+!placer marthe 340 gauche
+marthe (inquiet): Ferme la porte, mon poussin. Vite.
+> Dans la cave, trois élèves de première année, terrifiés. Des enfants « de sang douteux », menacés d'expulsion par le Conseil.
+marthe: Je les cache jusqu'à ce que ça se calme. Tu ne diras rien, hein ?
+* Je peux apporter des potions et des livres. Ils ne vont pas rater leur année. #genereux
+  ~ rel.marthe += 12; stat.reputation += 4; stat.potions += 1
+  ~ souvenir(marthe, cave, "Tu as aidé les enfants cachés dans sa cave")
+  ~ var.aide_cave = vrai
+* Je ne dirai rien. Promis. #loyal
+  ~ rel.marthe += 6
+* [rel.daval >= 10] Il faut prévenir Daval. Il pourrait les protéger. #regle
+  ~ rel.marthe -= 12; rel.daval += 5
+  marthe (colere): Daval ? C'est lui qui veut les renvoyer ! Sors d'ici.
+
+=== ch4_brax_blesse
+titre: La chute de Brax
+declencheur: tick_start
+chapitres: ch4
+quand: temps.semaine == 5
+unique: oui
+priorite: 8
+---
+!lieu infirmerie 150 nuit
+!placer brax 130 droite
+> Brax est allongé sur un lit de l'infirmerie, le torse bandé. Il a tenu seul face à six disciples dans la forêt pour couvrir la fuite de deux élèves.
+brax (triste): Ils étaient plus forts que je pensais. Organisés. Quelqu'un les entraîne. Quelqu'un de doué.
+brax: Écoute-moi. Quand ça va commencer pour de vrai, ne te bats pas pour gagner. Bats-toi pour que les autres rentrent chez eux.
+~ rel.brax += 6; stat.courage += 3
+si var.disciple
+  > Tu baisses les yeux. Tu connais certains des six. Tu leur as parlé, sous la tapisserie.
+  ~ stat.moral -= 8; stat.ombre += 3
+
+=== ch4_fin
+titre: Le sceau se fissure
+declencheur: chapter_end
+chapitres: ch4
+unique: oui
+priorite: 100
+---
+!lieu cour 300 nuit
+> Dernière nuit de l'année. Un grondement monte de la forêt. Au loin, une lueur violette s'élève au-dessus des arbres, puis retombe.
+!fx tremblement
+> Le sceau s'est fissuré. Tout le monde l'a senti.
+~ objectifReussi("quatrieme_annee")
+si var.larme_ok et var.plume_ok et var.rune_ok
+  > Dans ta malle, la Larme de Lune, la plume d'argent et la rune du sceau. Tout est prêt.
+  ~ var.ingredients = vrai
+sinon si var.mission
+  > Il te manque encore des ingrédients du rituel. Il reste une année.
+si var.noe_perdu
+  > Quelque part dans cette forêt, il y a Noé.

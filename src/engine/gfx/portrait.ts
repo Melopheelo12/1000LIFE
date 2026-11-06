@@ -49,6 +49,13 @@ export function renderPortrait(look: Look, emo: string): HTMLCanvasElement {
   if (r.hair === 'tresses') for (let i = -1; i <= 1; i += 2) for (let y = 0; y < 16; y++) g.rect(cx + i * (rx + 1) - 1, headTop + 8 + y, 3, 1, y % 2 ? hdk : hc);
   if (r.hair === 'queue') g.rect(cx + rx - 1, headTop + 6, 4, 12, hc);
   if (r.hair === 'carre') g.rect(cx - rx - 2, headTop + 3, rx * 2 + 5, 17, hc);
+  if (r.hair === 'afro') { g.ellipse(cx, headTop + 6, rx + 7, 12, hc); g.dither(cx - rx - 7, headTop - 5, rx * 2 + 15, 20, hdk, 3); }
+  if (r.hair === 'mi_long') g.rect(cx - rx - 2, headTop + 3, rx * 2 + 5, 21, hc);
+  if (r.hair === 'couettes') for (const sx of [-1, 1]) { g.ellipse(cx + sx * (rx + 4), headTop + 10, 3, 6, hc); g.rect(cx + sx * (rx + 4) - 1, headTop + 4, 3, 2, hdk); }
+  if (r.hair === 'dreads') for (let x = cx - rx - 2; x <= cx + rx + 2; x += 3) if (x < cx - rx + 2 || x > cx + rx - 2) for (let y = 0; y < 20; y++) g.rect(x, headTop + 4 + y, 2, 1, y % 3 ? hc : hdk);
+  const accC = (fallback: string) => r.accColor ?? fallback;
+  const hoodC = accC(shade(r.topColor, -0.1));
+  if (r.acc.has('capuche') && !r.acc.has('chapeau')) g.ellipse(cx, headTop + 11, rx + 5, 15, hoodC);
 
   // Épaules / tenue
   const shoulderY = headTop + headH + 3;
@@ -96,6 +103,12 @@ export function renderPortrait(look: Look, emo: string): HTMLCanvasElement {
       g.rect(cx - 5, shoulderY - 1, 11, 3, skinD);
       break;
   }
+  if (r.top === 'toge') {
+    for (let i = 0; i < 7; i++) { g.px(cx - 1 - i, shoulderY - 1 + i, r.topColor2); g.px(cx + 1 + i, shoulderY - 1 + i, r.topColor2); }
+    g.rect(cx - 1, shoulderY, 3, 6, shade(r.topColor, -0.3));
+  }
+  if (r.acc.has('cape')) { const cc = accC('#7a1f2a'); for (let y = shoulderY + 1; y < PORTRAIT; y++) { g.rect(cx - sw - 1, y, 4, 1, cc); g.rect(cx + sw - 2, y, 4, 1, cc); } g.rect(cx - 2, shoulderY + 2, 5, 3, '#e2b440'); }
+  if (r.acc.has('sac')) { const sc = accC('#5a4a3a'); g.rect(cx - 9, shoulderY, 2, PORTRAIT - shoulderY, sc); g.rect(cx + 8, shoulderY, 2, PORTRAIT - shoulderY, sc); }
   if (r.acc.has('collier')) for (let i = -3; i <= 3; i++) g.px(cx + i, shoulderY + 1 + (Math.abs(i) < 2 ? 1 : 0), '#f2c94c');
 
   // Oreilles
@@ -155,6 +168,13 @@ export function renderPortrait(look: Look, emo: string): HTMLCanvasElement {
   if (r.beard === 'barbe3j') g.dither(cx - rx + 1, eyeY + 5, rx * 2 - 1, headTop + headH - eyeY - 5, shade(skin, -0.28));
   if (r.beard === 'bouc') g.rect(cx - 2, mouthY + 2, 5, 3, hc);
   if (r.beard === 'moustache') g.rect(cx - 3, mouthY - 1, 7, 1, hc);
+  if (r.beard === 'barbe_longue') {
+    for (let y = eyeY + 5; y < PORTRAIT; y++) { const w = y < headTop + headH - 3 ? rx : Math.max(2, rx - Math.floor((y - (headTop + headH - 3)) / 2)); g.rect(cx - w, y, w * 2 + 1, 1, (y % 3) ? hc : shade(hc, -0.12)); }
+    g.rect(cx - 3, mouthY - 1, 7, 2, skinD); g.rect(cx - 3, mouthY - 2, 7, 1, hc);
+  }
+  if (r.acc.has('taches')) for (const [dx, dy] of [[-6, 3], [-5, 4], [-7, 4], [5, 3], [6, 4], [4, 4]]) g.px(cx + dx, eyeY + dy, shade(skin, -0.28));
+  if (r.acc.has('cicatrice')) for (let i = 0; i < 6; i++) g.px(lx - 1 + i, eyeY - 3 + i + (i > 2 ? 1 : 0), '#c27272');
+  if (r.acc.has('piercing')) { g.px(cx + 1, eyeY + 5, '#e0e4ec'); g.px(cx + 2, eyeY + 6, '#9aa0ae'); }
   // Bouche
   const lip = r.female ? mix(skinDD, '#c0505a', 0.45) : skinDD;
   switch (emo) {
@@ -192,8 +212,37 @@ export function renderPortrait(look: Look, emo: string): HTMLCanvasElement {
     case 'carre': capRows(6, 10); g.rect(cx - rx, top + 5, rx * 2 + 1, 2, hc); break;
     case 'herisse': capRows(5, 3); for (let i = -6; i <= 6; i += 3) { g.px(cx + i, top - 1, hc); g.px(cx + i, top - 2, hdk); } break;
     case 'chauve': g.rect(cx - 3, headTop + 1, 3, 1, shade(skin, 0.3)); break;
+    case 'afro': g.ellipse(cx, top + 2, rx + 6, 6, hc); g.dither(cx - rx - 5, top - 4, rx * 2 + 11, 9, hdk, 3); g.rect(cx - rx - 3, top + 4, 4, 9, hc); g.rect(cx + rx, top + 4, 4, 9, hc); break;
+    case 'mi_long': capRows(5, 14); g.rect(cx - rx + 1, top + 4, 7, 2, hc); break;
+    case 'frange': capRows(5, 6); g.rect(cx - rx, top + 4, rx * 2 + 1, 4, hc); for (let x = cx - rx; x <= cx + rx; x += 2) g.px(x, top + 8, hdk); break;
+    case 'couettes': capRows(5, 4); g.rect(cx - 1, top, 1, 5, hdk); break;
+    case 'catogan': capRows(5, 3); g.disc(cx, top - 4, 3, hc); g.rect(cx - 1, top - 1, 3, 1, hdk); break;
+    case 'undercut': for (let y = 0; y < 4; y++) g.rect(cx - rx + (y === 0 ? 2 : 0), top + 1 + y, rx * 2 + 1 - (y === 0 ? 4 : 0), 1, mix(hc, skin, 0.4)); g.ellipse(cx + 1, top + 1, rx - 1, 4, hc); g.rect(cx - 2, top - 2, rx + 2, 3, hc); g.rect(cx, top - 2, 4, 1, hl); break;
+    case 'dreads': capRows(5, 6); for (let x = cx - rx; x <= cx + rx; x += 3) g.rect(x, top - 1, 2, 3, hdk); break;
   }
   if (r.acc.has('bandeau')) g.rect(cx - rx - 1, top + 4, rx * 2 + 3, 2, r.topColor2);
+  if (r.acc.has('capuche') && !r.acc.has('chapeau')) {
+    for (let y = -3; y < 4; y++) { const w = rx + 4 - Math.max(0, -y); g.rect(cx - w, top + y, w * 2 + 1, 1, y === -3 ? shade(hoodC, 0.15) : hoodC); }
+    g.rect(cx - rx - 4, top + 3, 3, 15, hoodC); g.rect(cx + rx + 2, top + 3, 3, 15, hoodC);
+    g.rect(cx - rx - 1, top + 3, 1, 14, shade(hoodC, -0.3)); g.rect(cx + rx + 1, top + 3, 1, 14, shade(hoodC, -0.3));
+  }
+  if (r.acc.has('casque') && !r.acc.has('chapeau')) {
+    const cq = accC('#2a2a33');
+    g.rect(cx - rx, top - 2, rx * 2 + 1, 2, cq); g.rect(cx - rx - 2, top, 2, 6, cq); g.rect(cx + rx + 1, top, 2, 6, cq);
+    g.rect(cx - rx - 4, earY - 1, 4, 7, cq); g.rect(cx + rx + 1, earY - 1, 4, 7, cq); g.px(cx - rx - 3, earY + 1, shade(cq, 0.35)); g.px(cx + rx + 3, earY + 1, shade(cq, 0.35));
+  }
+  if (r.acc.has('chapeau')) {
+    const hatC = accC(shade(r.topColor, -0.12));
+    g.rect(cx - rx - 5, top + 3, rx * 2 + 11, 2, shade(hatC, -0.2));
+    for (let y = top + 2; y >= 0; y--) { const k = (top + 2 - y) / (top + 2); const w = Math.max(1, Math.round((rx + 1) * (1 - k * 0.85))); g.rect(cx - w + Math.round(k * 3), y, w * 2 + 1, 1, hatC); }
+    g.rect(cx - rx - 1, top + 1, rx * 2 + 3, 2, r.topColor2);
+  }
+  if (r.acc.has('echarpe')) {
+    const ec = accC(r.topColor2 === '#f1f1f1' ? '#c23b3b' : r.topColor2);
+    g.rect(cx - 7, shoulderY - 2, 15, 4, ec); g.rect(cx + 2, shoulderY + 1, 4, 8, ec);
+    for (let x = cx - 6; x < cx + 8; x += 3) g.px(x, shoulderY - 1, shade(ec, -0.25));
+    g.rect(cx + 2, shoulderY + 8, 4, 1, shade(ec, -0.3));
+  }
   if (r.acc.has('casquette')) {
     const cc = r.topColor2 === '#f1f1f1' ? '#c23b3b' : r.topColor2;
     for (let y = 0; y < 5; y++) g.rect(cx - rx - 1 + (y === 0 ? 2 : 0), top - 1 + y, rx * 2 + 3 - (y === 0 ? 4 : 0), 1, cc);

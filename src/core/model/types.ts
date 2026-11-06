@@ -92,6 +92,8 @@ export interface Look {
   build?: 'mince' | 'normal' | 'costaud';
   height?: 'petit' | 'normal' | 'grand' | 'enfant';
   acc?: string[];
+  /** couleur des accessoires (chapeau, écharpe, cape, casque, sac) */
+  accColor?: string;
   gender?: 'h' | 'f';
 }
 

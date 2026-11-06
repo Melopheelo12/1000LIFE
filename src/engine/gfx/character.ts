@@ -14,22 +14,37 @@ const GROUND = 44;
 const OUTLINE = '#17131f';
 
 export const SKINS: Record<string, string> = {
-  peau1: '#f7d9c4', peau2: '#efc29e', peau3: '#d9a57c', peau4: '#b97d55', peau5: '#8e5a39', peau6: '#5f3b26',
+  peau0: '#fbe7da', peau1: '#f7d9c4', peau2: '#efc29e', peau3: '#d9a57c', peau4: '#b97d55', peau5: '#8e5a39', peau6: '#5f3b26', peau7: '#3f271b',
 };
 export const HAIR_COLORS: Record<string, string> = {
   noir: '#1e1a20', brun: '#4b3023', chatain: '#7b5433', roux: '#b4532c', blond: '#e1b95b', platine: '#efe3b4',
   gris: '#9b9ba4', blanc: '#e9e9ef', bleu: '#3a6fd8', rose: '#e46aa8', vert: '#3fb36b', violet: '#8a52d6',
+  acajou: '#7a2a24', cuivre: '#d07a3a', argente: '#c8ccd8', turquoise: '#2fb5b0', rouge: '#c8323a', nuit: '#2a2f5e',
 };
 export const NAMED_COLORS: Record<string, string> = {
   rouge: '#d63c3c', bleu: '#2f62c9', marine: '#1d2f5e', ciel: '#7cc3ef', vert: '#2f9a4c', kaki: '#6b7a43', jaune: '#f0c63a',
   orange: '#ec8a2e', violet: '#7d4bc4', rose: '#e477a9', blanc: '#eef0f4', noir: '#25222b', gris: '#8b8f99', anthracite: '#3b3e47',
   bordeaux: '#7c2236', beige: '#d8c3a0', marron: '#6e4a31', or: '#e2b440', argent: '#c4cad3', turquoise: '#2fb5b0', creme: '#efe6cf',
 };
-export const HAIR_STYLES = ['court', 'rase', 'boucle', 'bouclecourt', 'long', 'queue', 'chignon', 'crete', 'tresses', 'meche', 'carre', 'herisse', 'chauve'];
-export const TOP_STYLES = ['maillot', 'gardien', 'tshirt', 'debardeur', 'polo', 'survet', 'sweat', 'chemise', 'costume', 'veste', 'blouse', 'robe'];
+export const HAIR_STYLES = ['court', 'rase', 'boucle', 'bouclecourt', 'afro', 'long', 'mi_long', 'frange', 'queue', 'couettes', 'chignon', 'catogan', 'crete', 'undercut', 'tresses', 'dreads', 'meche', 'carre', 'herisse', 'chauve'];
+export const TOP_STYLES = ['maillot', 'gardien', 'tshirt', 'debardeur', 'polo', 'survet', 'sweat', 'chemise', 'costume', 'veste', 'blouse', 'robe', 'toge'];
 export const BOTTOM_STYLES = ['short', 'pantalon', 'jean', 'survet', 'jupe'];
 export const BEARDS = ['', 'barbe', 'barbe3j', 'bouc', 'moustache'];
-export const ACCESSORIES = ['lunettes', 'casquette', 'bandeau', 'boucles', 'brassard', 'gants', 'collier'];
+export const ACCESSORIES = ['lunettes', 'casquette', 'bandeau', 'chapeau', 'capuche', 'casque', 'echarpe', 'cape', 'sac', 'baguette', 'montre', 'gants', 'brassard', 'collier', 'boucles', 'piercing', 'taches', 'cicatrice'];
+export const BEARD_STYLES = ['', 'barbe3j', 'bouc', 'moustache', 'barbe', 'barbe_longue'];
+/** Libellés affichés pour chaque option d'apparence. */
+export const LOOK_LABELS: Record<string, string> = {
+  court: 'Court', rase: 'Rasé', boucle: 'Bouclé', bouclecourt: 'Bouclé court', afro: 'Afro', long: 'Long', mi_long: 'Mi-long', frange: 'Frange', queue: 'Queue-de-cheval',
+  couettes: 'Couettes', chignon: 'Chignon', catogan: 'Chignon haut', crete: 'Crête', undercut: 'Undercut', tresses: 'Tresses', dreads: 'Dreadlocks', meche: 'Mèche', carre: 'Carré',
+  herisse: 'Hérissé', chauve: 'Chauve',
+  maillot: 'Maillot', gardien: 'Maillot de gardien', tshirt: 'T-shirt', debardeur: 'Débardeur', polo: 'Polo', survet: 'Survêtement', sweat: 'Sweat', chemise: 'Chemise',
+  costume: 'Costume', veste: 'Veste', blouse: 'Blouse', robe: 'Robe', toge: 'Robe de sorcier', short: 'Short', pantalon: 'Pantalon', jean: 'Jean', jupe: 'Jupe',
+  '': 'Aucune', barbe3j: 'Barbe de 3 jours', bouc: 'Bouc', moustache: 'Moustache', barbe: 'Barbe', barbe_longue: 'Longue barbe',
+  lunettes: 'Lunettes', casquette: 'Casquette', bandeau: 'Bandeau', chapeau: 'Chapeau pointu', capuche: 'Capuche', casque: 'Casque audio', echarpe: 'Écharpe', cape: 'Cape',
+  sac: 'Sac à dos', baguette: 'Baguette', montre: 'Montre', gants: 'Gants', brassard: 'Brassard', collier: 'Collier', boucles: 'Boucles d\'oreilles', piercing: 'Piercing',
+  taches: 'Taches de rousseur', cicatrice: 'Cicatrice', h: 'Masculin', f: 'Féminin', mince: 'Mince', normal: 'Normal', costaud: 'Costaud', petit: 'Petit', grand: 'Grand', enfant: 'Enfant',
+};
+export const lookLabel = (k: string) => LOOK_LABELS[k] ?? k;
 
 export function col(c: string | undefined, fallback: string, table?: Record<string, string>): string {
   if (!c) return fallback;
@@ -94,7 +109,7 @@ export function animDef(name: string): AnimDef { return ANIMS[name] ?? ANIMS[ANI
 interface Resolved {
   skin: string; hair: string; hairColor: string; eyes: string; beard: string;
   top: string; topColor: string; topColor2: string; bottom: string; bottomColor: string;
-  shoes: string; socks: string | null; build: string; height: string; acc: Set<string>; female: boolean;
+  shoes: string; socks: string | null; build: string; height: string; acc: Set<string>; female: boolean; accColor: string | null;
 }
 
 export function resolveLook(l: Look): Resolved {
@@ -116,6 +131,7 @@ export function resolveLook(l: Look): Resolved {
     height: l.height ?? 'normal',
     acc: new Set(l.acc ?? []),
     female: l.gender === 'f',
+    accColor: l.accColor ? col(l.accColor, '#7a1f2a') : null,
   };
 }
 
@@ -164,7 +180,7 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
   const leanAt = (y: number) => Math.round(lean * (hipY - y) / torso);
 
   const skinD = shade(r.skin, -0.18);
-  const longSleeves = ['gardien', 'survet', 'sweat', 'chemise', 'costume', 'veste', 'blouse'].includes(r.top);
+  const longSleeves = ['gardien', 'survet', 'sweat', 'chemise', 'costume', 'veste', 'blouse', 'toge'].includes(r.top);
   const noSleeves = r.top === 'debardeur';
   const fullPants = ['pantalon', 'jean', 'survet'].includes(r.bottom);
   const skirt = r.bottom === 'jupe' || r.top === 'robe';
@@ -195,6 +211,7 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
     const a = limbPoints(sx, sy, p[0], upper, p[0] + p[1], fore);
     drawLimb(g, sx, sy, a.x1, a.y1, a.x2, a.y2, armT, armColor(dark, front));
     g.rect(Math.round(a.x2) - 1, Math.round(a.y2) - 1, 2, 2, dark ? shade(gloves ? '#f3f3f3' : r.skin, -0.22) : gloves ? '#f3f3f3' : r.skin);
+    return a;
   };
   const drawLeg = (p: [number, number], dark: boolean) => {
     const lp = limbPoints(hipX, hipY, p[0], thigh, p[0] - p[1], shin);
@@ -205,6 +222,22 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
     g.px(fx + 2, fy - 1, shade(sc, 0.2));
   };
 
+  const accC = (fallback: string) => r.accColor ?? fallback;
+  // 0. Cape et sac (derrière le corps)
+  if (r.acc.has('cape')) {
+    const cc = accC('#7a1f2a');
+    for (let y = shY; y < GROUND - 3; y++) {
+      const w = 3 + Math.floor((y - shY) / 4);
+      const x0 = hipX - Math.floor(tw / 2) + leanAt(Math.min(y, hipY)) - w + 2;
+      g.rect(x0, y, w, 1, y >= GROUND - 4 ? shade(cc, -0.3) : cc);
+      g.px(x0, y, shade(cc, -0.25));
+    }
+  }
+  if (r.acc.has('sac')) {
+    const sc = accC('#5a4a3a');
+    const x0 = hipX - Math.floor(tw / 2) + leanAt(shY + 3) - 3;
+    g.rect(x0, shY + 1, 4, 8, sc); g.rect(x0, shY + 1, 4, 1, shade(sc, 0.2)); g.rect(x0 + 1, shY + 5, 2, 1, shade(sc, -0.3));
+  }
   // 1. Cheveux longs derrière la tête / bras et jambe du fond
   drawArm(pose.aB, true, false);
   drawLeg(pose.lB, true);
@@ -257,7 +290,21 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
     const sc = r.top === 'robe' ? r.topColor : r.bottomColor;
     for (let y = hipY - 1; y < hipY + 6; y++) { const w = tw + Math.floor((y - hipY + 1) / 2); g.rect(hipX - Math.floor(w / 2) + leanAt(y), y, w, 1, y === hipY + 5 ? shade(sc, -0.2) : sc); }
   }
+  if (r.top === 'toge') {
+    // Robe de sorcier : tombe jusqu'aux chevilles, col et liseré
+    const bottomY = GROUND - 3;
+    for (let y = hipY - 1; y < bottomY; y++) {
+      const w = tw + Math.min(4, Math.floor((y - hipY + 1) / 3));
+      const x0 = hipX - Math.floor(w / 2) + leanAt(Math.min(y, hipY));
+      g.rect(x0, y, w, 1, y >= bottomY - 1 ? shade(r.topColor, -0.25) : r.topColor);
+      g.px(x0, y, shade(r.topColor, -0.2));
+      g.px(x0 + w - 2, y, r.topColor2);
+    }
+    for (let y = shY; y < hipY; y++) g.px(fx(y) - 1, y, r.topColor2);
+    g.rect(bx(shY), shY, tw, 1, r.topColor2);
+  }
   if (r.acc.has('collier')) g.px(fx(shY) - 1, shY + 1, '#f2c94c');
+  if (r.acc.has('echarpe')) { const ec = accC(r.topColor2 === '#f1f1f1' ? '#c23b3b' : r.topColor2); g.rect(bx(shY) - 1, shY - 1, tw + 1, 2, ec); g.rect(bx(shY) - 1, shY + 1, 2, 4, ec); g.px(bx(shY) - 1, shY + 4, shade(ec, -0.3)); }
 
   // 3. Tête
   const hd = pose.hd ?? 0;
@@ -272,6 +319,11 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
   if (r.hair === 'queue') { g.rect(hx - 3, hy + 2, 4, 2, hc); g.rect(hx - 4, hy + 3, 2, 6, hc); }
   if (r.hair === 'tresses') for (let i = 0; i < 3; i++) for (let y = 0; y < 8 - i; y++) g.px(hx - 1 + i, hy + 3 + i + y, (y + i) % 2 ? hdk : hc);
   if (r.hair === 'chignon') g.disc(hx + 1, hy - 1, 2, hc);
+  if (r.hair === 'afro') g.ellipse(hx + 4, hy + 2, 7, 7, hc);
+  if (r.hair === 'mi_long') g.rect(hx - 1, hy + 1, 4, headH, hc);
+  if (r.hair === 'catogan') g.disc(hx + 1, hy - 2, 2, hc);
+  if (r.hair === 'couettes') { g.rect(hx - 3, hy + 3, 3, 3, hc); g.rect(hx - 4, hy + 5, 2, 4, hdk); }
+  if (r.hair === 'dreads') for (let i = 0; i < 4; i++) for (let y = 0; y < 9 - i; y++) g.px(hx - 1 + i, hy + 2 + y, (y + i) % 3 ? hc : hdk);
   // crâne
   g.rect(hx, hy, headW, headH, r.skin);
   g.ctx.clearRect(hx, hy, 1, 1); g.ctx.clearRect(hx + headW - 1, hy, 1, 1); g.ctx.clearRect(hx, hy + headH - 1, 1, 1); g.ctx.clearRect(hx + headW - 1, hy + headH - 1, 1, 1);
@@ -294,6 +346,7 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
   if (r.beard === 'barbe3j') g.dither(hx + 2, hy + headH - 4, headW - 2, 4, shade(r.skin, -0.3));
   if (r.beard === 'bouc') g.rect(hx + headW - 3, hy + headH - 2, 3, 2, hc);
   if (r.beard === 'moustache') g.rect(hx + headW - 4, my - 1, 3, 1, hc);
+  if (r.beard === 'barbe_longue') { g.rect(hx + 2, hy + headH - 4, headW - 2, 4, hc); g.rect(hx + 1, hy + headH - 5, 2, 2, hc); for (let y = 0; y < 6; y++) g.rect(hx + headW - 5 + Math.floor(y / 2), hy + headH + y, Math.max(1, 5 - Math.floor(y / 2)), 1, y % 2 ? hc : hdk); }
   // bouche
   const mouthC = r.beard === 'barbe' ? shade(r.skin, -0.1) : shade(r.skin, -0.38);
   if (pose.mouth === 'open' || emo === 'surpris') { g.rect(hx + headW - 3, my, 2, 2, '#5a1f2a'); }
@@ -303,6 +356,9 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
     if (emo === 'content' || emo === 'rire' || emo === 'fier') g.px(hx + headW - 1, my - 1, mouthC);
     if (emo === 'triste' || emo === 'colere') g.px(hx + headW - 1, my + 1, mouthC);
   }
+  if (r.acc.has('taches')) { g.px(hx + 4, eyeY + 2, shade(r.skin, -0.3)); g.px(hx + 6, eyeY + 2, shade(r.skin, -0.3)); }
+  if (r.acc.has('cicatrice')) { g.px(eyeX - 1, eyeY - 1, '#c97a7a'); g.px(eyeX, eyeY + 2, '#c97a7a'); }
+  if (r.acc.has('piercing')) g.px(hx + headW, eyeY + 3, '#d8dde6');
   // coiffure (dessus)
   const cap = (h = 3) => { g.rect(hx, hy - 1, headW, h, hc); g.rect(hx + 2, hy - 1, 3, 1, hl); };
   switch (r.hair) {
@@ -319,14 +375,37 @@ export function renderFrame(look: Look, pose: Pose, emo = 'neutre'): HTMLCanvasE
     case 'carre': cap(); g.rect(hx, hy, 4, headH - 1, hc); g.rect(hx + headW - 3, hy, 3, 2, hc); break;
     case 'herisse': cap(); for (let i = 0; i < 4; i++) { g.px(hx + 1 + i * 2, hy - 2, hc); g.px(hx + 1 + i * 2, hy - 3, hdk); } g.rect(hx, hy, 3, 5, hc); break;
     case 'chauve': g.px(hx + 3, hy + 1, shade(r.skin, 0.3)); break;
+    case 'afro': { g.rect(hx - 1, hy - 3, headW + 1, 4, hc); g.dither(hx - 1, hy - 3, headW + 1, 4, hdk, 3); g.rect(hx - 1, hy, 4, 7, hc); break; }
+    case 'mi_long': cap(); g.rect(hx, hy, 3, headH - 2, hc); g.px(hx + headW - 1, hy + 2, hc); break;
+    case 'frange': cap(3); g.rect(hx + 3, hy + 1, headW - 3, 2, hc); g.rect(hx, hy, 3, 7, hc); break;
+    case 'couettes': cap(); g.rect(hx, hy, 3, 5, hc); break;
+    case 'catogan': cap(); g.rect(hx, hy, 3, 4, hc); break;
+    case 'undercut': g.rect(hx + 2, hy - 2, headW - 1, 3, hc); g.rect(hx + 4, hy - 3, 4, 1, hl); g.rect(hx, hy, 3, 4, mix(hc, r.skin, 0.45)); break;
+    case 'dreads': cap(); g.rect(hx, hy, 3, 8, hc); for (let i = 0; i < headW; i += 2) g.px(hx + i, hy - 2, hdk); break;
   }
   if (r.acc.has('bandeau')) g.rect(hx, hy + 2, headW, 1, r.topColor2);
   if (r.acc.has('casquette')) { g.rect(hx - 1, hy - 2, headW + 1, 3, r.topColor2 === '#f1f1f1' ? '#c23b3b' : r.topColor2); g.rect(hx + headW - 1, hy, 4, 1, shade(r.topColor2 === '#f1f1f1' ? '#c23b3b' : r.topColor2, -0.25)); }
   if (r.acc.has('lunettes')) { g.rect(eyeX - 1, eyeY - 1, 3, 3, '#1b1b22'); g.px(eyeX, eyeY, '#bfe3ff'); g.rect(hx + 4, eyeY, eyeX - hx - 5, 1, '#1b1b22'); }
   if (r.acc.has('boucles')) g.px(hx + 3, eyeY + 2, '#f2c94c');
+  if (r.acc.has('casque') && !r.acc.has('chapeau')) { const cq = accC('#2a2a33'); g.rect(hx + 1, hy - 2, headW - 2, 1, cq); g.rect(hx + 2, eyeY, 3, 3, cq); g.px(hx + 3, eyeY + 1, shade(cq, 0.3)); }
+  if (r.acc.has('capuche') && !r.acc.has('chapeau')) { const hc2 = accC(shade(r.topColor, -0.1)); g.rect(hx - 1, hy - 2, headW + 1, 3, hc2); g.rect(hx - 1, hy, 3, headH, hc2); }
+  if (r.acc.has('chapeau')) {
+    // Chapeau pointu : bord, cône incliné vers l'arrière, bande
+    const hatC = accC(shade(r.topColor, -0.12));
+    g.rect(hx - 2, hy - 1, headW + 4, 2, shade(hatC, -0.15));
+    for (let i = 0; i < 9; i++) { const w = Math.max(1, headW - 1 - i); g.rect(hx + Math.floor(i / 3) - Math.floor(i / 2) + (headW - 1 - w) / 2, hy - 2 - i, w, 1, hatC); }
+    g.rect(hx, hy - 3, headW - 1, 1, r.topColor2);
+  }
 
-  // 4. Bras de devant
-  drawArm(pose.aF, false, true);
+  // 4. Bras de devant (+ baguette)
+  const hand = drawArm(pose.aF, false, true);
+  if (r.acc.has('montre')) { const wx = Math.round(hand.x1 + (hand.x2 - hand.x1) * 0.7); const wy = Math.round(hand.y1 + (hand.y2 - hand.y1) * 0.7); g.px(wx, wy, '#d8c060'); }
+  if (r.acc.has('baguette')) {
+    const dx = hand.x2 - hand.x1; const dy = hand.y2 - hand.y1; const L = Math.hypot(dx, dy) || 1;
+    const ex = hand.x2 + (dx / L) * 5; const ey = hand.y2 + (dy / L) * 5;
+    g.line(Math.round(hand.x2), Math.round(hand.y2), Math.round(ex), Math.round(ey), '#5a3a22');
+    g.px(Math.round(ex), Math.round(ey), '#fff6c8');
+  }
 
   g.outline(OUTLINE);
   return g.canvas;
@@ -358,7 +437,7 @@ export function randomLook(seed: number, base: Look = {}): Look {
   const female = base.gender ? base.gender === 'f' : r() < 0.3;
   return {
     skin: pick(Object.keys(SKINS)),
-    hair: female ? pick(['long', 'queue', 'chignon', 'carre', 'boucle', 'tresses']) : pick(['court', 'rase', 'bouclecourt', 'boucle', 'meche', 'herisse', 'chauve', 'tresses', 'court']),
+    hair: female ? pick(['long', 'queue', 'chignon', 'carre', 'boucle', 'tresses', 'mi_long', 'frange', 'couettes', 'afro', 'catogan']) : pick(['court', 'rase', 'bouclecourt', 'boucle', 'meche', 'herisse', 'chauve', 'tresses', 'court', 'afro', 'undercut', 'dreads', 'catogan']),
     hairColor: pick(['noir', 'noir', 'brun', 'brun', 'chatain', 'blond', 'roux', 'gris']),
     beard: female ? '' : pick(['', '', '', 'barbe3j', 'barbe', 'bouc', 'moustache']),
     top: pick(['tshirt', 'sweat', 'polo', 'veste', 'chemise']),

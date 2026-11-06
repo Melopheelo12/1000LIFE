@@ -1,0 +1,409 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  RELATIONS — conversations répétables (cliquer sur un personnage)
+//  et moments partagés déclenchés par certaines activités.
+//  Les scènes « histoire » (priorité 5 à 9) passent toujours avant celles-ci.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== re_noe
+titre: Noé
+declencheur: talk:noe
+quand: non var.noe_perdu
+recharge: 3
+---
+si chapitre == ch1
+  noe (inquiet): Tu trouves pas que ça sent bizarre, ici ? Chez moi, ça sent le pain chaud. Ici, ça sent la bougie et le vieux chien.
+  * « On s'y fera. Ensemble. » #loyal
+    ~ rel.noe += 5
+    noe (content): Ensemble. D'accord. Mais si un fantôme me parle, je dors dans ton lit.
+  * Lui apprendre le sort de lumière que tu viens de réussir. #etude
+    ~ rel.noe += 3; stat.sortileges += 1
+  * « Le vieux chien, c'est peut-être Gaspard. » #humour
+    ~ rel.noe += 3; stat.moral += 2
+sinon si rel.noe >= 45
+  noe (content): Regarde ! J'ai enfin réussi à faire léviter une brioche. Bon, elle a pris feu après. Mais elle a lévité.
+  * L'applaudir comme au grand tournoi. #loyal
+    ~ rel.noe += 4; stat.moral += 2
+  * Réviser avec lui jusqu'au couvre-feu. #etude
+    ~ rel.noe += 3; stat.savoir += 2; stat.energie -= 10
+    ~ souvenir(noe, revisions, "Vous avez révisé ensemble jusqu'au couvre-feu")
+  * [chapitre == ch4 ou chapitre == ch5] Lui demander s'il a peur de ce qui arrive. #ecoute
+    noe (pensif): Tout le temps. Mais quand t'es là, un peu moins.
+    ~ rel.noe += 6
+sinon si rel.noe < 15
+  noe: Ah. Salut. …Je dois aller à la bibliothèque. Enfin, je crois.
+  * Le retenir : « Noé, attends. Je suis désolé. » #reconciliation
+    test rel.noe + 30 + stat.courage / 4 vs 45
+    si reussite
+      noe (emu): …Moi aussi, je suis désolé. On recommence ?
+      ~ rel.noe += 12
+    sinon
+      noe (triste): Pas maintenant. Peut-être plus tard.
+      ~ rel.noe += 2
+  * Le laisser partir.
+    ~ rel.noe -= 2
+sinon
+  noe: Tu crois qu'on aura notre diplôme, nous deux ? Le fils du boulanger et… toi ?
+  * « On l'aura. Et on fêtera ça avec tes brioches. » #loyal
+    ~ rel.noe += 4
+  * « Toi, sûrement. Moi, je ne sais pas. » #honnete
+    noe (rire): Menteur. T'es le meilleur de nous deux, et tu le sais.
+    ~ rel.noe += 3; stat.moral += 2
+
+=== re_sera
+titre: Séraphine
+declencheur: talk:sera
+recharge: 3
+---
+si rel.sera <= -15
+  sera (colere): Qu'est-ce que tu veux ? Mon autographe ?
+  * Lui renvoyer sa pique. #provocation
+    ~ rel.sera -= 4; stat.courage += 1
+    sera (rire): Pas mal. Pour un roturier.
+  * Reconnaître qu'elle est la meilleure en duel de la promotion. #humble
+    test 30 + rel.sera / 2 + stat.ruse / 3 vs 30
+    si reussite
+      sera (surpris): …C'est vrai. Mais je n'aime pas qu'on me flatte.
+      ~ rel.sera += 8
+    sinon
+      sera: Je n'ai pas besoin qu'on me le dise.
+      ~ rel.sera += 1
+  * Passer ton chemin.
+sinon si rel.sera >= 30
+  sera (content): Tu tombes bien. J'ai besoin de quelqu'un qui ne tremble pas devant moi pour m'entraîner. Il n'y a que toi.
+  * Accepter un duel amical. #duel
+    test stat.duel vs 35 + temps.chapitre * 4
+    si reussite
+      !fx sort moi
+      > Tu la désarmes. Elle éclate de rire, pour la première fois depuis que tu la connais.
+      ~ rel.sera += 5; stat.duel += 2
+    sinon
+      > Elle te désarme en deux gestes. Puis elle t'explique, patiemment, ce que tu as mal fait.
+      ~ rel.sera += 4; stat.duel += 2
+  * Lui demander des nouvelles de sa mère. #ecoute
+    si mem.sera.confidence
+      sera (pensif): Elle m'a écrit. Trois lignes. « Tiens ton rang. » Comme d'habitude.
+      ~ rel.sera += 6
+    sinon
+      sera (surpris): Ma mère ? Pourquoi est-ce que ça t'intéresse ? …Elle va bien. Je crois.
+      ~ rel.sera += 3
+sinon
+  sera: Les Valcourt ont donné sept Archimages à cette école. Toi, tu as donné… quoi, déjà ?
+  * « Moi, je suis arrivé ici sans rien. Tout ce que je sais, je l'ai gagné. » #fierte
+    ~ rel.sera += 4; stat.courage += 1
+    sera (pensif): …Hm. Ça, au moins, personne ne pourra te l'enlever.
+  * Lui proposer de s'entraîner ensemble avant l'examen de duel. #duel
+    sera (surpris): Avec toi ? …Bon. Mais si tu me fais perdre mon temps, je te transforme en crapaud.
+    ~ rel.sera += 5; stat.duel += 1
+  * « Du talent, apparemment, puisque tu me parles. » #humour
+    ~ rel.sera += 3; stat.ruse += 1
+  * L'ignorer. #indifference
+    ~ rel.sera -= 2
+
+=== re_ayla
+titre: Ayla
+declencheur: talk:ayla
+quand: chapitre != ch1
+recharge: 3
+---
+si var.couple
+  ayla (content): Je t'ai vu arriver il y a trois jours. Dans une vision. Tu avais exactement cette tête-là.
+  * L'embrasser sur le front. #romance
+    ~ rel.ayla += 5; stat.moral += 4
+  * Lui proposer de monter voir les étoiles, ce soir. #romance
+    ~ rel.ayla += 4; stat.moral += 3; stat.energie -= 5
+    ~ souvenir(ayla, ensemble, "Vous avez passé la nuit à compter les étoiles")
+  * Lui demander si ses visions lui font encore mal. #ecoute
+    ayla (triste): Moins quand tu es là. C'est idiot, hein ?
+    ~ rel.ayla += 6
+sinon si rel.ayla >= 25
+  ayla (pensif): Tu crois qu'on peut changer ce qu'on voit ? Ce qui doit arriver ?
+  * « Oui. Sinon, à quoi bon voir ? » #espoir
+    ~ rel.ayla += 5; var.visions += 1
+  * « Je ne sais pas. Mais je t'aiderai à essayer. » #loyal
+    ~ rel.ayla += 6
+  * Lui demander ce qu'elle a vu sur toi. #curiosite
+    ayla: Une tour. Une barque. Et quelque chose de violet qui t'attend. Je ne sais pas encore si c'est une bonne chose.
+    ~ var.visions += 2; rel.ayla += 2
+sinon
+  ayla: Chut. J'écoute les étoiles. Elles sont bavardes, ce soir.
+  * S'asseoir et écouter avec elle, en silence. #patience
+    ~ rel.ayla += 4; stat.moral += 2
+  * Lui demander ce qu'elles disent. #curiosite
+    ayla (rire): Que tu poses trop de questions.
+    ~ rel.ayla += 2; var.visions += 1
+  * La laisser tranquille.
+
+=== re_selene
+titre: Professeure Arkadi
+declencheur: talk:selene
+recharge: 4
+---
+selene (content): Ah, mon petit astre ! Une question ? Une réclamation ? Une révélation cosmique ?
+* Demander une leçon particulière. #etude
+  test stat.discipline + stat.sortileges / 2 vs 45
+  si reussite
+    > Une heure de travail intense. Tu en ressors la tête qui bourdonne et la baguette qui crépite.
+    ~ stat.sortileges += 3; stat.energie -= 12; rel.selene += 3
+  sinon
+    selene: Tu t'es endormi deux fois. Reviens quand tu auras dormi, petit astre.
+    ~ stat.sortileges += 1; rel.selene += 1
+* [stat.ombre >= 20] Lui avouer que la voix du grimoire ne se tait plus. #honnete
+  selene (inquiet): Viens. Assieds-toi. On va respirer ensemble, et tu vas me raconter.
+  ~ stat.ombre -= 8; rel.selene += 6; stat.moral += 2
+  ~ souvenir(selene, aveu, "Tu lui as parlé de la voix du grimoire")
+* Lui demander pourquoi elle appelle tout le monde « petit astre ». #curiosite
+  selene (rire): Parce que vous êtes tous en train de vous allumer, et que je ne sais jamais lequel brillera le plus fort.
+  ~ rel.selene += 3; stat.moral += 2
+
+=== re_varn
+titre: Maîtresse Varn
+declencheur: talk:varn
+recharge: 4
+---
+varn: Vous êtes encore là. Je suppose que vous avez une question. Faites court.
+* Poser une question précise sur le dosage de l'essence de mandragore. #etude
+  test stat.potions vs 30 + temps.chapitre * 4
+  si reussite
+    varn (surpris): …La question est pertinente. La réponse : jamais plus de trois gouttes, sauf si vous voulez dormir un an.
+    ~ rel.varn += 4; stat.potions += 2
+  sinon
+    varn: La réponse est à la page quatre du manuel. Que vous auriez lu si vous l'aviez ouvert.
+    ~ rel.varn -= 1
+* [stat.ecus >= 10] Lui offrir une racine de lune achetée au marché. #genereux
+  ~ stat.ecus -= 10; rel.varn += 7
+  varn (pensif): …Elle est fraîche. Où l'avez-vous trouvée ? Peu importe. Merci.
+* Lui demander pourquoi elle ne sourit jamais. #provocation
+  varn: Parce que chaque fois que je souris, un élève fait exploser un chaudron. C'est statistique.
+  ~ rel.varn += 1; stat.moral += 1
+
+=== re_pell
+titre: Madame Pell
+declencheur: talk:pell
+recharge: 4
+---
+pell (content): Chut. On parle bas, à la bibliothèque. Même les livres font la sieste.
+* Proposer de l'aider à ranger les rayonnages. #genereux
+  > Deux heures à grimper aux échelles. Les livres se laissent ranger, sauf un, qui te mord le doigt.
+  ~ rel.pell += 5; stat.savoir += 2; stat.energie -= 10
+* Lui demander un livre qui n'est pas au programme. #curiosite
+  pell: Celui-ci. « Petite histoire des sceaux et des serments ». Personne ne l'a emprunté depuis quarante ans.
+  ~ stat.savoir += 3; rel.pell += 2; var.sceau_connu = vrai
+* [rel.pell >= 20 et chapitre != ch1] Lui demander, à voix très basse, ce qu'il y a dans la Réserve. #ruse
+  pell (inquiet): Des livres qui ne devraient pas exister. Et un qui… respire. Si tu y vas un jour, ne lis rien à voix haute.
+  ~ var.pell_alliee = vrai; rel.pell += 3; var.rumeur_grimoire = vrai
+
+=== re_brax
+titre: Maître Brax
+declencheur: talk:brax
+recharge: 3
+---
+si rel.brax >= 30
+  brax (content): Ah, mon meilleur élève. Ne le répète pas aux autres, ils sont jaloux.
+  * Lui demander comment il a perdu son œil. #curiosite
+    brax: Un dragon de glace. Ou une porte de placard. Ça dépend si je veux impressionner.
+    ~ rel.brax += 3; stat.moral += 2
+  * Lui demander une botte secrète. #duel
+    test stat.duel vs 40
+    si reussite
+      brax: La parade miroir. Tu renvoies le sort de l'autre, avec ses intérêts. Ne l'utilise que si tu n'as plus le choix.
+      ~ var.parade_miroir = vrai; rel.brax += 4
+      ~ souvenir(brax, eleve, "Il t'a appris sa botte secrète")
+    sinon
+      brax: Pas encore. Reviens quand tu tiendras debout plus de trois sorts.
+      ~ stat.duel += 1
+sinon
+  brax: Tu veux t'entraîner ou tu veux discuter ? Les deux ne vont pas ensemble.
+  * « M'entraîner. » #courage
+    ~ stat.duel += 2; stat.energie -= 10; rel.brax += 2
+  * « Discuter. » #ecoute
+    brax (pensif): Bon. Alors écoute : un mage qui ne sait pas perdre ne gagnera jamais rien. Voilà. C'était la discussion.
+    ~ rel.brax += 2; stat.courage += 1
+
+=== re_gaspard
+titre: Gaspard
+declencheur: talk:gaspard
+recharge: 3
+---
+gaspard (content): Entre, entre. Attention au chaudron, il y a un bébé griffon dedans. Non, je plaisante. Un peu.
+* Accepter une tasse de thé et un gâteau dur comme la pierre. #patience
+  > Le thé est bon. Le gâteau, tu le gardes dans ta poche pour plus tard. Peut-être pour te défendre.
+  ~ rel.gaspard += 4; stat.moral += 3
+* L'aider à nourrir les bêtes. #creature
+  ~ rel.gaspard += 3; stat.creatures += 2; stat.energie -= 8
+* [var.familier] Demander des nouvelles de {var.familier_nom}. #creature
+  gaspard (rire): Il a mangé mon chapeau. Le deuxième cette semaine. Il va très bien.
+  ~ rel.gaspard += 3; stat.moral += 4
+* [chapitre != ch1] Lui demander ce qu'il y a au fond de la forêt. #curiosite
+  gaspard (inquiet): Des choses vieilles. Des pierres qui se souviennent. N'y va jamais seul, tu m'entends ?
+  ~ var.rumeur_grimoire = vrai; rel.gaspard += 1
+
+=== re_lia
+titre: Lia
+declencheur: talk:lia
+quand: var.mentor_lia
+recharge: 3
+---
+si var.lia_sauvee
+  lia (content): Je ne t'ai jamais vraiment dit merci. Pour le cachot. Alors : merci. Voilà. C'est dit. Ne pleure pas.
+  ~ rel.lia += 4
+sinon
+  lia (inquiet): Tu peux m'expliquer la troisième loi des transmutations ? Je relis la page depuis une heure et les mots changent de place.
+  * Lui expliquer patiemment. #genereux
+    test stat.savoir vs 30
+    si reussite
+      lia (content): Ah ! C'était donc ça ! Tu devrais être professeur.
+      ~ rel.lia += 5; stat.savoir += 1; stat.reputation += 1
+    sinon
+      > Vous vous embrouillez tous les deux. Vous finissez par rire, la tête sur le livre.
+      ~ rel.lia += 3
+  * Lui dire que les mots changent vraiment de place : c'est un livre ensorcelé. #humour
+    lia (rire): Je savais que je n'étais pas folle !
+    ~ rel.lia += 4; stat.moral += 2
+
+=== re_tobias
+titre: Tobias
+declencheur: talk:tobias
+recharge: 3
+---
+tobias (rire): J'ai un plan. Une bombe à bulles dans la soupière des professeurs. Tu en es ?
+* Évidemment. #rebelle
+  test stat.ruse vs 30
+  si reussite
+    > Le dîner se termine sous une pluie de bulles roses. Personne ne sait qui a fait le coup. Sauf vous.
+    ~ rel.tobias += 6; stat.ruse += 2; stat.moral += 4
+  sinon
+    > Sélène vous attrape la main dans la soupière. Avertissement pour tous les deux.
+    ~ rel.tobias += 3; var.avertissements += 1; stat.discipline -= 6
+* Non, et toi non plus. #regle
+  tobias: Rabat-joie. …Bon, d'accord. Mais tu me dois une blague.
+  ~ rel.tobias -= 1; stat.discipline += 1
+* Proposer une meilleure idée : des chaussettes qui chantent. #ruse
+  tobias (surpris): …Tu es un génie. Un génie maléfique.
+  ~ rel.tobias += 5; stat.ruse += 1
+
+=== re_marthe
+titre: Marthe
+declencheur: talk:marthe
+recharge: 3
+---
+marthe (content): Voilà mon élève préféré ! Assieds-toi. Tu as une mine de chandelle mouillée.
+* Accepter un chocolat chaud offert par la maison. #repos
+  ~ stat.moral += 5; stat.energie += 6; rel.marthe += 3
+* Lui demander les rumeurs du village. #curiosite
+  si chapitre == ch1 ou chapitre == ch2
+    marthe (pensif): On dit que deux élèves ont disparu, l'été dernier, près des pierres. On n'en parle pas trop. Ça porte malheur.
+    ~ var.rumeur_grimoire = vrai; stat.savoir += 1
+  sinon
+    marthe (inquiet): Des gens en robe noire passent la nuit, vers la forêt. Ils ne prennent jamais rien à boire. C'est mauvais signe, les gens qui ne boivent rien.
+    ~ var.mefiance_orin = vrai; stat.savoir += 1
+  ~ rel.marthe += 2
+* Lui proposer de faire la vaisselle en échange. #genereux
+  ~ rel.marthe += 5; stat.ecus += 4; stat.energie -= 8
+
+=== re_orin
+titre: Orin Kael
+declencheur: talk:orin
+quand: non var.orin_demasque
+recharge: 4
+---
+si stat.ombre >= 25 ou var.cercle_orin
+  orin (content): Tu sens ça, toi aussi ? Cette force qui gronde sous le château ? Les autres ont peur. Toi et moi, on écoute.
+  * « J'écoute. » #ombre
+    ~ rel.orin += 5; stat.ombre += 3; stat.puissance += 1
+  * « Moi, j'essaie surtout de la faire taire. » #lumiere
+    orin (pensif): Dommage. Vraiment dommage.
+    ~ rel.orin -= 3; var.mefiance_orin = vrai
+sinon
+  orin: Le préfet Kael, à ton service. Si quelqu'un t'embête, viens me voir. Je règle toujours les problèmes. D'une manière ou d'une autre.
+  * Le remercier. #poli
+    ~ rel.orin += 3
+  * [stat.ruse >= 30] Remarquer la tache d'encre violette sur sa manche. #ruse
+    orin (surpris): …De l'encre. J'écris beaucoup. Tu as l'œil, dis donc.
+    ~ var.mefiance_orin = vrai; stat.ruse += 2; rel.orin -= 1
+  * Lui demander pourquoi il traîne toujours près de la bibliothèque. #curiosite
+    orin (rire): Parce que j'aime lire. C'est un crime, maintenant ?
+    ~ var.mefiance_orin = vrai
+
+=== re_daval
+titre: Inspecteur Daval
+declencheur: talk:daval
+quand: chapitre == ch4
+recharge: 3
+---
+daval: Élève {joueur.nom}. Vous avez quelque chose à me dire ? Tout le monde a toujours quelque chose à dire à un inspecteur.
+* [(var.malrik_nom ou var.grimoire_trouve) et non var.daval_sait] Tout lui raconter : le grimoire, Malrik, le cercle. #honnete
+  daval (surpris): …Vous vous rendez compte que vous venez d'avouer être entré dans la Réserve ?
+  ~ var.daval_sait = vrai; var.avertissements += 1; rel.daval += 10
+  ~ souvenir(daval, verite, "Tu lui as tout raconté")
+  daval (pensif): Je vais devoir vous sanctionner. Et ensuite, je vais devoir vous croire. C'est très désagréable.
+* Rien, inspecteur. Rien du tout. #prudence
+  daval: C'est ce que disent toujours ceux qui ont le plus à dire.
+  ~ rel.daval -= 2
+* [var.mefiance_orin] Lui conseiller de surveiller le préfet Kael. #ruse
+  daval (pensif): Le préfet modèle ? Intéressant. Très intéressant.
+  ~ rel.daval += 4; var.denonce_orin = vrai
+
+// ─── Moments partagés (activités) ─────────────────────────────────────────
+
+=== re_veillee_noe
+titre: Au coin du feu
+declencheur: activity:veillee
+quand: non var.noe_perdu et rel.noe >= 30
+chance: 50
+recharge: 4
+---
+!placer noe 150 droite
+> Le feu crépite dans la salle commune. Noé, emmitouflé dans une couverture trop grande, mange des marrons grillés par magie.
+noe (pensif): Tu crois qu'on se souviendra de tout ça, quand on sera vieux ? Des marrons, du feu, de la barque ?
+* « Je me souviendrai de tout. Promis. » #loyal
+  ~ rel.noe += 5; stat.moral += 3
+  ~ souvenir(noe, veillee, "Tu lui as promis de te souvenir de tout")
+* « Moi, je me souviendrai surtout de ta tête quand le lac t'a parlé. » #humour
+  noe (rire): Il m'a VRAIMENT parlé !
+  ~ rel.noe += 4; stat.moral += 4
+
+=== re_lettre_maman
+titre: Une lettre pour la maison
+declencheur: activity:ecrire_lettre
+recharge: 3
+---
+> Tu trempes la plume dans l'encre. Qu'est-ce que tu racontes à ta mère, cette fois ?
+* La vérité : les cours, les amis, et aussi les choses étranges. #honnete
+  ~ rel.claire += 3
+  ~ planifier(re_reponse_maman, 2)
+* Que tout va bien. Toujours bien. #prudence
+  ~ rel.claire += 1
+* [stat.ecus >= 10] Glisser quelques écus dans l'enveloppe. #genereux
+  ~ stat.ecus -= 10; rel.claire += 5
+  ~ souvenir(claire, ecus, "Tu lui as envoyé une partie de tes écus")
+  ~ planifier(re_reponse_maman, 2)
+
+=== re_reponse_maman
+titre: La réponse de ta mère
+declencheur: scheduled
+---
+> Une enveloppe qui sent la farine et la lavande. L'écriture de ta mère, appliquée, un peu tremblante.
+si mem.claire.ecus
+  > « Tu n'aurais pas dû, pour l'argent. Je l'ai mis de côté. Pour toi. Pour quand tu reviendras. »
+si stat.ombre >= 30
+  > « Tes dernières lettres me font un peu peur, mon trésor. Tu as l'air si loin. Promets-moi de faire attention. »
+  ~ stat.ombre -= 3
+sinon
+  > « J'ai lu ta lettre trois fois. Je suis si fière de toi. Je n'ai pas tout compris, mais je suis fière. »
+~ stat.moral += 5; rel.claire += 3
+
+=== re_chocolat_ayla
+titre: Une table pour deux
+declencheur: activity:chocolat
+quand: chapitre != ch1 et rel.ayla >= 20
+chance: 50
+recharge: 4
+---
+!placer ayla 200 gauche
+> Ayla entre dans l'auberge, les joues rouges de froid. Elle s'assoit en face de toi sans demander, comme si elle avait su que tu serais là. Évidemment qu'elle le savait.
+ayla (content): Je prends la même chose que toi. Je l'ai vu.
+* Partager ton chocolat en attendant le sien. #romance
+  ~ rel.ayla += 5; stat.moral += 3
+* Lui demander ce qu'elle a vu d'autre. #curiosite
+  ayla (rire): Que tu allais me poser cette question. Et que j'allais rire.
+  ~ rel.ayla += 3; var.visions += 1

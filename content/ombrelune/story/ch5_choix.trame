@@ -1,0 +1,506 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CINQUIÈME ANNÉE — LE CHOIX (15 ans)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch5_rentree
+titre: La dernière rentrée
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 1
+unique: oui
+priorite: 20
+---
+!lieu grand_hall 300 soir
+!placer halloran 420 gauche
+> La moitié des chaises sont vides. Des familles ont retiré leurs enfants. Les bougies sous la voûte vacillent comme si elles avaient peur.
+halloran (triste): Ombrelune a connu des jours plus sombres. Elle s'en est toujours relevée. Elle s'en relèvera encore.
+> Sa voix ne porte plus jusqu'au fond du hall. Il s'appuie sur la table pour ne pas tomber.
+si var.noe_perdu
+  > À côté de toi, la place de Noé est vide. Quelqu'un y a posé une bougie.
+  ~ stat.moral -= 6
+~ objectif("maitrise", "Réussir les Épreuves de Maîtrise")
+
+=== ch5_ultimatum
+titre: L'ultimatum
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 2 et (var.grimoire_trouve ou var.heritier)
+unique: oui
+priorite: 12
+---
+!lieu dortoir 180 nuit
+!entrer malrik droite 260
+> Tu ouvres les yeux. Il est assis au bord de ton lit. Pâle, jeune, presque doux.
+malrik: N'aie pas peur. Ce n'est qu'un rêve. Un rêve où l'on peut enfin se parler franchement.
+si var.heritier
+  malrik (triste): Tu as les yeux d'Ilyana. Ma sœur. Tu le savais ? Toi et moi, nous sommes la même famille.
+malrik: Le sceau tombera à la fin de l'année. Avec ou sans toi. Mais avec toi, personne n'a besoin de souffrir.
+malrik (content): Rejoins-moi, et je te donnerai tout. Le savoir que les vieux fous t'ont caché. La force. Et la sécurité pour ceux que tu aimes.
+si var.couple
+  malrik: Ayla, par exemple. Ses visions la tuent à petit feu. Moi, je peux les faire taire.
+* J'accepte. #ombre
+  ~ var.disciple = vrai; var.pacte = vrai; stat.ombre += 15; stat.puissance += 10; rel.malrik += 20
+  ~ souvenir(malrik, ultimatum, "Tu as accepté de le rejoindre")
+  malrik (fier): Enfin. Enfin, quelqu'un qui comprend.
+* Ma famille, c'est Noé, Ayla, Gaspard… pas toi. #lumiere
+  ~ stat.ombre -= 10; stat.courage += 5; rel.malrik -= 20
+  ~ souvenir(malrik, rejet, "Tu l'as rejeté au nom de tes amis")
+  malrik (colere): Alors regarde-les mourir.
+* Je dois réfléchir. #prudence
+  malrik: Réfléchis. Mais le temps, lui, ne réfléchit pas.
+  ~ stat.moral -= 4
+!sortir malrik droite
+
+=== ch5_offre_varn
+titre: La proposition de Maîtresse Varn
+declencheur: talk:varn
+chapitres: ch5
+quand: stat.potions >= 45 et rel.varn >= 15
+unique: oui
+priorite: 8
+---
+varn: J'ai une question, et je ne la poserai qu'une fois. Après tes études, resterais-tu ici ? Comme mon apprenti ?
+varn (pensif): Je ne suis pas éternelle. Il faudra quelqu'un pour apprendre aux enfants à ne pas s'empoisonner.
+* Ce serait un honneur. #etude
+  ~ var.offre_prof = vrai; rel.varn += 15
+  ~ souvenir(varn, apprenti, "Tu as accepté de devenir son apprenti")
+  varn (content): …Bien. N'en parlez à personne. J'ai une réputation de femme sans cœur à tenir.
+* J'ai d'autres projets. Mais merci. #independance
+  ~ rel.varn += 3
+  varn: Évidemment. Les meilleurs partent toujours.
+
+=== ch5_offre_gaspard
+titre: Le successeur
+declencheur: talk:gaspard
+chapitres: ch5
+quand: rel.gaspard >= 40 et stat.creatures >= 45
+unique: oui
+priorite: 8
+---
+gaspard (pensif): Mes genoux ne suivent plus. Les bêtes ont besoin de quelqu'un de jeune. Quelqu'un qu'elles aiment.
+gaspard: La cabane, la forêt, le Cerf… Ça pourrait être à toi. Si tu veux.
+* Oui. Rien ne me rendrait plus heureux. #creature
+  ~ var.offre_gardien = vrai; rel.gaspard += 15
+  ~ souvenir(gaspard, successeur, "Tu as accepté de devenir le prochain gardien")
+  gaspard (emu): …Les bêtes vont être contentes. Moi aussi. Un peu.
+* Je ne sais pas encore, Gaspard. #prudence
+  gaspard: Prends ton temps. La forêt attendra. Elle a l'habitude.
+
+=== ch5_offre_explorateur
+titre: Une lettre de très loin
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine >= 2 et stat.courage >= 55 et stat.creatures >= 30
+unique: oui
+priorite: 7
+---
+> Une lettre arrive par un oiseau que tu n'as jamais vu : plumes bleues, bec doré.
+> « La Guilde des Arpenteurs cherche de jeunes mages courageux pour cartographier les terres sauvages du Nord : dragons de glace, forêts qui marchent, cités englouties. Ton nom nous a été donné par un certain Gaspard Hulin. »
+* Accepter l'invitation pour après le diplôme. #aventure
+  ~ var.offre_explorer = vrai; stat.moral += 6
+* Ranger la lettre dans ta malle. On verra. #prudence
+  ~ stat.moral += 2
+
+=== ch5_doute
+titre: Tout arrêter
+declencheur: tick_end
+chapitres: ch5
+quand: stat.moral <= 45 ou (var.noe_perdu et stat.ombre >= 30) ou (rel.claire >= 65 et temps.semaine >= 3)
+unique: oui
+priorite: 7
+---
+> Tu regardes ta baguette, posée sur la table de nuit. Quatre années. Des amis perdus. Une voix dans ta tête qui ne se tait jamais.
+> Tu penses à ta mère. À la maison. À une vie sans magie, sans grimoire, sans ombre.
+* Je vais finir ce que j'ai commencé. #courage
+  ~ stat.moral += 6; stat.courage += 3
+* Après le diplôme, je rends ma baguette. Pour toujours. #renoncement
+  ~ var.renonce = vrai; stat.ombre -= 10
+  ~ souvenir(claire, retour, "Tu lui as écrit que tu allais peut-être rentrer pour de bon")
+  ~ rel.claire += 8
+* [var.couple] (Aller trouver Ayla) #romance
+  !lieu tour_ouest 180 nuit
+  !placer ayla 240 gauche
+  ayla: Tu as cette tête-là. La tête de quelqu'un qui veut tout abandonner.
+  ayla (content): Pas maintenant. Pas si près de la fin. Je l'ai vu : on y arrive.
+  ~ stat.moral += 12; rel.ayla += 6
+
+=== ch5_noe_retour
+titre: Noé
+declencheur: tick_start
+chapitres: ch5
+quand: var.noe_perdu et temps.semaine >= 3
+unique: oui
+priorite: 11
+---
+!lieu foret 400 nuit
+!placer noe 460 gauche
+> Il t'a donné rendez-vous dans la clairière par un mot glissé sous ta porte. Il porte une robe noire. Ses yeux sont cernés de violet.
+noe (triste): Je ne devrais pas être là. S'ils savent que je t'ai parlé…
+noe: Le rituel, c'est la dernière nuit de l'année. Ils vont utiliser ton sang. Ou celui de quelqu'un d'autre. Je ne sais pas.
+* Reviens, Noé. Personne ne t'en voudra. Moi, en tout cas. #loyal
+  test rel.noe + (mem.noe.revisions ? 15 : 0) + (mem.noe.sauve_foret ? 15 : 0) + (mem.noe.defendu ? 10 : 0) vs 45
+  si reussite
+    noe (emu): …Tu te souviens de la barque, la première nuit ? Tu m'as dit qu'on n'avait qu'à rester ensemble.
+    > Il arrache sa robe noire et la jette dans la brume.
+    ~ var.noe_perdu = faux; var.noe_sauve = vrai; rel.noe += 20
+    ~ souvenir(noe, retour, "Tu l'as ramené de chez les disciples")
+    !rappel noe.quai
+  sinon
+    noe (triste): Je ne peux pas. Pas maintenant. Il m'a donné quelque chose… je ne sais pas vivre sans.
+    > Il disparaît entre les arbres. Mais il t'a dit l'essentiel.
+    ~ var.infos_rituel = vrai
+* Pourquoi tu me préviens ? #ruse
+  noe: Parce que… parce que tu es mon ami. Même maintenant.
+  ~ var.infos_rituel = vrai; rel.noe += 6
+* [var.disciple] Bienvenue chez les nôtres, Noé. #ombre
+  noe (triste): …Oh. Toi aussi. Alors il n'y a plus personne.
+  ~ rel.noe -= 10; stat.ombre += 4
+
+=== ch5_examens
+titre: Les Épreuves de Maîtrise
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 3
+unique: oui
+priorite: 10
+---
+!lieu grand_hall 300 jour
+> Les Épreuves de Maîtrise. Cinq années résumées en trois jours. Devant un jury de mages venus de tout le pays.
+~ var.note_maitrise = (stat.sortileges + stat.potions + stat.savoir + stat.duel) / 4 + stat.discipline / 8 + var.points_classe / 4
+si var.points_classe >= 20
+  > Tes professeurs ont glissé un mot au jury : cinq années de travail sérieux en classe. Ça compte.
+* (Commencer par l'épreuve pratique de sortilèges) #duel
+  test stat.sortileges + stat.puissance / 3 vs 55
+  si reussite
+    !fx magie moi
+    > Ta démonstration laisse le jury muet. Puis l'un d'eux applaudit, seul, dans le silence.
+    ~ var.note_maitrise += 8; stat.reputation += 6
+  sinon
+    > Un sort de trop. La fumée envahit la salle. Le jury tousse et note quelque chose.
+    ~ var.note_maitrise -= 4
+* (Commencer par l'épreuve écrite) #etude
+  test stat.savoir vs 55
+  si reussite
+    > Tu remplis douze parchemins. Le dernier, tu l'écris en runes anciennes, juste pour le plaisir.
+    ~ var.note_maitrise += 8; stat.reputation += 4
+  sinon
+    > La troisième question te laisse sans voix. Tu la laisses vide.
+    ~ var.note_maitrise -= 4
+si var.note_maitrise >= 55
+  > Résultat : Maîtrise avec les honneurs. Le diplôme d'or.
+  ~ var.mention_or = vrai; stat.reputation += 10
+  ~ objectifReussi("maitrise")
+sinon si var.note_maitrise >= 35
+  > Résultat : Maîtrise obtenue.
+  ~ objectifReussi("maitrise")
+sinon
+  > Résultat : Maîtrise refusée. Tu pourras repasser les épreuves l'an prochain.
+  ~ objectifEchoue("maitrise"); stat.moral -= 8
+
+=== ch5_halloran_adieu
+titre: L'adieu de l'Archimage
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 4
+unique: oui
+priorite: 12
+---
+!lieu bureau_archimage 120 nuit
+!placer halloran 250 gauche
+> L'Archimage t'a fait appeler en pleine nuit. Il est assis près du feu, une couverture sur les genoux. Il paraît mille ans.
+halloran (triste): Je n'irai pas jusqu'à la fin de l'année, {joueur.nom}. Le sceau m'a pris tout ce qui me restait.
+si rel.halloran >= 20
+  halloran (content): Je voulais te dire… Le soir de ton arrivée, j'ai eu peur de toi. Aujourd'hui, je suis fier de toi.
+  ~ stat.moral += 6
+halloran: Quand je ne serai plus là, le sceau se brisera. Il faudra être au cercle de pierres. Tu sauras quoi faire. Ou tu ne sauras pas, et tu feras quand même.
+* Je serai là. #lumiere
+  ~ rel.halloran += 10; stat.courage += 4
+* J'ai peur. #honnete
+  halloran: Bien. Ceux qui n'ont pas peur sont les premiers à mourir. Garde ta peur. Elle est précieuse.
+  ~ rel.halloran += 6
+> Trois jours plus tard, la flamme d'Éveil du grand hall s'éteint. Ombrelune n'a plus d'Archimage.
+~ var.halloran_parti = vrai
+!rappel halloran.confiance_voix
+
+=== ch5_allies
+titre: Rassembler ceux qui restent
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 4
+unique: oui
+priorite: 11
+---
+!lieu salle_commune 200 nuit
+> Tu réunis tous ceux qui voudront bien venir. Le rituel aura lieu demain soir, au cercle de pierres.
+~ var.allies = 0
+si var.noe_sauve et non var.noe_perdu
+  !placer noe 120 droite
+  noe: Je viens. J'ai une dette, et je veux la payer.
+  ~ var.allies += 1
+si var.sera_alliee
+  !placer sera 300 gauche
+  sera (fier): Les Valcourt n'ont jamais fui un combat. Enfin, moi non.
+  ~ var.allies += 1
+si var.couple ou rel.ayla >= 40
+  !placer ayla 250 gauche
+  ayla: Je l'ai vu cent fois. Cette fois, je veux voir la fin.
+  ~ var.allies += 1
+si var.lia_sauvee et rel.lia >= 30
+  !placer lia 80 droite
+  lia: Je suis petite, mais je connais toutes les plantes qui font tomber les gens. Je viens.
+  ~ var.allies += 1
+si rel.gaspard >= 30
+  ~ var.allies += 1
+  > Gaspard viendra aussi, avec les bêtes de la forêt.
+si rel.brax >= 30
+  ~ var.allies += 1
+  > Brax, à peine remis, a déjà sa baguette à la main.
+si var.daval_sait
+  ~ var.allies += 1
+  > Même Daval a promis d'envoyer ses gardes.
+si var.allies == 0
+  > Personne ne vient. Tu iras seul.
+  ~ stat.moral -= 10
+sinon
+  > {var.allies} allié(s). Ce sera peut-être assez.
+
+=== ch5_main_tendue
+titre: La main tendue
+declencheur: tick_end
+chapitres: ch5
+quand: var.disciple et temps.semaine >= 2 et (var.couple ou (rel.noe >= 40 et non var.noe_perdu) ou rel.selene >= 30 ou rel.claire >= 50)
+unique: oui
+priorite: 8
+---
+si var.couple
+  !lieu tour_ouest 180 nuit
+  !placer ayla 240 gauche
+  ayla (triste): Tes yeux. Ils deviennent violets quand tu crois que personne ne regarde. Je l'ai vu en rêve, et maintenant je le vois en vrai.
+  ayla: Je ne te demande pas de m'expliquer. Je te demande de revenir.
+sinon si rel.noe >= 40 et non var.noe_perdu
+  !lieu salle_commune 200 nuit
+  !placer noe 260 gauche
+  noe (inquiet): Je t'ai suivi, l'autre nuit. Jusqu'à la tapisserie. J'ai entendu ce qu'ils disaient. Ce que TU disais.
+  noe (triste): T'es mon meilleur ami. Alors je te le dis comme un meilleur ami : arrête. S'il te plaît.
+sinon si rel.selene >= 30
+  !lieu tour_ouest 180 nuit
+  !placer selene 240 gauche
+  selene (inquiet): Mon petit astre… Ta lumière s'éteint. Je la vois baisser chaque jour, comme une bougie sous une cloche.
+  selene: Il n'est pas trop tard. Il n'est jamais trop tard, tant qu'on choisit encore.
+sinon
+  !lieu dortoir 180 nuit
+  > Une lettre de ta mère, arrivée ce soir. Une seule phrase, soulignée deux fois : « Je ne sais pas ce qui se passe, mais je sens que tu t'éloignes. Reviens-nous. »
+* Rompre le pacte avec Malrik. Maintenant. #lumiere
+  !fx magie moi
+  > Tu brûles le pacte dans ta tête comme on brûle une lettre. Ça fait mal. Horriblement mal. Une partie de ta force s'en va avec lui.
+  ~ var.disciple = faux; var.pacte = faux; stat.ombre -= 25; stat.puissance -= 8; stat.moral -= 4; rel.malrik -= 30
+  ~ souvenir(malrik, rupture, "Tu as rompu ton pacte avec lui")
+  [var.couple] ~ rel.ayla += 10
+  [rel.noe >= 40] ~ rel.noe += 10
+  malrik (colere): Tu le regretteras. Le soir du cercle, tu le regretteras.
+* Tu ne comprends pas. Il va nous rendre plus forts. #ombre
+  ~ stat.ombre += 6
+  [var.couple] ~ rel.ayla -= 15
+  [rel.noe >= 40] ~ rel.noe -= 15
+  > Le silence qui suit est le plus long de ta vie.
+
+=== ch5_nuit_finale
+titre: La nuit du cercle
+declencheur: tick_start
+chapitres: ch5
+quand: temps.semaine == 5
+unique: oui
+priorite: 50
+---
+!lieu foret 480 nuit
+!moment nuit
+> La dernière nuit. Le cercle de pierres brûle d'une lumière violette. Douze disciples en robe noire chantent autour du grimoire, posé sur la pierre centrale.
+!placer orin 520 gauche
+orin (fier): Tu es venu ! Évidemment que tu es venu. Il savait que tu viendrais.
+si var.noe_perdu
+  > Parmi les disciples, une silhouette rousse qui tremble. Noé.
+!fx eclair
+!entrer malrik droite 560
+> Au-dessus du grimoire, une forme se dresse. Malrik. Plus réel que jamais. Presque vivant.
+malrik: Le sceau est brisé. Il ne me manque qu'un souffle. Le tien, ou celui de n'importe qui dans ce cercle.
+~ var.nb_ingredients = (var.larme_ok ? 1 : 0) + (var.plume_ok ? 1 : 0) + (var.rune_ok ? 1 : 0)
+~ var.issue_bonus = var.allies >= 2 ? var.allies * 5 : (var.allies == 1 ? 5 : 0)
+si var.disciple
+  -> disciple
+si var.allies >= 2
+  > Derrière toi, des pas. Tes alliés sortent de la brume, baguettes levées. Les disciples hésitent.
+sinon si var.allies == 1
+  > Une seule personne t'a suivi. Elle se place dos à dos avec toi.
+sinon
+  > Tu es seul face au cercle.
+-> combat
+
+@combat
+> Les disciples attaquent. Des traits de ténèbres zèbrent la clairière.
+* (Te battre pour atteindre le grimoire) #duel
+  test stat.duel + stat.courage / 3 + var.issue_bonus vs 50
+  si reussite
+    !fx sort moi orin
+    > Tu fends leurs rangs. Orin se dresse devant toi. Un échange, deux, trois… Il tombe à genoux.
+    ~ var.orin_vaincu = vrai; stat.duel += 4; var.issue_bonus += 6
+  sinon
+    !fx sort orin moi
+    > Orin te projette contre une pierre. Le souffle coupé, tu te relèves quand même. Le grimoire est à trois pas.
+    ~ stat.energie -= 40
+* [var.parade_miroir] (Parade miroir contre le sort d'Orin) #duel
+  !fx sort orin moi
+  > Le sort d'Orin lui revient en pleine poitrine. Il s'effondre, inconscient.
+  ~ var.orin_vaincu = vrai; var.issue_bonus += 6
+* (Protéger tes alliés plutôt que foncer) #genereux
+  ~ var.protege = vrai; stat.courage += 3; var.issue_bonus += var.allies * 2
+  > Tu tiens la ligne. Personne ne tombe de ton côté. Mais Malrik grandit, nourri par le chant.
+* [var.familier] (Appeler {var.familier_nom}) #creature
+  > Une petite boule de lumière jaillit des fourrés et fonce dans les jambes des disciples. Le chant se brise une seconde. Une seconde, c'est assez.
+  ~ var.issue_bonus += 5; stat.creatures += 2
+-> sceau
+
+@sceau
+malrik (colere): Assez !
+> Le grimoire s'ouvre en grand. Le vent tourne autour du cercle. C'est maintenant ou jamais.
+* [var.mission ou var.sceau_connu ou var.infos_rituel ou var.runes_lues] Accomplir le rituel du sceau. #lumiere
+  si var.nb_ingredients == 3
+    > La Larme de Lune, la plume d'argent, la rune du sceau. Tout est là, dans tes mains.
+  sinon si var.nb_ingredients >= 1
+    > Il te manque des ingrédients. Ta propre magie devra combler le vide.
+  sinon
+    > Tu n'as ni Larme, ni plume, ni rune. Seulement ce que tu as appris. Il faudra que ce soit assez.
+  !fx magie moi
+  test stat.savoir + stat.puissance / 2 + var.issue_bonus + var.nb_ingredients * 12 vs 85
+  si reussite
+    !fx eclair
+    > Tu traces la rune dans l'air, et le monde devient blanc.
+    malrik (triste): Ilyana… pardon…
+    > Le grimoire se referme. Pour toujours. Le silence tombe sur la forêt.
+    ~ var.issue = "scelle"; stat.ombre = 0; stat.reputation += 20
+  sinon
+    > La rune vacille. Le sceau ne prend pas. Malrik éclate de rire.
+    -> dernier_recours
+* [var.heritier] Offrir ton propre sang au cercle pour le sceller à jamais. #sacrifice
+  -> sacrifice
+* Détruire le grimoire par la force. #courage
+  test stat.puissance + stat.duel / 2 + var.issue_bonus vs 70
+  si reussite
+    !fx eclair
+    !fx tremblement
+    > Ton sort frappe le grimoire de plein fouet. Les pages s'embrasent une à une, et le cri de Malrik se perd dans les flammes.
+    ~ var.issue = "detruit"; stat.reputation += 15; stat.ombre += 5
+  sinon
+    > Le grimoire absorbe ton sort comme une éponge. Malrik grandit encore.
+    -> dernier_recours
+* [stat.ombre >= 50] Rejoindre Malrik. Maintenant. #ombre
+  -> disciple
+-> epilogue
+
+@dernier_recours
+> Le vent hurle. Malrik commence à sortir du cercle, une main après l'autre, comme on sort d'un puits.
+* [var.heritier] Offrir ton sang. Il n'y a plus d'autre choix. #sacrifice
+  -> sacrifice
+* [var.couple ou rel.ayla >= 50] (Prendre la main d'Ayla) #romance
+  !placer ayla 440 droite
+  > Ayla ferme les yeux. Elle voit ce qui va se passer, et elle le change. Votre magie se mêle, et le sceau prend.
+  ~ var.issue = "scelle"; rel.ayla += 10; stat.reputation += 15
+* [var.noe_sauve et rel.noe >= 60] (Appeler Noé) #loyal
+  !placer noe 440 droite
+  > Noé entre dans le cercle à côté de toi. Il tremble de la tête aux pieds. Il pose sa main sur la tienne.
+  noe: Ensemble. On avait dit ensemble.
+  test stat.courage + rel.noe / 3 + var.issue_bonus vs 80
+  si reussite
+    > Deux magies, une seule voix. Le chant des disciples se brise. Le sceau prend.
+    ~ var.issue = "scelle"; rel.noe += 10; stat.reputation += 12
+  sinon
+    > Ce n'est pas assez. Noé est projeté hors du cercle. Malrik rit, plus fort que jamais.
+    ~ var.issue = "echec"; var.noe_blesse = vrai
+* (Tenir jusqu'au bout, malgré tout) #courage
+  test stat.courage + stat.puissance / 2 + var.issue_bonus vs 74
+  si reussite
+    > Tu tiens. Une seconde, dix, cent. Le chant des disciples se brise. Malrik se dissout, faute de souffle.
+    ~ var.issue = "scelle"; stat.reputation += 12
+  sinon
+    > Tu tombes à genoux. Malrik sort du cercle. Le château, au loin, commence à brûler.
+    ~ var.issue = "echec"
+* (Fuir) #peur
+  ~ var.issue = "fuite"
+  > Tu cours. Derrière toi, la clairière s'embrase de violet. Tu ne te retournes pas.
+-> epilogue
+
+@sacrifice
+> Tu entres dans le cercle. Tu poses ta main ouverte sur le grimoire. « Par le sang de son sang. »
+malrik (inquiet): Non… Non, tu ne comprends pas, tu vas…
+!fx eclair
+> La lumière qui sort de toi est blanche, immense, douce. Malrik hurle, puis se tait. Le grimoire tombe en poussière.
+~ var.issue = "sacrifice"
+-> epilogue
+
+@disciple
+malrik (fier): Mon héritier. Mon élève. Viens.
+> Tu t'avances vers le grimoire, et tu sens la voix de Malrik se glisser en toi comme dans un manteau trop longtemps vide.
+* (Accepter tout. Son savoir, sa force, sa mémoire.) #ombre
+  ~ var.issue = "ombre"; stat.ombre = 100; stat.puissance += 30
+  !fx eclair
+  > Quand tu rouvres les yeux, ils sont violets. Les disciples s'agenouillent. Orin sourit.
+* (Au dernier instant, retourner sa propre force contre lui) #ruse
+  test stat.ruse + stat.puissance / 2 vs 60
+  si reussite
+    > Il ne s'y attendait pas. Personne ne s'y attendait. Tu le refermes sur lui-même, comme une main qui se ferme sur une bougie.
+    ~ var.issue = "scelle"; stat.ombre -= 40; stat.reputation += 15
+  sinon
+    > Il rit. Il savait. Il a toujours su.
+    ~ var.issue = "ombre"; stat.ombre = 100
+* [var.couple ou var.noe_sauve ou rel.claire >= 50] (Penser à ceux que tu aimes) #lumiere
+  si var.couple
+    > Une voix perce le chant des disciples. Celle d'Ayla, quelque part dans la brume : « Je l'ai vu. Tu reviens. Tu reviens toujours. »
+  sinon si var.noe_sauve
+    > Une voix perce le chant des disciples. Celle de Noé : « Hé ! Le fils du boulanger a besoin de toi ! Reviens ! »
+  sinon
+    > Une odeur de pain chaud et de lavande traverse la fumée. Ta mère. La maison.
+  > La voix de Malrik se déchire comme un vieux drap. Tu recules hors du cercle, le souffle court. Tu es toi. Seulement toi.
+  ~ var.disciple = faux; stat.ombre -= 30; rel.malrik -= 30
+  malrik (colere): Traître !
+  -> sceau
+-> epilogue
+
+@epilogue
+si var.issue == "scelle" ou var.issue == "detruit"
+  > À l'aube, les disciples sont désarmés, Orin enchaîné, la forêt silencieuse. Les oiseaux recommencent à chanter.
+  si var.noe_perdu
+    > Noé est assis parmi les disciples, la tête dans les mains. Il pleure. Tu t'assois à côté de lui.
+    ~ var.noe_perdu = faux; var.noe_sauve = vrai
+sinon si var.issue == "sacrifice"
+  > Au matin, on te retrouve au centre du cercle, endormi, plus pâle qu'avant. Vivant. Mais quelque chose en toi s'est éteint.
+sinon si var.issue == "fuite" ou var.issue == "echec"
+  > Cette nuit-là, Ombrelune brûle.
+sinon si var.issue == "ombre"
+  > À l'aube, la forêt est silencieuse. Les oiseaux ne reviendront pas avant longtemps.
+
+=== ch5_diplome
+titre: La remise des diplômes
+declencheur: chapter_end
+chapitres: ch5
+unique: oui
+priorite: 100
+---
+!lieu cour 300 jour
+> La remise des diplômes a lieu dans la cour, comme le veut la tradition.
+si var.issue == "fuite" ou var.issue == "echec"
+  > Ou ce qu'il en reste. Les tours sont noircies, les vitraux brisés. Il n'y a ni musique, ni discours.
+sinon si var.issue == "ombre"
+  > Personne n'ose te regarder en face. On t'appelle déjà autrement.
+sinon
+  > Les vitraux brillent au soleil. Il y a de la musique, des rires, des familles venues de partout.
+  si var.mention_or
+    > Ton nom est appelé en premier. Diplôme d'or.
+  si var.noe_sauve
+    !placer noe 250 droite
+    noe (content): On l'a fait. On l'a vraiment fait. Le fils du boulanger a son diplôme !
+!placer claire 350 gauche
+si rel.claire >= 40
+  claire (emu): Mon trésor…
+  > Ta mère est venue. Elle ne comprend rien à la magie, mais elle te serre si fort que tu en perds ton chapeau.
+sinon
+  claire: Félicitations.
+  > Ta mère est venue. Vous vous serrez la main, un peu gênés. Cinq ans de lettres trop courtes.

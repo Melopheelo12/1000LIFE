@@ -1,0 +1,330 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  LES COURS — chaque fin de semaine (semaines 1 à 4), une scène de classe
+//  tirée au hasard dans la réserve « cours ». Les points gagnés en classe
+//  comptent pour les Épreuves de Maîtrise de cinquième année.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== cours_semaine
+titre: Les cours de la semaine
+declencheur: tick_end
+quand: temps.semaine <= 4
+recharge: 1
+priorite: 40
+---
+tirer cours 1
+
+=== cl_flamme_froide
+titre: Cours de sortilèges : la flamme froide
+declencheur: pool:cours
+chapitres: ch1, ch2
+recharge: 6
+---
+!lieu classe_sorts 160 jour
+!placer selene 300 gauche
+selene (content): Aujourd'hui, mes petits astres : une flamme qui ne brûle pas. Dans une bulle de verre. Sans casser la bulle, de préférence.
+* Te concentrer, seul, jusqu'à y arriver. #etude
+  test stat.sortileges + stat.puissance / 3 vs 22 + temps.chapitre * 6
+  si reussite
+    > Une petite flamme bleue danse dans ta bulle. Elle est froide comme un glaçon.
+    ~ stat.sortileges += 2; var.points_classe += 2; rel.selene += 2
+  sinon
+    > Ta bulle explose dans un nuage de suie. Sélène te tend un mouchoir sans un mot.
+    ~ stat.sortileges += 1; var.points_classe -= 1
+* [non var.noe_perdu] Aider Noé, dont la bulle fume déjà. #loyal
+  !placer noe 210 droite
+  noe (inquiet): Elle va exploser, hein ? Elle va exploser.
+  test stat.sortileges + 8 vs 24 + temps.chapitre * 6
+  si reussite
+    > Tu guides sa baguette. Deux flammes bleues s'allument côte à côte.
+    ~ rel.noe += 5; var.points_classe += 1; stat.sortileges += 1
+  sinon
+    > Les deux bulles explosent en même temps. Vous avez de la suie jusqu'aux oreilles, et un fou rire inarrêtable.
+    ~ rel.noe += 4; stat.moral += 3
+* Faire le malin : une flamme géante pour impressionner la classe. #provocation
+  test stat.puissance vs 30 + temps.chapitre * 5
+  si reussite
+    !fx magie moi
+    > Une colonne de flamme glacée monte jusqu'au plafond. Toute la classe applaudit. Sélène, un peu moins.
+    ~ stat.reputation += 4; stat.discipline -= 3; var.points_classe += 1
+  sinon
+    > Le plafond est maintenant couvert de givre. Et de suie. Et d'un peu de ta fierté.
+    ~ stat.discipline -= 5; var.points_classe -= 2; stat.moral -= 2
+
+=== cl_potion_sommeil
+titre: Cours de potions : la potion de sommeil
+declencheur: pool:cours
+recharge: 6
+---
+!lieu cachot_potions 120 jour
+!placer varn 300 gauche
+varn: Potion de sommeil. Par deux. Si votre binôme s'endort sur sa paillasse, c'est réussi. S'il ne se réveille pas, c'est raté.
+* [non var.noe_perdu] Te mettre avec Noé. #loyal
+  ~ var.bonus_cours = 0; rel.noe += 2
+  noe (inquiet): Je coupe, tu touilles ? Ou je touille et tu coupes ? Je ne sais jamais.
+* Te mettre avec Séraphine, la meilleure de la classe. #ambition
+  ~ var.bonus_cours = 8; rel.sera += 2
+  sera (fier): Ne touche à rien. Regarde, et prends des notes.
+* Travailler seul, dans ton coin. #etude
+  ~ var.bonus_cours = 3
+test stat.potions + var.bonus_cours vs 26 + temps.chapitre * 6
+si reussite
+  > La potion prend une couleur de nuit d'été. Une seule goutte, et la souris de test ronfle comme un ours.
+  ~ stat.potions += 2; var.points_classe += 2; rel.varn += 2
+  varn: Acceptable.
+sinon
+  > La potion tourne au gris. La souris de test se met à danser. Elle danse encore à la fin du cours.
+  ~ stat.potions += 1; var.points_classe -= 1
+  varn (colere): Recommencez chez vous. Deux fois.
+
+=== cl_griffon_blesse
+titre: Cours de créatures : l'aile blessée
+declencheur: pool:cours
+recharge: 6
+---
+!lieu cabane 200 jour
+!placer gaspard 140 droite
+gaspard (inquiet): Un jeune griffon s'est pris l'aile dans un filet de braconnier. Il a peur, et il a un bec qui coupe le fer. Qui veut essayer ?
+* (Lever la main et t'approcher doucement, à genoux) #creature
+  test stat.creatures + stat.courage / 4 vs 24 + temps.chapitre * 6
+  si reussite
+    > Le griffon te laisse approcher. Tu défais le filet, fil par fil. Il pose sa tête contre ton épaule.
+    ~ stat.creatures += 3; rel.gaspard += 4; var.points_classe += 2
+  sinon
+    > Un coup de bec, un seul, et ta manche est en lambeaux. Gaspard prend le relais.
+    ~ stat.creatures += 1; stat.energie -= 8
+* Proposer un sort d'apaisement plutôt que les mains. #etude
+  test stat.sortileges vs 26 + temps.chapitre * 6
+  si reussite
+    > Le griffon s'endort comme un chaton. Gaspard hoche la tête, approbateur.
+    ~ stat.sortileges += 1; stat.creatures += 1; var.points_classe += 1
+  sinon
+    > Le sort rate. Le griffon s'enfuit avec le filet. Il faudra le retrouver.
+    ~ rel.gaspard -= 1
+* Rester au fond, prudemment. #prudence
+  > Tu regardes Gaspard faire. C'est déjà une leçon, en soi.
+  ~ stat.creatures += 1
+
+=== cl_etoiles
+titre: Cours d'astronomie : la constellation du Lièvre
+declencheur: pool:cours
+chapitres: ch2, ch3, ch4, ch5
+recharge: 6
+---
+!lieu tour_ouest 160 nuit
+!placer selene 280 gauche
+selene: Ce soir, la constellation du Lièvre. Dessinez-la, et dites-moi ce qu'elle annonce. Tout le monde voit le lièvre. Les meilleurs voient ce qu'il fuit.
+* [rel.ayla >= 10] T'asseoir à côté d'Ayla. #romance
+  !placer ayla 220 droite
+  ayla (content): Il ne fuit rien. Il court vers quelque chose. Regarde ses oreilles.
+  ~ rel.ayla += 4; var.bonus_cours = 10
+* Observer seul, longtemps, sans rien dessiner. #patience
+  ~ var.bonus_cours = 5
+* Recopier la carte du manuel. Personne ne verra la différence. #ruse
+  ~ var.bonus_cours = 0; stat.discipline -= 2
+test stat.savoir + var.bonus_cours vs 28 + temps.chapitre * 5
+si reussite
+  > Ton dessin est juste. Et dans un coin, tu as noté une étoile que personne n'a vue. Sélène la regarde longtemps.
+  ~ stat.savoir += 2; var.visions += 1; var.points_classe += 2; rel.selene += 2
+sinon
+  > Ton lièvre ressemble à une théière. Sélène dit que c'est « une interprétation audacieuse ».
+  ~ stat.savoir += 1; var.points_classe -= 1
+
+=== cl_duel_classe
+titre: Cours de duel : en piste
+declencheur: pool:cours
+recharge: 5
+---
+!lieu arene 220 jour
+!placer brax 430 gauche
+brax: En piste, par deux. Pas de sorts interdits, pas de pleurs, pas de mordre. Oui, Wren, ça vaut pour toi.
+si chapitre == ch1 ou chapitre == ch2
+  !placer tobias 330 gauche
+  > Ton adversaire : Tobias Wren, qui fait déjà craquer ses doigts.
+sinon
+  !placer sera 330 gauche
+  > Ton adversaire : Séraphine de Valcourt. La classe entière retient son souffle.
+* Attaquer d'entrée, fort. #courage
+  ~ var.bonus_cours = stat.puissance / 4
+* Défendre et attendre l'erreur. #prudence
+  ~ var.bonus_cours = stat.ruse / 4
+* Écouter le conseil de Brax : les pieds d'abord. #etude
+  ~ var.bonus_cours = 6
+test stat.duel + var.bonus_cours vs 25 + temps.chapitre * 6
+si reussite
+  !fx sort moi
+  > Ton adversaire finit assis dans le sable, baguette envolée. Brax lève un pouce, sans rien dire.
+  ~ stat.duel += 2; var.duel_victoires += 1; var.points_classe += 2; rel.brax += 2
+  [chapitre != ch1 et chapitre != ch2] ~ rel.sera += 2
+sinon
+  > Tu te retrouves le nez dans le sable. Brax t'aide à te relever : « Les pieds, je t'avais dit. »
+  ~ stat.duel += 1; var.duel_defaites += 1; stat.moral -= 2
+
+=== cl_histoire
+titre: Cours d'histoire de la magie
+declencheur: pool:cours
+recharge: 6
+---
+!lieu bibliotheque 160 jour
+> Le cours d'histoire de la magie est donné par Sire Bertold, un fantôme en collerette qui enseigne ici depuis trois cents ans. Il n'a jamais remarqué qu'il était mort.
+> « … et c'est ainsi que la guerre des Quatre Affinités dura cent onze ans, à cause d'une querelle sur la couleur des nappes… »
+* (Dormir, la tête dans les bras) #repos
+  ~ stat.energie += 10; var.points_classe -= 1
+* (Écouter et prendre des notes) #etude
+  ~ stat.savoir += 2; var.points_classe += 1
+* [chapitre != ch1] Lui poser une question sur l'élève qui a été scellé, autrefois. #curiosite
+  > Le fantôme s'arrête net. Toute la classe se retourne.
+  > « Un sceau de sang, jeune élève. Le sang de sa sœur. On ne l'a jamais refait depuis. On ne devrait jamais avoir à le refaire. »
+  ~ var.sceau_connu = vrai; stat.savoir += 2; var.rumeur_grimoire = vrai
+
+=== cl_runes
+titre: Cours de runes anciennes
+declencheur: pool:cours
+chapitres: ch2, ch3, ch4, ch5
+recharge: 6
+---
+!lieu bibliotheque 200 jour
+!placer pell 330 gauche
+pell: Madame Arkadi est souffrante, c'est donc moi qui vous fais réciter vos runes. Traduisez ce texte. Il parle de serments. Et de ce qu'il en coûte de les briser.
+* Traduire avec soin, rune par rune. #etude
+  ~ var.bonus_cours = 6
+* Deviner le sens général et broder. #ruse
+  ~ var.bonus_cours = 0
+test stat.savoir + var.bonus_cours vs 30 + temps.chapitre * 5
+si reussite
+  > Ta traduction est presque parfaite. Madame Pell la garde, « pour l'archiver ». Tu as l'impression d'avoir compris quelque chose d'important.
+  ~ var.runes_lues = vrai; stat.savoir += 2; var.points_classe += 2; rel.pell += 3
+sinon
+  > Ta traduction parle d'une chèvre amoureuse d'un nuage. Madame Pell soupire très longtemps.
+  ~ stat.savoir += 1; var.points_classe -= 1
+
+=== cl_fleurs_cloches
+titre: Cours de botanique : les fleurs-cloches
+declencheur: pool:cours
+chapitres: ch1, ch2, ch3
+recharge: 6
+---
+!lieu serres 180 jour
+!placer gaspard 300 gauche
+gaspard: Les fleurs-cloches sonnent quand on les arrose trop. Et quand elles sonnent trop, elles mordent. Arrosez juste ce qu'il faut. Ni plus, ni moins.
+* Arroser goutte à goutte, en écoutant. #patience
+  test stat.potions + stat.creatures / 2 vs 22 + temps.chapitre * 6
+  si reussite
+    > Ta fleur tinte doucement, une seule note, claire. Gaspard sourit.
+    ~ stat.potions += 2; var.points_classe += 2
+  sinon
+    > Ta fleur sonne comme un tocsin, puis te mord le pouce. Toute la serre se met à carillonner.
+    ~ stat.potions += 1; stat.energie -= 5; var.points_classe -= 1
+* Copier le dosage de ton voisin. #ruse
+  > Ton voisin a tout faux. Vos deux fleurs vous mordent en même temps.
+  ~ stat.moral -= 2
+* Chanter pour la fleur pendant que tu l'arroses. #humour
+  > Tu ne sais pas si c'est le chant ou l'eau, mais ta fleur se met à sonner en rythme avec toi. Gaspard rit si fort qu'il en pleure.
+  ~ rel.gaspard += 4; stat.moral += 3; var.points_classe += 1
+
+=== cl_metamorphose
+titre: Cours de métamorphose
+declencheur: pool:cours
+recharge: 6
+---
+!lieu classe_sorts 160 jour
+!placer selene 300 gauche
+selene (content): Transformez votre théière en tortue. Une vraie tortue. Pas une tortue avec un bec verseur, monsieur Wren.
+test stat.sortileges + stat.savoir / 3 vs 26 + temps.chapitre * 6
+si reussite
+  > Ta théière se change en une petite tortue à carapace fleurie. Elle te regarde, digne et un peu vexée.
+  ~ stat.sortileges += 2; var.points_classe += 2
+  * Garder la tortue comme mascotte du dortoir. #humour
+    ~ stat.moral += 4
+  * La retransformer pour la rendre. #regle
+    ~ rel.selene += 3; stat.discipline += 2
+sinon
+  > Ta tortue a un bec verseur. Et elle siffle quand elle s'énerve. Sélène la note « intéressante ».
+  ~ stat.sortileges += 1; stat.moral += 1
+
+=== cl_mimeur
+titre: Cours de défense : le Mimeur
+declencheur: pool:cours
+chapitres: ch3, ch4, ch5
+recharge: 6
+---
+!lieu arene 220 jour
+!placer brax 430 gauche
+brax: Un Mimeur. Créature d'ombre. Il copie tout ce que tu fais, en mieux. Pour le battre, il faut faire ce que tu n'as jamais fait.
+> La créature se dresse devant toi : ta silhouette, en noir, sans visage.
+si stat.ombre >= 30
+  > Mais elle ne copie pas tes gestes. Elle copie ce qu'il y a dessous. Elle sourit, avec ta bouche.
+  ~ stat.moral -= 4
+* Faire quelque chose d'absurde : une révérence, un pas de danse. #humour
+  test stat.ruse + stat.courage / 3 vs 30 + temps.chapitre * 5
+  si reussite
+    > Le Mimeur s'embrouille, tente de copier ta révérence, trébuche sur ses propres pieds et se dissout en fumée.
+    ~ stat.ruse += 2; var.points_classe += 2; rel.brax += 3
+  sinon
+    > Il fait la révérence mieux que toi. Puis il te pousse. Brax le renvoie dans sa boîte.
+    ~ stat.moral -= 2
+* Attaquer de toutes tes forces. #courage
+  test stat.duel + stat.puissance / 3 vs 34 + temps.chapitre * 5
+  si reussite
+    !fx sort moi
+    > Ton sort le traverse de part en part. Brax hausse un sourcil : « Brutal. Mais efficace. »
+    ~ stat.duel += 2; var.points_classe += 1
+  sinon
+    !fx sort moi
+    > Il te renvoie ton propre sort, en mieux, exactement comme Brax l'avait dit.
+    ~ stat.energie -= 12
+
+=== cl_projet_groupe
+titre: Travail de groupe
+declencheur: pool:cours
+chapitres: ch2, ch3, ch4
+quand: non var.noe_perdu
+recharge: 7
+---
+!lieu bibliotheque 220 jour
+!placer noe 150 droite
+!placer sera 300 gauche
+> Sélène a formé les groupes au hasard. Le hasard a un sens de l'humour cruel : toi, Noé et Séraphine, sur un exposé de trente parchemins.
+sera: Je rédige. Vous recopiez. C'est plus efficace.
+noe (colere): Et pourquoi c'est toi qui rédiges ?
+sera (fier): Parce que je sais écrire, Lambert.
+* Prendre le parti de Noé. #loyal
+  ~ rel.noe += 4; rel.sera -= 4
+  noe (content): Merci.
+* Donner raison à Séraphine : elle écrit vraiment mieux. #honnete
+  ~ rel.sera += 4; rel.noe -= 3
+  sera (surpris): …Merci. Je crois.
+* Proposer de se partager le travail selon les talents de chacun. #ecoute
+  test stat.ruse + stat.savoir / 3 vs 28 + temps.chapitre * 4
+  si reussite
+    > Séraphine rédige, Noé dessine les schémas, toi tu fais les recherches. Votre exposé est le meilleur de la classe.
+    ~ rel.noe += 3; rel.sera += 4; var.points_classe += 3
+  sinon
+    > Ils se disputent pendant deux heures. Vous rendez dix parchemins, dont trois de disputes.
+    ~ var.points_classe -= 1; stat.moral -= 2
+
+=== cl_examen_blanc
+titre: L'examen blanc
+declencheur: pool:cours
+chapitres: ch4, ch5
+recharge: 6
+---
+!lieu grand_hall 300 jour
+!placer selene 380 gauche
+> Un examen blanc, pour préparer les Épreuves de Maîtrise. Trois heures. Trois sujets. Le grand hall est si silencieux qu'on entend les plumes gratter.
+* Commencer par la théorie. #etude
+  test stat.savoir + stat.discipline / 6 vs 45 + temps.chapitre * 2
+  si reussite
+    > Douze parchemins, sans une rature. Tu sors du hall avec la tête légère.
+    ~ var.points_classe += 3; stat.savoir += 1
+  sinon
+    > Tu bloques sur le deuxième sujet pendant une heure entière.
+    ~ var.points_classe -= 1; stat.moral -= 3
+* Commencer par la pratique. #duel
+  test stat.sortileges + stat.puissance / 4 vs 45 + temps.chapitre * 2
+  si reussite
+    !fx magie moi
+    > Ta démonstration fait lever la tête de toute la salle. Même Sélène arrête d'écrire.
+    ~ var.points_classe += 3; stat.sortileges += 1
+  sinon
+    > Un sort de trop. Un pupitre en moins. Tu nettoies pendant la pause.
+    ~ var.points_classe -= 1; stat.moral -= 3

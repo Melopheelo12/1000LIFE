@@ -4,20 +4,21 @@ Jeu narratif 2D en pixel art où l'on choisit un univers, incarne un personnage 
 
 Le projet est un **moteur** : chaque univers n'est qu'un **fichier de données**, avec des statistiques, des personnages, des lieux et des événements écrits dans le langage de script **Trame**. Un **éditeur intégré** permet de créer, tester, simuler et publier de nouveaux univers sans toucher au code.
 
-L'univers de référence, **« Crampons d'Or »** (football), contient :
+Deux univers complets sont livrés :
 
-| Contenu | Quantité |
-| --- | --- |
-| Événements | 132 |
-| Fins | 13 |
-| Lieux | 21 |
-| Personnages | 17 |
-| Chapitres | 5 |
-| Statistiques | 17 |
-| Activités | 19 |
-| Lignes de script Trame | environ 4 100 |
+| Contenu | « Crampons d'Or » (football) | « Ombrelune » (école de magie) |
+| --- | --- | --- |
+| Événements | 132 | 155 |
+| Fins | 13 | 13 |
+| Lieux | 21 | 18 |
+| Personnages | 17 | 16 |
+| Chapitres | 5 saisons | 5 années |
+| Statistiques | 17 | 14 |
+| Activités | 19 | 20 |
+| Décisions par partie (moyenne simulée) | environ 120 | environ 85 |
 
-Une partie dure environ 120 décisions, réparties sur toute une carrière, du centre de formation à la retraite.
+- **Crampons d'Or** : une carrière de footballeur, du centre de formation à la retraite, avec un match chaque semaine.
+- **Ombrelune** : cinq années dans une école de magie, de 11 à 15 ans. Tu choisis ton affinité (Flamme, Onde, Souffle ou Racine), ton origine et ton caractère. Chaque semaine : des cours (scène de classe tirée au hasard), des activités, des amitiés, des rivalités, et un grimoire qui murmure ton nom. Les cinq années convergent vers une seule nuit, au cercle de pierres, dont l'issue dépend de tout ce que tu as fait (alliés réunis, ingrédients du sceau, pacte avec l'ombre, liens avec Noé et Ayla…).
 
 ## Lancer le jeu
 
@@ -28,15 +29,25 @@ npm run build          # génère dist/index.html (un seul fichier, polices et c
 
 Ouvre ensuite `dist/index.html` dans un navigateur. Il n'y a ni serveur, ni API payante, ni connexion requise.
 
+### Partager le jeu avec GitHub Pages
+
+```bash
+npm run pages          # build + copie de dist/index.html vers index.html (à la racine)
+git add -A && git commit -m "Mise à jour du jeu" && git push
+```
+
+Dans le dépôt GitHub : **Settings → Pages → Build and deployment → Deploy from a branch → `main` / `(root)`**. Le jeu est alors jouable à l'adresse `https://<utilisateur>.github.io/<dépôt>/`, sur ordinateur comme sur téléphone. Chaque joueur a ses propres sauvegardes, dans son navigateur.
+
 ### Commandes
 
 | Commande | Rôle |
 | --- | --- |
 | `npm run build` | Compile le contenu (`content/`) puis le jeu dans `dist/` |
-| `npm test` | Tests unitaires du moteur et de l'éditeur (`node:test`) |
+| `npm test` | Tests unitaires du moteur, de l'éditeur et des univers livrés (`node:test`) |
 | `npm run typecheck` | Vérification TypeScript stricte |
-| `npm run simulate -- 500` | Joue 500 parties automatiques et affiche la répartition des fins |
+| `npm run simulate -- 500 ombrelune` | Joue 500 parties automatiques d'un univers et affiche la répartition des fins |
 | `npm run content` | Compile et valide seulement le contenu des univers |
+| `npm run pages` | Build, puis copie du jeu en `index.html` à la racine (pour GitHub Pages) |
 
 ### Contrôles en jeu
 
@@ -73,7 +84,12 @@ Ouvre ensuite `dist/index.html` dans un navigateur. Il n'y a ni serveur, ni API 
   - historique des décisions, statistiques et relations conservés ;
   - export et import de fichiers.
   - Stockage dans le navigateur, ou dans le compte de l'utilisateur quand le jeu est publié comme artifact claude.ai.
-- **Pixel art procédural** : personnages articulés (environ 26 animations), portraits à 9 émotions, environ 70 objets de décor, parallaxe, moments de la journée, météo, foule animée et tableau d'affichage.
+- **Apparence du personnage** entièrement personnalisable, à la création puis à tout moment en jeu (« Garde-robe » dans le menu ou la fiche du personnage) :
+  - corps (genre, corpulence, taille, teint), visage (couleur des yeux, pilosité, signes particuliers), 20 coiffures, tenue (haut, bas, chaussures) ;
+  - 18 accessoires (lunettes, chapeau pointu, cape, baguette, écharpe, cicatrice, taches de rousseur…) ;
+  - palettes de couleurs et sélecteur de couleur libre, bouton « Au hasard », aperçu animé (marche, émotions) ;
+  - la tenue imposée par certains lieux (maillot au stade, robe d'école à Ombrelune) reste prioritaire.
+- **Pixel art procédural** : personnages articulés (environ 26 animations), portraits à 9 émotions, une centaine d'objets de décor (dont un château, une forêt, des chaudrons, des pierres dressées, des grimoires), parallaxe, moments de la journée, météo, effets magiques, foule animée et tableau d'affichage.
 - **Éditeur d'histoires intégré** : voir [docs/UNIVERS.md](docs/UNIVERS.md).
   - Formulaires pour chaque élément, aperçus animés et placement au clic dans le décor.
   - Éditeur de script avec coloration, erreurs en direct, plan des nœuds, assistants d'écriture et aide-mémoire.
@@ -84,7 +100,8 @@ Ouvre ensuite `dist/index.html` dans un navigateur. Il n'y a ni serveur, ni API 
 ## Structure
 
 ```
-content/football/        univers de référence : universe.json + story/*.trame
+content/football/        univers football : universe.json + story/*.trame
+content/ombrelune/       univers école de magie : universe.json + story/*.trame
 src/core/                moteur narratif sans affichage (testable en Node)
   expr/                  langage d'expressions (conditions, effets, textes interpolés)
   trame/                 analyseur du langage Trame et format de fichier .trame
@@ -95,7 +112,7 @@ src/game/                contrôleur (relie moteur narratif et monde 2D), sauveg
 src/platform/            stockage (navigateur ou compte claude.ai), téléchargements
 src/ui/                  interface Preact : menus, écran de jeu, panneaux, éditeur
 tools/                   compilation du contenu, build, simulateur en ligne de commande
-tests/                   tests unitaires (moteur, éditeur)
+tests/                   tests unitaires (moteur, éditeur, univers livrés)
 docs/                    architecture, langage Trame, création d'univers
 ```
 
@@ -107,6 +124,6 @@ docs/                    architecture, langage Trame, création d'univers
 
 ## Pistes pour la suite
 
-- De nouveaux univers sur le même moteur (vie d'artiste, entreprise, enquête…).
+- De nouveaux univers sur le même moteur (pilote de course, vie d'artiste, enquête…).
 - Une génération de contenu locale facultative : un modèle exécuté sur la machine propose des événements dans le format Trame, puis l'éditeur les valide et les simule.
 - Des musiques procédurales et plus d'effets de mise en scène.

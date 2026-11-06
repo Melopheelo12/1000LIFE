@@ -193,6 +193,15 @@ export function validateUniverse(def: UniverseDef): ValidationReport {
   for (const en of u.endings) checkExpr(en.when, `fin ${en.def.id}`, 'fin', en.def.id);
   if (!u.endings.length) add({ where: 'univers', kind: 'univers', msg: 'Aucune fin définie', severity: 'error' });
   else if (u.endings.every((e) => e.when)) add({ where: 'univers', kind: 'univers', msg: 'Aucune fin « par défaut » (sans condition) : ajoute-en une pour garantir une conclusion', severity: 'warning' });
+  for (const l of def.locations) if (!(l.exits ?? []).length && def.locations.length > 1) add({ where: `lieu « ${l.id} »`, kind: 'lieu', id: l.id, msg: 'Aucune sortie : le joueur ne pourra quitter ce lieu qu\'avec la carte', severity: 'warning' });
+  // Une porte verrouillée ne sert à rien si le lieu reste ouvert sur la carte :
+  // on prévient quand TOUTES les portes qui mènent à un lieu sont conditionnelles
+  // alors que le lieu lui-même n'a aucune condition (donc toujours sur la carte).
+  for (const to of def.locations) {
+    if (to.when?.trim() || to.id === def.start.location) continue;
+    const doors = def.locations.flatMap((l) => (l.exits ?? []).filter((e) => e.to === to.id).map((e) => ({ from: l.id, when: e.when?.trim() })));
+    if (doors.length && doors.every((d) => d.when)) add({ where: `lieu « ${to.id} »`, kind: 'lieu', id: to.id, msg: `Toutes les portes vers ce lieu sont verrouillées (« ${doors[0].when} »), mais il reste accessible depuis la carte : donne-lui la même condition`, severity: 'warning' });
+  }
   if (!def.locations.some((l) => (l.hotspots ?? []).some((h) => h.endTick))) add({ where: 'univers', kind: 'univers', msg: 'Aucun élément de décor ne termine la semaine (case « Termine la semaine » d\'un élément interactif) : le joueur ne pourra pas avancer dans le temps', severity: 'error' });
   if (!u.locs.has(def.start.location)) add({ where: 'univers', kind: 'univers', msg: `Lieu de départ inconnu « ${def.start.location} »`, severity: 'error' });
   if (def.start.event && !u.events.has(def.start.event)) add({ where: 'univers', kind: 'univers', msg: `Événement de départ inconnu « ${def.start.event} »`, severity: 'error' });

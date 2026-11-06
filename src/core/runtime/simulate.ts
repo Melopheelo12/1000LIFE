@@ -147,6 +147,19 @@ function hubTurn(g: GameSession, rng: Rng, p: Persona) {
         return;
       }
     }
+    // objectifs en cours : activités qui font avancer une quête (événements marqués « important »),
+    // comme le ferait un joueur qui lit son journal
+    if (g.s.actions > 0) {
+      for (const l of locs) for (const h of l.hotspots ?? []) {
+        if (!g.testSrc(h.when)) continue;
+        const act = (h.activities ?? []).find((a) => g.activityOption(a).enabled && (g.u.byKey.get(`activity:${a}`) ?? []).some((ev) => ev.def.tags?.includes('important') && g.isEligible(ev)));
+        if (act) {
+          if (g.s.location !== l.id) { g.travel(l.id); return; }
+          g.doActivity(act);
+          return;
+        }
+      }
+    }
   }
   // 2. Activités
   if (g.s.actions > 0 && rng.next() < 0.85) {

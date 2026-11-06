@@ -2267,6 +2267,13 @@
      "x": 4,
      "color": "$club_couleur2"
     }
+   ],
+   "exits": [
+    {
+     "to": "vestiaire",
+     "x": 300,
+     "label": "Rejoindre les vestiaires"
+    }
    ]
   },
   {
@@ -3098,6 +3105,11 @@
    },
    "props": [
     {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE"
+    },
+    {
      "type": "grande_baie",
      "x": 230,
      "w": 220
@@ -3120,6 +3132,14 @@
     {
      "type": "bagages",
      "x": 380
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22,
+     "kind": "porte",
+     "label": "Rentrer en ville"
     }
    ]
   }

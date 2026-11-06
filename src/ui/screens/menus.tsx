@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { Look, UniverseDef } from '../../core/model/types';
 import { allUniverses, type UniverseEntry } from '../../game/registry';
 import { getEndings, listSaves, readSave, type SaveMeta, type SaveFile } from '../../game/saves';
-import { HAIR_COLORS, HAIR_STYLES, SKINS } from '../../engine/gfx/character';
+import { AppearanceEditor, LookPreview } from '../appearance';
 import { renderLocation, type SceneEnv } from '../../engine/gfx/scenery';
 import { getFrame, SPR_H } from '../../engine/gfx/character';
 import { audio } from '../../engine/audio';
@@ -15,8 +15,8 @@ import { previewSession, resolveLookWith, sessionEnv } from '../../game/env';
 export function staticEnv(def: UniverseDef, vars?: Record<string, string | number | boolean>): SceneEnv {
   return sessionEnv(previewSession(def, vars));
 }
-export function resolveStaticLook(def: UniverseDef, l: Look): Look {
-  return resolveLookWith(previewSession(def), l);
+export function resolveStaticLook(def: UniverseDef, l: Look, fields?: Record<string, string>): Look {
+  return resolveLookWith(previewSession(def, undefined, fields), l);
 }
 
 // ───────────────────────────── Titre ───────────────────────────────────────
@@ -166,9 +166,7 @@ export function CreationScreen({ def, onBack, onStart }: { def: UniverseDef; onB
   const [name, setName] = useState(cr.defaultName ?? '');
   const [look, setLook] = useState<Look>({ ...(cr.baseLook ?? {}) });
   const [fields, setFields] = useState<Record<string, string>>(() => Object.fromEntries((cr.fields ?? []).map((f) => [f.id, f.options[0]?.id ?? ''])));
-  const shown = useMemo(() => resolveStaticLook(def, look), [look]);
-  const hairIdx = HAIR_STYLES.indexOf(look.hair ?? 'court');
-  const cycleHair = (d: number) => setLook({ ...look, hair: HAIR_STYLES[(hairIdx + d + HAIR_STYLES.length) % HAIR_STYLES.length] });
+  const shown = useMemo(() => resolveStaticLook(def, look, fields), [look, fields]);
   const ready = name.trim().length > 0;
   return (
     <div class="screen">
@@ -176,33 +174,13 @@ export function CreationScreen({ def, onBack, onStart }: { def: UniverseDef; onB
         <div class="page-head"><button class="pbtn small" onClick={onBack}>← Univers</button><h1>{def.name}</h1></div>
         <div class="creation">
           <div class="preview-box pbox">
-            <div class="row" style={{ alignItems: 'flex-end', justifyContent: 'center', gap: 18 }}>
-              <SpriteView look={shown} anim="marche" scale={5} />
-              <div style={{ width: 120, height: 120, background: '#0e1018' }}><PortraitView look={shown} emo="content" size={40} /></div>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>{name || '…'}</div>
-            <div class="muted" style={{ textAlign: 'center' }}>{(cr.fields ?? []).map((f) => f.options.find((o) => o.id === fields[f.id])?.label).filter(Boolean).join(' · ')}</div>
+            <LookPreview look={shown} name={name} sub={(cr.fields ?? []).map((f) => f.options.find((o) => o.id === fields[f.id])?.label).filter(Boolean).join(' · ')} />
           </div>
           <div class="col pbox" style={{ padding: 18, gap: 18 }}>
             <label class="field">{cr.nameLabel ?? 'Nom'}
               <input type="text" id="creation-name" maxLength={24} value={name} onInput={(e) => setName((e.target as HTMLInputElement).value)} />
             </label>
-            {cr.look !== false && (
-              <>
-                <div class="field">Teint
-                  <div class="swatches">{Object.entries(SKINS).map(([k, v]) => <button key={k} class={`swatch ${look.skin === k ? 'on' : ''}`} style={{ background: v }} aria-label={`Teint ${k}`} onClick={() => setLook({ ...look, skin: k })} />)}</div>
-                </div>
-                <div class="field">Coiffure
-                  <div class="row"><button class="pbtn small" onClick={() => cycleHair(-1)} aria-label="Coiffure précédente">◀</button><span style={{ minWidth: 110, textAlign: 'center' }}>{look.hair ?? 'court'}</span><button class="pbtn small" onClick={() => cycleHair(1)} aria-label="Coiffure suivante">▶</button></div>
-                </div>
-                <div class="field">Couleur des cheveux
-                  <div class="swatches">{Object.entries(HAIR_COLORS).map(([k, v]) => <button key={k} class={`swatch ${look.hairColor === k ? 'on' : ''}`} style={{ background: v }} aria-label={`Cheveux ${k}`} onClick={() => setLook({ ...look, hairColor: k })} />)}</div>
-                </div>
-                <div class="field">Pilosité
-                  <div class="row">{[['', 'Aucune'], ['barbe3j', 'Barbe de 3 jours'], ['bouc', 'Bouc'], ['moustache', 'Moustache'], ['barbe', 'Barbe']].map(([k, l]) => <button key={k} class={`pbtn small ${(look.beard ?? '') === k ? 'primary' : ''}`} onClick={() => setLook({ ...look, beard: k })}>{l}</button>)}</div>
-                </div>
-              </>
-            )}
+            {cr.look !== false && <AppearanceEditor look={look} onChange={setLook} base={cr.baseLook ?? {}} />}
             {(cr.fields ?? []).map((f) => (
               <div class="field" key={f.id}>{f.label}
                 <div class="opts">

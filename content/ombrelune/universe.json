@@ -1,0 +1,2814 @@
+{
+ "format": "mille-vies/universe@1",
+ "id": "ombrelune",
+ "version": "1.0",
+ "name": "Ombrelune",
+ "tagline": "Cinq années dans une académie de magie. Ce que tu deviens ne dépend que de toi.",
+ "description": "À 11 ans, une lettre scellée de cire violette t'ouvre les portes de l'Académie d'Ombrelune, perchée au-dessus du lac. Sortilèges, potions, créatures, duels, amitiés, rivalités… et un vieux grimoire qui murmure ton nom. Cinq années pour devenir grand mage, ou te perdre dans l'ombre.",
+ "author": "Mille Vies",
+ "tags": [
+  "Magie",
+  "École",
+  "Aventure"
+ ],
+ "published": true,
+ "theme": {
+  "accent": "#b893ff",
+  "accent2": "#e2b440",
+  "cover": "cour"
+ },
+ "config": {
+  "tickLabel": "Semaine",
+  "actionsPerTick": 3,
+  "actionsLabel": "Actions",
+  "randomEventChance": 45,
+  "maxStoryEventsPerTick": 2,
+  "checkScale": 11,
+  "hud": [
+   "energie",
+   "moral",
+   "ombre",
+   "ecus"
+  ],
+  "dateLine": "{var.annee}e année · {var.age} ans",
+  "endTickLabel": "Dormir et terminer la semaine",
+  "showValues": true
+ },
+ "stats": [
+  {
+   "id": "puissance",
+   "label": "Puissance magique",
+   "short": "Puiss.",
+   "category": "Magie",
+   "initial": 20,
+   "color": "#b893ff",
+   "description": "La force brute de ta magie."
+  },
+  {
+   "id": "sortileges",
+   "label": "Sortilèges",
+   "category": "Magie",
+   "initial": 12,
+   "color": "#7ad8ff",
+   "description": "Précision et variété de tes sorts."
+  },
+  {
+   "id": "potions",
+   "label": "Potions",
+   "category": "Magie",
+   "initial": 12,
+   "color": "#5fdc7a",
+   "description": "Alchimie, ingrédients, dosages."
+  },
+  {
+   "id": "creatures",
+   "label": "Créatures",
+   "category": "Magie",
+   "initial": 10,
+   "color": "#e2b440",
+   "description": "Ton lien avec les créatures magiques."
+  },
+  {
+   "id": "duel",
+   "label": "Duel",
+   "category": "Magie",
+   "initial": 6,
+   "color": "#f06a6a",
+   "description": "Réflexes et tactique en combat de sorts."
+  },
+  {
+   "id": "savoir",
+   "label": "Savoir",
+   "category": "Esprit",
+   "initial": 15,
+   "color": "#c9a0ff",
+   "description": "Théorie, histoire, runes."
+  },
+  {
+   "id": "courage",
+   "label": "Courage",
+   "category": "Esprit",
+   "initial": 30,
+   "color": "#ff9a3a"
+  },
+  {
+   "id": "ruse",
+   "label": "Ruse",
+   "category": "Esprit",
+   "initial": 20,
+   "color": "#8fa0c8"
+  },
+  {
+   "id": "energie",
+   "label": "Énergie",
+   "category": "État",
+   "initial": 85,
+   "color": "#5fcf7d"
+  },
+  {
+   "id": "moral",
+   "label": "Moral",
+   "category": "État",
+   "initial": 65,
+   "color": "#7cb7ff"
+  },
+  {
+   "id": "ombre",
+   "label": "Part d'ombre",
+   "short": "Ombre",
+   "category": "État",
+   "initial": 0,
+   "color": "#6a3fa8",
+   "description": "La magie noire laisse des traces. Méditer les efface un peu."
+  },
+  {
+   "id": "reputation",
+   "label": "Réputation",
+   "category": "Social",
+   "initial": 10,
+   "color": "#ffd25a"
+  },
+  {
+   "id": "discipline",
+   "label": "Discipline",
+   "category": "Social",
+   "initial": 60,
+   "color": "#9aa0ae",
+   "description": "Ce que les professeurs pensent de ton sérieux."
+  },
+  {
+   "id": "ecus",
+   "label": "Écus",
+   "category": "Social",
+   "min": 0,
+   "max": 99999,
+   "initial": 20,
+   "color": "#e2b440"
+  }
+ ],
+ "vars": {
+  "annee": 1,
+  "age": 11,
+  "couleur_affinite": "#a8323a",
+  "affinite_nom": "Flamme",
+  "sorts": 0,
+  "duel_victoires": 0,
+  "duel_defaites": 0,
+  "avertissements": 0,
+  "cle_reserve": false,
+  "grimoire_trouve": false,
+  "foret_ok": false,
+  "tour_ouverte": false,
+  "couple": false,
+  "mentor_lia": false,
+  "orin_demasque": false,
+  "noe_perdu": false,
+  "pacte": false,
+  "sceau": false,
+  "renonce": false,
+  "champion": false,
+  "expulse": false,
+  "visions": 0,
+  "malrik_nom": false,
+  "sera_absente": false,
+  "issue": "",
+  "allies": 0,
+  "points_classe": 0,
+  "bonus_cours": 0
+ },
+ "traits": [
+  {
+   "id": "loyal",
+   "label": "Loyal",
+   "description": "N'oublie jamais qui l'a aidé.",
+   "gain": 1.2,
+   "loss": 1.0
+  },
+  {
+   "id": "anxieux",
+   "label": "Anxieux",
+   "description": "Les disputes le travaillent longtemps.",
+   "gain": 1.1,
+   "loss": 1.3
+  },
+  {
+   "id": "fier",
+   "label": "Fier",
+   "description": "Difficile à impressionner, blessé par le mépris.",
+   "gain": 0.8,
+   "loss": 1.3
+  },
+  {
+   "id": "rancunier",
+   "label": "Rancunier",
+   "description": "Pardonne rarement.",
+   "gain": 0.9,
+   "loss": 1.6
+  },
+  {
+   "id": "genereux",
+   "label": "Généreux",
+   "description": "Donne une seconde chance.",
+   "gain": 1.2,
+   "loss": 0.7
+  },
+  {
+   "id": "sage",
+   "label": "Sage",
+   "description": "Juge sur la durée, pas sur un coup d'éclat.",
+   "gain": 0.9,
+   "loss": 0.8
+  },
+  {
+   "id": "exigeant",
+   "label": "Exigeant",
+   "description": "Il en faut beaucoup pour gagner son estime.",
+   "gain": 0.7,
+   "loss": 1.2
+  },
+  {
+   "id": "manipulateur",
+   "label": "Manipulateur",
+   "description": "Se montre vite amical… quand ça l'arrange.",
+   "gain": 1.4,
+   "loss": 0.6
+  },
+  {
+   "id": "reveur",
+   "label": "Rêveur",
+   "description": "Sensible aux gestes plus qu'aux mots.",
+   "gain": 1.15,
+   "loss": 1.0
+  },
+  {
+   "id": "bourru",
+   "label": "Bourru",
+   "description": "Cache un grand cœur sous des grognements.",
+   "gain": 0.85,
+   "loss": 0.8
+  }
+ ],
+ "characters": [
+  {
+   "id": "noe",
+   "name": "Noé Lambert",
+   "short": "Noé",
+   "role": "Ton meilleur ami, élève d'Onde",
+   "traits": [
+    "loyal",
+    "anxieux"
+   ],
+   "relation": 20,
+   "relationLabel": "Amitié",
+   "description": "Fils d'un boulanger sans pouvoirs, il découvre la magie en même temps que toi. Drôle, maladroit, terrifié par tout.",
+   "goals": "prouver qu'un enfant sans lignée a sa place ici.",
+   "look": {
+    "skin": "peau2",
+    "hair": "bouclecourt",
+    "hairColor": "roux",
+    "acc": [
+     "lunettes",
+     "taches"
+    ],
+    "top": "toge",
+    "topColor": "#2f62c9",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Tu as fait le devoir de potions ? Moi non plus."
+    },
+    {
+     "text": "J'ai encore rêvé que le lac me parlait…",
+     "if": "chapitre != ch1"
+    },
+    {
+     "text": "Je te dois une fière chandelle, tu sais.",
+     "if": "rel.noe >= 50"
+    }
+   ]
+  },
+  {
+   "id": "sera",
+   "name": "Séraphine de Valcourt",
+   "short": "Séraphine",
+   "role": "La rivale, élève de Flamme",
+   "traits": [
+    "fier",
+    "rancunier"
+   ],
+   "relation": -10,
+   "relationLabel": "Estime",
+   "description": "Héritière d'une vieille lignée de mages. Brillante, cassante, et persuadée que tout lui est dû.",
+   "goals": "être la meilleure, pour que sa mère la regarde enfin.",
+   "look": {
+    "skin": "peau1",
+    "hair": "carre",
+    "hairColor": "platine",
+    "acc": [
+     "collier"
+    ],
+    "gender": "f",
+    "top": "toge",
+    "topColor": "#a8323a",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Tu es encore là, toi ?"
+    },
+    {
+     "text": "…Pas mal, ton sort de tout à l'heure. N'en prends pas l'habitude.",
+     "if": "rel.sera >= 20"
+    }
+   ]
+  },
+  {
+   "id": "ayla",
+   "name": "Ayla Morven",
+   "short": "Ayla",
+   "role": "Élève de Souffle, voyante",
+   "traits": [
+    "reveur",
+    "sage"
+   ],
+   "relation": 0,
+   "relationLabel": "Affection",
+   "description": "Elle parle peu, dessine les étoiles et voit parfois ce qui n'est pas encore arrivé.",
+   "goals": "comprendre ses visions avant qu'elles ne la dévorent.",
+   "look": {
+    "skin": "peau3",
+    "hair": "mi_long",
+    "hairColor": "nuit",
+    "acc": [
+     "boucles"
+    ],
+    "gender": "f",
+    "top": "toge",
+    "topColor": "#c4cad3",
+    "topColor2": "#6a3fa8",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Les étoiles sont nerveuses, ce soir."
+    },
+    {
+     "text": "Je t'ai vu dans un rêve. Tu souriais.",
+     "if": "rel.ayla >= 40"
+    }
+   ]
+  },
+  {
+   "id": "halloran",
+   "name": "Archimage Corvin Halloran",
+   "short": "Halloran",
+   "role": "Le directeur de l'académie",
+   "traits": [
+    "sage"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Plus vieux que le château, dit-on. Bienveillant, mais il garde plus de secrets qu'il n'a de livres.",
+   "goals": "empêcher l'Ombre de revenir, quel qu'en soit le prix.",
+   "look": {
+    "skin": "peau1",
+    "hair": "long",
+    "hairColor": "blanc",
+    "beard": "barbe_longue",
+    "acc": [
+     "chapeau",
+     "baguette"
+    ],
+    "accColor": "#3a2a6a",
+    "height": "grand",
+    "top": "toge",
+    "topColor": "#3a2a6a",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   }
+  },
+  {
+   "id": "varn",
+   "name": "Maîtresse Ilsa Varn",
+   "short": "Varn",
+   "role": "Professeure de potions",
+   "traits": [
+    "exigeant"
+   ],
+   "relation": 0,
+   "relationLabel": "Estime",
+   "description": "Sévère, précise, impitoyable avec les paresseux. Juste, pourtant.",
+   "goals": "former des alchimistes, pas des empoisonneurs.",
+   "look": {
+    "skin": "peau4",
+    "hair": "chignon",
+    "hairColor": "noir",
+    "acc": [
+     "lunettes"
+    ],
+    "gender": "f",
+    "top": "toge",
+    "topColor": "#1d2230",
+    "topColor2": "#2fb5b0",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Trois gouttes. Pas quatre. Trois."
+    }
+   ]
+  },
+  {
+   "id": "brax",
+   "name": "Maître Oswin Brax",
+   "short": "Brax",
+   "role": "Maître des duels",
+   "traits": [
+    "exigeant",
+    "bourru"
+   ],
+   "relation": 0,
+   "relationLabel": "Respect",
+   "description": "Ancien champion des duels, une cicatrice pour chaque victoire. Il ne parle qu'en aboiements.",
+   "goals": "trouver enfin un élève qui le dépasse.",
+   "look": {
+    "skin": "peau5",
+    "hair": "rase",
+    "hairColor": "noir",
+    "beard": "barbe",
+    "acc": [
+     "cicatrice",
+     "gants"
+    ],
+    "build": "costaud",
+    "height": "grand",
+    "top": "toge",
+    "topColor": "#7c2236",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Garde haute ! Toujours !"
+    }
+   ]
+  },
+  {
+   "id": "selene",
+   "name": "Professeure Sélène Arkadi",
+   "short": "Sélène",
+   "role": "Sortilèges et divination",
+   "traits": [
+    "reveur"
+   ],
+   "relation": 5,
+   "relationLabel": "Estime",
+   "description": "Excentrique, couverte de bijoux, elle enseigne les sorts en chantonnant et lit l'avenir dans le thé.",
+   "goals": "protéger Ayla de ses propres visions.",
+   "look": {
+    "skin": "peau2",
+    "hair": "long",
+    "hairColor": "argente",
+    "acc": [
+     "boucles",
+     "collier"
+    ],
+    "gender": "f",
+    "top": "toge",
+    "topColor": "#4a2a6a",
+    "topColor2": "#c4cad3",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Le futur est un brouillon, mon petit. On peut toujours raturer."
+    }
+   ]
+  },
+  {
+   "id": "gaspard",
+   "name": "Gaspard Hulin",
+   "short": "Gaspard",
+   "role": "Gardien du domaine",
+   "traits": [
+    "bourru",
+    "genereux"
+   ],
+   "relation": 5,
+   "relationLabel": "Amitié",
+   "description": "Un géant aux mains calleuses qui parle mieux aux bêtes qu'aux humains. Il connaît chaque arbre de la forêt.",
+   "goals": "que personne ne fasse de mal à ses créatures.",
+   "look": {
+    "skin": "peau3",
+    "hair": "herisse",
+    "hairColor": "gris",
+    "beard": "barbe",
+    "top": "veste",
+    "topColor": "#6e4a31",
+    "topColor2": "#4a3020",
+    "bottom": "pantalon",
+    "bottomColor": "#6b7a43",
+    "build": "costaud",
+    "height": "grand"
+   },
+   "barks": [
+    {
+     "text": "Les bêtes sentent le cœur des gens. Elles t'aiment bien, toi."
+    }
+   ]
+  },
+  {
+   "id": "pell",
+   "name": "Madame Pell",
+   "short": "Mme Pell",
+   "role": "La bibliothécaire",
+   "traits": [
+    "exigeant"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Elle entend une page se froisser à trois salles de distance.",
+   "goals": "que la Réserve reste fermée.",
+   "look": {
+    "skin": "peau1",
+    "hair": "chignon",
+    "hairColor": "gris",
+    "acc": [
+     "lunettes"
+    ],
+    "gender": "f",
+    "top": "toge",
+    "topColor": "#3b3e47",
+    "topColor2": "#9aa0ae",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Chut."
+    }
+   ]
+  },
+  {
+   "id": "malrik",
+   "name": "Malrik",
+   "short": "Malrik",
+   "role": "L'Ombre du grimoire",
+   "traits": [
+    "manipulateur"
+   ],
+   "relation": 0,
+   "relationLabel": "Emprise",
+   "hidden": true,
+   "description": "Un ancien élève, le plus doué de son siècle. Son âme est enfermée dans un grimoire, et elle a faim.",
+   "goals": "retrouver un corps. Le tien, peut-être.",
+   "look": {
+    "skin": "peau0",
+    "hair": "long",
+    "hairColor": "noir",
+    "acc": [
+     "capuche"
+    ],
+    "accColor": "#14141c",
+    "height": "grand",
+    "top": "toge",
+    "topColor": "#14141c",
+    "topColor2": "#6a3fa8",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   }
+  },
+  {
+   "id": "claire",
+   "name": "Claire",
+   "short": "Maman",
+   "role": "Ta mère",
+   "traits": [
+    "genereux"
+   ],
+   "relation": 40,
+   "relationLabel": "Lien",
+   "description": "Elle t'écrit chaque semaine. Elle ne comprend pas tout, mais elle est fière de toi.",
+   "goals": "que tu restes toi-même.",
+   "look": {
+    "skin": "peau3",
+    "hair": "mi_long",
+    "hairColor": "chatain",
+    "gender": "f",
+    "top": "veste",
+    "topColor": "#7cc3ef",
+    "bottom": "jean"
+   }
+  },
+  {
+   "id": "orin",
+   "name": "Orin Kael",
+   "short": "Orin",
+   "role": "Préfet, élève de Flamme",
+   "traits": [
+    "manipulateur"
+   ],
+   "relation": 10,
+   "relationLabel": "Confiance",
+   "description": "Le préfet que tout le monde admire. Charmant, brillant, toujours là pour aider. Trop, peut-être.",
+   "goals": "réveiller l'Ombre et devenir son bras droit.",
+   "look": {
+    "skin": "peau3",
+    "hair": "undercut",
+    "hairColor": "blond",
+    "height": "grand",
+    "acc": [
+     "brassard"
+    ],
+    "top": "toge",
+    "topColor": "#a8323a",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Si tu as besoin de quoi que ce soit, tu viens me voir. D'accord ?"
+    }
+   ]
+  },
+  {
+   "id": "lia",
+   "name": "Lia Kade",
+   "short": "Lia",
+   "role": "Une première année, élève de Racine",
+   "traits": [
+    "anxieux",
+    "loyal"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Une petite nouvelle perdue, qui te rappelle toi à ton arrivée.",
+   "goals": "ne pas être renvoyée chez elle.",
+   "look": {
+    "skin": "peau5",
+    "hair": "couettes",
+    "hairColor": "noir",
+    "gender": "f",
+    "height": "enfant",
+    "top": "toge",
+    "topColor": "#2f6a3a",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   },
+   "barks": [
+    {
+     "text": "Tu crois que je vais y arriver ?"
+    }
+   ]
+  },
+  {
+   "id": "tobias",
+   "name": "Tobias Wren",
+   "short": "Tobias",
+   "role": "L'ombre de Séraphine",
+   "traits": [
+    "fier"
+   ],
+   "relation": -10,
+   "relationLabel": "Estime",
+   "description": "Grand, costaud, il suit Séraphine partout et rit à toutes ses blagues.",
+   "goals": "qu'on arrête de le prendre pour un idiot.",
+   "look": {
+    "skin": "peau1",
+    "hair": "court",
+    "hairColor": "blond",
+    "build": "costaud",
+    "top": "toge",
+    "topColor": "#a8323a",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33"
+   }
+  },
+  {
+   "id": "daval",
+   "name": "Inspecteur Daval",
+   "short": "Daval",
+   "role": "Envoyé du Conseil des Mages",
+   "traits": [
+    "exigeant"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Un fonctionnaire glacial venu enquêter sur les incidents de l'académie.",
+   "goals": "trouver un coupable. N'importe lequel.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "gris",
+    "beard": "moustache",
+    "top": "costume",
+    "topColor": "#25222b",
+    "topColor2": "#6a3fa8",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b"
+   }
+  },
+  {
+   "id": "marthe",
+   "name": "Marthe",
+   "short": "Marthe",
+   "role": "L'aubergiste de Pierrelune",
+   "traits": [
+    "genereux"
+   ],
+   "relation": 5,
+   "relationLabel": "Amitié",
+   "description": "Son chocolat chaud guérit tout, sauf les chagrins d'amour. Et encore.",
+   "goals": "que son auberge reste le refuge des élèves.",
+   "look": {
+    "skin": "peau4",
+    "hair": "chignon",
+    "hairColor": "roux",
+    "gender": "f",
+    "build": "costaud",
+    "top": "blouse",
+    "topColor": "#efe6cf",
+    "bottom": "jupe",
+    "bottomColor": "#7c2236"
+   }
+  }
+ ],
+ "locations": [
+  {
+   "id": "quai",
+   "name": "Le débarcadère",
+   "group": "Domaine",
+   "width": 520,
+   "kind": "exterieur",
+   "time": "nuit",
+   "spawn": 60,
+   "ambient": "nature",
+   "floor": {
+    "style": "dalles",
+    "color": "#5a5650"
+   },
+   "backdrop": [
+    {
+     "type": "montagnes",
+     "x": 0
+    },
+    {
+     "type": "chateau",
+     "x": 380
+    },
+    {
+     "type": "mer",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "lampadaire",
+     "x": 120
+    },
+    {
+     "type": "arbre_sombre",
+     "x": 250
+    },
+    {
+     "type": "lampadaire",
+     "x": 380
+    },
+    {
+     "type": "lucioles",
+     "x": 260,
+     "w": 500
+    }
+   ],
+   "exits": [
+    {
+     "to": "cour",
+     "x": 500,
+     "kind": "bord",
+     "label": "Monter au château"
+    }
+   ]
+  },
+  {
+   "id": "cour",
+   "name": "La cour d'honneur",
+   "group": "Domaine",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "jour",
+   "spawn": 120,
+   "ambient": "nature",
+   "floor": {
+    "style": "dalles",
+    "color": "#8a8278"
+   },
+   "backdrop": [
+    {
+     "type": "montagnes",
+     "x": 0
+    },
+    {
+     "type": "chateau",
+     "x": 600
+    }
+   ],
+   "props": [
+    {
+     "type": "porte",
+     "x": 90,
+     "w": 26,
+     "h": 44,
+     "color": "#5a3a24",
+     "label": "GRAND HALL"
+    },
+    {
+     "type": "arbre",
+     "x": 170
+    },
+    {
+     "type": "banc_public",
+     "x": 250
+    },
+    {
+     "type": "statue",
+     "x": 330
+    },
+    {
+     "type": "banc_public",
+     "x": 410
+    },
+    {
+     "type": "arbre",
+     "x": 500,
+     "taille": 1.2
+    },
+    {
+     "type": "panneau",
+     "x": 560,
+     "text": "FORÊT : INTERDIT"
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 90,
+     "kind": "porte",
+     "label": "Grand hall"
+    },
+    {
+     "to": "quai",
+     "x": 14,
+     "kind": "bord",
+     "label": "Débarcadère"
+    },
+    {
+     "to": "serres",
+     "x": 250,
+     "label": "Les serres"
+    },
+    {
+     "to": "cabane",
+     "x": 480,
+     "label": "Cabane du gardien"
+    },
+    {
+     "to": "village",
+     "x": 626,
+     "kind": "bord",
+     "label": "Pierrelune",
+     "when": "chapitre != ch1"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "noe",
+     "x": 230,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 0 et non var.noe_perdu"
+    },
+    {
+     "id": "tobias",
+     "x": 380,
+     "face": "gauche",
+     "when": "chapitre == ch1 ou chapitre == ch2"
+    }
+   ]
+  },
+  {
+   "id": "grand_hall",
+   "name": "Le grand hall",
+   "group": "Château",
+   "width": 800,
+   "kind": "interieur",
+   "spawn": 60,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#7a7480",
+    "color2": "#4a4450"
+   },
+   "floor": {
+    "style": "dalles",
+    "color": "#5a5660"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 30,
+     "w": 24,
+     "h": 40,
+     "label": "COUR"
+    },
+    {
+     "type": "torche",
+     "x": 80
+    },
+    {
+     "type": "porte",
+     "x": 130,
+     "label": "COMMUNE"
+    },
+    {
+     "type": "porte",
+     "x": 230,
+     "label": "SORTS"
+    },
+    {
+     "type": "vitrail",
+     "x": 285
+    },
+    {
+     "type": "porte",
+     "x": 340,
+     "label": "BIBLIO"
+    },
+    {
+     "type": "tapisserie",
+     "x": 395,
+     "motif": "lune"
+    },
+    {
+     "type": "porte",
+     "x": 450,
+     "label": "CACHOTS",
+     "color": "#3a3a40"
+    },
+    {
+     "type": "blason",
+     "x": 505,
+     "color": "$couleur_affinite"
+    },
+    {
+     "type": "porte",
+     "x": 560,
+     "label": "ARÈNE"
+    },
+    {
+     "type": "vitrail",
+     "x": 610
+    },
+    {
+     "type": "porte",
+     "x": 660,
+     "label": "INFIRMERIE",
+     "color": "#c8c4bc"
+    },
+    {
+     "type": "porte",
+     "x": 760,
+     "label": "TOUR",
+     "color": "#2a2430",
+     "when": "var.tour_ouverte"
+    },
+    {
+     "type": "torche",
+     "x": 720
+    },
+    {
+     "type": "chandelier",
+     "x": 240
+    },
+    {
+     "type": "chandelier",
+     "x": 560
+    },
+    {
+     "type": "table_banquet",
+     "x": 300,
+     "w": 110
+    },
+    {
+     "type": "table_banquet",
+     "x": 500,
+     "w": 110
+    },
+    {
+     "type": "escalier",
+     "x": 700,
+     "dir": "droite"
+    }
+   ],
+   "exits": [
+    {
+     "to": "cour",
+     "x": 30,
+     "kind": "porte"
+    },
+    {
+     "to": "salle_commune",
+     "x": 130,
+     "kind": "porte",
+     "label": "Salle commune"
+    },
+    {
+     "to": "classe_sorts",
+     "x": 230,
+     "kind": "porte",
+     "label": "Salle des sortilèges"
+    },
+    {
+     "to": "bibliotheque",
+     "x": 340,
+     "kind": "porte",
+     "label": "Bibliothèque"
+    },
+    {
+     "to": "cachot_potions",
+     "x": 450,
+     "kind": "porte",
+     "label": "Cachots"
+    },
+    {
+     "to": "arene",
+     "x": 560,
+     "kind": "porte",
+     "label": "Arène des duels"
+    },
+    {
+     "to": "infirmerie",
+     "x": 660,
+     "kind": "porte",
+     "label": "Infirmerie"
+    },
+    {
+     "to": "tour_ouest",
+     "x": 760,
+     "kind": "porte",
+     "label": "Tour de l'Ouest",
+     "when": "var.tour_ouverte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "sera",
+     "x": 300,
+     "face": "gauche",
+     "when": "non var.sera_absente"
+    },
+    {
+     "id": "orin",
+     "x": 610,
+     "face": "gauche",
+     "when": "chapitre != ch1 et non var.orin_demasque"
+    },
+    {
+     "id": "daval",
+     "x": 420,
+     "face": "droite",
+     "when": "chapitre == ch4"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "escalier_secret",
+     "x": 700,
+     "label": "L'escalier qui bouge",
+     "activities": [
+      "explorer"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "salle_commune",
+   "name": "La salle commune",
+   "group": "Château",
+   "width": 420,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#8a6a5a",
+    "color2": "#5a3a2a"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#7a5233"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "tapisserie",
+     "x": 70,
+     "color": "$couleur_affinite",
+     "color2": "#e2b440"
+    },
+    {
+     "type": "canape",
+     "x": 120,
+     "color": "$couleur_affinite"
+    },
+    {
+     "type": "cheminee",
+     "x": 210
+    },
+    {
+     "type": "tapis",
+     "x": 210,
+     "w": 90,
+     "color": "#5a2a3a"
+    },
+    {
+     "type": "fauteuil",
+     "x": 300,
+     "color": "#5a2a3a"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 352,
+     "w": 36,
+     "h": 60
+    },
+    {
+     "type": "porte",
+     "x": 398,
+     "label": "DORTOIR"
+    },
+    {
+     "type": "bougies",
+     "x": 255,
+     "y": 100
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    },
+    {
+     "to": "dortoir",
+     "x": 398,
+     "kind": "porte",
+     "label": "Dortoir"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "noe",
+     "x": 150,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 1 et non var.noe_perdu"
+    },
+    {
+     "id": "ayla",
+     "x": 300,
+     "face": "gauche",
+     "when": "chapitre != ch1"
+    },
+    {
+     "id": "lia",
+     "x": 80,
+     "face": "droite",
+     "when": "var.mentor_lia"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "coin_du_feu",
+     "x": 210,
+     "label": "Le coin du feu",
+     "activities": [
+      "veillee",
+      "aider_lia"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dortoir",
+   "name": "Le dortoir",
+   "group": "Château",
+   "width": 360,
+   "kind": "interieur",
+   "spawn": 60,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#8a7f78",
+    "color2": "#5a4a40"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#7a5233"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "COMMUNE"
+    },
+    {
+     "type": "lit",
+     "x": 90,
+     "color": "$couleur_affinite"
+    },
+    {
+     "type": "fenetre",
+     "x": 135,
+     "rideaux": "$couleur_affinite"
+    },
+    {
+     "type": "lit",
+     "x": 180,
+     "color": "$couleur_affinite"
+    },
+    {
+     "type": "lit",
+     "x": 265,
+     "color": "$couleur_affinite"
+    },
+    {
+     "type": "bureau",
+     "x": 320,
+     "lampe": true
+    },
+    {
+     "type": "chaise",
+     "x": 306
+    },
+    {
+     "type": "bougies",
+     "x": 225,
+     "y": 96,
+     "count": 2
+    }
+   ],
+   "exits": [
+    {
+     "to": "salle_commune",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "lit",
+     "x": 180,
+     "label": "Ton lit",
+     "activities": [
+      "se_reposer",
+      "ecrire_lettre"
+     ],
+     "endTick": true
+    },
+    {
+     "id": "bureau",
+     "x": 320,
+     "label": "Ton bureau",
+     "activities": [
+      "etudier"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "classe_sorts",
+   "name": "La salle des sortilèges",
+   "group": "Château",
+   "width": 420,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#787088",
+    "color2": "#4a4458"
+   },
+   "floor": {
+    "style": "dalles",
+    "color": "#5a5468"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "tableau_blanc",
+     "x": 120,
+     "color": "#24352a"
+    },
+    {
+     "type": "vitrail",
+     "x": 340
+    },
+    {
+     "type": "chandelier",
+     "x": 210
+    },
+    {
+     "type": "rune",
+     "x": 210,
+     "w": 30
+    },
+    {
+     "type": "pupitre",
+     "x": 300
+    },
+    {
+     "type": "table",
+     "x": 150
+    },
+    {
+     "type": "chaise",
+     "x": 135
+    },
+    {
+     "type": "bougies",
+     "x": 380,
+     "y": 96
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "selene",
+     "x": 300,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "cercle",
+     "x": 210,
+     "label": "Le cercle d'entraînement",
+     "activities": [
+      "pratiquer_sorts"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cachot_potions",
+   "name": "Le cachot des potions",
+   "group": "Château",
+   "width": 400,
+   "kind": "interieur",
+   "time": "soir",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#5a5a64",
+    "color2": "#2a2a30"
+   },
+   "floor": {
+    "style": "dalles",
+    "color": "#44444c"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL",
+     "color": "#3a3a40"
+    },
+    {
+     "type": "potions",
+     "x": 80
+    },
+    {
+     "type": "chaudron",
+     "x": 170
+    },
+    {
+     "type": "chaudron",
+     "x": 255,
+     "color": "#e94b8a"
+    },
+    {
+     "type": "bougies",
+     "x": 120,
+     "y": 98
+    },
+    {
+     "type": "torche",
+     "x": 320
+    },
+    {
+     "type": "cage",
+     "x": 365,
+     "creature": "#7ad8ff"
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "varn",
+     "x": 300,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "chaudron",
+     "x": 170,
+     "label": "Ton chaudron",
+     "activities": [
+      "preparer_potion"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bibliotheque",
+   "name": "La bibliothèque",
+   "group": "Château",
+   "width": 520,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "boiserie",
+    "color": "#4a3020",
+    "color2": "#e2b440"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#6a4a2a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "HALL"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 80
+    },
+    {
+     "type": "bibliotheque",
+     "x": 140
+    },
+    {
+     "type": "table",
+     "x": 240
+    },
+    {
+     "type": "chaise",
+     "x": 225
+    },
+    {
+     "type": "bougies",
+     "x": 248,
+     "y": 110,
+     "count": 2
+    },
+    {
+     "type": "sablier",
+     "x": 300,
+     "label": "SILENCE"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 370
+    },
+    {
+     "type": "statue",
+     "x": 430
+    },
+    {
+     "type": "porte",
+     "x": 495,
+     "label": "RÉSERVE",
+     "style": "metal",
+     "color": "#3a2a2a",
+     "when": "var.cle_reserve"
+    },
+    {
+     "type": "chandelier",
+     "x": 200
+    },
+    {
+     "type": "chandelier",
+     "x": 400
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    },
+    {
+     "to": "section_interdite",
+     "x": 495,
+     "kind": "porte",
+     "label": "La Réserve",
+     "when": "var.cle_reserve"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "pell",
+     "x": 330,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "table_etude",
+     "x": 240,
+     "label": "Table d'étude",
+     "activities": [
+      "etudier"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "section_interdite",
+   "name": "La Réserve interdite",
+   "group": "Château",
+   "width": 360,
+   "kind": "interieur",
+   "time": "nuit",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "boiserie",
+    "color": "#2a1a14",
+    "color2": "#6a3fa8"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#3a2618"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "style": "metal",
+     "color": "#3a2a2a"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 80,
+     "color": "#3a2418"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 140,
+     "color": "#3a2418"
+    },
+    {
+     "type": "pupitre",
+     "x": 210,
+     "lumiere": true
+    },
+    {
+     "type": "grimoire",
+     "x": 210,
+     "y": 112,
+     "color": "#14141c"
+    },
+    {
+     "type": "bougies",
+     "x": 270,
+     "y": 100
+    },
+    {
+     "type": "bibliotheque",
+     "x": 320,
+     "color": "#3a2418"
+    }
+   ],
+   "exits": [
+    {
+     "to": "bibliotheque",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "grimoire",
+     "x": 210,
+     "label": "Le grimoire noir",
+     "activities": [
+      "lire_grimoire"
+     ],
+     "when": "var.grimoire_trouve"
+    }
+   ],
+   "when": "var.cle_reserve"
+  },
+  {
+   "id": "arene",
+   "name": "L'arène des duels",
+   "group": "Château",
+   "width": 560,
+   "kind": "exterieur",
+   "time": "jour",
+   "spawn": 40,
+   "ambient": "foule",
+   "floor": {
+    "style": "sable",
+    "color": "#b8a27a"
+   },
+   "backdrop": [
+    {
+     "type": "montagnes",
+     "x": 0
+    },
+    {
+     "type": "tribune_loin",
+     "x": 0,
+     "couleurs": [
+      "#a8323a",
+      "#2f62c9",
+      "#c4cad3",
+      "#2f6a3a"
+     ],
+     "densite": 0.55
+    }
+   ],
+   "props": [
+    {
+     "type": "rune",
+     "x": 280,
+     "w": 46,
+     "color": "#ff9a5a"
+    },
+    {
+     "type": "drapeau",
+     "x": 70,
+     "color": "#a8323a"
+    },
+    {
+     "type": "drapeau",
+     "x": 490,
+     "color": "#2f62c9"
+    },
+    {
+     "type": "torche",
+     "x": 150,
+     "y": 110
+    },
+    {
+     "type": "torche",
+     "x": 410,
+     "y": 110
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "bord",
+     "label": "Grand hall"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "brax",
+     "x": 430,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "cercle_duel",
+     "x": 280,
+     "label": "Le cercle de duel",
+     "activities": [
+      "entrainement_duel"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "infirmerie",
+   "name": "L'infirmerie",
+   "group": "Château",
+   "width": 340,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#c8c2b8",
+    "color2": "#8a847a"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#d8d4cc",
+    "color2": "#bfbab0"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "color": "#c8c4bc"
+    },
+    {
+     "type": "potions",
+     "x": 70
+    },
+    {
+     "type": "lit",
+     "x": 130,
+     "color": "#efe6cf"
+    },
+    {
+     "type": "fenetre",
+     "x": 180
+    },
+    {
+     "type": "lit",
+     "x": 230,
+     "color": "#efe6cf"
+    },
+    {
+     "type": "armoire",
+     "x": 300
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "lit_soin",
+     "x": 130,
+     "label": "Un lit libre",
+     "activities": [
+      "se_soigner"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tour_ouest",
+   "name": "La tour de l'Ouest",
+   "group": "Château",
+   "width": 360,
+   "kind": "interieur",
+   "time": "nuit",
+   "spawn": 40,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#5a5468",
+    "color2": "#3a3448"
+   },
+   "floor": {
+    "style": "dalles",
+    "color": "#48445a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "color": "#2a2430"
+    },
+    {
+     "type": "sablier",
+     "x": 90
+    },
+    {
+     "type": "vitrail",
+     "x": 180,
+     "w": 34,
+     "h": 60
+    },
+    {
+     "type": "rune",
+     "x": 180,
+     "w": 34,
+     "color": "#b893ff"
+    },
+    {
+     "type": "escalier",
+     "x": 320,
+     "dir": "gauche"
+    },
+    {
+     "type": "bougies",
+     "x": 260,
+     "y": 100
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "ayla",
+     "x": 260,
+     "face": "gauche",
+     "when": "chapitre == ch3 ou chapitre == ch4"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "cercle_lune",
+     "x": 180,
+     "label": "Le cercle de lune",
+     "activities": [
+      "mediter",
+      "divination"
+     ]
+    }
+   ],
+   "when": "var.tour_ouverte"
+  },
+  {
+   "id": "bureau_archimage",
+   "name": "Le bureau de l'Archimage",
+   "group": "Château",
+   "width": 380,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "interieur",
+   "when": "faux",
+   "wall": {
+    "style": "boiserie",
+    "color": "#3a2418",
+    "color2": "#b893ff"
+   },
+   "floor": {
+    "style": "moquette",
+    "color": "#5a2a3a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22
+    },
+    {
+     "type": "bibliotheque",
+     "x": 80
+    },
+    {
+     "type": "cage",
+     "x": 140,
+     "color": "#c4cad3",
+     "creature": "#c4cad3"
+    },
+    {
+     "type": "bureau",
+     "x": 220,
+     "lampe": true
+    },
+    {
+     "type": "sablier",
+     "x": 280
+    },
+    {
+     "type": "cheminee",
+     "x": 330
+    },
+    {
+     "type": "bibliotheque",
+     "x": 365,
+     "w": 24
+    }
+   ],
+   "exits": [
+    {
+     "to": "grand_hall",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "halloran",
+     "x": 250,
+     "face": "gauche"
+    }
+   ]
+  },
+  {
+   "id": "serres",
+   "name": "Les serres",
+   "group": "Domaine",
+   "width": 420,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "nature",
+   "wall": {
+    "style": "vitre",
+    "color": "#5a7a6a"
+   },
+   "floor": {
+    "style": "terre",
+    "color": "#4a3a2a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "style": "vitre"
+    },
+    {
+     "type": "plante",
+     "x": 80
+    },
+    {
+     "type": "plante",
+     "x": 120
+    },
+    {
+     "type": "champignons",
+     "x": 170,
+     "lueur": true,
+     "color": "#b893ff"
+    },
+    {
+     "type": "table",
+     "x": 240
+    },
+    {
+     "type": "plante",
+     "x": 230
+    },
+    {
+     "type": "plante",
+     "x": 300
+    },
+    {
+     "type": "buisson",
+     "x": 350
+    },
+    {
+     "type": "champignons",
+     "x": 390,
+     "color": "#e2b440"
+    }
+   ],
+   "exits": [
+    {
+     "to": "cour",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "plantes",
+     "x": 240,
+     "label": "Les plantes rares",
+     "activities": [
+      "cueillette"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cabane",
+   "name": "La cabane du gardien",
+   "group": "Domaine",
+   "width": 340,
+   "kind": "interieur",
+   "spawn": 40,
+   "ambient": "nature",
+   "wall": {
+    "style": "bois",
+    "color": "#6a4a2a"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#5a3a22"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22
+    },
+    {
+     "type": "cage",
+     "x": 80,
+     "creature": "#e2b440"
+    },
+    {
+     "type": "table",
+     "x": 160
+    },
+    {
+     "type": "chaudron",
+     "x": 210,
+     "feu": false,
+     "color": "#8ad86a"
+    },
+    {
+     "type": "cheminee",
+     "x": 270,
+     "color": "#7a7268"
+    },
+    {
+     "type": "porte",
+     "x": 318,
+     "label": "FORÊT",
+     "color": "#3a2a1a",
+     "when": "var.foret_ok"
+    }
+   ],
+   "exits": [
+    {
+     "to": "cour",
+     "x": 22,
+     "kind": "porte"
+    },
+    {
+     "to": "foret",
+     "x": 318,
+     "kind": "porte",
+     "label": "La forêt de Brume",
+     "when": "var.foret_ok"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "gaspard",
+     "x": 140,
+     "face": "droite"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "enclos",
+     "x": 80,
+     "label": "Les créatures",
+     "activities": [
+      "soigner_creatures"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "foret",
+   "name": "La forêt de Brume",
+   "group": "Domaine",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "soir",
+   "spawn": 40,
+   "ambient": "nature",
+   "when": "var.foret_ok",
+   "floor": {
+    "style": "terre",
+    "color": "#2e2a22"
+   },
+   "backdrop": [
+    {
+     "type": "foret",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "arbre_sombre",
+     "x": 90
+    },
+    {
+     "type": "champignons",
+     "x": 160,
+     "lueur": true,
+     "color": "#7ad8ff"
+    },
+    {
+     "type": "arbre_sombre",
+     "x": 230,
+     "taille": 1.2
+    },
+    {
+     "type": "arbre_sombre",
+     "x": 380
+    },
+    {
+     "type": "champignons",
+     "x": 440,
+     "lueur": true,
+     "color": "#b893ff"
+    },
+    {
+     "type": "rune",
+     "x": 540,
+     "w": 34,
+     "color": "#7ad8ff",
+     "when": "var.cercle_trouve ou (chapitre == ch5 et temps.semaine == 5)"
+    },
+    {
+     "type": "arbre_sombre",
+     "x": 610,
+     "taille": 1.1
+    },
+    {
+     "type": "lucioles",
+     "x": 320,
+     "w": 600
+    },
+    {
+     "type": "menhir",
+     "x": 494,
+     "taille": 0.9,
+     "lueur": "#b893ff",
+     "when": "var.cercle_trouve ou (chapitre == ch5 et temps.semaine == 5)",
+     "color": "#a39e94"
+    },
+    {
+     "type": "menhir",
+     "x": 586,
+     "taille": 1.15,
+     "lueur": "#b893ff",
+     "when": "var.cercle_trouve ou (chapitre == ch5 et temps.semaine == 5)",
+     "color": "#a39e94"
+    },
+    {
+     "type": "menhir",
+     "x": 626,
+     "taille": 0.8,
+     "when": "var.cercle_trouve ou (chapitre == ch5 et temps.semaine == 5)",
+     "color": "#a39e94"
+    },
+    {
+     "type": "silhouettes",
+     "x": 560,
+     "w": 130,
+     "nombre": 7,
+     "when": "chapitre == ch5 et temps.semaine == 5"
+    },
+    {
+     "type": "grimoire",
+     "x": 540,
+     "when": "chapitre == ch5 et temps.semaine == 5"
+    }
+   ],
+   "exits": [
+    {
+     "to": "cabane",
+     "x": 20,
+     "kind": "bord",
+     "label": "Cabane du gardien"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "clairiere",
+     "x": 300,
+     "label": "La clairière aux champignons",
+     "activities": [
+      "cueillette_foret"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "village",
+   "name": "Pierrelune",
+   "group": "Village",
+   "width": 600,
+   "kind": "exterieur",
+   "time": "jour",
+   "spawn": 40,
+   "ambient": "ville",
+   "when": "chapitre != ch1",
+   "floor": {
+    "style": "trottoir",
+    "color": "#5a5650",
+    "color2": "#a89e8e"
+   },
+   "backdrop": [
+    {
+     "type": "collines",
+     "x": 0
+    },
+    {
+     "type": "chateau",
+     "x": 120
+    }
+   ],
+   "props": [
+    {
+     "type": "panneau",
+     "x": 60,
+     "text": "PIERRELUNE"
+    },
+    {
+     "type": "maison",
+     "x": 170,
+     "w": 90
+    },
+    {
+     "type": "lampadaire",
+     "x": 240
+    },
+    {
+     "type": "maison",
+     "x": 330,
+     "w": 110
+    },
+    {
+     "type": "arbre",
+     "x": 420
+    },
+    {
+     "type": "maison",
+     "x": 500,
+     "w": 90
+    },
+    {
+     "type": "banc_public",
+     "x": 560
+    }
+   ],
+   "exits": [
+    {
+     "to": "cour",
+     "x": 14,
+     "kind": "bord",
+     "label": "Retour au château"
+    },
+    {
+     "to": "auberge",
+     "x": 330,
+     "label": "L'auberge de la Comète"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "echoppe",
+     "x": 500,
+     "label": "L'échoppe d'Aldric",
+     "activities": [
+      "acheter_livre",
+      "acheter_ingredients"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "auberge",
+   "name": "L'auberge de la Comète",
+   "group": "Village",
+   "width": 400,
+   "kind": "interieur",
+   "time": "soir",
+   "spawn": 40,
+   "ambient": "club",
+   "when": "chapitre != ch1",
+   "wall": {
+    "style": "bois",
+    "color": "#6a4a2a"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#5a3a22"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22
+    },
+    {
+     "type": "cheminee",
+     "x": 110
+    },
+    {
+     "type": "table",
+     "x": 190
+    },
+    {
+     "type": "chaise",
+     "x": 175
+    },
+    {
+     "type": "table",
+     "x": 250
+    },
+    {
+     "type": "bougies",
+     "x": 252,
+     "y": 114,
+     "count": 2
+    },
+    {
+     "type": "comptoir",
+     "x": 330,
+     "w": 80
+    },
+    {
+     "type": "chandelier",
+     "x": 230
+    }
+   ],
+   "exits": [
+    {
+     "to": "village",
+     "x": 22,
+     "kind": "porte"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "marthe",
+     "x": 340,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "comptoir",
+     "x": 300,
+     "label": "Le comptoir",
+     "activities": [
+      "chocolat",
+      "travailler_auberge"
+     ]
+    }
+   ]
+  }
+ ],
+ "activities": [
+  {
+   "id": "etudier",
+   "label": "Étudier",
+   "description": "Réviser tes cours, lire, prendre des notes.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.savoir += hasard(2, 3); stat.sortileges += hasard(0, 1); stat.discipline += 1",
+   "feedback": "Les pages défilent. Quelque chose finit par rentrer."
+  },
+  {
+   "id": "pratiquer_sorts",
+   "label": "Pratiquer les sortilèges",
+   "description": "S'entraîner dans le cercle jusqu'à ce que les étincelles obéissent.",
+   "cost": {
+    "actions": 1,
+    "energie": 15
+   },
+   "effects": "stat.sortileges += hasard(1, 3); stat.puissance += hasard(0, 1); var.sorts += chance(35) ? 1 : 0",
+   "feedback": "Tes doigts fourmillent encore de magie."
+  },
+  {
+   "id": "preparer_potion",
+   "label": "Préparer une potion",
+   "description": "Ingrédients, feu doux, patience.",
+   "cost": {
+    "actions": 1,
+    "energie": 10,
+    "ecus": 2
+   },
+   "effects": "stat.potions += hasard(1, 3); stat.savoir += hasard(0, 1); rel.varn += chance(40) ? 1 : 0",
+   "feedback": "Une odeur de menthe et de soufre te suit tout le reste de la journée."
+  },
+  {
+   "id": "entrainement_duel",
+   "label": "S'entraîner au duel",
+   "description": "Esquives, parades, contre-sorts.",
+   "cost": {
+    "actions": 1,
+    "energie": 20
+   },
+   "effects": "stat.duel += hasard(1, 3); stat.courage += hasard(0, 1); rel.brax += 1",
+   "feedback": "Brax grogne. Venant de lui, c'est presque un compliment."
+  },
+  {
+   "id": "soigner_creatures",
+   "label": "Soigner les créatures",
+   "description": "Nourrir, panser, apprivoiser.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.creatures += hasard(1, 3); stat.moral += 3; rel.gaspard += 2",
+   "feedback": "Une petite bête s'endort contre ta main."
+  },
+  {
+   "id": "cueillette",
+   "label": "Cueillir des plantes rares",
+   "description": "Racines, fleurs de lune, mousse argentée.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.potions += 1; stat.creatures += hasard(0, 1); stat.ecus += 3",
+   "feedback": "Tu revends le surplus à Maîtresse Varn pour quelques écus."
+  },
+  {
+   "id": "cueillette_foret",
+   "label": "Explorer la clairière",
+   "description": "Les champignons qui brillent ne poussent qu'ici.",
+   "cost": {
+    "actions": 1,
+    "energie": 20
+   },
+   "effects": "stat.potions += hasard(1, 2); stat.creatures += 1; stat.courage += 1; stat.ecus += 6",
+   "feedback": "Tu ressors de la brume les poches pleines et le cœur battant."
+  },
+  {
+   "id": "mediter",
+   "label": "Méditer dans le cercle de lune",
+   "description": "Faire le vide. Laisser la lumière chasser l'ombre.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.moral += 5; stat.puissance += hasard(0, 1); stat.ombre -= 4; stat.energie += 5",
+   "feedback": "Un calme d'argent descend sur toi."
+  },
+  {
+   "id": "divination",
+   "label": "Lire les étoiles",
+   "description": "Chercher des réponses dans le ciel.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.savoir += 1; var.visions += 1; stat.moral -= 1",
+   "feedback": "Les étoiles te montrent des choses que tu préférerais oublier.",
+   "when": "chapitre != ch1",
+   "lockedText": "La professeure Sélène n'enseigne la divination qu'à partir de la deuxième année."
+  },
+  {
+   "id": "veillee",
+   "label": "Veillée au coin du feu",
+   "description": "Rire, raconter des histoires, oublier les devoirs.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.moral += 6; stat.energie += 4; rel.noe += (temps.semaine % 2 == 1 et non var.noe_perdu) ? 2 : 0",
+   "feedback": "Les flammes dansent. Tu te sens chez toi."
+  },
+  {
+   "id": "aider_lia",
+   "label": "Aider Lia à réviser",
+   "description": "Lui expliquer ce que personne ne t'a expliqué.",
+   "cost": {
+    "actions": 1,
+    "energie": 5
+   },
+   "effects": "rel.lia += 4; stat.savoir += 1; stat.moral += 2; stat.reputation += 1",
+   "feedback": "Lia relit ses notes en souriant.",
+   "when": "var.mentor_lia",
+   "lockedText": "Personne ne te demande d'aide pour l'instant."
+  },
+  {
+   "id": "se_reposer",
+   "label": "Faire une sieste",
+   "description": "Fermer les rideaux du lit et dormir un peu.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie += 25; stat.moral += 2",
+   "feedback": "Tu te réveilles avec la trace de l'oreiller sur la joue."
+  },
+  {
+   "id": "ecrire_lettre",
+   "label": "Écrire à maman",
+   "description": "Un corbeau messager attend sur le rebord de la fenêtre.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "rel.claire += 5; stat.moral += 3",
+   "feedback": "Le corbeau s'envole dans la nuit avec ta lettre.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "explorer",
+   "label": "Explorer le château",
+   "description": "Suivre l'escalier là où il a envie d'aller.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.ruse += hasard(0, 1); stat.courage += hasard(0, 1); stat.savoir += hasard(0, 1)",
+   "feedback": "Le château a encore mille secrets à te montrer."
+  },
+  {
+   "id": "lire_grimoire",
+   "label": "Lire le grimoire noir",
+   "description": "Des sorts que personne ne t'apprendra jamais.",
+   "cost": {
+    "actions": 1,
+    "energie": 15
+   },
+   "effects": "stat.puissance += hasard(3, 5); stat.savoir += 2; stat.ombre += hasard(5, 8); stat.moral -= 2; rel.malrik += 4",
+   "feedback": "Les lettres bougent. Une voix te remercie.",
+   "when": "var.grimoire_trouve"
+  },
+  {
+   "id": "travailler_auberge",
+   "label": "Servir à l'auberge",
+   "description": "Marthe paie bien et nourrit mieux.",
+   "cost": {
+    "actions": 1,
+    "energie": 20
+   },
+   "effects": "stat.ecus += 15; rel.marthe += 2; stat.discipline -= 1",
+   "feedback": "Tu rentres au château en sentant le chocolat et la fumée."
+  },
+  {
+   "id": "chocolat",
+   "label": "Prendre un chocolat chaud",
+   "description": "Le meilleur de toute la vallée.",
+   "cost": {
+    "actions": 1,
+    "ecus": 4
+   },
+   "effects": "stat.moral += 7; stat.energie += 6",
+   "feedback": "Brûlant, épais, parfait."
+  },
+  {
+   "id": "acheter_livre",
+   "label": "Acheter un livre de sorts",
+   "description": "Aldric a des ouvrages introuvables à la bibliothèque.",
+   "cost": {
+    "actions": 1,
+    "ecus": 12
+   },
+   "effects": "stat.savoir += 3; stat.sortileges += 2",
+   "feedback": "Tu caresses la couverture neuve tout le chemin du retour."
+  },
+  {
+   "id": "acheter_ingredients",
+   "label": "Acheter des ingrédients rares",
+   "description": "De quoi réussir des potions de haut niveau.",
+   "cost": {
+    "actions": 1,
+    "ecus": 10
+   },
+   "effects": "stat.potions += 4",
+   "feedback": "Ton sac sent l'anis et la poudre d'étoile."
+  },
+  {
+   "id": "se_soigner",
+   "label": "Se faire soigner",
+   "description": "Une infusion amère et un lit propre.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie += 30; stat.moral += 3",
+   "feedback": "Tu repars d'un pas plus léger.",
+   "maxPerTick": 1
+  }
+ ],
+ "chapters": [
+  {
+   "id": "ch1",
+   "title": "L'Éveil",
+   "subtitle": "Première année · 11 ans",
+   "weeks": 5,
+   "onStart": "var.annee = 1; var.age = 11"
+  },
+  {
+   "id": "ch2",
+   "title": "Les Secrets",
+   "subtitle": "Deuxième année · 12 ans",
+   "weeks": 5,
+   "location": "dortoir",
+   "onStart": "var.annee = 2; var.age = 12; stat.energie = 85",
+   "intro": "L'été est passé trop vite. Le bateau te ramène au château, et cette fois, tu connais le chemin."
+  },
+  {
+   "id": "ch3",
+   "title": "L'Épreuve",
+   "subtitle": "Troisième année · 13 ans",
+   "weeks": 5,
+   "location": "dortoir",
+   "onStart": "var.annee = 3; var.age = 13; stat.energie = 85",
+   "intro": "Troisième année. On ne te regarde plus comme un petit nouveau. Et le grimoire, lui, ne t'a pas oublié."
+  },
+  {
+   "id": "ch4",
+   "title": "La Fracture",
+   "subtitle": "Quatrième année · 14 ans",
+   "weeks": 5,
+   "location": "dortoir",
+   "onStart": "var.annee = 4; var.age = 14; stat.energie = 85",
+   "intro": "Pendant l'été, deux élèves ont disparu de leurs familles. Le Conseil des Mages s'inquiète. Ombrelune n'est plus un refuge."
+  },
+  {
+   "id": "ch5",
+   "title": "Le Choix",
+   "subtitle": "Cinquième année · 15 ans",
+   "weeks": 5,
+   "location": "dortoir",
+   "onStart": "var.annee = 5; var.age = 15; stat.energie = 85",
+   "intro": "Dernière année. Les examens, l'avenir, et l'Ombre qui gronde sous le château. Tout va se jouer maintenant."
+  }
+ ],
+ "creation": {
+  "nameLabel": "Ton prénom",
+  "defaultName": "Elio",
+  "look": true,
+  "baseLook": {
+   "skin": "peau3",
+   "hair": "court",
+   "hairColor": "brun",
+   "top": "toge",
+   "topColor": "$couleur_affinite",
+   "topColor2": "#e2b440",
+   "bottom": "pantalon",
+   "bottomColor": "#25222b",
+   "shoes": "#2a2a33",
+   "acc": [
+    "baguette"
+   ]
+  },
+  "fields": [
+   {
+    "id": "affinite",
+    "label": "Ton affinité magique",
+    "options": [
+     {
+      "id": "flamme",
+      "label": "Flamme",
+      "description": "Le feu, la force, le duel. Robe rouge.",
+      "effects": "var.couleur_affinite = \"#a8323a\"; var.affinite_nom = \"Flamme\"; stat.duel += 8; stat.puissance += 5; stat.courage += 5"
+     },
+     {
+      "id": "onde",
+      "label": "Onde",
+      "description": "L'eau, le soin, les potions. Robe bleue.",
+      "effects": "var.couleur_affinite = \"#2f62c9\"; var.affinite_nom = \"Onde\"; stat.potions += 10; stat.moral += 5; rel.noe += 8"
+     },
+     {
+      "id": "souffle",
+      "label": "Souffle",
+      "description": "L'air, les illusions, la divination. Robe argentée.",
+      "effects": "var.couleur_affinite = \"#c4cad3\"; var.affinite_nom = \"Souffle\"; stat.sortileges += 8; stat.savoir += 6; rel.ayla += 8"
+     },
+     {
+      "id": "racine",
+      "label": "Racine",
+      "description": "La terre, les plantes, les créatures. Robe verte.",
+      "effects": "var.couleur_affinite = \"#2f6a3a\"; var.affinite_nom = \"Racine\"; stat.creatures += 12; rel.gaspard += 10"
+     }
+    ]
+   },
+   {
+    "id": "origine",
+    "label": "D'où tu viens",
+    "options": [
+     {
+      "id": "sans_magie",
+      "label": "Une famille sans magie",
+      "description": "Tes parents ont cru à une blague en recevant la lettre.",
+      "effects": "stat.courage += 8; rel.noe += 10; rel.sera -= 10; rel.claire += 10"
+     },
+     {
+      "id": "lignee",
+      "label": "Une lignée de mages",
+      "description": "Ton nom ouvre des portes. Et attire les jalousies.",
+      "effects": "stat.reputation += 10; stat.ecus += 40; rel.sera += 15; stat.savoir += 5"
+     },
+     {
+      "id": "trouve",
+      "label": "Un enfant trouvé",
+      "description": "Recueilli bébé devant un orphelinat. Personne ne sait d'où tu viens.",
+      "effects": "stat.ruse += 10; rel.gaspard += 8; stat.puissance += 6; rel.claire -= 10"
+     }
+    ]
+   },
+   {
+    "id": "caractere",
+    "label": "Ton caractère",
+    "options": [
+     {
+      "id": "curieux",
+      "label": "Curieux",
+      "description": "Tu veux tout comprendre, tout ouvrir.",
+      "effects": "stat.savoir += 6; stat.ruse += 3"
+     },
+     {
+      "id": "temeraire",
+      "label": "Téméraire",
+      "description": "Tu fonces, tu réfléchis après.",
+      "effects": "stat.courage += 10; stat.discipline -= 5"
+     },
+     {
+      "id": "discret",
+      "label": "Discret",
+      "description": "On ne te remarque pas. Ça a ses avantages.",
+      "effects": "stat.ruse += 10; stat.discipline += 5"
+     }
+    ]
+   }
+  ]
+ },
+ "start": {
+  "location": "quai",
+  "event": "intro"
+ },
+ "onTickEnd": "stat.energie += 26; stat.ecus += 3; stat.moral += stat.moral < 40 ? 2 : 0; stat.ombre -= stat.ombre > 0 ? 1 : 0; eloigner(claire, 1); eloigner(noe, rel.noe > 20 ? 1 : 0); eloigner(ayla, var.couple ? 1 : 0)",
+ "sheet": [
+  {
+   "title": "Scolarité",
+   "rows": [
+    {
+     "label": "Affinité",
+     "value": "{var.affinite_nom}"
+    },
+    {
+     "label": "Année",
+     "value": "{var.annee}e année"
+    },
+    {
+     "label": "Sorts maîtrisés",
+     "value": "{var.sorts}"
+    },
+    {
+     "label": "Points en classe",
+     "value": "{var.points_classe}"
+    },
+    {
+     "label": "Duels",
+     "value": "{var.duel_victoires} victoire(s), {var.duel_defaites} défaite(s)"
+    },
+    {
+     "label": "Avertissements",
+     "value": "{var.avertissements}"
+    },
+    {
+     "label": "Champion des duels",
+     "value": "oui",
+     "when": "var.champion"
+    },
+    {
+     "label": "Visions",
+     "value": "{var.visions}",
+     "when": "var.visions > 0"
+    }
+   ]
+  }
+ ],
+ "events": [],
+ "endings": []
+}

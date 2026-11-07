@@ -1,0 +1,144 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  LES FINS (évaluées par priorité décroissante ; la dernière est la fin par défaut)
+//  Chaque fin révèle, d'une façon ou d'une autre, qui était le coupable :
+//  la partie suivante, ce sera quelqu'un d'autre.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== fin:fin_dessaisi
+titre: Dessaisi
+type: tragique
+quand: var.dessaisi
+priorite: 110
+resume: Trop de pression, trop d'entorses aux règles. On t'a retiré l'enquête, et quelqu'un, à Saint-Rémy, dort tranquille.
+lieu: bureau
+---
+!moment soir
+> Tu rends ta carte d'accès à Garnier. [[rival:Il|Elle]] la prend sans triomphe.
+[var.rival_allie] rival (triste): Ce n'est pas juste. Tu étais sur la bonne voie. Je le dirai aux gars de Lyon.
+> La section de recherches reprend tout depuis le début. Ils classent ton dossier dans un carton, avec une étiquette : « Méthodes contestables ».
+> Trois mois plus tard, ils arrêtent {liste("suspects", var.n_coupable, "nom")}. Avec tes notes. Ton nom n'apparaît nulle part.
+[var.couple] > Élise est venue te voir à Lyon. Elle a apporté un croissant de la boulangerie de ta mère, écrasé dans son sac. Vous avez ri, puis pleuré.
+> Ta mère t'appelle tous les dimanches. Elle ne parle jamais de l'affaire. Une fois, elle a juste dit : « Le village s'est calmé. Reviens quand tu veux. Vraiment quand tu veux. »
+
+=== fin:fin_pardon
+titre: Laisser partir
+type: inattendue
+quand: var.laisse_partir
+priorite: 105
+resume: Tu savais. Tu avais les preuves. Et tu as refermé le dossier.
+lieu: etang
+---
+!moment aube
+> Tu as écrit dans ton rapport : « Éléments insuffisants pour désigner un coupable. » C'est le seul mensonge de ta carrière.
+[var.coupable == helene] > Hélène Vasseur a vendu le manoir et s'est installée à Nice, chez sa sœur. Elle t'envoie une carte postale chaque année, sans un mot. Juste une rose séchée.
+[var.coupable == julien] > Julien a remboursé ses dettes avec l'héritage, puis a disparu en Amérique du Sud. On dit qu'il a ouvert une école de surf. On dit qu'il ne joue plus.
+[var.coupable == roussel] > Bernard Roussel a démissionné « pour raisons de santé ». Il cultive des tomates derrière sa maison et ne sort plus jamais le samedi soir.
+[var.coupable == ami] > Thomas a fermé le Relais. Pas à cause du promoteur : le projet est mort avec Vasseur. [[ami:Il|Elle]] l'a fermé parce qu'[[ami:il|elle]] ne pouvait plus regarder le comptoir. Vous ne vous parlez plus. Mais le jour de ton anniversaire, il y a toujours une bouteille devant ta porte.
+[var.coupable == morel] > La docteure Morel a fait publier la vérité sur l'accident de 2004, preuves à l'appui. Paul a enfin une plaque sur le mur de la scierie. Elle soigne toujours tout le village. Elle te regarde comme si tu étais la seule personne au monde à savoir.
+[var.coupable == delorme] > Marc Delorme a été blanchi du vol de bois. Il a repris son poste à la scierie, rachetée par une coopérative d'ouvriers. Il a arrêté de braconner. Presque.
+> Le village croit que l'affaire n'a jamais été résolue. Toi seul[[|e]] sais. Tu portes ce secret comme un caillou dans ta poche, que tu fais rouler entre tes doigts quand personne ne regarde.
+> Était-ce de la justice ? De la faiblesse ? De l'amour pour ce village ? Tu n'as jamais tranché.
+
+=== fin:fin_ami
+titre: Ce qu'on doit à ses amis
+type: tragique
+quand: var.accuse == ami et var.coupable == ami et var.solide
+priorite: 100
+resume: Le coupable, c'était [[ami:ton meilleur ami|ta meilleure amie]]. Tu l'as arrêté[[ami:|e]] quand même, parce que c'était ton travail.
+lieu: cafe
+---
+!moment soir
+> Le procès a lieu au printemps, à Lyon. Thomas plaide coupable. [[ami:Il|Elle]] ne te regarde qu'une seule fois, quand tu témoignes à la barre.
+> Huit ans de prison. Le juge a retenu l'absence de préméditation, la provocation, l'émotion.
+> Le Relais a fermé. Le promoteur a abandonné son projet après la mort de Vasseur. Le bâtiment est vide, avec la vieille photo de vous deux toujours accrochée derrière la vitre sale.
+[var.carnet_noir] > Dans le carnet noir d'Édouard, tu as trouvé la preuve qu'il avait truqué l'accident de 2004, et une page entière sur les dettes du Relais. Tu as tout versé au dossier. Ça n'a rien changé pour Thomas. Ça a tout changé pour la famille de Paul Morel.
+> Tu lui écris tous les mois. Les premières lettres reviennent sans avoir été ouvertes. La septième, non.
+> Il y a des enquêtes qu'on résout, et d'autres qui vous résolvent. Celle-là a fait de toi quelqu'un que tu ne connaissais pas encore : quelqu'un qui fait ce qui est juste, même quand ça brise tout.
+
+=== fin:fin_verite
+titre: Toute la vérité
+type: secrete
+quand: var.accuse == var.coupable et var.solide et var.carnet_noir
+priorite: 95
+resume: Le meurtrier d'Édouard Vasseur, et le secret qu'il avait enterré vingt ans plus tôt. Saint-Rémy sait enfin tout.
+lieu: place
+---
+!moment jour
+!fx confettis
+> Ton rapport fait quarante pages. Les vingt premières concernent le meurtre d'Édouard Vasseur, et l'arrestation de {liste("suspects", var.n_coupable, "nom")}. Les vingt suivantes, l'accident du 14 juin 2004.
+> Le carnet noir est versé au dossier. La sécurité de la scie avait été retirée sur ordre d'Édouard Vasseur. Paul Morel n'était pas imprudent. Le rapport avait été réécrit.
+[present(pere) et var.pere_aveu] > Ton père a témoigné. Il a dit la vérité devant le juge, à soixante-sept ans, en serrant sa casquette entre ses mains. En sortant du tribunal, il t'a dit : « Merci. » Tu ne l'avais jamais entendu dire ce mot.
+> La docteure Morel a fait poser une plaque sur le mur de la scierie, rachetée par ses ouvriers : « À Paul Morel, 1981-2004. Qui n'était pas imprudent. »
+[var.couple] > Élise a écrit l'article de sa vie. Il a été repris par tous les journaux du pays. Elle t'a demandé de rester. Tu as demandé ta mutation à la brigade de Montbrison, à vingt minutes de Saint-Rémy.
+[var.rival_allie] > Garnier a été promu[[rival:|e]]. À la cérémonie, [[rival:il|elle]] a dit à tout le monde que c'était grâce à « l'enquêteur de Lyon. Enfin, de Saint-Rémy. »
+> Ta mère a mis ta photo dans la vitrine de la boulangerie, entre les religieuses et les éclairs au café. Tu as protesté pour la forme.
+> Le village ne t'a pas pardonné d'avoir tout déterré. Mais il te salue, maintenant. C'est mieux qu'un pardon.
+
+=== fin:fin_resolue
+titre: Affaire résolue
+type: heureuse
+quand: var.accuse == var.coupable et var.solide
+priorite: 80
+resume: Un dossier solide, des aveux, un procès. Le meurtrier d'Édouard Vasseur répondra de son crime.
+lieu: bureau
+---
+!moment jour
+> La procureure Delmas a lu ton dossier deux fois. Puis elle a appelé Lyon : « Annulez la section de recherches. C'est réglé. »
+[var.coupable == helene] > Hélène Vasseur a été condamnée à douze ans. Elle a demandé une seule chose au juge : pouvoir s'occuper du jardin de la prison.
+[var.coupable == julien] > Julien Vasseur a été condamné à quinze ans. Ses créanciers ont été arrêtés grâce à ses aveux. Il a dit au juge qu'en prison, au moins, il dormait.
+[var.coupable == roussel] > Bernard Roussel a été condamné à dix-huit ans, et l'affaire des Prés-Hauts a fait tomber deux conseillers départementaux. Saint-Rémy a élu une nouvelle maire : la fille Bertin.
+[var.coupable == morel] > Claire Morel a été condamnée à dix ans. Le juge a tenu compte de l'accident de 2004. Le village s'est cotisé pour lui payer un avocat. La moitié du tribunal était remplie de ses patients.
+[var.coupable == delorme] > Marc Delorme a été condamné à quatorze ans. Au procès, les ouvriers de la scierie ont tous témoigné : c'était Vasseur qui volait le bois. Ça n'a rien changé. Ça a juste rendu les choses plus tristes.
+> Le village, lui, a mis du temps à te pardonner d'avoir mis son linge sale sur la place publique. Mais la boulangerie de ta mère n'a jamais vendu autant de croissants.
+[var.couple] > Élise et toi, vous vous voyez un week-end sur deux. Lyon, Saint-Rémy, Lyon. Elle dit que c'est très bien comme ça. Tu n'en es pas si sûr[[|e]].
+[var.rival_allie] > Garnier t'a envoyé un message : « La prochaine fois qu'il y a un meurtre ici, je t'appelle direct. » Tu espères qu'il n'y en aura pas.
+[present(cadet)] > [[cadet:Ton petit frère|Ta petite sœur]] a quitté la scierie pour entrer à l'école de gendarmerie. « Comme toi, mais en mieux », [[cadet:dit-il|dit-elle]].
+
+=== fin:fin_relache
+titre: Faute de preuves
+type: neutre
+quand: var.accuse == var.coupable
+priorite: 70
+resume: Tu avais le bon nom. Pas le dossier. Le coupable est ressorti libre, un sourire en coin.
+lieu: place
+---
+!moment soir
+> Quarante-huit heures de garde à vue. Puis un avocat de Lyon, trois vices de procédure, et un juge qui soupire en refermant ton dossier : « C'est tout ? »
+> {liste("suspects", var.n_coupable, "nom")} ressort libre. Sur les marches de la gendarmerie, un regard vers toi. Pas de triomphe. Juste la certitude qu'il n'y aura pas de deuxième fois.
+> Tu avais raison. Tout le village le sait, maintenant. Ça ne sert à rien d'avoir raison.
+[var.coupable == ami] > Thomas a rouvert le Relais une semaine plus tard. Tu n'y es jamais retourné[[|e]]. Le soir de ton départ, [[ami:il|elle]] a laissé allumée la lumière du comptoir toute la nuit.
+[var.couple] > Élise a voulu écrire un article sur l'affaire. Tu lui as demandé de ne pas le faire. Elle ne l'a pas fait. Vous ne vous êtes plus parlé pendant un mois.
+> La procureure a classé l'affaire « sans suite, faute de charges suffisantes ». Elle t'a dit, en te raccompagnant : « La prochaine fois, ramenez-moi des preuves. Pas des certitudes. »
+
+=== fin:fin_erreur
+titre: L'erreur judiciaire
+type: tragique
+quand: var.accuse != ''
+priorite: 60
+resume: Tu as arrêté la mauvaise personne. Un innocent a payé, et le vrai coupable a assisté au procès depuis le premier rang.
+lieu: eglise
+---
+!moment soir
+[var.accuse == helene] > Hélène Vasseur a passé quatre mois en détention provisoire avant que son appel à Nice ne soit retrouvé dans les relevés. Elle n'est jamais revenue au manoir.
+[var.accuse == julien] > Julien Vasseur a passé trois mois en prison avant que les images du casino ne l'innocentent. Ses créanciers, eux, l'attendaient à la sortie.
+[var.accuse == roussel] > Le maire a été libéré au bout de deux mois : sa secrétaire a fini par témoigner. Sa femme a demandé le divorce le lendemain. Il a démissionné.
+[var.accuse == ami] > Thomas a passé cinq mois en détention avant que le bulletin de l'hôpital ne soit enfin versé au dossier. Le Relais a fait faillite pendant ce temps. [[ami:Il|Elle]] ne t'a jamais pardonné. Tu ne te l'es jamais pardonné non plus.
+[var.accuse == morel] > La docteure Morel a été libérée au bout de trois mois, grâce au témoignage du père Antoine. Pendant ce temps, Saint-Rémy n'avait plus de médecin. Deux personnes âgées sont mortes faute de soins rapides.
+[var.accuse == delorme] > Marc Delorme a passé six mois en prison avant que l'Office des forêts ne retrouve la photo du piège photographique. Personne ne s'est excusé. Personne ne s'excuse jamais auprès des gens comme lui.
+> Et pendant ce temps, {liste("suspects", var.n_coupable, "nom")} assistait au procès, au premier rang, sans jamais te quitter des yeux.
+> Un an plus tard, la section de recherches de Lyon rouvre le dossier. Ils trouvent en trois semaines ce que tu n'avais pas su voir.
+> On ne t'a pas renvoyé[[|e]]. On t'a muté[[|e]] aux archives. Tu y classes des affaires anciennes, et tu te demandes, chaque jour, à quel moment tu t'es trompé[[|e]].
+
+=== fin:fin_classee
+titre: Affaire classée
+type: neutre
+resume: Douze jours, et pas de nom. L'affaire Vasseur rejoint les cartons des affaires non résolues. Mais toi, tu sais qu'il y avait une réponse.
+lieu: etang
+---
+!moment aube
+> Le treizième jour, la section de recherches de Lyon reprend le dossier. Tu leur remets tes notes, tes photos, tes fils rouges. Ils te remercient poliment.
+> Tu reprends la route de Lyon à l'aube. Dans le rétroviseur, l'étang du Moulin fume dans la brume, comme le premier jour.
+[var.couple] > Élise t'a accompagné[[|e]] jusqu'à la voiture. « Tu reviendras ? » Tu as dit oui. Tu ne sais pas encore si c'était vrai.
+> Six mois plus tard, un article de L'Écho des Étangs te parvient par la poste, sans un mot. Les enquêteurs de Lyon ont arrêté {liste("suspects", var.n_coupable, "nom")}.
+> Tu relis tes notes. Tout était là. Les fils rouges menaient au bon endroit. Il t'a juste manqué un peu de temps, ou un peu de courage.
+> Ta mère a punaisé l'article dans l'arrière-boutique, à côté de ta photo de diplôme. « Ce n'était pas ta faute », a-t-elle écrit en marge. Tu n'en es pas si sûr[[|e]].

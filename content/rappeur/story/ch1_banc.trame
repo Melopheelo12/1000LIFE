@@ -1,0 +1,494 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 1 — LE BANC (19 ans)
+//  Le studio de la cave, le premier open mic, le clash avec Vortex,
+//  et le label Diamant Noir qui flaire la bonne affaire.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== intro
+titre: Le banc
+declencheur: manual
+---
+!moment soir
+!placer moi 380 droite
+!placer momo 410 gauche
+> Cité des Glycines, Valbrune. Un vendredi soir de septembre, au pied du bâtiment B. Le banc est gravé de vingt ans de prénoms. Le tien est là, entre deux cœurs au compas.
+momo (content): Vas-y, pose. J'ai fait cette prod cet après-midi. Seize mesures, pas une de plus.
+> Il lance la boucle sur une enceinte grosse comme un savon. Un piano triste, une basse qui gronde sous les pieds.
+* Poser le couplet sur ta mère et ses nuits à l'hôpital. #sincere
+  test stat.plume vs 32
+  si reussite
+    > Ta voix tremble à la troisième mesure, puis se pose. Quand tu t'arrêtes, Momo ne dit rien pendant un long moment.
+    momo (emu): … [[Frère|Ma sœur]]. Celui-là, on l'enregistre.
+    ~ stat.plume += 2; stat.authenticite += 3; rel.momo += 4
+  sinon
+    > Tu cherches tes mots, tu te répètes. La boucle tourne dans le vide.
+    momo (pensif): C'est là, je l'entends. Il te manque juste le courage de le dire en entier.
+    ~ stat.authenticite += 2
+* Kicker la prod, vite et fort, en découpant chaque temps. #technique
+  test stat.flow vs 30
+  si reussite
+    > Les syllabes claquent comme des pétards. Trois gamins qui passaient s'arrêtent net.
+    momo (rire): Ils ont la bouche ouverte, regarde-les !
+    ~ stat.flow += 2; stat.respect += 2
+  sinon
+    > Tu t'emmêles à la sixième mesure et tu finis en riant.
+    momo (rire): Respire, [[champion|championne]]. On a toute la vie.
+    ~ stat.moral += 2
+* Faire le clown : un freestyle sur les chaussettes de Momo. #humour
+  > Momo s'étouffe de rire. Même la dame du troisième, à sa fenêtre, sourit.
+  ~ rel.momo += 5; stat.moral += 4
+!entrer dris droite 452
+dris (content): Eh, les artistes ! Toujours sur ce banc ?
+> Dris. Le troisième prénom gravé sur le bois. Survêtement neuf, baskets immaculées, un téléphone qui vibre toutes les trente secondes.
+dris: Je vous ai ramené à manger. Des vrais trucs, pas les sandwichs de Samir.
+* Prendre le sachet en le remerciant. #loyal
+  ~ rel.dris += 4
+  dris (fier): Normal. On est une famille, nous trois.
+* « T'as payé avec quoi, Dris ? » #mefiance
+  ~ rel.dris -= 3; stat.authenticite += 1
+  dris (colere): Avec mon argent. Ça te va, monsieur le juge ?
+momo (fier): Raconte-lui pour la cave, toi. Non, je le dis : j'ai fini. Isolation, micro, carte son. Le studio du bâtiment C est ouvert. On n'a plus aucune excuse.
+dris: Et en ville, le Spot fait un open mic tous les soirs. Fred laisse monter n'importe qui. Même toi.
+~ objectif(scene, "Monter sur scène à l'open mic du Spot (centre-ville)")
+~ objectif(premier_son, "Enregistrer ton premier morceau au studio de la cave (écris d'abord un texte)")
+~ rencontrer(mere)
+mere: {joueur.nom} ! Ton assiette refroidit ! Et demain, tu travailles chez Samir, je te rappelle !
+dris (rire): La patronne a parlé.
+> Chaque semaine, tu as 3 actions. Écris dans ta chambre, freestyle au banc, enregistre au studio de la cave, prends le bus pour le centre-ville. Déplace-toi avec ← → ou en cliquant, interagis avec E, ou ouvre le PLAN.
+
+=== ch1_blaze
+titre: Le studio de la cave
+declencheur: enter:studio
+chapitres: ch1
+unique: oui
+priorite: 8
+tags: important
+---
+!placer momo 236 gauche
+> Une porte en fer, onze marches, une odeur de béton humide. Puis la lumière rose d'une ampoule, des boîtes à œufs collées au plafond et un micro sous un filtre en collant.
+momo (fier): Bienvenue chez nous. J'ai mis six mois. Les boîtes à œufs, c'est la boulangerie qui me les a données.
+momo: Avant de poser quoi que ce soit, il te faut un blaze. Un vrai. Ton prénom, c'est pour ta mère.
+* « Sillage. Ce qu'on laisse derrière soi. » #poesie
+  ~ var.blaze = "Sillage"; stat.plume += 1
+  momo (pensif): Sillage… Ça fait album concept. J'aime bien.
+* « Le Môme. Parce qu'on l'est tous restés. » #humble
+  ~ var.blaze = "Le Môme"; stat.respect += 1
+  momo (rire): Le Môme ! Ta mère va adorer.
+* « Néon. Je veux qu'on me voie de loin. » #ambition
+  ~ var.blaze = "Néon"; stat.hype += 1
+  momo (fier): Néon. Ça brille, ça claque. Comme un nom sur une affiche.
+* « Mon prénom, tout simplement. Je n'ai rien à cacher. » #sincere
+  ~ var.blaze = joueur.nom; stat.authenticite += 3
+  momo: Pas de blaze, pas de masque. C'est un choix, ça aussi.
+momo: Règle numéro un du studio : on enregistre ce qui est vrai. Règle numéro deux : on ne touche pas à mon PC sans moi.
+> Pour enregistrer, il te faut un texte fini. Ton carnet t'attend à ton bureau, dans ta chambre.
+
+=== ch1_premier_son
+titre: Première prise
+declencheur: activity:enregistrer
+unique: oui
+priorite: 9
+tags: important
+---
+!placer momo 220 droite
+> Le casque te serre les oreilles. Derrière la vitre imaginaire, Momo lève trois doigts. Deux. Un.
+momo: Ça tourne. De quoi tu parles, sur ce premier son ?
+* Du quartier : les tours, le banc, les rêves qui rouillent. #quartier
+  ~ stat.respect += 3; stat.authenticite += 3; var.theme = "quartier"
+* D'amour, d'un regard croisé dans le bus de nuit. #romance
+  ~ stat.hype += 2; rel.lina += 3; var.theme = "amour"
+* De toi, de ce que tu vas devenir. Un pur ego trip. #ego
+  ~ stat.hype += 3; stat.authenticite -= 2; var.theme = "ego"
+test stat.flow + stat.plume / 3 vs 42
+si reussite
+  > Une prise. Une seule. Momo retire son casque, le regarde comme s'il avait mordu.
+  momo (surpris): On garde. On ne touche à rien.
+  ~ stat.hype += 3; var.abonnes += 120
+sinon
+  > Quatorze prises. À la quinzième, ta voix est cassée mais juste.
+  momo (content): Elle est sale, elle est vivante. On garde celle-là.
+  ~ stat.hype += 1; var.abonnes += 50
+momo (pensif): Dernière chose. Quand on le poste… on écrit quoi, dans la description ? Juste ton blaze ?
+* « Prod. Momo. En gros. C'est notre son. » #loyal
+  ~ var.momo_credite = vrai; rel.momo += 8
+  ~ souvenir(momo, credit, "Tu as écrit son nom en gros sur votre premier son")
+  momo (emu): … Merci, [[frère|ma sœur]]. Ma mère va encadrer la capture d'écran.
+* « On verra plus tard, ça fait plus pro sans. » #ambition
+  ~ rel.momo -= 8; stat.hype += 1
+  ~ souvenir(momo, oubli, "Tu n'as pas voulu écrire son nom sur votre premier son")
+  momo (triste): Ouais. Plus pro. D'accord.
+~ objectifReussi(premier_son)
+
+=== ch1_open_mic
+titre: Le premier open mic
+declencheur: activity:open_mic
+unique: oui
+priorite: 9
+tags: important
+---
+!placer fred 300 gauche
+!placer rival 250 droite
+> Le Spot est plein à craquer. Ça sent la bière tiède et le parfum bon marché. Fred tapote le micro.
+fred: Suivant sur la liste… {var.blaze != '' ? var.blaze : joueur.nom}. Des Glycines, il paraît. Fais-nous voyager, [[petit|petite]].
+> Au premier rang, Vortex, [[rival:le roi|la reine]] des open mics des Hauts-de-Brune, croise les bras. Un peu plus loin, [[lina:un garçon|une fille]] lève un vieil appareil photo vers la scène.
+~ rencontrer(fred); rencontrer(rival); var.lina_vue = vrai
+* Commencer a cappella, dans le silence. #sincere
+  test stat.plume + stat.scene / 2 vs 42
+  si reussite
+    > Le bar se tait. Même le frigo semble retenir son souffle. À la dernière mesure, une salve d'applaudissements.
+    ~ stat.hype += 4; stat.respect += 4; stat.authenticite += 2
+  sinon
+    > Le silence t'avale. Quelqu'un tousse. Tu termines trop vite, sous des applaudissements polis.
+    ~ stat.moral -= 4
+* Demander au DJ la prod la plus rapide qu'il ait. #technique
+  test stat.flow + stat.scene / 2 vs 42
+  si reussite
+    > Tu dévales l'instru sans freiner. Le public tape du pied, puis crie à chaque fin de phrase.
+    ~ stat.hype += 4; stat.respect += 3
+  sinon
+    > Tu décroches au bout de huit mesures. Le DJ baisse le son par pitié.
+    ~ stat.moral -= 5; stat.respect -= 1
+* Faire participer la salle : « Quand je dis Glycines, vous dites… » #showman
+  test stat.scene vs 30
+  si reussite
+    > « GLYCINES ! » Toute la salle hurle avec toi. Même ceux qui ne savent pas où c'est.
+    ~ stat.hype += 5; stat.scene += 2
+  sinon
+    > Trois personnes répondent. Dont Momo, qui crie beaucoup trop fort.
+    ~ stat.moral -= 3; rel.momo += 2
+rival (moqueur): Pas mal. Pour un premier passage. On voit que les Glycines découvrent le rap.
+> Quelques rires. Vortex a déjà le dos tourné.
+* Lui répondre au micro, du tac au tac. #clash
+  ~ stat.respect += 3; rel.rival -= 6
+  > « Les Hauts-de-Brune découvrent la politesse, c'est pour bientôt ? » La salle hurle. Vortex se retourne, plus du tout amusé[[rival:|e]].
+* Le remercier, avec un sourire. #calme
+  ~ rel.rival += 4; stat.authenticite += 1
+  rival (surpris): … C'est ça, c'est ça.
+fred (content): Reviens quand tu veux, [[petit|petite]]. Le micro t'aime bien.
+~ objectifReussi(scene); rel.fred += 6
+
+=== ch1_lina
+titre: L'appareil photo
+declencheur: talk:lina
+chapitres: ch1, ch2
+quand: var.lina_vue
+unique: oui
+priorite: 7
+---
+!placer lina 210 droite
+lina (content): C'est toi, des Glycines ? Regarde.
+> Sur l'écran de l'appareil, une photo de toi au micro, les yeux fermés, une goutte de sueur sur la tempe. Tu ne t'étais jamais vu comme ça.
+lina: Je fais un projet sur les open mics, pour les Beaux-Arts. Les visages des gens qui osent. Tu as le meilleur.
+~ rencontrer(lina)
+* « Tu me l'envoies ? Je veux la mettre en photo de profil. » #sociable
+  ~ rel.lina += 5; var.abonnes += 40
+  lina (rire): Seulement si tu me cites. Crédit photo : moi.
+* « Et si tu filmais mon premier clip ? » #ambition
+  ~ rel.lina += 3; stat.hype += 1
+  lina (pensif): Ça dépend. Tu as quelque chose à dire, ou juste quelque chose à vendre ?
+* « Pourquoi tu photographies les autres, et jamais toi ? » #romance
+  ~ rel.lina += 8
+  ~ souvenir(lina, question, "Tu lui as demandé pourquoi [[lina:il|elle]] ne se photographiait jamais")
+  lina (surpris): … Personne ne m'avait jamais posé la question.
+lina: Je suis là un soir sur deux. Viens me dire bonjour, si tu repasses.
+
+=== ch1_vortex_diss
+titre: Le diss
+declencheur: tick_start
+chapitres: ch1
+quand: var.open_mics >= 1 et temps.semaine >= 3
+unique: oui
+priorite: 8
+---
+!son notif
+> Ton téléphone explose. Quarante notifications en une minute. Vortex vient de poster un morceau : « Mauvaise herbe ».
+> « Les Glycines, ça pousse mal, ça fane vite / [[Un petit|Une petite]] qui rappe sa mère parce qu'[[il|elle]] n'a rien d'autre dans la tête… »
+> Le refrain, c'est ton blaze, déformé. La vidéo a déjà huit mille vues.
+* Répondre par un son. Ce soir. #clash
+  ~ var.clash = vrai; stat.respect += 3; planifier(ch1_battle, 1)
+  > Tu écris toute la nuit. À six heures du matin, Fred t'envoie un message : « Vendredi, battle au Spot. Toi contre [[rival:lui|elle]]. Trois manches. Le quartier entier sera là. »
+* L'ignorer. Les vrais n'ont pas besoin de répondre. #calme
+  ~ var.clash_ignore = vrai; stat.authenticite += 3; stat.respect -= 4
+  > Tu ne réponds pas. Sur le banc, Dris secoue la tête. « Tu laisses passer ça ? Au quartier, on va dire que t'as peur. »
+* L'appeler, direct, pour lui demander ce qu'il veut. #direct
+  ~ rel.rival += 4; stat.respect += 1
+  rival (moqueur): Ce que je veux ? Qu'on parle de moi. Et regarde : on parle de moi.
+  > [[rival:Il|Elle]] raccroche. Mais quelque chose a changé dans sa voix. Un peu de respect, peut-être.
+
+=== ch1_battle
+titre: La battle du Spot
+declencheur: scheduled
+chapitres: ch1
+unique: oui
+---
+!lieu spot 300 nuit
+!placer rival 360 gauche
+!placer moi 300 droite
+!placer fred 110 droite
+!fx foule
+> Le Spot n'a jamais été aussi plein. Les Glycines d'un côté, les Hauts-de-Brune de l'autre. Fred, au milieu, tient le micro comme un arbitre.
+fred: Trois manches. Une minute chacun. Le public décide. Pas de coups, pas d'insultes sur les mères. Le reste, c'est la guerre.
+~ var.manches = 0
+> Première manche. Vortex ouvre : une rafale de punchlines sur ton âge, ton quartier, tes baskets.
+* Répondre avec des images, des vraies, sur ce qu'[[rival:il|elle]] cache. #plume
+  test stat.plume vs 40
+  si reussite
+    > Ta dernière phrase tombe comme un couperet. Les Hauts-de-Brune eux-mêmes poussent un « ooooh ».
+    ~ var.manches += 1
+  sinon
+    > Tes images sont belles, mais trop longues. Le public décroche.
+* Rire de toi-même avant qu'[[rival:il|elle]] ne le fasse. #humour
+  test stat.plume + stat.scene / 2 vs 38
+  si reussite
+    > Tu retournes chacune de ses vannes contre [[rival:lui|elle]]. La salle pleure de rire.
+    ~ var.manches += 1
+  sinon
+    > Tes blagues tombent à plat. Vortex fait semblant de bâiller.
+> Deuxième manche. La prod est rapide, sale, piégeuse.
+* Accélérer encore. Double-temps sur tout le couplet. #technique
+  test stat.flow vs 42
+  si reussite
+    > Tu tiens le double-temps jusqu'au bout. Fred lui-même lève le poing.
+    ~ var.manches += 1
+  sinon
+    > Tu t'essouffles à la moitié. Vortex mime un inhalateur.
+* Ralentir, poser chaque mot, et laisser le silence parler. #calme
+  test stat.flow + stat.plume / 2 vs 40
+  si reussite
+    > Contre toute attente, ton calme hypnotise la salle. On entend chaque syllabe.
+    ~ var.manches += 1
+  sinon
+    > Le public s'impatiente. « Plus vite ! » crie quelqu'un.
+> Dernière manche. Tout se joue maintenant.
+* Parler du quartier, de ta mère, de ce qui est vrai. #sincere
+  test stat.scene + stat.authenticite / 3 vs 40
+  si reussite
+    > Plus personne ne rit. Quand tu baisses le micro, les Glycines hurlent ton nom.
+    ~ var.manches += 1; stat.authenticite += 3
+  sinon
+    > Ta voix se brise. Certains applaudissent, d'autres sifflent.
+* Viser son ego, sans pitié. #clash
+  test stat.scene + stat.respect / 3 vs 40
+  si reussite
+    > Vortex perd son sourire. Pour la première fois de la soirée, [[rival:il|elle]] ne trouve rien à répondre.
+    ~ var.manches += 1; rel.rival -= 8
+  sinon
+    > Tu vas trop loin. Une partie de la salle te hue.
+    ~ stat.respect -= 2
+si var.manches >= 2
+  !fx confettis
+  !son positif
+  fred (fier): Le public a choisi. Victoire pour les Glycines !
+  > Les potes te portent sur leurs épaules. Lina a tout filmé. Le lendemain, la vidéo de la battle dépasse les cent mille vues.
+  ~ var.clash_gagne = vrai; stat.hype += 9; stat.respect += 8; var.abonnes += 1500; rel.rival -= 4
+  ~ souvenir(rival, battle, "Tu l'as battu[[rival:|e]] devant tout Valbrune, au Spot")
+sinon
+  !son negatif
+  fred: Le public a choisi… Victoire pour les Hauts-de-Brune.
+  > Vortex lève les bras. Tu serres les dents. Mais la vidéo tourne quand même : on parle de toi comme du « petit qui a tenu tête ».
+  ~ var.clash_perdu = vrai; stat.hype += 4; stat.respect -= 3; var.abonnes += 600; stat.moral -= 6
+rival (pensif): … On se reverra, Glycines.
+~ rel.fred += 4
+
+=== ch1_dris_offre
+titre: Un service
+declencheur: tick_end
+chapitres: ch1
+quand: temps.semaine >= 2
+unique: oui
+priorite: 6
+---
+!lieu cite 420 nuit
+!placer dris 450 gauche
+> Il est presque minuit. Dris t'attend sur le banc, capuche sur la tête.
+dris: J'ai un service à te demander. Rien de grave. Un sac à garder dans le studio, une semaine. Personne ne descend jamais dans cette cave.
+dris: Trois cents euros. De quoi payer un vrai micro à Momo.
+* Refuser net. Le studio, c'est sacré. #prudent
+  ~ rel.dris -= 5; stat.authenticite += 2
+  dris (colere): Sacré… T'es devenu curé ? Laisse tomber.
+* Accepter, sans poser de questions. #argent
+  ~ var.dris_deal += 1; stat.argent += 300; rel.dris += 6; stat.authenticite -= 3
+  ~ souvenir(dris, sac, "Tu as caché son sac dans le studio pour trois cents euros")
+  > Le sac est lourd. Tu ne l'ouvres pas. Tu le glisses derrière le canapé de la cave, et tu essaies de ne plus y penser.
+* « Pourquoi tu fais ça, Dris ? Toi, t'étais le plus malin de nous trois. » #sincere
+  ~ rel.dris += 3; stat.authenticite += 1
+  dris (triste): Le plus malin, c'est celui qui paie le loyer de sa mère. Les poèmes, ça ne remplit pas un frigo.
+  > Il repart avec son sac. Tu le regardes s'éloigner sous les lampadaires.
+
+=== ch1_fred
+titre: L'album de 1997
+declencheur: talk:fred
+quand: var.open_mics >= 1
+unique: oui
+priorite: 6
+---
+!placer fred 110 droite
+fred (pensif): Tu veux savoir pourquoi un type qui a vendu cent mille disques sert des sirops à la menthe ?
+> Il sort de sous le comptoir une pochette jaunie. Un jeune homme en bonnet, le poing levé : « Fred M. — Béton armé ».
+fred: J'avais ton âge. Un label m'a fait signer sur le capot d'une voiture. Huit ans. Ils ont gardé mes bandes, mes droits, mon nom. Quand j'ai voulu partir, c'était cinquante mille francs de pénalité.
+fred: Alors écoute-moi bien. Le jour où on te tend un contrat, tu le lis. Chaque ligne. Et tu ne vends jamais ce qui te rend vrai.
+* « Je te promets de lire chaque ligne. » #prudent
+  ~ var.fred_conseil = vrai; rel.fred += 8
+  ~ souvenir(fred, promesse, "Tu lui as promis de lire chaque ligne de ton premier contrat")
+* « C'était une autre époque. Aujourd'hui, les artistes sont malins. » #ambition
+  ~ rel.fred -= 3; stat.hype += 1
+  fred (triste): C'est exactement ce que je disais.
+* Lui demander de te faire écouter l'album. #curiosite
+  ~ rel.fred += 6; stat.plume += 2; var.fred_conseil = vrai
+  > Il le passe en entier, les yeux fermés. Le troisième morceau te donne la chair de poule. Personne ne le connaît plus.
+
+=== ch1_momo_entrepot
+titre: L'entrepôt
+declencheur: talk:momo
+chapitres: ch1
+quand: var.prods >= 1 ou var.sons >= 1
+unique: oui
+priorite: 5
+---
+!placer momo 236 gauche
+momo (inquiet): Mon oncle m'a trouvé une place à l'entrepôt. CDI, nuits, mille cinq cents par mois. Ma mère pleure de joie.
+momo: Si je dis oui, je ne pourrai plus venir au studio que le dimanche. Et encore.
+* « Dis oui. Ta famille passe avant. » #famille
+  ~ rel.momo += 2; var.momo_entrepot = vrai
+  momo (triste): … Ouais. T'as raison. Les prods, ça peut attendre.
+  > Il signe la semaine suivante. Le studio sent un peu plus le béton humide, et un peu moins la musique.
+* « Six mois. Donne-nous six mois, et je te jure qu'on vit de la musique. » #loyal
+  ~ rel.momo += 8; stat.authenticite += 2
+  ~ souvenir(momo, six_mois, "Tu lui as juré que la musique vous ferait vivre d'ici six mois")
+  momo (fier): Six mois. Je note la date. Sur le mur.
+  > Il prend un feutre et écrit la date à côté de la porte. En gros.
+* « Et si on cherchait une solution à mi-temps ? » #prudent
+  ~ rel.momo += 4; stat.argent -= 40
+  > Vous passez la soirée à faire des calculs sur un ticket de caisse. Il prendra des week-ends, toi plus de services chez Samir. Ça tiendra. Peut-être.
+
+=== ch1_samir
+titre: L'anniversaire du Kiosque
+declencheur: talk:samir
+chapitres: ch1
+unique: oui
+priorite: 5
+---
+!placer samir 130 droite
+samir (content): Le Kiosque a dix ans samedi ! Je fais des tacos gratuits toute la soirée. Et j'ai pensé… un petit concert ? Toi, devant le comptoir ?
+samir: Je ne peux pas te payer, mais je te nourris jusqu'à tes trente ans.
+* Accepter avec plaisir. #genereux
+  test stat.scene vs 28
+  si reussite
+    > Tu chantes entre les frites et la sauce samouraï. Les clients filment. Samir pleure dans son tablier.
+    ~ stat.hype += 3; rel.samir += 8; var.abonnes += 200; stat.scene += 2
+  sinon
+    > Personne n'écoute vraiment, mais tout le monde mange. Samir t'applaudit pour dix.
+    ~ rel.samir += 6; stat.moral += 2
+* Négocier : un concert contre une augmentation. #argent
+  ~ rel.samir -= 2; stat.argent += 60
+  samir (rire): Un vrai business[[man|woman]] ! D'accord, d'accord. Mais tu chantes deux fois.
+* Refuser : tu ne veux pas être « le rappeur du snack ». #fierte
+  ~ rel.samir -= 5; stat.authenticite -= 1
+  samir (triste): Le rappeur du snack… D'accord, star.
+
+=== ch1_diamant_repere
+titre: Une carte de visite noire
+declencheur: tick_end
+chapitres: ch1
+quand: temps.semaine >= 4
+unique: oui
+priorite: 7
+---
+!son notif
+si var.clash_gagne
+  > La vidéo de la battle ne s'arrête plus de tourner. Ce soir-là, un message privé arrive d'un compte certifié.
+sinon si var.clash
+  > Ta défaite contre Vortex a fait le tour des réseaux. Étrangement, c'est ce soir-là qu'un compte certifié t'écrit.
+sinon
+  > Fred te tend une carte de visite noire, gravée d'un diamant doré. « Un type est passé. Il t'a vu sur scène. Fais attention. »
+> « Tony Diamant — Diamant Noir Records. J'ai un projet pour toi. Passe au bureau, en centre-ville. Ne tarde pas. »
+~ var.label_ouvert = vrai; rencontrer(diamant)
+~ objectif(label, "Rencontrer Tony Diamant au label Diamant Noir (centre-ville)")
+momo (inquiet): Diamant Noir ? C'est le label de Tito et de la Brigade. Ils ont des voitures de sport et des contrats d'esclaves, à ce qu'on dit.
+
+=== ch1_contrat
+titre: Le contrat
+declencheur: enter:label
+chapitres: ch1, ch2
+unique: oui
+priorite: 9
+tags: important
+---
+!placer diamant 252 gauche
+diamant (content): [[Le|La]] voilà ! Assieds-toi. Tu bois quelque chose ? Champagne ? Non ? Tu as raison, garde la tête froide.
+> Six disques d'or au mur. Un canapé en cuir blanc. Sur le bureau, un contrat déjà imprimé, ton nom en gras.
+diamant: Je vais être direct. Tu as la gueule, tu as la rage, tu as la hype. Moi, j'ai la machine. Cinq mille euros d'avance, aujourd'hui, en liquide. Un clip pro. Des radios.
+diamant: Tu signes là, en bas. Et tu oublies ton pote de la cave : on a nos producteurs.
+~ objectifReussi(label)
+-> offre
+@offre
+* Signer, là, tout de suite. #argent
+  -> signe
+* [non var.clauses_lues] Lire le contrat en entier, ligne par ligne. #prudent
+  test stat.plume + (var.fred_conseil ? 15 : 0) vs 40
+  si reussite
+    > Page sept, en tout petit : huit ans d'exclusivité. Le label garde tes enregistrements pour toujours. Il touche sur tes concerts, ton image, tes vêtements. Et cinquante mille euros de pénalité si tu pars avant la fin.
+    !rappel fred.promesse
+    ~ var.clauses_lues = vrai; stat.authenticite += 2
+    diamant (moqueur): Tu lis tout, toi. C'est mignon. Personne ne lit tout.
+  sinon
+    > Les phrases font trois lignes et tu n'en comprends pas la moitié. Diamant regarde sa montre.
+    diamant: Alors ? On ne va pas y passer la nuit.
+  -> offre
+* Demander une semaine pour réfléchir. #prudent
+  diamant (froid): Une semaine. Pas un jour de plus. Après, je signe le petit de la Brigade à ta place.
+  ~ planifier(ch1_ultimatum, 1)
+  -> fin
+* Refuser. Poliment, mais fermement. #independant
+  -> refus
+@signe
+!son positif
+> Tu signes. Diamant pose une enveloppe épaisse sur le bureau. Cinq mille euros. Tu n'as jamais vu autant d'argent de ta vie.
+~ var.contrat_diamant = vrai; var.label_nom = "Diamant Noir"; stat.argent += 5000; stat.hype += 6; stat.authenticite -= 6
+[var.clauses_lues] ~ stat.authenticite -= 4
+~ souvenir(diamant, signature, "Tu as signé chez Diamant Noir")
+diamant (fier): Bienvenue dans la famille. Tu vas voir, dans six mois, on ne te reconnaîtra plus.
+!rappel momo.six_mois
+@refus
+~ var.refus_diamant = vrai; stat.authenticite += 6; rel.diamant -= 10
+diamant (froid): Tu fais une erreur. Mais j'ai l'habitude, les jeunes en font. Tu reviendras. Ils reviennent tous.
+> Dans l'ascenseur, tes mains tremblent. Cinq mille euros. Tu viens de dire non à cinq mille euros.
+
+=== ch1_ultimatum
+titre: L'ultimatum
+declencheur: scheduled
+chapitres: ch1, ch2
+quand: non var.contrat_diamant et non var.refus_diamant
+unique: oui
+---
+!son telephone
+diamant: Une semaine, c'est passé. Tu signes, ou je raye ton nom. Je ne rappellerai pas.
+* Accepter. Tu passes au bureau demain matin. #argent
+  ~ var.contrat_diamant = vrai; var.label_nom = "Diamant Noir"; stat.argent += 5000; stat.hype += 6; stat.authenticite -= 8
+  ~ souvenir(diamant, signature, "Tu as signé chez Diamant Noir")
+  > Le lendemain, tu signes sans lire. L'enveloppe est aussi épaisse que promis.
+* Raccrocher. #independant
+  ~ var.refus_diamant = vrai; stat.authenticite += 5; rel.diamant -= 10
+  > Tu raccroches. Ton cœur bat fort. Momo, à côté de toi, te tape dans le dos sans rien dire.
+
+=== ch1_fin
+titre: L'été
+declencheur: chapter_end
+chapitres: ch1
+---
+!lieu cite 380 soir
+!placer momo 410 gauche
+> L'été s'installe sur les Glycines. Les gamins courent autour des jets d'eau des pompiers, les grands jouent aux cartes jusqu'à trois heures du matin.
+si var.contrat_diamant
+  momo (froid): Alors, la star de Diamant Noir ? Ils t'ont dit quand tu sortais ton album ? Ils t'ont parlé de moi ?
+  > Tu ne réponds pas. Diamant t'a demandé de « couper les ponts avec le passé ».
+  ~ rel.momo -= 6
+sinon
+  momo (content): Pas de label, pas de patron. Juste toi, moi et la cave. J'ai fait quarante prods cet été. Il y en a au moins dix qui vont tout casser.
+  ~ rel.momo += 4; var.prods += 3
+si var.clash_gagne
+  > Sur le banc, on t'appelle désormais « celui qui a éteint Vortex ».
+sinon si var.clash_perdu
+  > Sur le banc, on parle encore de la battle. Tu as perdu, mais tu as tenu. C'est presque pareil, ici.
+dris: Profitez, les artistes. L'été, c'est court.
+> Six mois vont passer. Six mois d'écriture, de services au snack et de nuits blanches dans la cave.

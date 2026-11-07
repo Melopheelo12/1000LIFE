@@ -1,0 +1,2081 @@
+{
+ "format": "mille-vies/universe@1",
+ "id": "rappeur",
+ "version": "1.0",
+ "name": "Seize Mesures",
+ "tagline": "Du banc de la cité à la grande scène. Chaque rime a un prix.",
+ "description": "Tu as 19 ans, un carnet plein de textes et un banc au pied du bâtiment B de la cité des Glycines. Open mics, clashs, featurings, un label qui promet la lune et des potes d'enfance qui ne prennent pas tous le même chemin : douze semaines pour faire entendre ta voix… sans la perdre.",
+ "author": "Mille Vies",
+ "tags": [
+  "Musique",
+  "Rap",
+  "Drame"
+ ],
+ "published": true,
+ "theme": {
+  "accent": "#ff4fd8",
+  "accent2": "#f2c230",
+  "cover": "spot"
+ },
+ "config": {
+  "tickLabel": "Semaine",
+  "actionsPerTick": 3,
+  "actionsLabel": "Actions",
+  "randomEventChance": 45,
+  "maxStoryEventsPerTick": 2,
+  "checkScale": 11,
+  "hud": [
+   "energie",
+   "moral",
+   "hype",
+   "argent"
+  ],
+  "dateLine": "{var.age} ans · {nombre(var.abonnes)} abonnés",
+  "endTickLabel": "Dormir et terminer la semaine",
+  "showValues": true
+ },
+ "stats": [
+  {
+   "id": "plume",
+   "label": "Plume",
+   "category": "Talent",
+   "initial": 30,
+   "color": "#7cb7ff",
+   "description": "Tes textes : les images, les punchlines, la sincérité."
+  },
+  {
+   "id": "flow",
+   "label": "Flow",
+   "category": "Talent",
+   "initial": 28,
+   "color": "#ff9a3a",
+   "description": "Ta façon de poser sur le beat."
+  },
+  {
+   "id": "scene",
+   "label": "Scène",
+   "category": "Talent",
+   "initial": 22,
+   "color": "#e477a9",
+   "description": "Ta présence face à un public."
+  },
+  {
+   "id": "energie",
+   "label": "Énergie",
+   "category": "État",
+   "initial": 100,
+   "color": "#f2c230"
+  },
+  {
+   "id": "moral",
+   "label": "Moral",
+   "category": "État",
+   "initial": 65,
+   "color": "#4fd6c4"
+  },
+  {
+   "id": "hype",
+   "label": "Hype",
+   "category": "Carrière",
+   "initial": 5,
+   "color": "#ff4fd8",
+   "description": "Le bruit qu'on fait autour de toi."
+  },
+  {
+   "id": "respect",
+   "label": "Respect",
+   "category": "Carrière",
+   "initial": 30,
+   "color": "#b0b8d0",
+   "description": "Ce que le quartier et le milieu pensent de toi."
+  },
+  {
+   "id": "authenticite",
+   "label": "Authenticité",
+   "short": "Authent.",
+   "category": "Carrière",
+   "initial": 60,
+   "color": "#6ad48a",
+   "description": "Rester toi-même, même quand on te pousse à jouer un rôle."
+  },
+  {
+   "id": "argent",
+   "label": "Argent",
+   "short": "€",
+   "category": "Carrière",
+   "initial": 120,
+   "format": "argent",
+   "min": 0,
+   "max": 999999,
+   "color": "#e2b440"
+  }
+ ],
+ "vars": {
+  "age": 19,
+  "abonnes": 120,
+  "blaze": "",
+  "textes": 1,
+  "sons": 0,
+  "prods": 0,
+  "freestyles": 0,
+  "open_mics": 0,
+  "clips": 0,
+  "clash": false,
+  "clash_gagne": false,
+  "clash_perdu": false,
+  "clash_ignore": false,
+  "manches": 0,
+  "label_ouvert": false,
+  "label_nom": "",
+  "contrat_diamant": false,
+  "contrat_encre": false,
+  "contrat_rompu": false,
+  "refus_diamant": false,
+  "fred_conseil": false,
+  "clauses_lues": false,
+  "single_commercial": false,
+  "preuve_blanchiment": false,
+  "encre_offre": false,
+  "kaiser_connu": false,
+  "feat_kaiser": false,
+  "momo_ecarte": false,
+  "momo_parti": false,
+  "momo_credite": false,
+  "momo_kaiser": false,
+  "dris_deal": 0,
+  "dris_sac": false,
+  "dris_parti": false,
+  "dris_arrete": false,
+  "chute": false,
+  "garde_a_vue": false,
+  "cadet_studio": false,
+  "cadet_dehors": false,
+  "cadet_sauve": false,
+  "couple": false,
+  "lina_partie": false,
+  "lina_vue": false,
+  "jalousie": false,
+  "rival_paix": false,
+  "feat_rival": false,
+  "revanche": false,
+  "festival_ouvert": false,
+  "festival_ok": false,
+  "festival_triomphe": false,
+  "ep_sorti": false,
+  "ep_succes": false,
+  "pere_fier": false,
+  "raccroche": false,
+  "aide_mere": false,
+  "carnet_vole": false,
+  "studio_ferme": 0
+ },
+ "traits": [
+  {
+   "id": "loyal",
+   "label": "Loyal",
+   "description": "N'oublie jamais qui l'a aidé.",
+   "gain": 1.2,
+   "loss": 1.0
+  },
+  {
+   "id": "fier",
+   "label": "Fier",
+   "description": "Blessé par le mépris, difficile à impressionner.",
+   "gain": 0.85,
+   "loss": 1.3
+  },
+  {
+   "id": "rancunier",
+   "label": "Rancunier",
+   "description": "Pardonne rarement.",
+   "gain": 0.9,
+   "loss": 1.5
+  },
+  {
+   "id": "genereux",
+   "label": "Généreux",
+   "description": "Donne une seconde chance.",
+   "gain": 1.2,
+   "loss": 0.75
+  },
+  {
+   "id": "anxieux",
+   "label": "Anxieux",
+   "description": "S'inquiète de tout, et surtout de toi.",
+   "gain": 1.1,
+   "loss": 1.2
+  },
+  {
+   "id": "exigeant",
+   "label": "Exigeant",
+   "description": "Il en faut beaucoup pour gagner son estime.",
+   "gain": 0.75,
+   "loss": 1.2
+  },
+  {
+   "id": "sage",
+   "label": "Sage",
+   "description": "Juge sur la durée.",
+   "gain": 0.9,
+   "loss": 0.8
+  },
+  {
+   "id": "reveur",
+   "label": "Rêveur",
+   "description": "Sensible aux gestes plus qu'aux mots.",
+   "gain": 1.15,
+   "loss": 1.0
+  },
+  {
+   "id": "bourru",
+   "label": "Bourru",
+   "description": "Un grand cœur sous des grognements.",
+   "gain": 0.85,
+   "loss": 0.8
+  },
+  {
+   "id": "manipulateur",
+   "label": "Manipulateur",
+   "description": "Amical… quand ça l'arrange.",
+   "gain": 1.4,
+   "loss": 0.6
+  }
+ ],
+ "characters": [
+  {
+   "id": "momo",
+   "name": "Momo Sy",
+   "short": "Momo",
+   "role": "Ton meilleur pote, beatmaker",
+   "traits": [
+    "loyal",
+    "fier"
+   ],
+   "relation": 35,
+   "relationLabel": "Amitié",
+   "description": "Vous vous connaissez depuis la maternelle. Il fait des prods sur un vieux PC, dans la cave du bâtiment C, avec un casque rafistolé au scotch.",
+   "goals": "que ses prods sortent de la cave et qu'on dise enfin son nom.",
+   "look": {
+    "skin": "peau6",
+    "hair": "rase",
+    "hairColor": "noir",
+    "top": "sweat",
+    "topColor": "#2f62c9",
+    "bottom": "jean",
+    "bottomColor": "#1d2230",
+    "shoes": "#f4f4f4",
+    "acc": [
+     "casque"
+    ],
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "J'ai une boucle de piano qui va te rendre fou."
+    },
+    {
+     "text": "On est à combien de morceaux, là ?",
+     "if": "var.sons >= 1"
+    },
+    {
+     "text": "Merci de pas m'avoir lâché, [[frère|ma sœur]].",
+     "if": "rel.momo >= 60"
+    }
+   ]
+  },
+  {
+   "id": "dris",
+   "name": "Dris Kaci",
+   "short": "Dris",
+   "role": "Ton pote d'enfance, qui a pris un autre chemin",
+   "traits": [
+    "genereux",
+    "fier"
+   ],
+   "relation": 30,
+   "relationLabel": "Amitié",
+   "description": "Il était le plus drôle de la classe. Aujourd'hui, il a des baskets neuves chaque semaine et un téléphone qui ne s'arrête jamais de sonner.",
+   "goals": "sortir sa mère de la cité, quel qu'en soit le prix.",
+   "look": {
+    "skin": "peau4",
+    "hair": "undercut",
+    "hairColor": "noir",
+    "beard": "barbe3j",
+    "top": "survet",
+    "topColor": "#25222b",
+    "topColor2": "#eef0f4",
+    "bottom": "survet",
+    "bottomColor": "#25222b",
+    "shoes": "#f4f4f4",
+    "acc": [
+     "casquette",
+     "collier"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Tranquille ? Si t'as besoin de quoi que ce soit, tu demandes."
+    },
+    {
+     "text": "Je t'ai entendu à la radio du bus. Le quartier est fier, [[frère|ma sœur]].",
+     "if": "stat.hype >= 30"
+    }
+   ]
+  },
+  {
+   "id": "rival",
+   "name": "Vortex",
+   "short": "Vortex",
+   "role": "[[rival:Le rappeur|La rappeuse]] des Hauts-de-Brune",
+   "traits": [
+    "fier",
+    "rancunier"
+   ],
+   "relation": -15,
+   "relationLabel": "Respect",
+   "description": "La terreur autoproclamée des open mics de Valbrune. Une plume tranchante, un ego encore plus.",
+   "goals": "rester le seul nom qu'on cite quand on parle de Valbrune.",
+   "look": {
+    "skin": "peau2",
+    "hair": "dreads",
+    "hairColor": "noir",
+    "top": "veste",
+    "topColor": "#7c2236",
+    "topColor2": "#25222b",
+    "bottom": "jean",
+    "bottomColor": "#25222b",
+    "acc": [
+     "collier",
+     "montre"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Les Glycines, ça rappe ? Première nouvelle."
+    },
+    {
+     "text": "…Ton dernier son. Pas mal. Je dis ça, je dis rien.",
+     "if": "rel.rival >= 20"
+    }
+   ]
+  },
+  {
+   "id": "lina",
+   "name": "Lina Ferhat",
+   "short": "Lina",
+   "role": "Photographe et vidéaste",
+   "traits": [
+    "reveur",
+    "sage"
+   ],
+   "relation": 0,
+   "relationLabel": "Affection",
+   "description": "[[lina:Étudiant|Étudiante]] aux Beaux-Arts, [[lina:il|elle]] filme les open mics avec un vieil appareil et un regard qui voit tout.",
+   "goals": "exposer ses photos à Paris, un jour.",
+   "look": {
+    "skin": "peau3",
+    "hair": "boucle",
+    "hairColor": "noir",
+    "top": "veste",
+    "topColor": "#e2b440",
+    "topColor2": "#25222b",
+    "bottom": "jean",
+    "bottomColor": "#2b3a5a",
+    "gender": "f",
+    "acc": [
+     "boucles",
+     "sac"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Ne bouge pas. La lumière est parfaite."
+    },
+    {
+     "text": "Tu as écrit quoi, cette semaine ? Fais-moi écouter.",
+     "if": "rel.lina >= 25"
+    }
+   ]
+  },
+  {
+   "id": "mere",
+   "name": "Samia",
+   "short": "Maman",
+   "role": "Ta mère",
+   "traits": [
+    "genereux",
+    "anxieux"
+   ],
+   "relation": 45,
+   "relationLabel": "Lien",
+   "description": "Aide-soignante, elle enchaîne les gardes de nuit et trouve encore le temps de te garder une assiette au chaud.",
+   "goals": "que tu aies une vie plus douce que la sienne.",
+   "look": {
+    "skin": "peau4",
+    "hair": "chignon",
+    "hairColor": "noir",
+    "top": "blouse",
+    "topColor": "#7cc3ef",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "gender": "f"
+   },
+   "barks": [
+    {
+     "text": "Tu as mangé ? Ne mens pas, je vois bien que non."
+    },
+    {
+     "text": "Une collègue m'a montré ta vidéo. J'ai fait semblant de ne pas pleurer.",
+     "if": "stat.hype >= 25"
+    }
+   ]
+  },
+  {
+   "id": "pere",
+   "name": "Rachid",
+   "short": "Papa",
+   "role": "Ton père",
+   "traits": [
+    "exigeant",
+    "bourru"
+   ],
+   "relation": 10,
+   "relationLabel": "Lien",
+   "description": "Chauffeur de bus depuis vingt-deux ans. Pour lui, le rap, c'est du bruit, et un vrai métier, c'est un métier qui paie.",
+   "goals": "que tu ne gâches pas ta vie comme il croit avoir gâché la sienne.",
+   "look": {
+    "skin": "peau4",
+    "hair": "rase",
+    "hairColor": "gris",
+    "beard": "moustache",
+    "top": "chemise",
+    "topColor": "#2b3a5a",
+    "topColor2": "#e8e8e8",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Le bus de 6 h 12 n'attend personne. Toi non plus, la vie ne t'attendra pas."
+    },
+    {
+     "text": "…Des gamins chantaient ton refrain dans mon bus. J'ai monté le son.",
+     "if": "var.pere_fier"
+    }
+   ]
+  },
+  {
+   "id": "cadet",
+   "name": "Ilyès",
+   "short": "Ilyès",
+   "role": "[[cadet:Ton petit frère|Ta petite sœur]]",
+   "traits": [
+    "loyal",
+    "reveur"
+   ],
+   "relation": 40,
+   "relationLabel": "Lien",
+   "description": "Treize ans, [[cadet:il|elle]] connaît tous tes textes par cœur et récite tes punchlines dans la cour du collège.",
+   "goals": "te ressembler. Exactement.",
+   "look": {
+    "skin": "peau4",
+    "hair": "court",
+    "hairColor": "noir",
+    "top": "sweat",
+    "topColor": "#d63c3c",
+    "bottom": "jean",
+    "bottomColor": "#1d2230",
+    "height": "enfant",
+    "build": "mince"
+   },
+   "barks": [
+    {
+     "text": "Tu me fais écouter le nouveau ? Juste trente secondes !"
+    }
+   ]
+  },
+  {
+   "id": "fred",
+   "name": "Fred Mansour",
+   "short": "Fred",
+   "role": "Le patron du Spot, ancien rappeur",
+   "traits": [
+    "sage",
+    "bourru"
+   ],
+   "relation": 5,
+   "relationLabel": "Estime",
+   "description": "En 1997, tout Valbrune connaissait son album par cœur. Puis un contrat l'a ruiné. Aujourd'hui, il tient le Spot et prête son micro à ceux qui ont faim.",
+   "goals": "voir un gamin du quartier réussir là où il a échoué.",
+   "look": {
+    "skin": "peau3",
+    "hair": "chauve",
+    "beard": "barbe",
+    "hairColor": "gris",
+    "top": "chemise",
+    "topColor": "#3b3e47",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "acc": [
+     "lunettes"
+    ],
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Le micro est ouvert. Le respect, lui, se gagne."
+    },
+    {
+     "text": "Tu me rappelles quelqu'un. Moi, à vingt ans. En moins bête.",
+     "if": "rel.fred >= 30"
+    }
+   ]
+  },
+  {
+   "id": "diamant",
+   "name": "Tony Diamant",
+   "short": "Diamant",
+   "role": "Patron du label Diamant Noir Records",
+   "traits": [
+    "manipulateur"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Chaîne en or, montre qui brille, sourire qui brille encore plus. Il signe des jeunes du quartier et les rend célèbres. Officiellement.",
+   "goals": "trouver le prochain produit à vendre. Et blanchir ce qui doit l'être.",
+   "look": {
+    "skin": "peau2",
+    "hair": "meche",
+    "hairColor": "noir",
+    "top": "costume",
+    "topColor": "#25222b",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "acc": [
+     "lunettes",
+     "collier",
+     "montre"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Le talent, c'est bien. Le talent qui signe, c'est mieux."
+    }
+   ]
+  },
+  {
+   "id": "clemence",
+   "name": "Clémence Roy",
+   "short": "Clémence",
+   "role": "Directrice artistique d'Encre Records",
+   "traits": [
+    "exigeant",
+    "sage"
+   ],
+   "relation": 0,
+   "relationLabel": "Estime",
+   "description": "Elle a signé trois des plus beaux albums de la décennie. Elle déteste les modes, adore les textes, et ne fait jamais de promesse qu'elle ne tient pas.",
+   "goals": "trouver une vraie voix, pas un buzz.",
+   "look": {
+    "skin": "peau1",
+    "hair": "carre",
+    "hairColor": "chatain",
+    "top": "veste",
+    "topColor": "#1d2f5e",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "gender": "f",
+    "acc": [
+     "lunettes"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Je ne cherche pas un tube. Je cherche quelqu'un qui a quelque chose à dire."
+    }
+   ]
+  },
+  {
+   "id": "kaiser",
+   "name": "Kaïser",
+   "short": "Kaïser",
+   "role": "La star du rap, enfant de Valbrune",
+   "traits": [
+    "fier",
+    "manipulateur"
+   ],
+   "relation": 0,
+   "relationLabel": "Respect",
+   "description": "Trois disques de diamant, un hôtel particulier à Paris et une légende : il aurait commencé sur le même banc que toi.",
+   "goals": "rester au sommet. Et rester crédible.",
+   "look": {
+    "skin": "peau6",
+    "hair": "rase",
+    "hairColor": "noir",
+    "beard": "bouc",
+    "top": "veste",
+    "topColor": "#eef0f4",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#eef0f4",
+    "acc": [
+     "lunettes",
+     "collier",
+     "montre"
+    ],
+    "height": "grand"
+   }
+  },
+  {
+   "id": "samir",
+   "name": "Samir",
+   "short": "Samir",
+   "role": "Le patron du Kiosque, ton patron",
+   "traits": [
+    "genereux",
+    "bourru"
+   ],
+   "relation": 10,
+   "relationLabel": "Amitié",
+   "description": "Il fait les meilleurs tacos de Valbrune et les pires blagues. Il t'a embauché sans te demander de CV.",
+   "goals": "que son snack tienne encore dix ans.",
+   "look": {
+    "skin": "peau3",
+    "hair": "court",
+    "hairColor": "noir",
+    "beard": "barbe",
+    "top": "tshirt",
+    "topColor": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Un tacos trois viandes et un rappeur, ça marche !"
+    },
+    {
+     "text": "Quand tu seras riche, tu me feras de la pub, hein ?",
+     "if": "stat.hype >= 20"
+    }
+   ]
+  }
+ ],
+ "locations": [
+  {
+   "id": "cite",
+   "name": "La cité des Glycines",
+   "group": "Quartier",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "soir",
+   "spawn": 360,
+   "ambient": "ville",
+   "floor": {
+    "style": "trottoir",
+    "color": "#4a4a52",
+    "color2": "#b9b2a6"
+   },
+   "backdrop": [
+    {
+     "type": "tours",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "immeuble",
+     "x": 90,
+     "w": 100,
+     "h": 100,
+     "text": "BAT. B"
+    },
+    {
+     "type": "poubelle",
+     "x": 160
+    },
+    {
+     "type": "mur_tag",
+     "x": 250,
+     "w": 90
+    },
+    {
+     "type": "lampadaire",
+     "x": 330
+    },
+    {
+     "type": "banc_public",
+     "x": 400
+    },
+    {
+     "type": "arbre",
+     "x": 465
+    },
+    {
+     "type": "immeuble",
+     "x": 545,
+     "w": 80,
+     "h": 90,
+     "color": "#a89e8e",
+     "text": "BAT. C"
+    },
+    {
+     "type": "arret_bus",
+     "x": 612
+    }
+   ],
+   "exits": [
+    {
+     "to": "appart",
+     "x": 90,
+     "label": "Bâtiment B (chez toi)"
+    },
+    {
+     "to": "studio",
+     "x": 545,
+     "label": "La cave du bâtiment C (le studio)"
+    },
+    {
+     "to": "ville",
+     "x": 612,
+     "label": "Bus pour le centre-ville"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "momo",
+     "x": 372,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 1 et non var.momo_parti"
+    },
+    {
+     "id": "dris",
+     "x": 440,
+     "face": "gauche",
+     "when": "non var.dris_parti"
+    },
+    {
+     "id": "cadet",
+     "x": 200,
+     "face": "droite",
+     "when": "var.cadet_dehors"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "banc",
+     "x": 400,
+     "label": "Le banc",
+     "activities": [
+      "freestyle"
+     ]
+    },
+    {
+     "id": "mur",
+     "x": 250,
+     "label": "Le mur tagué",
+     "activities": [
+      "clip"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "appart",
+   "name": "Chez tes parents",
+   "group": "Quartier",
+   "width": 380,
+   "kind": "interieur",
+   "spawn": 60,
+   "ambient": "interieur",
+   "wall": {
+    "style": "papier",
+    "color": "#e8d8c0",
+    "color2": "#c9a070"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#b89a7a",
+    "color2": "#a88a6a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE"
+    },
+    {
+     "type": "cuisine",
+     "x": 96,
+     "w": 76
+    },
+    {
+     "type": "cadre",
+     "x": 180,
+     "y": 46
+    },
+    {
+     "type": "canape",
+     "x": 196,
+     "color": "#8a4a3a",
+     "coussin": "#f2c230"
+    },
+    {
+     "type": "fenetre",
+     "x": 250,
+     "w": 30,
+     "rideaux": "#c9a070"
+    },
+    {
+     "type": "ecran",
+     "x": 290,
+     "y": 70,
+     "w": 30,
+     "h": 18,
+     "contenu": "info"
+    },
+    {
+     "type": "plante",
+     "x": 328
+    },
+    {
+     "type": "porte",
+     "x": 356,
+     "label": "CHAMBRE"
+    }
+   ],
+   "exits": [
+    {
+     "to": "cite",
+     "x": 22,
+     "kind": "porte",
+     "label": "Descendre dans la cité"
+    },
+    {
+     "to": "chambre",
+     "x": 356,
+     "kind": "porte",
+     "label": "Ta chambre"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "mere",
+     "x": 110,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 0"
+    },
+    {
+     "id": "pere",
+     "x": 236,
+     "face": "gauche",
+     "when": "temps.semaine % 2 == 1"
+    },
+    {
+     "id": "cadet",
+     "x": 300,
+     "face": "gauche",
+     "when": "non var.cadet_dehors"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "salon",
+     "x": 196,
+     "label": "Le salon",
+     "activities": [
+      "famille"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "chambre",
+   "name": "Ta chambre",
+   "group": "Quartier",
+   "width": 340,
+   "kind": "interieur",
+   "spawn": 60,
+   "ambient": "interieur",
+   "wall": {
+    "style": "papier",
+    "color": "#5a4a6a",
+    "color2": "#3a2f48"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#7a5a3e"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SALON"
+    },
+    {
+     "type": "lit",
+     "x": 84,
+     "color": "#2f62c9"
+    },
+    {
+     "type": "affiche",
+     "x": 84,
+     "y": 44,
+     "variante": "groupe",
+     "color": "#25222b",
+     "color2": "#ff4fd8"
+    },
+    {
+     "type": "fenetre",
+     "x": 152,
+     "rideaux": "#7c2236"
+    },
+    {
+     "type": "affiche",
+     "x": 206,
+     "y": 48,
+     "variante": "texte",
+     "color": "#f2c230",
+     "color2": "#25222b"
+    },
+    {
+     "type": "etagere",
+     "x": 262,
+     "y": 50,
+     "w": 30
+    },
+    {
+     "type": "bureau",
+     "x": 272,
+     "ordinateur": true
+    },
+    {
+     "type": "chaise",
+     "x": 256
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 170
+    },
+    {
+     "type": "tapis",
+     "x": 170,
+     "w": 60,
+     "color": "#3a2f48"
+    }
+   ],
+   "exits": [
+    {
+     "to": "appart",
+     "x": 22,
+     "kind": "porte",
+     "label": "Le salon"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "lit",
+     "x": 84,
+     "label": "Ton lit",
+     "activities": [
+      "repos"
+     ],
+     "endTick": true
+    },
+    {
+     "id": "bureau",
+     "x": 272,
+     "label": "Ton bureau",
+     "activities": [
+      "ecrire",
+      "poster",
+      "classiques"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "studio",
+   "name": "Le studio de la cave",
+   "group": "Quartier",
+   "width": 360,
+   "kind": "interieur",
+   "time": "nuit",
+   "spawn": 50,
+   "ambient": "club",
+   "wall": {
+    "style": "beton",
+    "color": "#4a4a52"
+   },
+   "floor": {
+    "style": "beton",
+    "color": "#34343c"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "CITÉ",
+     "style": "metal",
+     "color": "#5a6070"
+    },
+    {
+     "type": "affiche",
+     "x": 78,
+     "y": 40,
+     "variante": "groupe",
+     "color": "#ff4fd8",
+     "color2": "#25222b"
+    },
+    {
+     "type": "canape",
+     "x": 110,
+     "color": "#3a3048"
+    },
+    {
+     "type": "bureau",
+     "x": 205,
+     "ordinateur": true,
+     "color": "#25222b"
+    },
+    {
+     "type": "chaise",
+     "x": 220
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 205,
+     "color": "#ff4fd8"
+    },
+    {
+     "type": "tapis",
+     "x": 302,
+     "w": 44,
+     "color": "#25222b"
+    },
+    {
+     "type": "micro",
+     "x": 302
+    },
+    {
+     "type": "neon",
+     "x": 302,
+     "y": 30,
+     "text": "REC",
+     "color": "#d63c3c"
+    }
+   ],
+   "exits": [
+    {
+     "to": "cite",
+     "x": 22,
+     "kind": "porte",
+     "label": "Remonter dans la cité"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "momo",
+     "x": 236,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 0 et non var.momo_parti"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "cabine",
+     "x": 302,
+     "label": "La cabine",
+     "activities": [
+      "enregistrer"
+     ]
+    },
+    {
+     "id": "ordi",
+     "x": 205,
+     "label": "L'ordinateur",
+     "activities": [
+      "prod"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ville",
+   "name": "Centre-ville de Valbrune",
+   "group": "Centre-ville",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "soir",
+   "spawn": 600,
+   "ambient": "ville",
+   "floor": {
+    "style": "trottoir",
+    "color": "#3e3e46",
+    "color2": "#c9c2b4"
+   },
+   "backdrop": [
+    {
+     "type": "ville",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "immeuble",
+     "x": 70,
+     "w": 90,
+     "h": 100,
+     "color": "#9a4a3a",
+     "text": "LE SPOT"
+    },
+    {
+     "type": "neon",
+     "x": 70,
+     "y": 62,
+     "text": "OPEN MIC",
+     "color": "#ff4fd8"
+    },
+    {
+     "type": "lampadaire",
+     "x": 150
+    },
+    {
+     "type": "immeuble",
+     "x": 222,
+     "w": 80,
+     "h": 80,
+     "color": "#e8d8b0",
+     "text": "LE KIOSQUE"
+    },
+    {
+     "type": "arbre",
+     "x": 292
+    },
+    {
+     "type": "immeuble",
+     "x": 372,
+     "w": 90,
+     "h": 120,
+     "color": "#25222b",
+     "text": "DIAMANT NOIR"
+    },
+    {
+     "type": "lampadaire",
+     "x": 440
+    },
+    {
+     "type": "panneau",
+     "x": 505,
+     "text": "FESTIVAL BITUME",
+     "color": "#7d4bc4",
+     "when": "var.festival_ouvert"
+    },
+    {
+     "type": "voiture",
+     "x": 520,
+     "color": "#25222b",
+     "luxe": true,
+     "when": "var.label_ouvert"
+    },
+    {
+     "type": "arret_bus",
+     "x": 600
+    }
+   ],
+   "exits": [
+    {
+     "to": "spot",
+     "x": 70,
+     "label": "Le Spot (open mic)"
+    },
+    {
+     "to": "snack",
+     "x": 222,
+     "label": "Le Kiosque"
+    },
+    {
+     "to": "label",
+     "x": 372,
+     "label": "Diamant Noir Records",
+     "when": "var.label_ouvert"
+    },
+    {
+     "to": "festival",
+     "x": 505,
+     "label": "Le festival Bitume",
+     "when": "var.festival_ouvert"
+    },
+    {
+     "to": "cite",
+     "x": 600,
+     "label": "Bus pour la cité"
+    }
+   ]
+  },
+  {
+   "id": "spot",
+   "name": "Le Spot",
+   "group": "Centre-ville",
+   "width": 420,
+   "kind": "interieur",
+   "time": "nuit",
+   "spawn": 240,
+   "ambient": "club",
+   "wall": {
+    "style": "briques",
+    "color": "#5a2a2a"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#3a2618"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE",
+     "style": "metal",
+     "color": "#3a3048"
+    },
+    {
+     "type": "comptoir",
+     "x": 98,
+     "w": 76,
+     "color": "#2a1f3a"
+    },
+    {
+     "type": "affiche",
+     "x": 176,
+     "y": 44,
+     "variante": "groupe",
+     "color": "#f2c230",
+     "color2": "#25222b"
+    },
+    {
+     "type": "table",
+     "x": 200,
+     "w": 40
+    },
+    {
+     "type": "chaise",
+     "x": 186
+    },
+    {
+     "type": "table",
+     "x": 262,
+     "w": 40
+    },
+    {
+     "type": "neon",
+     "x": 330,
+     "y": 30,
+     "text": "OPEN MIC",
+     "color": "#ff4fd8"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 330,
+     "color": "#ff4fd8"
+    },
+    {
+     "type": "micro",
+     "x": 330
+    },
+    {
+     "type": "dj",
+     "x": 392
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22,
+     "kind": "porte",
+     "label": "Sortir dans la rue"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "fred",
+     "x": 110,
+     "face": "droite"
+    },
+    {
+     "id": "lina",
+     "x": 210,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 0 et non var.lina_partie"
+    },
+    {
+     "id": "rival",
+     "x": 270,
+     "face": "gauche",
+     "when": "temps.semaine >= 2"
+    },
+    {
+     "id": "clemence",
+     "x": 160,
+     "face": "droite",
+     "when": "var.encre_offre"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "scene",
+     "x": 330,
+     "label": "La scène",
+     "activities": [
+      "open_mic"
+     ]
+    },
+    {
+     "id": "comptoir",
+     "x": 98,
+     "label": "Le comptoir",
+     "activities": [
+      "reseauter"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "snack",
+   "name": "Le Kiosque",
+   "group": "Centre-ville",
+   "width": 360,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "carrelage",
+    "color": "#f2ead8",
+    "color2": "#c9773a"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#d8cdb8",
+    "color2": "#c9bca4"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE"
+    },
+    {
+     "type": "comptoir",
+     "x": 110,
+     "w": 80,
+     "machine": true,
+     "bouteilles": false,
+     "color": "#9aa3ae"
+    },
+    {
+     "type": "ecran",
+     "x": 210,
+     "contenu": "info"
+    },
+    {
+     "type": "table",
+     "x": 250,
+     "w": 44
+    },
+    {
+     "type": "fenetre",
+     "x": 296,
+     "w": 40
+    },
+    {
+     "type": "table",
+     "x": 322,
+     "w": 40
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 160
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22,
+     "kind": "porte",
+     "label": "Sortir dans la rue"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "samir",
+     "x": 130,
+     "face": "droite"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "comptoir_snack",
+     "x": 110,
+     "label": "Derrière le comptoir",
+     "activities": [
+      "taf"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "label",
+   "name": "Diamant Noir Records",
+   "group": "Centre-ville",
+   "width": 360,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "when": "var.label_ouvert",
+   "wall": {
+    "style": "moderne",
+    "color": "#1d1428",
+    "color2": "#e2b440"
+   },
+   "floor": {
+    "style": "moquette",
+    "color": "#2a2030"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE",
+     "style": "vitre"
+    },
+    {
+     "type": "trophees",
+     "x": 92,
+     "count": 6
+    },
+    {
+     "type": "neon",
+     "x": 205,
+     "y": 30,
+     "text": "DIAMANT NOIR",
+     "color": "#e2b440"
+    },
+    {
+     "type": "bureau",
+     "x": 222,
+     "w": 46,
+     "color": "#25222b",
+     "lampe": true
+    },
+    {
+     "type": "fauteuil",
+     "x": 238,
+     "color": "#25222b"
+    },
+    {
+     "type": "canape",
+     "x": 312,
+     "color": "#e8e2d4"
+    },
+    {
+     "type": "plante",
+     "x": 342,
+     "taille": "grande"
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22,
+     "kind": "porte",
+     "label": "Sortir dans la rue"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "diamant",
+     "x": 252,
+     "face": "gauche"
+    }
+   ]
+  },
+  {
+   "id": "studio_paris",
+   "name": "Studio 18, Paris",
+   "group": "Paris",
+   "width": 360,
+   "kind": "interieur",
+   "time": "nuit",
+   "spawn": 60,
+   "ambient": "club",
+   "when": "faux",
+   "wall": {
+    "style": "moderne",
+    "color": "#2c3142",
+    "color2": "#e2b440"
+   },
+   "floor": {
+    "style": "moquette",
+    "color": "#3a3f52"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "SORTIE",
+     "style": "vitre"
+    },
+    {
+     "type": "canape",
+     "x": 86,
+     "color": "#25222b"
+    },
+    {
+     "type": "frigo",
+     "x": 132
+    },
+    {
+     "type": "table_conference",
+     "x": 205,
+     "w": 70,
+     "text": "STUDIO 18"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 205
+    },
+    {
+     "type": "tapis",
+     "x": 302,
+     "w": 44,
+     "color": "#25222b"
+    },
+    {
+     "type": "micro",
+     "x": 302
+    },
+    {
+     "type": "neon",
+     "x": 302,
+     "y": 30,
+     "text": "REC",
+     "color": "#d63c3c"
+    },
+    {
+     "type": "plante",
+     "x": 342,
+     "taille": "grande"
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22,
+     "kind": "porte",
+     "label": "Rentrer à Valbrune"
+    }
+   ]
+  },
+  {
+   "id": "festival",
+   "name": "Festival Bitume, la grande scène",
+   "group": "Centre-ville",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "nuit",
+   "spawn": 60,
+   "ambient": "foule",
+   "when": "var.festival_ouvert",
+   "floor": {
+    "style": "beton",
+    "color": "#2a2a32"
+   },
+   "backdrop": [
+    {
+     "type": "ville",
+     "x": 0
+    },
+    {
+     "type": "tribune_loin",
+     "x": 0,
+     "couleurs": [
+      "#ff4fd8",
+      "#f2c230",
+      "#7cb7ff",
+      "#eef0f4"
+     ],
+     "densite": 0.85
+    }
+   ],
+   "props": [
+    {
+     "type": "projecteur",
+     "x": 60
+    },
+    {
+     "type": "neon",
+     "x": 330,
+     "y": 70,
+     "text": "BITUME",
+     "color": "#f2c230"
+    },
+    {
+     "type": "micro",
+     "x": 270
+    },
+    {
+     "type": "dj",
+     "x": 330
+    },
+    {
+     "type": "micro",
+     "x": 390
+    },
+    {
+     "type": "projecteur",
+     "x": 580
+    },
+    {
+     "type": "drapeau",
+     "x": 140,
+     "color": "#ff4fd8",
+     "color2": "#25222b"
+    },
+    {
+     "type": "drapeau",
+     "x": 500,
+     "color": "#f2c230",
+     "color2": "#25222b"
+    }
+   ],
+   "exits": [
+    {
+     "to": "ville",
+     "x": 22,
+     "kind": "bord",
+     "label": "Retour en ville"
+    }
+   ]
+  }
+ ],
+ "activities": [
+  {
+   "id": "ecrire",
+   "label": "Écrire des textes",
+   "description": "Le carnet, un stylo, et cette phrase qui tourne depuis ce matin.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.plume += hasard(1, 3); var.textes += 1; stat.moral += 1",
+   "feedback": "Une page de plus. Tu barres la moitié, tu gardes le meilleur."
+  },
+  {
+   "id": "poster",
+   "label": "Poster un extrait",
+   "description": "Trente secondes face caméra, un couplet, et le monde entier comme public.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "var.abonnes += hasard(10, 40) + stat.hype * 4 + var.sons * 15; stat.hype += chance(40) ? 1 : 0",
+   "feedback": "Les premières vues tombent. Tu rafraîchis toutes les deux minutes.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "classiques",
+   "label": "Réécouter les classiques",
+   "description": "Les albums qui t'ont appris à écrire, casque vissé sur les oreilles.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.plume += hasard(0, 1); stat.flow += hasard(0, 2); stat.moral += 2",
+   "feedback": "Tu rembobines le même couplet dix fois. Comment il a fait ça ?"
+  },
+  {
+   "id": "freestyle",
+   "label": "Freestyler au banc",
+   "description": "Momo tape un beat sur le banc, les potes font cercle.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.flow += hasard(1, 3); stat.respect += 1; var.freestyles += 1",
+   "feedback": "Les potes crient sur ta dernière rime. Le quartier t'écoute."
+  },
+  {
+   "id": "prod",
+   "label": "Bosser une prod avec Momo",
+   "description": "Choisir les samples, caler la rythmique, se disputer sur la caisse claire.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.flow += hasard(0, 1); stat.plume += hasard(0, 1); rel.momo += 2; var.prods += 1",
+   "feedback": "À deux heures du matin, la prod tourne enfin. Momo hoche la tête en rythme.",
+   "when": "non var.momo_parti",
+   "lockedText": "Momo ne vient plus au studio."
+  },
+  {
+   "id": "enregistrer",
+   "label": "Enregistrer un morceau",
+   "description": "Casque, micro, une prise. Puis une autre. Puis encore une.",
+   "cost": {
+    "actions": 1,
+    "energie": 15
+   },
+   "effects": "var.sons += 1; stat.flow += 1; stat.hype += hasard(0, 1); var.abonnes += 20 + stat.hype * 2",
+   "feedback": "Le morceau est dans la boîte. Tu le réécoutes en boucle sur le chemin du retour.",
+   "when": "var.textes > var.sons et var.studio_ferme == 0",
+   "lockedText": "Il te faut un texte fini de plus que de morceaux enregistrés (écris dans ta chambre), et un studio ouvert.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "open_mic",
+   "label": "Monter sur scène à l'open mic",
+   "description": "Ton nom sur la liste, le micro chaud, trente paires d'yeux.",
+   "cost": {
+    "actions": 1,
+    "energie": 15
+   },
+   "effects": "stat.scene += hasard(1, 3); stat.hype += hasard(0, 2); stat.respect += 1; var.open_mics += 1; var.abonnes += 10 + stat.scene",
+   "feedback": "Les applaudissements te suivent jusqu'au bar."
+  },
+  {
+   "id": "reseauter",
+   "label": "Traîner au comptoir",
+   "description": "Serrer des mains, écouter les anciens, croiser ceux qui comptent.",
+   "cost": {
+    "actions": 1,
+    "argent": 8
+   },
+   "effects": "stat.moral += 3; stat.respect += chance(40) ? 1 : 0; stat.hype += chance(25) ? 1 : 0; rel.fred += 1",
+   "feedback": "Fred te sert un sirop à la menthe et une histoire de 1997."
+  },
+  {
+   "id": "taf",
+   "label": "Faire un service au snack",
+   "description": "Tacos, frites, sauce algérienne, et le sourire même à minuit.",
+   "cost": {
+    "actions": 1,
+    "energie": 20
+   },
+   "effects": "stat.argent += 45; rel.samir += 1; stat.moral -= 1",
+   "feedback": "Quarante-cinq euros et une odeur de friture qui ne partira jamais."
+  },
+  {
+   "id": "repos",
+   "label": "Dormir",
+   "description": "Éteindre le téléphone. Pour une fois.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie += 25; stat.moral += 2",
+   "feedback": "Tu te réveilles avec trois idées de punchlines et aucun souvenir de tes rêves."
+  },
+  {
+   "id": "famille",
+   "label": "Passer du temps en famille",
+   "description": "Le thé à la menthe, la télé trop forte, les questions de ta mère.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.moral += 4; rel.mere += 3; rel.pere += 2; rel.cadet += 2",
+   "feedback": "Pour une heure, il n'y a plus de musique ni de chiffres. Juste eux.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "clip",
+   "label": "Tourner un clip",
+   "description": "Une caméra, un mur tagué, la lumière du soir et tous les potes en figurants.",
+   "cost": {
+    "actions": 1,
+    "energie": 20,
+    "argent": 60
+   },
+   "effects": "stat.hype += hasard(3, 6); var.clips += 1; var.abonnes += 150 + stat.hype * 5; rel.lina += 2",
+   "feedback": "Le soleil se couche pile au bon moment. Lina lève le pouce.",
+   "when": "chapitre == ch2 et var.sons >= 1",
+   "lockedText": "Il faut au moins un morceau enregistré, et ce n'est possible qu'à partir du chapitre 2."
+  }
+ ],
+ "chapters": [
+  {
+   "id": "ch1",
+   "title": "Le banc",
+   "subtitle": "19 ans · Cité des Glycines",
+   "weeks": 6,
+   "onStart": "var.age = 19"
+  },
+  {
+   "id": "ch2",
+   "title": "La lumière",
+   "subtitle": "20 ans · Valbrune",
+   "weeks": 6,
+   "location": "chambre",
+   "onStart": "var.age = 20; stat.energie = 100",
+   "intro": "Six mois ont passé. Ton nom circule dans les open mics, et quelqu'un, quelque part, écoute tes morceaux en boucle."
+  }
+ ],
+ "creation": {
+  "nameLabel": "Ton prénom",
+  "defaultName": "Nassim",
+  "look": true,
+  "baseLook": {
+   "skin": "peau4",
+   "hair": "court",
+   "hairColor": "noir",
+   "top": "sweat",
+   "topColor": "#3b3e47",
+   "bottom": "jean",
+   "bottomColor": "#1d2230",
+   "shoes": "#f4f4f4",
+   "acc": [
+    "casquette"
+   ]
+  },
+  "fields": [
+   {
+    "id": "style",
+    "label": "Ton style",
+    "options": [
+     {
+      "id": "kickeur",
+      "label": "Kickeur",
+      "description": "Le flow avant tout : tu découpes les instrus comme personne.",
+      "effects": "stat.flow += 10; stat.scene += 2"
+     },
+     {
+      "id": "parolier",
+      "label": "Parolier",
+      "description": "Des images, des histoires, des textes qu'on relit.",
+      "effects": "stat.plume += 10; stat.authenticite += 4"
+     },
+     {
+      "id": "showman",
+      "label": "Showman",
+      "description": "La scène est ta maison. Tu fais lever les foules.",
+      "effects": "stat.scene += 10; stat.hype += 3"
+     }
+    ]
+   },
+   {
+    "id": "moteur",
+    "label": "Ce qui te pousse",
+    "options": [
+     {
+      "id": "rage",
+      "label": "La rage",
+      "description": "Le quartier, l'injustice, tout ce qu'on ne dit pas.",
+      "effects": "stat.respect += 8; stat.authenticite += 5; rel.dris += 6"
+     },
+     {
+      "id": "famille",
+      "label": "Ta famille",
+      "description": "Tu veux sortir tes parents de la cité.",
+      "effects": "rel.mere += 10; rel.pere += 8; stat.moral += 4"
+     },
+     {
+      "id": "gloire",
+      "label": "La gloire",
+      "description": "Les disques d'or, les plateaux télé, ton nom en lettres de néon.",
+      "effects": "stat.hype += 4; stat.authenticite -= 6; var.abonnes += 300"
+     }
+    ]
+   },
+   {
+    "id": "caractere",
+    "label": "Ton caractère",
+    "options": [
+     {
+      "id": "calme",
+      "label": "Calme",
+      "description": "Tu réfléchis avant de répondre. Même en clash.",
+      "effects": "stat.moral += 5; stat.plume += 3"
+     },
+     {
+      "id": "sanguin",
+      "label": "Sanguin",
+      "description": "Tu ne laisses rien passer.",
+      "effects": "stat.respect += 6; stat.flow += 2"
+     },
+     {
+      "id": "charmeur",
+      "label": "Charmeur",
+      "description": "Les gens t'aiment vite. Trop vite, parfois.",
+      "effects": "rel.lina += 8; stat.scene += 3"
+     }
+    ]
+   }
+  ],
+  "cast": [
+   {
+    "id": "mere",
+    "label": "Ta mère",
+    "group": "Famille",
+    "hint": "Aide-soignante de nuit. Elle croit en toi, même quand elle ne comprend pas tes textes."
+   },
+   {
+    "id": "pere",
+    "label": "Ton père",
+    "group": "Famille",
+    "hint": "Chauffeur de bus. Pour lui, le rap n'est pas un métier.",
+    "optional": true
+   },
+   {
+    "id": "cadet",
+    "label": "Ton petit frère",
+    "labels": [
+     "Ton petit frère",
+     "Ta petite sœur"
+    ],
+    "group": "Famille",
+    "hint": "Treize ans, et tous tes textes par cœur.",
+    "genderChoice": true,
+    "optional": true,
+    "alt": {
+     "name": "Inaya",
+     "look": {
+      "skin": "peau4",
+      "hair": "tresses",
+      "hairColor": "noir",
+      "gender": "f",
+      "top": "sweat",
+      "topColor": "#d63c3c",
+      "bottom": "jean",
+      "bottomColor": "#1d2230",
+      "height": "enfant",
+      "build": "mince"
+     }
+    }
+   },
+   {
+    "id": "momo",
+    "label": "Ton meilleur pote",
+    "group": "Amis et rivaux",
+    "hint": "Le beatmaker de la cave du bâtiment C."
+   },
+   {
+    "id": "dris",
+    "label": "Ton pote d'enfance",
+    "group": "Amis et rivaux",
+    "hint": "Il a pris le chemin de l'argent facile."
+   },
+   {
+    "id": "rival",
+    "label": "Ton rival",
+    "labels": [
+     "Ton rival",
+     "Ta rivale"
+    ],
+    "group": "Amis et rivaux",
+    "hint": "La terreur des open mics des Hauts-de-Brune.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Nova",
+     "look": {
+      "skin": "peau2",
+      "hair": "tresses",
+      "hairColor": "noir",
+      "gender": "f",
+      "top": "veste",
+      "topColor": "#7c2236",
+      "topColor2": "#25222b",
+      "bottom": "jean",
+      "bottomColor": "#25222b",
+      "acc": [
+       "collier",
+       "boucles"
+      ]
+     }
+    }
+   },
+   {
+    "id": "lina",
+    "label": "L'amour",
+    "group": "Cœur",
+    "hint": "Photographe aux Beaux-Arts. Filme les open mics.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Ilan",
+     "look": {
+      "skin": "peau3",
+      "hair": "bouclecourt",
+      "hairColor": "noir",
+      "gender": "h",
+      "beard": "barbe3j",
+      "top": "veste",
+      "topColor": "#e2b440",
+      "topColor2": "#25222b",
+      "bottom": "jean",
+      "bottomColor": "#2b3a5a",
+      "acc": [
+       "sac"
+      ]
+     }
+    }
+   }
+  ]
+ },
+ "start": {
+  "location": "cite",
+  "event": "intro"
+ },
+ "onTickEnd": "stat.energie += 26; stat.moral += stat.moral < 40 ? 2 : 0; stat.hype -= stat.hype > 25 ? 1 : 0; var.studio_ferme = max(0, var.studio_ferme - 1); eloigner(momo, rel.momo > 30 ? 1 : 0); eloigner(mere, 1); eloigner(lina, var.couple ? 1 : 0)",
+ "sheet": [
+  {
+   "title": "Carrière",
+   "rows": [
+    {
+     "label": "Blaze",
+     "value": "{var.blaze}",
+     "when": "var.blaze != ''"
+    },
+    {
+     "label": "Abonnés",
+     "value": "{nombre(var.abonnes)}"
+    },
+    {
+     "label": "Textes écrits",
+     "value": "{var.textes}"
+    },
+    {
+     "label": "Morceaux enregistrés",
+     "value": "{var.sons}"
+    },
+    {
+     "label": "Open mics",
+     "value": "{var.open_mics}"
+    },
+    {
+     "label": "Freestyles au banc",
+     "value": "{var.freestyles}"
+    },
+    {
+     "label": "Clips",
+     "value": "{var.clips}",
+     "when": "var.clips > 0"
+    },
+    {
+     "label": "Label",
+     "value": "{var.label_nom}",
+     "when": "var.label_nom != ''"
+    },
+    {
+     "label": "Le clash",
+     "value": "{var.clash_gagne ? 'gagné' : var.clash_perdu ? 'perdu' : 'en cours'}",
+     "when": "var.clash"
+    },
+    {
+     "label": "EP",
+     "value": "{var.ep_succes ? 'sorti, un succès' : 'sorti'}",
+     "when": "var.ep_sorti"
+    }
+   ]
+  }
+ ],
+ "events": [],
+ "endings": []
+}

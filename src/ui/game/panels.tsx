@@ -8,6 +8,7 @@ import { audio } from '../../engine/audio';
 import { toStr } from '../../core/expr/expr';
 import { Meter, PanelShell, PortraitView, fmtStat, fmtTime } from '../components';
 import { Wardrobe } from '../appearance';
+import { tickWords } from '../../core/runtime/session';
 
 export function Panels({ c, panel }: { c: GameController; panel: Panel }) {
   const close = () => c.closePanel();
@@ -41,7 +42,7 @@ function Journal({ c }: { c: GameController }) {
           {s.history.length === 0 && <p class="muted">Aucune décision pour l'instant. Chaque choix important sera noté ici, avec ses conséquences.</p>}
           {[...s.history].reverse().slice(0, 150).map((d, i) => (
             <div key={i} class={`item ${d.key ? 'key' : ''}`}>
-              <div class="meta">CH. {d.ch} · SEMAINE {d.wk} · {d.title.toUpperCase()}{d.key ? ' · DÉCISION CLÉ' : ''}</div>
+              <div class="meta">CH. {d.ch} · {tickWords(c.u.def.config).one.toUpperCase()} {d.wk} · {d.title.toUpperCase()}{d.key ? ' · DÉCISION CLÉ' : ''}</div>
               <div>{d.choice}</div>
               {d.fx.length > 0 && <div class="fx">{d.fx.join(' · ')}</div>}
             </div>
@@ -109,7 +110,7 @@ function Stats({ c }: { c: GameController }) {
 
 function Relations({ c }: { c: GameController }) {
   const g = c.g;
-  const chars = c.u.def.characters.filter((ch) => g.s.met[ch.id] || (!ch.hidden && g.s.rel[ch.id] !== (ch.relation ?? 0)));
+  const chars = c.u.def.characters.filter((ch) => g.present(ch.id) && (g.s.met[ch.id] || (!ch.hidden && g.s.rel[ch.id] !== (ch.relation ?? 0))));
   if (!chars.length) return <p class="muted">Tu n'as encore rencontré personne. Parle aux gens autour de toi.</p>;
   const traitLabel = (id: string) => c.u.traits.get(id)?.label ?? id;
   return (
@@ -201,7 +202,7 @@ function Saves({ c }: { c: GameController }) {
             <div class="slot" key={slot}>
               <div class="info">
                 <div class="label">Emplacement {slot}</div>
-                {m ? <div>{m.player} — {m.universeName} · {m.chapter}, sem. {m.week} <span class="muted">· {new Date(m.updated).toLocaleString('fr-FR')}</span></div> : <div class="muted">Vide</div>}
+                {m ? <div>{m.player} — {m.universeName} · {m.chapter}, {(m.tickLabel ?? 'semaine').toLowerCase()} {m.week} <span class="muted">· {new Date(m.updated).toLocaleString('fr-FR')}</span></div> : <div class="muted">Vide</div>}
               </div>
               <button class="pbtn small primary" disabled={!canSave} onClick={() => save(slot)}>Sauvegarder ici</button>
               {m && <button class="pbtn small" onClick={() => exportSlot(slot)}>Exporter</button>}
@@ -213,7 +214,7 @@ function Saves({ c }: { c: GameController }) {
           );
         })}
       </div>
-      <p class="muted" style={{ fontSize: 13 }}>Une sauvegarde automatique est faite au début de chaque semaine. Pour charger une partie, passe par le menu principal.</p>
+      <p class="muted" style={{ fontSize: 13 }}>Une sauvegarde automatique est faite au début de chaque {tickWords(c.u.def.config).one}. Pour charger une partie, passe par le menu principal.</p>
     </div>
   );
 }
@@ -252,7 +253,7 @@ function Menu({ c }: { c: GameController }) {
       {c.opts.test && <button class="pbtn" onClick={() => c.ui.set({ panel: 'debug' })}>Débogage</button>}
       {!confirmQuit
         ? <button class="pbtn ghost" onClick={() => setConfirmQuit(true)}>{c.opts.test ? 'Retour à l\'éditeur' : 'Quitter vers le menu'}</button>
-        : <div class="item col"><span>La progression depuis la dernière sauvegarde sera perdue{c.opts.test ? '' : ' (sauvegarde auto en début de semaine)'}.</span><div class="row"><button class="pbtn danger" onClick={() => c.opts.onExit()}>Quitter</button><button class="pbtn" onClick={() => setConfirmQuit(false)}>Rester</button></div></div>}
+        : <div class="item col"><span>La progression depuis la dernière sauvegarde sera perdue{c.opts.test ? '' : ` (sauvegarde auto en début de ${tickWords(c.u.def.config).one})`}.</span><div class="row"><button class="pbtn danger" onClick={() => c.opts.onExit()}>Quitter</button><button class="pbtn" onClick={() => setConfirmQuit(false)}>Rester</button></div></div>}
       <div class="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>
         Clavier : <span class="kbd">←</span> <span class="kbd">→</span> se déplacer (<span class="kbd">Maj</span> pour courir), <span class="kbd">E</span> interagir, <span class="kbd">Espace</span> continuer, <span class="kbd">1</span>–<span class="kbd">9</span> choisir, <span class="kbd">J</span> journal, <span class="kbd">C</span> personnage, <span class="kbd">R</span> relations, <span class="kbd">M</span> plan. Souris ou toucher : clique pour te déplacer et interagir.
       </div>
@@ -271,7 +272,7 @@ function Debug({ c }: { c: GameController }) {
   return (
     <div class="col" style={{ gap: 14 }}>
       <div class="row">
-        <button class="pbtn small" onClick={() => c.debugEndWeek()}>Finir la semaine</button>
+        <button class="pbtn small" onClick={() => c.debugEndWeek()}>Finir {tickWords(c.u.def.config).le}{tickWords(c.u.def.config).one}</button>
         <button class="pbtn small" onClick={() => c.debugNextChapter()}>Chapitre suivant</button>
         <button class="pbtn small" onClick={() => { g.s.actions = (c.u.def.config?.actionsPerTick ?? 3); force((n) => n + 1); }}>Recharger les actions</button>
         <span class="muted">Ch. {g.s.time.chapter + 1} · sem. {g.s.time.week} · lieu {g.s.location} · tick {g.s.time.tick}</span>

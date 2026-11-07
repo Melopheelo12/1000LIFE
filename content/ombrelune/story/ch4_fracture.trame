@@ -181,13 +181,13 @@ si mem.noe.revisions ou mem.noe.sauve_foret ou mem.noe.defendu
     ~ rel.noe += 10; var.noe_sauve = vrai
     ~ souvenir(noe, choix, "Tu l'as retenu quand Orin voulait le recruter")
   sinon
-    noe (triste): C'est facile à dire. Tu es champion, tu es le chouchou des profs. Moi, je suis juste « le fils du boulanger ».
+    noe (triste): C'est facile à dire. Tu es [[champion|championne]], tu es [[le chouchou|la chouchoute]] des profs. Moi, je suis juste « le fils du boulanger ».
     ~ var.noe_perdu = vrai
     > Le lendemain, le lit de Noé est vide. Il a laissé un mot : « Pardon. »
 * C'est un piège, Noé. Les deux disparus de l'été, c'était ses recrues. #honnete
   test stat.savoir + rel.noe / 2 vs 40
   si reussite
-    noe (inquiet): …Tu es sûr ? Alors j'ai failli… Merci.
+    noe (inquiet): …Tu es [[sûr|sûre]] ? Alors j'ai failli… Merci.
     ~ var.noe_sauve = vrai; rel.noe += 6
   sinon
     noe: Tu dis ça parce que tu ne veux pas que je devienne aussi fort que toi.
@@ -228,7 +228,7 @@ priorite: 8
 ---
 !lieu bureau_archimage 120 soir
 !placer halloran 250 gauche
-halloran (triste): Je n'ai plus le temps d'attendre que tu sois prêt. Le sceau se brise.
+halloran (triste): Je n'ai plus le temps d'attendre que tu sois [[prêt|prête]]. Le sceau se brise.
 halloran: Pour le refaire, il faut trois choses. La Larme de Lune, distillée de ta main. Une plume du Cerf d'argent, offerte, jamais prise. Et la rune du sceau, retrouvée dans les étoiles.
 halloran: Veux-tu m'aider ?
 * Oui. Dites-moi quoi faire. #lumiere
@@ -370,7 +370,7 @@ si var.noe_perdu
     !fx sort moi
     > Deux disciples encagoulés. Tes sorts les renversent avant qu'ils aient compris. Tu libères Lia.
     ~ rel.lia += 15; stat.reputation += 8; var.lia_sauvee = vrai
-    ~ souvenir(lia, sauvee, "Tu es venu la chercher dans la salle secrète")
+    ~ souvenir(lia, sauvee, "Tu es [[venu|venue]] la chercher dans la salle secrète")
     lia (emu): Je savais que tu viendrais. Je le savais.
   sinon
     > Ils sont trop nombreux. Tu parviens à arracher Lia à leurs fils, mais un sort t'atteint au dos.

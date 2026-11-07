@@ -4,21 +4,23 @@ Jeu narratif 2D en pixel art où l'on choisit un univers, incarne un personnage 
 
 Le projet est un **moteur** : chaque univers n'est qu'un **fichier de données**, avec des statistiques, des personnages, des lieux et des événements écrits dans le langage de script **Trame**. Un **éditeur intégré** permet de créer, tester, simuler et publier de nouveaux univers sans toucher au code.
 
-Deux univers complets sont livrés :
+Quatre univers sont livrés : deux grandes histoires et deux histoires courtes.
 
-| Contenu | « Crampons d'Or » (football) | « Ombrelune » (école de magie) |
-| --- | --- | --- |
-| Événements | 132 | 155 |
-| Fins | 13 | 13 |
-| Lieux | 21 | 18 |
-| Personnages | 17 | 16 |
-| Chapitres | 5 saisons | 5 années |
-| Statistiques | 17 | 14 |
-| Activités | 19 | 20 |
-| Décisions par partie (moyenne simulée) | environ 120 | environ 85 |
+| Contenu | « Crampons d'Or » (football) | « Ombrelune » (école de magie) | « Seize Mesures » (rappeur) | « Six Suspects » (enquête) |
+| --- | --- | --- | --- | --- |
+| Événements | 147 | 176 | 58 | 59 |
+| Fins | 13 | 13 | 8 | 8 |
+| Lieux | 21 | 18 | 10 | 11 |
+| Personnages | 20 | 20 | 12 | 15 |
+| Chapitres | 5 saisons | 5 années | 2 × 6 semaines | 2 × 6 journées |
+| Statistiques | 17 | 14 | 9 | 7 |
+| Activités | 19 | 20 | 12 | 18 |
+| Décisions par partie (moyenne simulée) | environ 125 | environ 90 | environ 38 | environ 40 |
 
 - **Crampons d'Or** : une carrière de footballeur, du centre de formation à la retraite, avec un match chaque semaine.
 - **Ombrelune** : cinq années dans une école de magie, de 11 à 15 ans. Tu choisis ton affinité (Flamme, Onde, Souffle ou Racine), ton origine et ton caractère. Chaque semaine : des cours (scène de classe tirée au hasard), des activités, des amitiés, des rivalités, et un grimoire qui murmure ton nom. Les cinq années convergent vers une seule nuit, au cercle de pierres, dont l'issue dépend de tout ce que tu as fait (alliés réunis, ingrédients du sceau, pacte avec l'ombre, liens avec Noé et Ayla…).
+- **Seize Mesures** : douze semaines pour passer du banc de la cité des Glycines à la grande scène. Open mics, battle contre Vortex, featuring avec une star, un label douteux qui promet la lune (et cache autre chose), Momo le beatmaker, Dris le pote d'enfance qui a pris un autre chemin, Lina la photographe, ta famille. Huit fins, du disque d'or à la prison.
+- **Six Suspects** : un meurtre à Saint-Rémy-des-Étangs, ton village natal. Six suspects, dont ton meilleur ami (ou ta meilleure amie), et **un coupable tiré au sort à chaque partie** (jamais le même que la partie précédente). Les témoignages confirment l'alibi des innocents et brisent celui du coupable ; la trace de l'étang désigne deux personnes qu'il faut départager ; l'arme se trouve par une perquisition bien choisie (deux au maximum). Le tableau de la gendarmerie fait le point. Une seule arrestation possible : huit fins, de « Toute la vérité » à « L'erreur judiciaire ».
 
 ## Lancer le jeu
 
@@ -84,6 +86,11 @@ Dans le dépôt GitHub : **Settings → Pages → Build and deployment → Deplo
   - historique des décisions, statistiques et relations conservés ;
   - export et import de fichiers.
   - Stockage dans le navigateur, ou dans le compte de l'utilisateur quand le jeu est publié comme artifact claude.ai.
+- **Ton entourage, à ta façon** (deuxième onglet de la création) : tu donnes un prénom et un visage à ta mère, ton père, tes frères et sœurs, ton meilleur ami, ton rival et la personne dont tu tomberas amoureux ou amoureuse.
+  - Garçon ou fille au choix pour l'amour et la fratrie : tout le texte s'accorde (« il est jaloux » / « elle est jalouse »).
+  - Les prénoms choisis remplacent ceux de l'histoire partout, avec l'élision corrigée (« d'Inès » devient « de Noah »).
+  - Certains proches sont facultatifs (un père, un grand frère, une petite sœur…) : présents, ils ont leurs propres scènes ; absents, ils n'apparaissent jamais.
+  - Des drames qui reviennent plus tard : un prétendant, une photo dans la presse, des disputes, une rupture et peut-être un retour, un secret trahi, un mauvais coup entre amis qui finit par se savoir.
 - **Apparence du personnage** entièrement personnalisable, à la création puis à tout moment en jeu (« Garde-robe » dans le menu ou la fiche du personnage) :
   - corps (genre, corpulence, taille, teint), visage (couleur des yeux, pilosité, signes particuliers), 20 coiffures, tenue (haut, bas, chaussures) ;
   - 18 accessoires (lunettes, chapeau pointu, cape, baguette, écharpe, cicatrice, taches de rousseur…) ;

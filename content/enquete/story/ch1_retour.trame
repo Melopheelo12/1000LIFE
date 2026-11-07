@@ -1,0 +1,260 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 1 — LE RETOUR (jours 1 à 6)
+//  Le coupable est tiré au sort dans l'introduction (var.coupable) parmi
+//  les six suspects ; var.leurre est l'autre suspect que la trace de
+//  l'étang désigne aussi. Les témoignages confirment l'alibi des innocents
+//  (var.alibi_x) ou brisent celui du coupable (var.brise_x, var.ind_x).
+//  Les mobiles, vrais dans toutes les parties, comptent comme un élément :
+//  var.ind_x pour le coupable, var.faux_x (fausse piste) pour les autres.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== intro
+titre: L'étang du Moulin
+declencheur: manual
+---
+!moment aube
+!placer moi 520 gauche
+!placer rival 330 droite
+!placer lucette 430 gauche
+> Saint-Rémy-des-Étangs, un dimanche d'octobre, six heures et demie. La brume colle à l'eau. Neuf ans que tu n'étais pas revenu[[|e]].
+> Le corps a déjà été emporté. Il reste un ruban jaune, des traces de bottes dans la vase, et Lucette Pradier, quatre-vingt-un ans, qui serre son caniche contre elle.
+~ var.n_coupable = hasard(0, 5)
+~ var.n_coupable = var.n_coupable == precedent("n_coupable", -1) ? (var.n_coupable + hasard(1, 5)) % 6 : var.n_coupable
+~ var.coupable = liste("suspects", var.n_coupable, "id"); var.leurre = liste("suspects", var.n_coupable, "leurre")
+lucette (triste): C'est Bijou qui l'a trouvé. Monsieur Vasseur, dans les roseaux, près du lavoir. Il avait les yeux ouverts. Je n'en dormirai plus jamais.
+~ rencontrer(lucette)
+rival (froid): La police judiciaire de Lyon. Quel honneur. On aurait très bien pu s'en charger nous-mêmes.
+~ rencontrer(rival)
+* Lui tendre la main. « On va travailler ensemble. » #diplomatie
+  ~ rel.rival += 6
+  rival: … On verra bien.
+* « On m'a confié l'affaire. Pas à vous. » #autorite
+  ~ rel.rival -= 6; stat.aplomb += 2
+  rival (colere): Profite. Ici, personne ne te parlera.
+* « Je suis d'ici, moi aussi. Je connais ces gens. » #village
+  ~ rel.rival += 2; stat.confiance += 3
+  rival (moqueur): Tu les connaissais. Neuf ans, c'est long.
+!son telephone
+delmas: Lieutenant, ici la procureure Delmas. Je vous ai fait venir parce que vous connaissez ce village. Ne me le faites pas regretter.
+delmas: Douze jours. Après, l'affaire part à la section de recherches de Lyon, et vous rentrez. Je veux un nom, et un dossier qui tient debout devant un juge.
+~ rencontrer(delmas)
+rival: Voilà la liste. Six personnes avaient une bonne raison d'en vouloir à Édouard Vasseur. C'est-à-dire la moitié du village, en fait.
+> Hélène Vasseur, la veuve. Julien Vasseur, le fils, arrivé de Lyon la veille. Bernard Roussel, le maire. Marc Delorme, le contremaître licencié. La docteure Claire Morel, dont le frère est mort à la scierie.
+> Et Thomas Girard. [[ami:Ton meilleur ami|Ta meilleure amie]]. Que Vasseur voulait expulser du Relais.
+~ objectif(meurtrier, "Trouver qui a tué Édouard Vasseur avant la fin du douzième jour")
+~ objectif(scene, "Examiner la scène de crime (la rive, ici, à l'étang)")
+~ objectif(suspects, "Interroger les six suspects, puis vérifier leurs alibis")
+> Chaque journée te laisse 3 actions. Interroge les suspects en leur parlant, enquête dans les lieux du village, et fais le point au tableau de la gendarmerie. Déplace-toi avec ← → ou en cliquant, interagis avec E, ou ouvre le PLAN. Le soir, va dormir dans ta chambre, chez ta mère.
+
+=== en_autopsie
+titre: Le rapport du légiste
+declencheur: tick_start
+quand: temps.total >= 1
+unique: oui
+priorite: 9
+---
+!son telephone
+fabre: Docteur Fabre, institut médico-légal. Votre victime, lieutenant. Je vous fais la version courte, puisque personne ne lit la longue.
+fabre: Un seul coup, à l'arrière du crâne, porté de haut en bas. Il était mort avant de toucher l'eau : pas une goutte dans les poumons. Heure du décès : entre 22 h 30 et 23 h 30.
+~ rencontrer(fabre); var.autopsie = vrai
+si var.coupable == helene
+  fabre: L'arme : un objet lourd et arrondi. Un pommeau, une boule de bronze, quelque chose comme ça. Et des traces de somnifère dans le sang. Une bonne dose. Il était sonné avant même de recevoir le coup.
+sinon si var.coupable == morel
+  fabre: L'arme : un objet cylindrique, métallique, assez long. Une barre, un tube, une grosse lampe. Et des traces de somnifère dans le sang. Une bonne dose. Il était sonné avant même de recevoir le coup.
+sinon si var.coupable == julien
+  fabre: L'arme : un objet métallique, avec des arêtes nettes. Un outil, une clé, quelque chose de mécanique.
+sinon si var.coupable == delorme
+  fabre: L'arme : un outil lourd. J'ai retiré des échardes de bois de la plaie. Un manche, sans doute.
+sinon si var.coupable == roussel
+  fabre: L'arme : un objet lourd et anguleux. Il y avait des particules de bronze dans la plaie. Du bronze, oui. Ce n'est pas tous les jours.
+sinon
+  fabre: L'arme : un objet en bois dur, lisse, verni. Pas un outil de jardin, c'est trop régulier. Un manche de quelque chose. Ou une batte.
+fabre: Voilà. Trouvez-moi l'arme et je vous dirai si c'est la bonne. Bonne chasse.
+~ stat.methode += 1
+
+=== en_scene
+titre: La scène de crime
+declencheur: activity:examiner_scene
+unique: oui
+priorite: 9
+tags: important
+---
+> Le ruban jaune claque dans le vent. La berge garde la forme de la nuit : les herbes couchées, la vase retournée, le vieux lavoir de pierre où Édouard venait chaque soir à 22 h 30, depuis trente ans, fumer son cigare face à l'eau.
+test stat.methode vs 32
+si reussite
+  > Tu quadrilles la berge mètre par mètre. Au bout d'une heure, ton regard s'arrête sur une chose que les gendarmes ont piétinée sans la voir.
+  ~ stat.methode += 1
+sinon
+  > Tu tournes en rond pendant des heures. C'est en glissant dans la vase, au moment de repartir, que tu la vois enfin.
+  ~ stat.energie -= 10
+si var.coupable == helene ou var.coupable == morel
+  > Accroché aux ronces, à deux pas du lavoir : un long fil de laine bordeaux, soyeux. Du mohair. À Saint-Rémy, tout le monde le sait, deux femmes portent une écharpe de ce genre : Hélène Vasseur, et la docteure Morel.
+sinon si var.coupable == julien ou var.coupable == delorme
+  > Sur le chemin du lavoir, là où aucune voiture ne devrait passer : des traces de pneus larges, fraîches, à moitié effacées par la rosée. Un tout-terrain. Deux personnes roulent sur ces chemins avec ce genre d'engin : Julien Vasseur, avec son 4x4, et Marc Delorme, avec le pick-up de la scierie.
+sinon
+  > Dans la vase, au pied du lavoir : un briquet tempête en métal, gravé « Fête des Étangs 2018 ». Tu te souviens de cette fête. Le comité n'avait fait graver que deux briquets, pour ses deux organisateurs : le maire, Bernard Roussel… et Thomas.
+~ var.trace_trouvee = vrai; objectifReussi(scene)
+~ objectif(trace, "Faire analyser la trace de l'étang au labo (ton poste de travail, à la gendarmerie)")
+* Mettre la pièce sous scellés, dans les règles. #methode
+  ~ stat.methode += 1; stat.pression -= 2
+* Prendre des photos de tout, sous tous les angles. #intuition
+  ~ stat.intuition += 1
+
+=== en_lucette
+titre: La fenêtre de Lucette
+declencheur: talk:lucette
+unique: oui
+priorite: 8
+tags: important
+---
+!placer lucette 318 droite
+lucette: Asseyez-vous donc. Vous voulez un biscuit ? Bijou, laisse [[le monsieur|la dame]] tranquille.
+lucette (pensif): Ma fenêtre donne sur le chemin du manoir à l'étang. À mon âge, on ne dort plus beaucoup. Alors on regarde.
+lucette: Monsieur Vasseur est passé sous ma fenêtre à 22 h 25, comme tous les soirs. Il sifflotait. Il sifflotait toujours quand il allait écraser quelqu'un.
+si var.coupable == julien ou var.coupable == delorme
+  lucette: Vers 22 h 40, Bijou a aboyé comme un fou. Il y avait des phares sur le chemin du lavoir. Une voiture haute, avec un moteur qui grondait.
+sinon
+  lucette: Vers 22 h 40, Bijou a aboyé. Pas de voiture, non. Quelqu'un à pied, qui marchait vite sur le gravier.
+* « Et Hélène Vasseur ? Elle dit qu'elle dormait. » #methode
+  si var.coupable == helene
+    lucette (surpris): Dormir ? Ha ! À dix heures et demie passées, je l'ai vue traverser le parc avec sa lampe de jardin. Vers l'étang. Elle a menti aux gendarmes, alors.
+    ~ var.brise_helene = vrai; var.ind_helene += 1
+  sinon
+    lucette: Hélène ? Sa chambre s'est éteinte à neuf heures, comme tous les soirs. Mais elle n'a pas dormi tout de suite : je l'entendais au téléphone à travers la haie, avec sa sœur de Nice. Elles se disputaient l'héritage de leur mère, comme chaque samedi.
+    ~ var.alibi_helene = vrai
+* Lui demander ce que le village dit de l'affaire. #village
+  lucette: Que c'est la docteure, à cause de son frère. Ou le fils, à cause de l'argent. Ou le maire, à cause de tout. Ici, chacun a son coupable. C'est pratique, un mort comme Édouard : tout le monde avait une raison.
+  ~ stat.confiance += 2
+  lucette: Et pour Hélène, si vous voulez savoir : je l'ai vue, ou plutôt je l'ai entendue.
+  si var.coupable == helene
+    lucette (surpris): Elle dit qu'elle dormait ? À dix heures et demie passées, elle traversait le parc avec sa lampe de jardin. Vers l'étang.
+    ~ var.brise_helene = vrai; var.ind_helene += 1
+  sinon
+    lucette: Elle était au téléphone avec sa sœur de Nice, jusqu'à minuit passé. Je l'entendais à travers la haie.
+    ~ var.alibi_helene = vrai
+~ rel.lucette += 5
+
+=== en_cure
+titre: Le confessionnal
+declencheur: talk:cure
+unique: oui
+priorite: 8
+tags: important
+---
+!placer cure 300 gauche
+cure: Asseyez-vous, lieutenant. Ici, au moins, personne ne vous écoutera.
+cure (pensif): Samedi soir, j'étais à la ferme des Bertin. Le vieux Bertin s'en allait. La docteure Morel était là, elle aussi.
+si var.coupable == morel
+  cure (inquiet): Elle est partie vers 22 h 15. Pressée. Elle a parlé d'une urgence. Le vieux est mort à minuit, et elle n'est pas revenue. Elle qui ne quitte jamais un mourant.
+  ~ var.brise_morel = vrai; var.ind_morel += 1
+sinon
+  cure: Elle est restée jusqu'au bout. Une heure du matin. Elle lui a tenu la main pendant que je disais les prières. Nous sommes repartis ensemble, à pied, sous la pluie.
+  ~ var.alibi_morel = vrai
+cure: Vous savez pour son frère, Paul ? Écrasé sous une grume, à la scierie, en 2004. Édouard a juré que Paul avait lui-même retiré le dispositif de sécurité de la machine. Claire n'y a jamais cru. Elle a attendu vingt ans.
+~ var.ind_morel += var.coupable == morel ? 1 : 0; var.faux_morel += var.coupable == morel ? 0 : 1
+* « Édouard venait-il se confesser ? » #intuition
+  cure (pensif): Une seule fois en trente ans. Je ne peux rien vous dire de ce qu'il m'a confié. Mais je peux vous dire la date : le 14 juin 2004. Le soir même de l'accident.
+  ~ var.code_coffre = vrai; stat.intuition += 2
+* Lui demander comment va le village. #village
+  cure: Il a peur. Pas du meurtrier : de ce que votre enquête va déterrer. Ici, chacun a quelque chose sous son plancher.
+  ~ stat.confiance += 3
+~ rel.cure += 5
+
+=== en_releves
+titre: Les relevés téléphoniques
+declencheur: activity:releves
+unique: oui
+priorite: 8
+tags: important
+---
+> Trois cents pages de relevés, arrivées de Lyon par coursier. Tu étales tout sur le bureau. Garnier lève les yeux au ciel et va se chercher un café.
+si var.coupable == julien
+  > Le portable de Julien Vasseur borne à Lyon jusqu'à 20 h. Puis sur l'autoroute. À 22 h 05, il active l'antenne de Saint-Rémy. Lui qui jure avoir passé toute la nuit au casino de Lyon.
+  ~ var.brise_julien = vrai; var.ind_julien += 1
+sinon
+  > Le portable de Julien Vasseur n'a pas quitté Lyon de la soirée. Le casino confirme : caméras, carte de fidélité, et quatre mille euros perdus à la roulette entre 21 h et 3 h du matin.
+  ~ var.alibi_julien = vrai
+si var.coupable == helene
+  > Le portable d'Hélène Vasseur est resté éteint toute la soirée. La ligne fixe du manoir, elle, n'a pas servi.
+sinon
+  > La ligne fixe du manoir : un appel de 22 h 03 à 0 h 31, vers Nice. Hélène Vasseur appelait sa sœur, comme chaque samedi.
+  ~ var.alibi_helene = vrai
+> Le terminal de carte bancaire du Relais : dernière transaction samedi à 22 h 04. Plus rien ensuite, un samedi soir.
+si var.coupable == ami et non var.brise_ami
+  ~ var.brise_ami = vrai; var.ind_ami += 1
+sinon si var.coupable != ami et non var.mensonge_ami
+  ~ var.mensonge_ami = vrai; var.faux_ami += 1
+> Le dernier appel reçu par Édouard, à 19 h 12, vient de la cabine téléphonique de la place. Quarante secondes. Quelqu'un qui ne voulait pas que son numéro apparaisse.
+~ var.releves_recus = vrai; stat.methode += 1
+
+=== en_archives
+titre: Les archives de la mairie
+declencheur: activity:archives
+unique: oui
+priorite: 8
+tags: important
+---
+> La salle des archives sent le papier humide et la cire. Le maire t'a donné la clé avec un sourire crispé : « Prenez votre temps. »
+> Le procès-verbal du conseil municipal de samedi soir : « Séance levée à 22 h 05. » Le maire prétend avoir présidé jusqu'à minuit.
+si var.coupable == roussel
+  ~ var.brise_roussel = vrai; var.ind_roussel += 1
+sinon
+  ~ var.mensonge_roussel = vrai; var.faux_roussel += 1
+> Plus loin, un dossier épais, « Les Prés-Hauts » : la commune a racheté à Édouard Vasseur un terrain trois fois son prix, pour y construire un supermarché. Glissées dedans, des lettres d'Édouard au maire, de plus en plus menaçantes : « Vous me devez votre écharpe, Bernard. Je peux vous la reprendre. »
+~ var.ind_roussel += var.coupable == roussel ? 1 : 0; var.faux_roussel += var.coupable == roussel ? 0 : 1
+test stat.methode vs 38
+si reussite
+  > Tout au fond, mal rangé, un autre dossier attire ton œil : « Accident de la scierie Vasseur, 14 juin 2004 ». Conclusion du rapport de gendarmerie : imprudence de la victime, Paul Morel.
+  [present(pere)] > Le rapport est signé de la main de ton père.
+  [non present(pere)] > Le rapport est signé par un adjudant parti à la retraite depuis longtemps.
+  > Dans la marge, une note au crayon, à moitié effacée : « Rapport modifié à la demande de M. Vasseur. »
+  ~ var.code_coffre = vrai; var.piste_2004 = vrai; stat.intuition += 2
+sinon
+  > Le reste n'est que poussière et délibérations sur l'éclairage public.
+
+=== en_bureau_vasseur
+titre: Le bureau d'Édouard
+declencheur: activity:fouiller_bureau
+unique: oui
+priorite: 8
+tags: important
+---
+> Le bureau d'Édouard Vasseur : un sous-main en cuir, un coupe-papier en argent, un cendrier propre. Un homme d'ordre. Les tiroirs, eux, racontent autre chose.
+> Premier tiroir : un projet de convention de divorce, rédigé par un avocat de Lyon. Édouard comptait quitter Hélène. Avec leur contrat de mariage, elle partait sans rien.
+~ var.ind_helene += var.coupable == helene ? 1 : 0; var.faux_helene += var.coupable == helene ? 0 : 1
+> Deuxième tiroir : une lettre de Julien, suppliante. Quatre-vingt mille euros de dettes de jeu, des gens « qui ne plaisantent pas ». Dans la marge, de la main d'Édouard : « Plus un centime. »
+~ var.ind_julien += var.coupable == julien ? 1 : 0; var.faux_julien += var.coupable == julien ? 0 : 1
+> Troisième tiroir : le double d'une plainte contre Marc Delorme, pour vol de bois. Édouard voulait le voir en prison.
+~ var.ind_delorme += var.coupable == delorme ? 1 : 0; var.faux_delorme += var.coupable == delorme ? 0 : 1
+> Dans l'agenda, à la date de samedi : « 22 h 30, lavoir. » Aucun nom.
+test stat.intuition vs 34
+si reussite
+  > En te relevant, tu remarques que le portrait d'Édouard, au-dessus de la cheminée, est légèrement de travers. Comme si on l'avait souvent décroché.
+  ~ var.piste_coffre = vrai
+  ~ objectif(coffre, "Ouvrir ce que cache le portrait d'Édouard, au manoir")
+sinon
+  > Tu refermes les tiroirs. Il y a forcément autre chose, dans cette maison. Mais quoi ?
+  ~ var.piste_coffre = chance(50)
+  [var.piste_coffre] > En sortant, Julien grommelle : « Mon père passait son temps à décrocher ce fichu tableau. »
+  [var.piste_coffre] ~ objectif(coffre, "Ouvrir ce que cache le portrait d'Édouard, au manoir")
+
+=== en_scierie
+titre: L'atelier de la scierie
+declencheur: activity:fouiller_scierie
+unique: oui
+priorite: 8
+tags: important
+---
+> La scierie tourne au ralenti depuis dimanche. Les ouvriers t'observent par-dessus les piles de planches.
+[present(cadet)] !placer cadet 220 droite
+[present(cadet)] cadet: Viens, je te montre. Les gars ne parlent pas aux flics, mais moi, je suis [[cadet:ton frère|ta sœur]].
+si var.coupable == delorme
+  > Dans le casier de Delorme, qu'il n'a jamais vidé, il manque son merlin, le gros outil à fendre le bois. Les autres ouvriers jurent qu'il était là vendredi.
+  > Et Kevin, l'apprenti, a vu le pick-up de la scierie garé sur le chemin du lavoir samedi soir, vers 22 h 45. Delorme n'a jamais rendu les clés.
+  ~ var.brise_delorme = vrai; var.ind_delorme += 1
+sinon
+  > Dans le bureau du chef d'équipe, une photo imprimée, punaisée au mur comme une blague : un piège photographique de l'Office des forêts, à la Combe-aux-Loups, à cinq kilomètres de l'étang. Samedi, 22 h 51. Marc Delorme, un chevreuil sur l'épaule.
+  > Il braconnait. Il ne pouvait pas être au lavoir.
+  ~ var.alibi_delorme = vrai
+> Le comptable te glisse, à voix basse, que Julien Vasseur est passé vendredi supplier qu'on lui avance de l'argent sur « sa future part ».
+~ stat.methode += 1

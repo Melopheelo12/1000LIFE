@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { Rng } from '../rng';
 import type { CompiledUniverse } from './compile';
+import type { CastChoice } from '../model/types';
 import { StoryRunner } from './runner';
 import { GameSession, type MetaInfo } from './session';
 
@@ -64,7 +65,16 @@ export function simulateOne(u: CompiledUniverse, rng: Rng, persona: Persona, max
   const def = u.def;
   const fields: Record<string, string> = {};
   for (const f of def.creation?.fields ?? []) fields[f.id] = rng.pick(f.options)!.id;
-  const g = GameSession.create(u, { name: 'Test', fields, seed: rng.int(1, 2 ** 31) }, meta);
+  // Entourage tiré au hasard : proches facultatifs présents ou non, genre choisi au hasard,
+  // pour que la simulation couvre toutes les combinaisons possibles à la création.
+  const cast: Record<string, CastChoice> = {};
+  for (const sl of def.creation?.cast ?? []) {
+    const ch: CastChoice = {};
+    if (sl.optional && rng.chance(sl.defaultAbsent ? 50 : 25)) ch.absent = !sl.defaultAbsent;
+    if (sl.genderChoice && rng.chance(50)) ch.genre = (def.characters.find((c) => c.id === sl.id)?.look.gender === 'f' ? 'h' : 'f');
+    if (Object.keys(ch).length) cast[sl.id] = ch;
+  }
+  const g = GameSession.create(u, { name: 'Test', fields, seed: rng.int(1, 2 ** 31), cast }, meta);
   const runner = new StoryRunner(g, true);
   let decisions = 0;
   let steps = 0;

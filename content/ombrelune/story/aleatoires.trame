@@ -14,7 +14,7 @@ si rel.claire >= 50
 sinon si rel.claire >= 20
   > « Tout va bien ici. Tu nous manques. Écris un peu plus, s'il te plaît. »
 sinon
-  > « Je sais que tu es occupé. Juste un mot, de temps en temps. Pour savoir que tu vas bien. »
+  > « Je sais que tu es [[occupé|occupée]]. Juste un mot, de temps en temps. Pour savoir que tu vas bien. »
 * (Répondre tout de suite, longuement) #famille
   ~ rel.claire += 6; stat.moral += 3
 * (Répondre plus tard… et oublier)
@@ -167,7 +167,7 @@ declencheur: random
 quand: stat.reputation >= 30
 recharge: 6
 ---
-> Une rumeur court dans les couloirs : tu serais l'élève préféré de l'Archimage, et tu aurais un sort secret.
+> Une rumeur court dans les couloirs : tu serais [[l'élève préféré|l'élève préférée]] de l'Archimage, et tu aurais un sort secret.
 * Démentir. #humble
   ~ stat.reputation -= 2; stat.discipline += 1
 * Laisser courir, en souriant mystérieusement. #ruse
@@ -204,7 +204,7 @@ recharge: 8
 !moment nuit
 > Des centaines d'étoiles filantes traversent le ciel au-dessus du lac. Le château entier est aux fenêtres.
 * [rel.ayla >= 15] Monter sur le toit avec Ayla. #romance
-  > Elle compte les étoiles à voix basse. À la centième, elle pose sa tête sur ton épaule.
+  > [[ayla:Il|Elle]] compte les étoiles à voix basse. À la centième, [[ayla:il|elle]] pose sa tête sur ton épaule.
   ~ rel.ayla += 8; stat.moral += 6
 * Faire un vœu avec Noé. #loyal
   ~ rel.noe += 4; stat.moral += 4

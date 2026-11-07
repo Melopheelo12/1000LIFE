@@ -1,0 +1,378 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ENTOURAGE — la mère, le père (facultatif), le petit frère ou la petite
+//  sœur (facultatif), Lina, Dris et Vortex.
+//  Les proches facultatifs sont protégés par present(id).
+// ═══════════════════════════════════════════════════════════════════════
+
+// ─── La mère ─────────────────────────────────────────────────────────────
+
+=== fa_mere_garde
+titre: Après la garde
+declencheur: activity:famille
+chapitres: ch1
+unique: oui
+priorite: 6
+---
+!placer mere 120 droite
+> Ta mère rentre de sa garde de nuit à sept heures du matin. Elle s'assoit dans la cuisine sans enlever son manteau.
+mere (inquiet): Douze heures debout. Un monsieur est parti cette nuit, chambre 14. Il n'avait personne. Je lui ai tenu la main.
+mere: Et toi, mon cœur ? Ta musique… tu crois vraiment que ça va marcher ?
+* « Je garde mon boulot chez Samir. La musique, je la fais à côté. » #prudent
+  ~ rel.mere += 6
+  mere (content): C'est tout ce que je demande. Un pied dans le réel.
+* « Ça va marcher, maman. Je vais te sortir d'ici. » #ambition
+  ~ rel.mere += 2; stat.moral += 2
+  mere (triste): Je ne veux pas que tu me sortes d'ici. Je veux que tu sois heureux[[|se]]. Ce n'est pas pareil.
+* [stat.argent >= 50] Poser cinquante euros sur la table, pour les courses. #famille
+  ~ stat.argent -= 50; rel.mere += 10; var.aide_mere = vrai
+  ~ souvenir(mere, courses, "Tu lui as laissé de l'argent pour les courses, un matin après sa garde")
+  mere (emu): Reprends ça. … Bon. D'accord. Mais c'est la dernière fois.
+
+=== fa_mere_factures
+titre: La lettre rouge
+declencheur: tick_end
+chapitres: ch2
+quand: temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+!lieu appart 120 soir
+!placer mere 120 droite
+> Sur la table de la cuisine, une lettre au tampon rouge. « Dernier avis avant coupure. » Ta mère la retourne quand tu entres.
+mere (inquiet): Ce n'est rien. L'hôpital a réduit mes heures, c'est tout. On va s'arranger.
+* [stat.argent >= 500] Payer la facture, sans discuter. #famille
+  ~ stat.argent -= 500; rel.mere += 12; var.aide_mere = vrai
+  !rappel mere.courses
+  mere (emu): Mon enfant qui paie l'électricité… Ton grand-père doit bien rire, là-haut.
+* Prendre des services en plus chez Samir. #travail
+  ~ stat.energie -= 25; stat.argent += 120; rel.mere += 6; rel.samir += 4
+  > Trois nuits de friteuse. La facture est payée. Tu dors debout dans le bus.
+* [stat.argent < 500] Raccrocher le micro. Signer le CDI de l'entrepôt, pour de bon. #sacrifice
+  mere (triste): Non. Pas pour moi. Je t'interdis de faire ça pour moi.
+  > Mais tu as déjà appelé l'oncle de Momo. Lundi, tu commences à cinq heures.
+  ~ var.raccroche = vrai; rel.mere += 8
+  ~ fin(fin_raccroche)
+* « On va s'en sortir, maman. Ne t'inquiète pas. » #espoir
+  ~ rel.mere += 2; stat.moral -= 3
+  > Elle sourit. Toi aussi. Aucun de vous deux n'y croit vraiment.
+
+// ─── Le père ─────────────────────────────────────────────────────────────
+
+=== fa_pere_carnet
+titre: Le carnet
+declencheur: tick_end
+chapitres: ch1
+quand: present(pere) et temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+!lieu appart 230 soir
+!placer pere 236 gauche
+> Ton père est assis sur le canapé, ton carnet de textes à la main. Il lit à voix haute, avec une voix de robot.
+pere (moqueur): « Mes rêves sont plus hauts que les tours de la cité »… Les tours font quinze étages, [[fils|ma fille]]. Ce n'est pas très haut.
+pere: Vingt-deux ans que je conduis le bus de 6 h 12. Tu sais combien de rappeurs j'ai vus monter ? Ils descendent tous à l'arrêt « chômage ».
+* Lui reprendre le carnet des mains. #fierte
+  ~ rel.pere -= 6; stat.authenticite += 2
+  pere (colere): Vas-y, fais le fier. On verra qui paie le loyer dans dix ans.
+* Lui lire, toi, ton meilleur texte. Debout, dans le salon. #sincere
+  test stat.plume vs 42
+  si reussite
+    > Il ne dit rien. Il regarde la fenêtre. À la fin, il se racle la gorge, se lève, et va se coucher. Ta mère te dit plus tard qu'il a demandé « le titre de la chanson ».
+    ~ rel.pere += 10
+    ~ souvenir(pere, texte, "Tu lui as lu ton meilleur texte, debout dans le salon")
+  sinon
+    pere: C'est joli. Ça ne paie pas les factures, mais c'est joli.
+    ~ rel.pere += 2
+* Sortir sans un mot. #fuite
+  ~ rel.pere -= 3; stat.moral -= 3
+  > Tu claques la porte. Tu passes la nuit sur le banc, à écrire un texte sur les pères qui ne comprennent rien.
+  ~ var.textes += 1
+
+=== fa_pere_bus
+titre: Le bus de 6 h 12
+declencheur: tick_end
+chapitres: ch2
+quand: present(pere) et (var.sons >= 2 ou stat.hype >= 30)
+unique: oui
+priorite: 4
+---
+!lieu appart 230 soir
+!placer pere 236 gauche
+pere (pensif): Ce matin, dans mon bus, trois gamins du collège Jean-Moulin chantaient un refrain. Fort. Je leur ai dit de baisser.
+pere: Et puis j'ai reconnu ta voix, dans leur téléphone.
+!rappel pere.texte
+* « Et tu leur as dit de baisser ? » #humour
+  pere (rire): Non. J'ai monté la radio du bus, et je leur ai demandé de remettre du début.
+  ~ var.pere_fier = vrai; rel.pere += 10
+* « Alors, toujours l'arrêt chômage ? » #rancune
+  pere (triste): … Tu as le droit. J'ai été dur. C'est parce que j'ai peur pour toi, c'est tout.
+  ~ rel.pere += 4; var.pere_fier = rel.pere >= 20
+* Le serrer dans tes bras. #famille
+  ~ var.pere_fier = vrai; rel.pere += 14
+  > Il se raidit, puis te tape dans le dos, trois fois, comme on fait chez vous.
+
+// ─── Le petit frère ou la petite sœur ──────────────────────────────────
+
+=== fa_cadet_studio
+titre: Juste une fois
+declencheur: talk:cadet
+chapitres: ch1
+quand: present(cadet)
+unique: oui
+priorite: 5
+---
+!placer cadet 300 gauche
+cadet (content): Tu m'emmènes au studio ? Juste une fois ! J'ai écrit un texte. Enfin, quatre phrases.
+> Sur une feuille de cahier de maths, quatre phrases au stylo bleu. Il y a des fautes, et une image qui te coupe le souffle.
+* L'emmener au studio et l'enregistrer, pour de vrai. #mentor
+  ~ var.cadet_studio = vrai; rel.cadet += 12; rel.momo += 2
+  ~ souvenir(cadet, studio, "Tu l'as emmené[[cadet:|e]] au studio pour enregistrer ses quatre phrases")
+  > Momo lui fait une prod en dix minutes. [[cadet:Il|Elle]] tremble au micro. Le soir, [[cadet:il|elle]] s'endort avec le casque sur les oreilles.
+* « Plus tard. Concentre-toi sur l'école d'abord. » #grand_frere
+  ~ rel.cadet -= 4; rel.mere += 2
+  cadet (triste): Tout le monde dit « plus tard ». Même toi.
+* Lui apprendre à compter les mesures, là, sur la table du salon. #famille
+  ~ rel.cadet += 8; stat.flow += 1
+  > Tu tapes le rythme sur la table, [[cadet:il|elle]] compte à voix haute. Votre mère fait semblant de ne pas sourire.
+
+=== fa_cadet_guet
+titre: Au pied du bâtiment D
+declencheur: tick_end
+chapitres: ch2
+quand: present(cadet) et temps.semaine >= 3
+unique: oui
+priorite: 6
+---
+!lieu cite 200 nuit
+!placer cadet 200 droite
+> Vingt-deux heures. Au pied du bâtiment D, sur une chaise de camping, une petite silhouette en sweat rouge surveille la rue. Ilyès. Treize ans. Un talkie-walkie à la main.
+> C'est la place du guetteur. Celle de Dris, à son âge.
+!rappel cadet.studio
+* Aller voir les grands du bâtiment D, et le reprendre devant eux. #protecteur
+  test stat.respect vs 45
+  si reussite
+    > Tu parles calmement. Ils te connaissent, ils ont vu la battle. L'un d'eux hausse les épaules : « Reprends-le. On s'en fout. »
+    ~ var.cadet_sauve = vrai; rel.cadet += 4; stat.respect += 3
+  sinon
+    > Ils rient. On te pousse. Tu repars avec une lèvre fendue, et Ilyès qui pleure de honte derrière toi.
+    ~ var.cadet_sauve = vrai; rel.cadet -= 6; stat.moral -= 8
+* Lui proposer de venir au studio chaque soir à la place. #mentor
+  test rel.cadet + (var.cadet_studio ? 25 : 0) vs 55
+  si reussite
+    cadet (emu): Chaque soir ? Pour de vrai ? … D'accord. Je leur dis que j'arrête.
+    ~ var.cadet_sauve = vrai; rel.cadet += 10; var.cadet_studio = vrai
+  sinon
+    cadet (colere): Ton studio, c'est pas de l'argent. Eux, ils me donnent cinquante euros par soir.
+    ~ var.cadet_dehors = vrai
+* Tout raconter à vos parents. #famille
+  ~ var.cadet_sauve = vrai; rel.cadet -= 12; rel.mere += 4
+  cadet (colere): Balance ! Je te parle plus jamais !
+  > [[cadet:Il|Elle]] est privé[[cadet:|e]] de sortie pour un mois. [[cadet:Il|Elle]] ne te dit plus bonjour, mais [[cadet:il|elle]] rentre à dix-neuf heures.
+* Ce ne sont pas tes affaires. Tu as un EP à finir. #indifference
+  ~ var.cadet_dehors = vrai; rel.cadet -= 4; stat.authenticite -= 4
+
+// ─── Lina ───────────────────────────────────────────────────────────────
+
+=== dr_lina_toit
+titre: Le toit des Beaux-Arts
+declencheur: talk:lina
+quand: connu.lina et rel.lina >= 10 et non var.lina_partie
+unique: oui
+priorite: 5
+---
+!placer lina 210 droite
+lina (content): Viens. Je connais un endroit.
+> [[lina:Il|Elle]] t'emmène sur le toit de l'école des Beaux-Arts par un escalier de secours. Toute la ville s'étend en dessous : les tours des Glycines, au loin, ressemblent à des jouets.
+lina: C'est ici que je viens quand je n'arrive plus à rien. D'ici, tout a l'air réparable.
+!rappel lina.question
+* Lui demander de te prendre en photo, là, maintenant. #romance
+  ~ rel.lina += 8
+  > [[lina:Il|Elle]] refuse. [[lina:Il|Elle]] prend l'appareil, le tourne vers vous deux, et appuie. La première photo où [[lina:il|elle]] apparaît.
+  ~ souvenir(lina, toit, "La première photo d'[[lina:lui|elle]], prise avec toi sur le toit")
+* Lui lire un texte que tu n'as jamais montré à personne. #sincere
+  test stat.plume vs 40
+  si reussite
+    ~ rel.lina += 10; stat.authenticite += 2
+    lina (emu): Personne n'écrit comme ça sur les Glycines. Personne.
+  sinon
+    ~ rel.lina += 4
+    lina: Il y a quelque chose. Continue de le travailler.
+* Parler de musique, de carrière, de chiffres. #ambition
+  ~ rel.lina -= 2; stat.hype += 1
+  lina (pensif): Tu sais, tu as le droit de juste regarder la ville. Sans rien vendre.
+
+=== dr_lina_cafe
+titre: Un café avec Lina
+declencheur: talk:lina
+quand: connu.lina et non var.lina_partie
+recharge: 2
+priorite: 2
+---
+!placer lina 210 droite
+si var.couple
+  lina (content): Tu as dix minutes ? J'ai développé la pellicule de dimanche. Il y a une photo de toi qui dort sur le canapé du studio. Je la garde pour moi.
+sinon
+  lina: Tu veux un café ? Fred fait le pire café de Valbrune, mais il le fait avec amour.
+* Lui demander sur quoi [[lina:il|elle]] travaille en ce moment. #ecoute
+  ~ rel.lina += 5
+  > [[lina:Il|Elle]] te parle d'une série sur les mains des gens : les mains des chauffeurs de bus, des aides-soignantes, des rappeurs. Tu l'écoutes une heure sans voir le temps passer.
+* Lui faire écouter ton dernier texte. #sincere
+  ~ rel.lina += 4; stat.plume += 1
+  lina (pensif): La deuxième phrase. Garde-la. Coupe le reste et repars de là.
+* Lui raconter la battle, en exagérant un peu. #humour
+  ~ rel.lina += 3; stat.moral += 2
+  lina (rire): Dans ta version, il y avait combien de personnes ? Mille ? J'y étais, je te rappelle.
+
+=== dr_lina_couple
+titre: Ce qui ne se photographie pas
+declencheur: talk:lina
+quand: vu(dr_lina_toit) et rel.lina >= 24 et non var.couple et non var.lina_partie
+unique: oui
+priorite: 6
+---
+!placer lina 210 droite
+> Le Spot vient de fermer. Fred passe la serpillière en chantonnant du Fred M. Lina range son appareil, lentement, comme pour gagner du temps.
+lina (pensif): J'ai développé mes pellicules. Sur trente-six photos, il y a toi sur vingt-deux. Ce n'est plus un projet sur les open mics, je crois.
+* L'embrasser. #romance
+  ~ var.couple = vrai; rel.lina += 12; stat.moral += 10
+  !emote lina coeur
+  > Fred s'arrête de passer la serpillière. Il éteint la lumière de la salle, discrètement, et vous laisse seuls.
+  ~ souvenir(lina, baiser, "Votre premier baiser, au Spot, après la fermeture")
+* « Moi aussi. Mais j'ai peur de tout gâcher. » #sincere
+  ~ var.couple = vrai; rel.lina += 10
+  lina (rire): On a peur tous les deux, alors. C'est déjà un début.
+* « Je ne peux pas, pas maintenant. La musique d'abord. » #ambition
+  ~ rel.lina -= 10; stat.moral -= 6
+  lina (triste): D'accord. Je comprends. Enfin, j'essaie.
+
+=== dr_lina_jalousie
+titre: L'autre prétendant
+declencheur: tick_start
+chapitres: ch2
+quand: var.couple et temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+!placer lina 210 droite
+si var.jalousie
+  lina (inquiet): Kaïser m'a écrit. Il veut que je fasse les photos de sa tournée. Trois mois. Paris, Bruxelles, Montréal. Je voulais t'en parler avant de répondre.
+sinon
+  lina (inquiet): Vortex m'a écrit. [[rival:Il|Elle]] veut que je réalise son prochain clip. C'est bien payé. Et [[rival:il|elle]] m'invite à dîner pour « en parler ». Je voulais t'en parler avant de répondre.
+* « Vas-y. C'est ton travail. J'ai confiance en toi. » #confiance
+  ~ rel.lina += 12; var.lina_tournee = vrai
+  lina (emu): Tu es sûr[[|e]] ? … Merci. Ça compte, que tu me fasses confiance.
+* « On te veut toi, pas tes photos. Tu le vois bien, non ? » #jalousie
+  ~ rel.lina -= 14
+  lina (colere): Donc c'est impossible que quelqu'un aime mon travail ? Merci.
+* Ne rien dire, bouder toute la soirée. #silence
+  ~ rel.lina -= 6
+  > [[lina:Il|Elle]] finit par refuser l'offre. [[lina:Il|Elle]] ne te dit pas pourquoi. Tu le sais très bien.
+
+=== dr_lina_expo
+titre: Le même soir
+declencheur: tick_end
+chapitres: ch2
+quand: var.couple et temps.semaine >= 3
+unique: oui
+priorite: 5
+---
+!placer lina 210 droite
+lina (content): Mon vernissage, c'est jeudi ! Ma première vraie expo, dans une vraie galerie. Tu seras là ? Tu es sur la moitié des photos, tu sais.
+!son notif
+> Au même moment, un message : on t'offre un showcase à Paris, jeudi soir, devant des programmateurs de radio.
+* Aller au vernissage. #romance
+  ~ rel.lina += 12; stat.hype -= 2; stat.moral += 6
+  > Tu restes devant ta propre photo pendant une heure, à écouter des inconnus dire « ce visage, quelle intensité ». Lina ne lâche pas ta main.
+  !rappel lina.toit
+* Faire le showcase à Paris. #ambition
+  ~ rel.lina -= 14; stat.hype += 6; var.abonnes += 4000
+  > Le showcase se passe bien. Sur ton téléphone, à minuit, une seule photo : une salle de galerie, et un mur où il manque quelqu'un.
+* Lui demander de décaler son vernissage. #egoisme
+  ~ rel.lina -= 20
+  lina (colere): Décaler ? Ma première exposition ? Tu t'entends ?
+
+=== dr_lina_rupture
+titre: Les pellicules
+declencheur: tick_end
+chapitres: ch2
+quand: var.couple et rel.lina < 15
+unique: oui
+priorite: 7
+---
+!placer lina 210 droite
+lina (triste): Je crois qu'on s'est perdus quelque part entre ton deuxième morceau et ton dernier showcase.
+> [[lina:Il|Elle]] te rend une boîte à chaussures. Dedans, toutes les photos de toi. Toutes.
+lina: Garde-les. Moi, je n'arrive plus à les regarder.
+~ var.couple = faux; var.lina_partie = vrai; stat.moral -= 15
+* La retenir. #romance
+  > Tu lui prends la main. [[lina:Il|Elle]] la retire, doucement. « Pas comme ça. Pas maintenant. »
+* La laisser partir. #respect
+  > Tu [[lina:le|la]] regardes descendre l'escalier du Spot. [[lina:Il|Elle]] ne se retourne pas. Tu écris toute la nuit.
+  ~ var.textes += 1; stat.plume += 2
+
+// ─── Dris ───────────────────────────────────────────────────────────────
+
+=== dr_dris_baskets
+titre: Les baskets
+declencheur: talk:dris
+chapitres: ch1
+unique: oui
+priorite: 4
+---
+!placer dris 440 gauche
+dris (content): Tiens. Pointure 43, c'est bien ça ? Les mêmes que les miennes. Édition limitée.
+> Une boîte orange. Dedans, des baskets à deux cents euros.
+* Les prendre. On ne refuse pas un cadeau d'un frère. #loyal
+  ~ rel.dris += 8; stat.authenticite -= 2
+  dris (fier): Comme ça, sur scène, tu ressembles à quelque chose.
+* Les refuser. Tu sais d'où vient l'argent. #mefiance
+  ~ rel.dris -= 8; stat.authenticite += 3
+  dris (colere): Tu sais quoi ? Garde tes vieilles chaussures. Et ta morale avec.
+* [present(cadet)] Les accepter, et les offrir à Ilyès. #famille
+  ~ rel.dris += 2; rel.cadet += 6
+  > Ilyès ne les quitte plus. Même pour dormir.
+
+=== dr_dris_nouvelles
+titre: Des nouvelles de Dris
+declencheur: tick_end
+chapitres: ch2
+quand: var.dris_parti et temps.semaine >= 4
+unique: oui
+priorite: 4
+---
+si var.dris_arrete
+  > Une lettre de la maison d'arrêt. Une écriture penchée que tu reconnais : celle des mots doux qu'il faisait passer en CM2.
+  > « Ici, on écoute ton son à la radio de la promenade. Je dis à tout le monde que c'est [[mon frère|ma sœur]]. Personne ne me croit. Continue. Pour nous trois. »
+sinon
+  > Un message de Marseille. Une photo de Dris en tablier, dans la pizzeria de son oncle, de la farine jusqu'aux sourcils.
+  > « Je pétris de la pâte toute la journée. Je dors la nuit. Je n'ai plus peur quand le téléphone sonne. Merci, [[frère|ma sœur]]. »
+  !rappel dris.depart
+* Lui répondre, longuement. #loyal
+  ~ rel.dris += 8; stat.moral += 6
+* Écrire un morceau pour lui. #plume
+  ~ stat.plume += 2; var.textes += 1; stat.authenticite += 3
+  > Le texte s'appelle « Le troisième prénom ». C'est le plus beau que tu aies écrit.
+
+// ─── Vortex ─────────────────────────────────────────────────────────────
+
+=== dr_rival_silence
+titre: Le silence
+declencheur: talk:rival
+chapitres: ch1
+quand: var.clash_ignore
+unique: oui
+priorite: 6
+---
+!placer rival 270 gauche
+rival (moqueur): Alors, la mauvaise herbe ? Toujours muette ? Les Glycines ont perdu leur langue ?
+* Lui répondre, ici, a cappella, devant tout le monde. #clash
+  test stat.flow + stat.plume / 2 vs 44
+  si reussite
+    > Seize mesures improvisées. Le bar explose. Vortex encaisse, puis applaudit, deux fois, du bout des doigts.
+    ~ stat.respect += 8; rel.rival += 6; stat.hype += 3
+  sinon
+    > Tu bafouilles. [[rival:Il|Elle]] rit. Le bar aussi.
+    ~ stat.respect -= 3; stat.moral -= 4
+* « Je n'ai pas besoin de t'écraser pour exister. » #calme
+  ~ stat.authenticite += 4; rel.rival += 8
+  rival (pensif): … Ça, c'est une phrase. Tu devrais l'écrire.

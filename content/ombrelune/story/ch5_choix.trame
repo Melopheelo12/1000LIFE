@@ -37,7 +37,7 @@ si var.heritier
 malrik: Le sceau tombera à la fin de l'année. Avec ou sans toi. Mais avec toi, personne n'a besoin de souffrir.
 malrik (content): Rejoins-moi, et je te donnerai tout. Le savoir que les vieux fous t'ont caché. La force. Et la sécurité pour ceux que tu aimes.
 si var.couple
-  malrik: Ayla, par exemple. Ses visions la tuent à petit feu. Moi, je peux les faire taire.
+  malrik: Ayla, par exemple. Ses visions [[ayla:le|la]] tuent à petit feu. Moi, je peux les faire taire.
 * J'accepte. #ombre
   ~ var.disciple = vrai; var.pacte = vrai; stat.ombre += 15; stat.puissance += 10; rel.malrik += 20
   ~ souvenir(malrik, ultimatum, "Tu as accepté de le rejoindre")
@@ -259,7 +259,7 @@ si var.daval_sait
   ~ var.allies += 1
   > Même Daval a promis d'envoyer ses gardes.
 si var.allies == 0
-  > Personne ne vient. Tu iras seul.
+  > Personne ne vient. Tu iras [[seul|seule]].
   ~ stat.moral -= 10
 sinon
   > {var.allies} allié(s). Ce sera peut-être assez.
@@ -316,7 +316,7 @@ priorite: 50
 !moment nuit
 > La dernière nuit. Le cercle de pierres brûle d'une lumière violette. Douze disciples en robe noire chantent autour du grimoire, posé sur la pierre centrale.
 !placer orin 520 gauche
-orin (fier): Tu es venu ! Évidemment que tu es venu. Il savait que tu viendrais.
+orin (fier): Tu es [[venu|venue]] ! Évidemment que tu es [[venu|venue]]. Il savait que tu viendrais.
 si var.noe_perdu
   > Parmi les disciples, une silhouette rousse qui tremble. Noé.
 !fx eclair
@@ -332,7 +332,7 @@ si var.allies >= 2
 sinon si var.allies == 1
   > Une seule personne t'a suivi. Elle se place dos à dos avec toi.
 sinon
-  > Tu es seul face au cercle.
+  > Tu es [[seul|seule]] face au cercle.
 -> combat
 
 @combat
@@ -402,7 +402,7 @@ malrik (colere): Assez !
   -> sacrifice
 * [var.couple ou rel.ayla >= 50] (Prendre la main d'Ayla) #romance
   !placer ayla 440 droite
-  > Ayla ferme les yeux. Elle voit ce qui va se passer, et elle le change. Votre magie se mêle, et le sceau prend.
+  > Ayla ferme les yeux. [[ayla:Il|Elle]] voit ce qui va se passer, et [[ayla:il|elle]] le change. Votre magie se mêle, et le sceau prend.
   ~ var.issue = "scelle"; rel.ayla += 10; stat.reputation += 15
 * [var.noe_sauve et rel.noe >= 60] (Appeler Noé) #loyal
   !placer noe 440 droite
@@ -471,7 +471,7 @@ si var.issue == "scelle" ou var.issue == "detruit"
     > Noé est assis parmi les disciples, la tête dans les mains. Il pleure. Tu t'assois à côté de lui.
     ~ var.noe_perdu = faux; var.noe_sauve = vrai
 sinon si var.issue == "sacrifice"
-  > Au matin, on te retrouve au centre du cercle, endormi, plus pâle qu'avant. Vivant. Mais quelque chose en toi s'est éteint.
+  > Au matin, on te retrouve au centre du cercle, [[endormi|endormie]], plus pâle qu'avant. [[Vivant|Vivante]]. Mais quelque chose en toi s'est éteint.
 sinon si var.issue == "fuite" ou var.issue == "echec"
   > Cette nuit-là, Ombrelune brûle.
 sinon si var.issue == "ombre"

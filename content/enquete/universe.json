@@ -1,0 +1,2324 @@
+{
+ "format": "mille-vies/universe@1",
+ "id": "enquete",
+ "version": "1.0",
+ "name": "Six Suspects",
+ "tagline": "Un meurtre à Saint-Rémy-des-Étangs. Six suspects. Un coupable différent à chaque partie.",
+ "description": "Tu as quitté Saint-Rémy-des-Étangs à dix-huit ans. Tu y reviens à vingt-sept, avec une carte de police et un cadavre : Édouard Vasseur, l'homme le plus puissant du village, retrouvé mort dans l'étang du Moulin. Six personnes avaient une raison de le tuer, dont certaines que tu aimes. Douze jours pour trouver laquelle.",
+ "author": "Mille Vies",
+ "tags": [
+  "Enquête",
+  "Policier",
+  "Mystère"
+ ],
+ "published": true,
+ "theme": {
+  "accent": "#5fb3a1",
+  "accent2": "#e2b440",
+  "cover": "etang"
+ },
+ "config": {
+  "tickLabel": "Journée",
+  "actionsPerTick": 3,
+  "actionsLabel": "Actions",
+  "randomEventChance": 40,
+  "maxStoryEventsPerTick": 2,
+  "checkScale": 11,
+  "hud": [
+   "energie",
+   "moral",
+   "pression",
+   "confiance"
+  ],
+  "dateLine": "Jour {temps.total + 1} sur 12",
+  "endTickLabel": "Dormir et terminer la journée",
+  "showValues": true,
+  "remember": [
+   "n_coupable"
+  ]
+ },
+ "stats": [
+  {
+   "id": "intuition",
+   "label": "Intuition",
+   "category": "Enquête",
+   "initial": 30,
+   "color": "#b893ff",
+   "description": "Sentir le mensonge, relier ce qui ne se relie pas."
+  },
+  {
+   "id": "methode",
+   "label": "Méthode",
+   "category": "Enquête",
+   "initial": 30,
+   "color": "#7cb7ff",
+   "description": "Rigueur, procédure, patience."
+  },
+  {
+   "id": "aplomb",
+   "label": "Aplomb",
+   "category": "Enquête",
+   "initial": 25,
+   "color": "#f0a15a",
+   "description": "Faire parler ceux qui ne veulent pas."
+  },
+  {
+   "id": "energie",
+   "label": "Énergie",
+   "category": "État",
+   "initial": 100,
+   "color": "#f5c542"
+  },
+  {
+   "id": "moral",
+   "label": "Moral",
+   "category": "État",
+   "initial": 65,
+   "color": "#4fd6c4"
+  },
+  {
+   "id": "pression",
+   "label": "Pression",
+   "category": "Enquête",
+   "initial": 15,
+   "min": 0,
+   "max": 100,
+   "color": "#f06a6a",
+   "description": "Celle de la procureure, de la presse et du maire. À 100, on te retire l'enquête."
+  },
+  {
+   "id": "confiance",
+   "label": "Confiance du village",
+   "short": "Confiance",
+   "category": "Enquête",
+   "initial": 35,
+   "color": "#6ad48a",
+   "description": "Les gens de Saint-Rémy acceptent-ils encore de te parler ?"
+  }
+ ],
+ "vars": {
+  "coupable": "",
+  "leurre": "",
+  "n_coupable": 0,
+  "accuse": "",
+  "solide": false,
+  "laisse_partir": false,
+  "dessaisi": false,
+  "trace_trouvee": false,
+  "trace_envoyee": false,
+  "trace_analysee": false,
+  "trace_comparee": false,
+  "arme_trouvee": false,
+  "arme_envoyee": false,
+  "arme_identifiee": false,
+  "autopsie": false,
+  "piste_coffre": false,
+  "code_coffre": false,
+  "carnet_noir": false,
+  "perquisitions": 0,
+  "illegal": 0,
+  "aveu_partiel": false,
+  "releves_recus": false,
+  "elise_scoop": false,
+  "couple": false,
+  "rival_allie": false,
+  "menace_cadet": false,
+  "dernier_essai": false,
+  "ind_accuse": 0,
+  "cadet_lyon": false,
+  "pere_aveu": false,
+  "mensonge_roussel": false,
+  "mensonge_ami": false,
+  "ind_helene": 0,
+  "faux_helene": 0,
+  "alibi_helene": false,
+  "brise_helene": false,
+  "perq_helene": false,
+  "ind_julien": 0,
+  "faux_julien": 0,
+  "alibi_julien": false,
+  "brise_julien": false,
+  "perq_julien": false,
+  "ind_roussel": 0,
+  "faux_roussel": 0,
+  "alibi_roussel": false,
+  "brise_roussel": false,
+  "perq_roussel": false,
+  "ind_ami": 0,
+  "faux_ami": 0,
+  "alibi_ami": false,
+  "brise_ami": false,
+  "perq_ami": false,
+  "ind_morel": 0,
+  "faux_morel": 0,
+  "alibi_morel": false,
+  "brise_morel": false,
+  "perq_morel": false,
+  "ind_delorme": 0,
+  "faux_delorme": 0,
+  "alibi_delorme": false,
+  "brise_delorme": false,
+  "perq_delorme": false
+ },
+ "traits": [
+  {
+   "id": "loyal",
+   "label": "Loyal",
+   "description": "N'oublie jamais qui l'a aidé.",
+   "gain": 1.2,
+   "loss": 1.0
+  },
+  {
+   "id": "fier",
+   "label": "Fier",
+   "description": "Blessé par le mépris.",
+   "gain": 0.85,
+   "loss": 1.3
+  },
+  {
+   "id": "anxieux",
+   "label": "Anxieux",
+   "description": "Les tensions le travaillent longtemps.",
+   "gain": 1.1,
+   "loss": 1.3
+  },
+  {
+   "id": "rancunier",
+   "label": "Rancunier",
+   "description": "Pardonne rarement.",
+   "gain": 0.9,
+   "loss": 1.5
+  },
+  {
+   "id": "genereux",
+   "label": "Généreux",
+   "description": "Donne une seconde chance.",
+   "gain": 1.2,
+   "loss": 0.75
+  },
+  {
+   "id": "sage",
+   "label": "Sage",
+   "description": "Juge sur la durée.",
+   "gain": 0.9,
+   "loss": 0.8
+  },
+  {
+   "id": "exigeant",
+   "label": "Exigeant",
+   "description": "Il en faut beaucoup pour gagner son estime.",
+   "gain": 0.75,
+   "loss": 1.2
+  },
+  {
+   "id": "manipulateur",
+   "label": "Manipulateur",
+   "description": "Amical… quand ça l'arrange.",
+   "gain": 1.4,
+   "loss": 0.6
+  },
+  {
+   "id": "reveur",
+   "label": "Rêveur",
+   "description": "Sensible aux gestes plus qu'aux mots.",
+   "gain": 1.15,
+   "loss": 1.0
+  },
+  {
+   "id": "bourru",
+   "label": "Bourru",
+   "description": "Un grand cœur sous des grognements.",
+   "gain": 0.85,
+   "loss": 0.8
+  }
+ ],
+ "characters": [
+  {
+   "id": "helene",
+   "name": "Hélène Vasseur",
+   "short": "Hélène",
+   "role": "La veuve",
+   "traits": [
+    "fier",
+    "anxieux"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Trente-cinq ans de mariage avec Édouard. Elle tient le jardin le plus soigné du canton, et un sourire qui n'atteint jamais ses yeux.",
+   "goals": "garder le manoir, et sa dignité.",
+   "look": {
+    "skin": "peau1",
+    "hair": "chignon",
+    "hairColor": "gris",
+    "top": "veste",
+    "topColor": "#3b3e47",
+    "topColor2": "#7c2236",
+    "bottom": "jupe",
+    "bottomColor": "#25222b",
+    "gender": "f",
+    "acc": [
+     "echarpe",
+     "collier"
+    ],
+    "accColor": "#7c2236"
+   },
+   "barks": [
+    {
+     "text": "Édouard détestait qu'on marche sur ses pelouses. Je ne sais pas pourquoi je vous dis ça."
+    }
+   ]
+  },
+  {
+   "id": "julien",
+   "name": "Julien Vasseur",
+   "short": "Julien",
+   "role": "Le fils",
+   "traits": [
+    "anxieux",
+    "fier"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Trente-deux ans, un costume trop cher et des dettes trop lourdes. Il est arrivé de Lyon la veille du meurtre.",
+   "goals": "ne plus jamais avoir à demander d'argent à son père.",
+   "look": {
+    "skin": "peau1",
+    "hair": "meche",
+    "hairColor": "chatain",
+    "top": "veste",
+    "topColor": "#2b3a5a",
+    "topColor2": "#eef0f4",
+    "bottom": "jean",
+    "bottomColor": "#1d2230",
+    "acc": [
+     "montre"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Vous avez fini de fouiller la maison de mon père ?"
+    }
+   ]
+  },
+  {
+   "id": "roussel",
+   "name": "Bernard Roussel",
+   "short": "Roussel",
+   "role": "Le maire",
+   "traits": [
+    "manipulateur",
+    "anxieux"
+   ],
+   "relation": 5,
+   "relationLabel": "Confiance",
+   "description": "Maire depuis douze ans grâce au soutien d'Édouard, qui l'avait fait roi et pouvait le défaire.",
+   "goals": "finir son mandat sans scandale.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "gris",
+    "beard": "moustache",
+    "top": "costume",
+    "topColor": "#1d2f5e",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#1d2f5e",
+    "build": "costaud",
+    "acc": [
+     "montre"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Saint-Rémy a besoin de calme. Et vous, vous apportez la tempête."
+    }
+   ]
+  },
+  {
+   "id": "ami",
+   "name": "Thomas Girard",
+   "short": "Thomas",
+   "role": "[[ami:Ton meilleur ami|Ta meilleure amie]], [[ami:patron|patronne]] du Relais",
+   "traits": [
+    "loyal",
+    "genereux"
+   ],
+   "relation": 45,
+   "relationLabel": "Amitié",
+   "description": "Vous avez fait les quatre cents coups ensemble jusqu'au bac. [[ami:Il|Elle]] a repris le café de ses parents quand tu es [[parti|partie]] à Lyon.",
+   "goals": "garder le Relais ouvert, coûte que coûte.",
+   "look": {
+    "skin": "peau3",
+    "hair": "bouclecourt",
+    "hairColor": "brun",
+    "beard": "barbe3j",
+    "top": "chemise",
+    "topColor": "#6b7a43",
+    "topColor2": "#efe6cf",
+    "bottom": "jean",
+    "bottomColor": "#2b3a5a"
+   },
+   "barks": [
+    {
+     "text": "Je te sers comme d'habitude ? Enfin, comme il y a dix ans."
+    },
+    {
+     "text": "Tu tiens le coup ? Tu as une tête de déterré.",
+     "if": "stat.energie < 40"
+    }
+   ]
+  },
+  {
+   "id": "morel",
+   "name": "Claire Morel",
+   "short": "Dr Morel",
+   "role": "La médecin du village",
+   "traits": [
+    "sage",
+    "rancunier"
+   ],
+   "relation": 5,
+   "relationLabel": "Confiance",
+   "description": "Elle soigne tout Saint-Rémy depuis quinze ans, des rhumes aux secrets. Son frère est mort il y a vingt ans, dans un accident à la scierie Vasseur.",
+   "goals": "que la vérité sur la mort de son frère soit enfin dite.",
+   "look": {
+    "skin": "peau2",
+    "hair": "carre",
+    "hairColor": "noir",
+    "top": "veste",
+    "topColor": "#3b3e47",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "gender": "f",
+    "acc": [
+     "lunettes",
+     "echarpe"
+    ],
+    "accColor": "#7c2236"
+   },
+   "barks": [
+    {
+     "text": "Vous dormez assez ? Non. Évidemment."
+    }
+   ]
+  },
+  {
+   "id": "delorme",
+   "name": "Marc Delorme",
+   "short": "Delorme",
+   "role": "L'ancien contremaître de la scierie",
+   "traits": [
+    "bourru",
+    "rancunier"
+   ],
+   "relation": -5,
+   "relationLabel": "Confiance",
+   "description": "Vingt-six ans à la scierie, licencié le mois dernier pour un vol de bois qu'il nie. Il braconne dans les bois de l'étang, tout le monde le sait.",
+   "goals": "laver son nom.",
+   "look": {
+    "skin": "peau3",
+    "hair": "rase",
+    "hairColor": "gris",
+    "beard": "barbe",
+    "top": "veste",
+    "topColor": "#6b7a43",
+    "topColor2": "#4a3a2a",
+    "bottom": "pantalon",
+    "bottomColor": "#4a3a2a",
+    "build": "costaud",
+    "height": "grand",
+    "acc": [
+     "casquette"
+    ],
+    "accColor": "#6b7a43"
+   },
+   "barks": [
+    {
+     "text": "Je n'ai rien à dire aux flics. Même à ceux d'ici."
+    }
+   ]
+  },
+  {
+   "id": "mere",
+   "name": "Françoise",
+   "short": "Maman",
+   "role": "Ta mère, boulangère",
+   "traits": [
+    "genereux",
+    "anxieux"
+   ],
+   "relation": 40,
+   "relationLabel": "Lien",
+   "description": "Elle tient la boulangerie de la place depuis trente ans. Elle sait tout ce qui se dit à Saint-Rémy avant sept heures du matin.",
+   "goals": "que tu restes un peu, cette fois.",
+   "look": {
+    "skin": "peau2",
+    "hair": "chignon",
+    "hairColor": "blond",
+    "top": "blouse",
+    "topColor": "#efe6cf",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "gender": "f"
+   },
+   "barks": [
+    {
+     "text": "Tu as maigri. Prends un croissant. Prends-en deux."
+    },
+    {
+     "text": "Les clientes ne parlent que de toi. Pas toujours en bien.",
+     "if": "stat.confiance < 30"
+    }
+   ]
+  },
+  {
+   "id": "pere",
+   "name": "Jean",
+   "short": "Papa",
+   "role": "Ton père, gendarme à la retraite",
+   "traits": [
+    "sage",
+    "bourru"
+   ],
+   "relation": 25,
+   "relationLabel": "Lien",
+   "description": "Trente ans à la brigade de Saint-Rémy. Il a enquêté sur l'accident de la scierie en 2004, et il n'en parle jamais.",
+   "goals": "que tu fasses mieux que lui.",
+   "look": {
+    "skin": "peau2",
+    "hair": "rase",
+    "hairColor": "gris",
+    "beard": "moustache",
+    "top": "sweat",
+    "topColor": "#6b7a43",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Commence par les alibis. Toujours."
+    }
+   ]
+  },
+  {
+   "id": "cadet",
+   "name": "Hugo",
+   "short": "Hugo",
+   "role": "[[cadet:Ton petit frère|Ta petite sœur]]",
+   "traits": [
+    "loyal",
+    "reveur"
+   ],
+   "relation": 30,
+   "relationLabel": "Lien",
+   "description": "Dix-neuf ans, [[cadet:apprenti|apprentie]] à la scierie Vasseur. [[cadet:Il|Elle]] voit tout et ne dit rien, sauf à toi.",
+   "goals": "partir de Saint-Rémy, comme toi.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "chatain",
+    "top": "sweat",
+    "topColor": "#ec8a2e",
+    "bottom": "jean",
+    "bottomColor": "#1d2230",
+    "build": "mince"
+   },
+   "barks": [
+    {
+     "text": "À la scierie, tout le monde se tait depuis dimanche. Même les machines."
+    }
+   ]
+  },
+  {
+   "id": "rival",
+   "name": "Paul Garnier",
+   "short": "Garnier",
+   "role": "[[rival:Le gendarme|La gendarme]] du village",
+   "traits": [
+    "fier",
+    "rancunier"
+   ],
+   "relation": -10,
+   "relationLabel": "Respect",
+   "description": "Vingt ans à la brigade de Saint-Rémy. [[rival:Il|Elle]] connaissait la victime, [[rival:il|elle]] voulait l'enquête, et on te l'a donnée à toi.",
+   "goals": "prouver qu'on n'avait pas besoin d'un[[|e]] Lyonnais[[|e]] pour ça.",
+   "look": {
+    "skin": "peau1",
+    "hair": "court",
+    "hairColor": "blond",
+    "top": "chemise",
+    "topColor": "#1d2f5e",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#1d2f5e",
+    "acc": [
+     "casquette"
+    ],
+    "accColor": "#1d2f5e",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Le bureau du fond est à toi. Ne touche pas à la machine à café."
+    },
+    {
+     "text": "… Bon travail, aujourd'hui. Ne te fais pas d'idées.",
+     "if": "var.rival_allie"
+    }
+   ]
+  },
+  {
+   "id": "elise",
+   "name": "Élise Marchal",
+   "short": "Élise",
+   "role": "Journaliste à L'Écho des Étangs",
+   "traits": [
+    "reveur",
+    "exigeant"
+   ],
+   "relation": 20,
+   "relationLabel": "Affection",
+   "description": "Ton premier amour, au lycée. [[elise:Il|Elle]] est [[elise:resté|restée]] à Saint-Rémy et écrit pour le journal local, en rêvant d'une vraie affaire. [[elise:Le|La]] voilà servi[[elise:|e]].",
+   "goals": "écrire enfin un article qui compte.",
+   "look": {
+    "skin": "peau3",
+    "hair": "mi_long",
+    "hairColor": "chatain",
+    "top": "veste",
+    "topColor": "#7cc3ef",
+    "topColor2": "#25222b",
+    "bottom": "jean",
+    "bottomColor": "#2b3a5a",
+    "gender": "f",
+    "acc": [
+     "sac"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Une petite déclaration pour L'Écho ? Non ? Je repasserai."
+    }
+   ]
+  },
+  {
+   "id": "lucette",
+   "name": "Lucette Pradier",
+   "short": "Lucette",
+   "role": "La voisine du manoir",
+   "traits": [
+    "genereux",
+    "anxieux"
+   ],
+   "relation": 10,
+   "relationLabel": "Confiance",
+   "description": "Quatre-vingt-un ans, un caniche nommé Bijou et une fenêtre qui donne sur le chemin de l'étang. C'est elle qui a trouvé le corps.",
+   "goals": "qu'on l'écoute enfin.",
+   "look": {
+    "skin": "peau1",
+    "hair": "chignon",
+    "hairColor": "blanc",
+    "top": "veste",
+    "topColor": "#7d4bc4",
+    "bottom": "jupe",
+    "bottomColor": "#3b3e47",
+    "gender": "f",
+    "acc": [
+     "lunettes"
+    ],
+    "height": "petit"
+   },
+   "barks": [
+    {
+     "text": "Bijou ne dort plus depuis dimanche. Moi non plus."
+    }
+   ]
+  },
+  {
+   "id": "cure",
+   "name": "Père Antoine",
+   "short": "Père Antoine",
+   "role": "Le curé de Saint-Rémy",
+   "traits": [
+    "sage"
+   ],
+   "relation": 10,
+   "relationLabel": "Confiance",
+   "description": "Il connaît les péchés de tout le village et n'en a jamais trahi un seul. Enfin, presque.",
+   "goals": "que Saint-Rémy retrouve la paix.",
+   "look": {
+    "skin": "peau2",
+    "hair": "court",
+    "hairColor": "gris",
+    "top": "chemise",
+    "topColor": "#25222b",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "acc": [
+     "lunettes"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Les murs de cette église ont entendu plus de secrets que toutes vos archives."
+    }
+   ]
+  },
+  {
+   "id": "delmas",
+   "name": "Anne Delmas",
+   "short": "La procureure",
+   "role": "La procureure de la République",
+   "traits": [
+    "exigeant"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "description": "Elle t'a confié l'affaire contre l'avis de tout le monde. Elle attend des résultats, pas des excuses.",
+   "goals": "un dossier solide, avant que la presse ne s'empare de l'affaire.",
+   "look": {
+    "skin": "peau1",
+    "hair": "carre",
+    "hairColor": "gris",
+    "top": "costume",
+    "topColor": "#25222b",
+    "topColor2": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "gender": "f",
+    "acc": [
+     "lunettes"
+    ]
+   }
+  },
+  {
+   "id": "fabre",
+   "name": "Docteur Fabre",
+   "short": "Dr Fabre",
+   "role": "Le médecin légiste",
+   "traits": [
+    "bourru"
+   ],
+   "relation": 0,
+   "relationLabel": "Confiance",
+   "hidden": true,
+   "description": "Le légiste de l'institut de Lyon. Trente ans de cadavres et un humour à la hauteur.",
+   "goals": "qu'on lise ses rapports jusqu'au bout.",
+   "look": {
+    "skin": "peau2",
+    "hair": "chauve",
+    "top": "blouse",
+    "topColor": "#eef0f4",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "acc": [
+     "lunettes"
+    ],
+    "beard": "barbe3j"
+   }
+  }
+ ],
+ "lists": {
+  "suspects": [
+   {
+    "id": "helene",
+    "nom": "Hélène Vasseur",
+    "leurre": "morel"
+   },
+   {
+    "id": "julien",
+    "nom": "Julien Vasseur",
+    "leurre": "delorme"
+   },
+   {
+    "id": "roussel",
+    "nom": "Bernard Roussel",
+    "leurre": "ami"
+   },
+   {
+    "id": "ami",
+    "nom": "Thomas Girard",
+    "leurre": "roussel"
+   },
+   {
+    "id": "morel",
+    "nom": "Claire Morel",
+    "leurre": "helene"
+   },
+   {
+    "id": "delorme",
+    "nom": "Marc Delorme",
+    "leurre": "julien"
+   }
+  ]
+ },
+ "locations": [
+  {
+   "id": "place",
+   "name": "La place de l'église",
+   "group": "Le village",
+   "width": 800,
+   "kind": "exterieur",
+   "time": "jour",
+   "spawn": 300,
+   "ambient": "nature",
+   "floor": {
+    "style": "dalles",
+    "color": "#8a8278"
+   },
+   "backdrop": [
+    {
+     "type": "collines",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "panneau",
+     "x": 22,
+     "text": "SAINT-RÉMY",
+     "color": "#2f6a3a"
+    },
+    {
+     "type": "immeuble",
+     "x": 80,
+     "w": 80,
+     "h": 70,
+     "color": "#e6d6b8",
+     "text": "BOULANGERIE"
+    },
+    {
+     "type": "immeuble",
+     "x": 190,
+     "w": 80,
+     "h": 70,
+     "color": "#c9a06a",
+     "text": "LE RELAIS"
+    },
+    {
+     "type": "statue",
+     "x": 280
+    },
+    {
+     "type": "banc_public",
+     "x": 330
+    },
+    {
+     "type": "arbre",
+     "x": 370
+    },
+    {
+     "type": "immeuble",
+     "x": 450,
+     "w": 90,
+     "h": 90,
+     "color": "#e8e2d4",
+     "text": "MAIRIE"
+    },
+    {
+     "type": "lampadaire",
+     "x": 510
+    },
+    {
+     "type": "immeuble",
+     "x": 570,
+     "w": 70,
+     "h": 70,
+     "color": "#d8dde4",
+     "text": "GENDARMERIE"
+    },
+    {
+     "type": "voiture",
+     "x": 625,
+     "color": "#1d2f5e"
+    },
+    {
+     "type": "immeuble",
+     "x": 690,
+     "w": 70,
+     "h": 120,
+     "color": "#a89e8e",
+     "text": "ÉGLISE"
+    },
+    {
+     "type": "arbre",
+     "x": 742,
+     "taille": 1.1
+    }
+   ],
+   "exits": [
+    {
+     "to": "etang",
+     "x": 14,
+     "kind": "bord",
+     "label": "Le chemin de l'étang"
+    },
+    {
+     "to": "maison",
+     "x": 80,
+     "label": "La boulangerie (chez toi)"
+    },
+    {
+     "to": "cafe",
+     "x": 190,
+     "label": "Le Relais"
+    },
+    {
+     "to": "mairie",
+     "x": 450,
+     "label": "La mairie"
+    },
+    {
+     "to": "bureau",
+     "x": 570,
+     "label": "La gendarmerie"
+    },
+    {
+     "to": "eglise",
+     "x": 690,
+     "label": "L'église"
+    },
+    {
+     "to": "cabinet",
+     "x": 360,
+     "label": "Le cabinet médical (ruelle)"
+    },
+    {
+     "to": "scierie",
+     "x": 786,
+     "kind": "bord",
+     "label": "La route de la scierie"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "lucette",
+     "x": 318,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 1"
+    },
+    {
+     "id": "elise",
+     "x": 240,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 0"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "monument",
+     "x": 280,
+     "label": "Le monument aux morts",
+     "activities": [
+      "flaner"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "etang",
+   "name": "L'étang du Moulin",
+   "group": "Le village",
+   "width": 640,
+   "kind": "exterieur",
+   "time": "aube",
+   "spawn": 400,
+   "ambient": "nature",
+   "floor": {
+    "style": "herbe",
+    "color": "#4a6a3a"
+   },
+   "backdrop": [
+    {
+     "type": "collines",
+     "x": 0
+    },
+    {
+     "type": "mer",
+     "x": 0
+    },
+    {
+     "type": "arbres",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "arbre_sombre",
+     "x": 60
+    },
+    {
+     "type": "buisson",
+     "x": 130
+    },
+    {
+     "type": "cloture",
+     "x": 290,
+     "w": 170,
+     "h": 12,
+     "color": "#f0c63a"
+    },
+    {
+     "type": "banc_public",
+     "x": 420
+    },
+    {
+     "type": "arbre",
+     "x": 490
+    },
+    {
+     "type": "buisson",
+     "x": 548
+    },
+    {
+     "type": "panneau",
+     "x": 600,
+     "text": "ÉTANG DU MOULIN",
+     "color": "#2f6a3a"
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 626,
+     "kind": "bord",
+     "label": "Le chemin du village"
+    },
+    {
+     "to": "manoir",
+     "x": 18,
+     "kind": "bord",
+     "label": "Le parc du manoir Vasseur"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "delorme",
+     "x": 520,
+     "face": "gauche",
+     "when": "temps.semaine % 2 == 0"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "rive",
+     "x": 290,
+     "label": "La rive, sous le ruban",
+     "activities": [
+      "examiner_scene"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "maison",
+   "name": "La boulangerie de ta mère",
+   "group": "Le village",
+   "width": 380,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "papier",
+    "color": "#efe0c8",
+    "color2": "#c9a070"
+   },
+   "floor": {
+    "style": "carrelage",
+    "color": "#c8b090",
+    "color2": "#b8a080"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "PLACE"
+    },
+    {
+     "type": "comptoir",
+     "x": 86,
+     "w": 64,
+     "bouteilles": false,
+     "color": "#c9a06a"
+    },
+    {
+     "type": "etagere",
+     "x": 86,
+     "y": 40,
+     "w": 60
+    },
+    {
+     "type": "cuisine",
+     "x": 180,
+     "w": 60
+    },
+    {
+     "type": "table",
+     "x": 256,
+     "w": 50
+    },
+    {
+     "type": "cadre",
+     "x": 256,
+     "y": 44
+    },
+    {
+     "type": "fenetre",
+     "x": 312,
+     "w": 30
+    },
+    {
+     "type": "porte",
+     "x": 356,
+     "label": "ÉTAGE"
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 22,
+     "kind": "porte",
+     "label": "La place"
+    },
+    {
+     "to": "chambre",
+     "x": 356,
+     "kind": "porte",
+     "label": "Ta chambre, à l'étage"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "mere",
+     "x": 104,
+     "face": "droite"
+    },
+    {
+     "id": "pere",
+     "x": 270,
+     "face": "gauche"
+    },
+    {
+     "id": "cadet",
+     "x": 200,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 1 et non var.cadet_lyon"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "table_cuisine",
+     "x": 256,
+     "label": "La table de la cuisine",
+     "activities": [
+      "diner_famille"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "chambre",
+   "name": "Ta chambre d'enfant",
+   "group": "Le village",
+   "width": 320,
+   "kind": "interieur",
+   "time": "nuit",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "papier",
+    "color": "#c9d6e3",
+    "color2": "#7a9ab8"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#a8794e"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "ESCALIER"
+    },
+    {
+     "type": "lit",
+     "x": 90,
+     "color": "#7c2236"
+    },
+    {
+     "type": "affiche",
+     "x": 90,
+     "y": 44,
+     "variante": "groupe",
+     "color": "#25222b",
+     "color2": "#e477a9"
+    },
+    {
+     "type": "fenetre",
+     "x": 160,
+     "rideaux": "#b04848"
+    },
+    {
+     "type": "etagere",
+     "x": 236,
+     "y": 50,
+     "w": 30
+    },
+    {
+     "type": "bureau",
+     "x": 252,
+     "lampe": true
+    },
+    {
+     "type": "chaise",
+     "x": 236
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 160
+    }
+   ],
+   "exits": [
+    {
+     "to": "maison",
+     "x": 22,
+     "kind": "porte",
+     "label": "Redescendre"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "lit",
+     "x": 90,
+     "label": "Ton lit",
+     "activities": [
+      "dormir"
+     ],
+     "endTick": true
+    },
+    {
+     "id": "vieux_bureau",
+     "x": 252,
+     "label": "Ton vieux bureau",
+     "activities": [
+      "relire_notes"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "bureau",
+   "name": "La gendarmerie",
+   "group": "Le village",
+   "width": 400,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "peint",
+    "color": "#d8dde4",
+    "color2": "#1d2f5e"
+   },
+   "floor": {
+    "style": "lino",
+    "color": "#9aa3ae"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "PLACE"
+    },
+    {
+     "type": "horloge",
+     "x": 92,
+     "y": 24
+    },
+    {
+     "type": "tableau_affichage",
+     "x": 150,
+     "w": 64,
+     "h": 34,
+     "text": "AFFAIRE VASSEUR"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 200
+    },
+    {
+     "type": "bureau",
+     "x": 250,
+     "ordinateur": true
+    },
+    {
+     "type": "fauteuil",
+     "x": 266
+    },
+    {
+     "type": "armoire",
+     "x": 330,
+     "color": "#8b8f99"
+    },
+    {
+     "type": "fenetre",
+     "x": 372,
+     "w": 30
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 22,
+     "kind": "porte",
+     "label": "La place"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "rival",
+     "x": 320,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "tableau",
+     "x": 150,
+     "label": "Le tableau de l'enquête",
+     "activities": [
+      "analyser_indices",
+      "comparer",
+      "arreter"
+     ]
+    },
+    {
+     "id": "poste",
+     "x": 250,
+     "label": "Ton poste de travail",
+     "activities": [
+      "labo",
+      "releves",
+      "perquisition",
+      "rapport"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cafe",
+   "name": "Le Relais",
+   "group": "Le village",
+   "width": 400,
+   "kind": "interieur",
+   "time": "soir",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "bois",
+    "color": "#7a5232"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#5a3e28"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "PLACE"
+    },
+    {
+     "type": "comptoir",
+     "x": 100,
+     "w": 80,
+     "bouteilles": true,
+     "color": "#5a3e28"
+    },
+    {
+     "type": "ecran",
+     "x": 110,
+     "y": 40,
+     "contenu": "match"
+    },
+    {
+     "type": "table",
+     "x": 210,
+     "w": 44
+    },
+    {
+     "type": "chaise",
+     "x": 196
+    },
+    {
+     "type": "cadre",
+     "x": 250,
+     "y": 44
+    },
+    {
+     "type": "table",
+     "x": 290,
+     "w": 44
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 150,
+     "color": "#e2b440"
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 290,
+     "color": "#e2b440"
+    },
+    {
+     "type": "affiche",
+     "x": 340,
+     "y": 46,
+     "variante": "texte",
+     "color": "#e2b440",
+     "color2": "#25222b"
+    },
+    {
+     "type": "porte",
+     "x": 378,
+     "label": "CAVE",
+     "color": "#4a3020"
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 22,
+     "kind": "porte",
+     "label": "La place"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "ami",
+     "x": 120,
+     "face": "droite"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "comptoir",
+     "x": 100,
+     "label": "Le comptoir",
+     "activities": [
+      "rumeurs"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mairie",
+   "name": "La mairie",
+   "group": "Le village",
+   "width": 380,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "lambris",
+    "color": "#e8e2d4",
+    "color2": "#5a3e28"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#7a5232"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "PLACE"
+    },
+    {
+     "type": "drapeau",
+     "x": 86,
+     "color": "#1d2f5e",
+     "color2": "#eef0f4"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 150,
+     "w": 44
+    },
+    {
+     "type": "cadre",
+     "x": 236,
+     "y": 40,
+     "w": 28,
+     "h": 20
+    },
+    {
+     "type": "bureau",
+     "x": 240,
+     "w": 46,
+     "lampe": true
+    },
+    {
+     "type": "fauteuil",
+     "x": 256,
+     "color": "#4a1f1f"
+    },
+    {
+     "type": "plante",
+     "x": 338,
+     "taille": "grande"
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 22,
+     "kind": "porte",
+     "label": "La place"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "roussel",
+     "x": 262,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "archives",
+     "x": 150,
+     "label": "Les archives municipales",
+     "activities": [
+      "archives"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "eglise",
+   "name": "L'église Saint-Rémy",
+   "group": "Le village",
+   "width": 420,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "pierre",
+    "color": "#9a9184",
+    "color2": "#6a6258"
+   },
+   "floor": {
+    "style": "dalles",
+    "color": "#7a746a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "PLACE"
+    },
+    {
+     "type": "vitrail",
+     "x": 100
+    },
+    {
+     "type": "banc",
+     "x": 160,
+     "w": 60
+    },
+    {
+     "type": "chandelier",
+     "x": 210
+    },
+    {
+     "type": "bougies",
+     "x": 214,
+     "y": 96,
+     "count": 3
+    },
+    {
+     "type": "banc",
+     "x": 260,
+     "w": 60
+    },
+    {
+     "type": "pupitre",
+     "x": 316
+    },
+    {
+     "type": "vitrail",
+     "x": 350
+    },
+    {
+     "type": "statue",
+     "x": 392
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 22,
+     "kind": "porte",
+     "label": "La place"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "cure",
+     "x": 300,
+     "face": "gauche"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "cierges",
+     "x": 214,
+     "label": "Les cierges",
+     "activities": [
+      "recueillement"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cabinet",
+   "name": "Le cabinet médical",
+   "group": "Le village",
+   "width": 340,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "carrelage",
+    "color": "#eef4f6",
+    "color2": "#7cc3ef"
+   },
+   "floor": {
+    "style": "lino",
+    "color": "#c8d4d8"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "RUELLE"
+    },
+    {
+     "type": "affiche",
+     "x": 80,
+     "y": 44,
+     "variante": "texte",
+     "color": "#2f9a4c"
+    },
+    {
+     "type": "table_massage",
+     "x": 150
+    },
+    {
+     "type": "armoire",
+     "x": 222,
+     "color": "#e8eef0"
+    },
+    {
+     "type": "bureau",
+     "x": 282,
+     "w": 40
+    },
+    {
+     "type": "fenetre",
+     "x": 318,
+     "w": 24
+    },
+    {
+     "type": "lampe_plafond",
+     "x": 150
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 22,
+     "kind": "porte",
+     "label": "La place"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "morel",
+     "x": 266,
+     "face": "gauche"
+    }
+   ]
+  },
+  {
+   "id": "manoir",
+   "name": "Le manoir Vasseur",
+   "group": "Le village",
+   "width": 460,
+   "kind": "interieur",
+   "spawn": 50,
+   "ambient": "interieur",
+   "wall": {
+    "style": "boiserie",
+    "color": "#4a3020",
+    "color2": "#e2b440"
+   },
+   "floor": {
+    "style": "parquet",
+    "color": "#6a4a2a"
+   },
+   "props": [
+    {
+     "type": "porte",
+     "x": 22,
+     "label": "PARC"
+    },
+    {
+     "type": "bibliotheque",
+     "x": 88
+    },
+    {
+     "type": "cheminee",
+     "x": 180
+    },
+    {
+     "type": "cadre",
+     "x": 180,
+     "y": 36,
+     "w": 30,
+     "h": 22
+    },
+    {
+     "type": "tapis",
+     "x": 222,
+     "w": 90,
+     "color": "#5a2a3a"
+    },
+    {
+     "type": "fauteuil",
+     "x": 244,
+     "color": "#5a2a2a"
+    },
+    {
+     "type": "chandelier",
+     "x": 268
+    },
+    {
+     "type": "table",
+     "x": 306,
+     "w": 40
+    },
+    {
+     "type": "bureau",
+     "x": 370,
+     "lampe": true,
+     "color": "#4a2f1d"
+    },
+    {
+     "type": "chaise",
+     "x": 386
+    },
+    {
+     "type": "plante",
+     "x": 434,
+     "taille": "grande"
+    }
+   ],
+   "exits": [
+    {
+     "to": "etang",
+     "x": 22,
+     "kind": "porte",
+     "label": "Le parc, vers l'étang"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "helene",
+     "x": 240,
+     "face": "droite"
+    },
+    {
+     "id": "julien",
+     "x": 316,
+     "face": "gauche",
+     "when": "temps.semaine % 2 == 0"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "bureau_vasseur",
+     "x": 370,
+     "label": "Le bureau d'Édouard",
+     "activities": [
+      "fouiller_bureau"
+     ]
+    },
+    {
+     "id": "portrait",
+     "x": 180,
+     "label": "Le portrait d'Édouard",
+     "activities": [
+      "examiner_portrait"
+     ],
+     "when": "var.piste_coffre"
+    }
+   ]
+  },
+  {
+   "id": "scierie",
+   "name": "La scierie Vasseur",
+   "group": "Le village",
+   "width": 560,
+   "kind": "exterieur",
+   "time": "jour",
+   "spawn": 50,
+   "ambient": "ville",
+   "floor": {
+    "style": "terre",
+    "color": "#6a5a48"
+   },
+   "backdrop": [
+    {
+     "type": "collines",
+     "x": 0
+    },
+    {
+     "type": "arbres",
+     "x": 0
+    }
+   ],
+   "props": [
+    {
+     "type": "panneau",
+     "x": 70,
+     "text": "SCIERIE VASSEUR",
+     "color": "#6e4a31"
+    },
+    {
+     "type": "cartons",
+     "x": 150
+    },
+    {
+     "type": "cartons",
+     "x": 182
+    },
+    {
+     "type": "grillage",
+     "x": 270,
+     "w": 120
+    },
+    {
+     "type": "voiture",
+     "x": 360,
+     "color": "#8a7a5a"
+    },
+    {
+     "type": "arbre",
+     "x": 450
+    },
+    {
+     "type": "cartons",
+     "x": 505
+    }
+   ],
+   "exits": [
+    {
+     "to": "place",
+     "x": 14,
+     "kind": "bord",
+     "label": "La route du village"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "delorme",
+     "x": 410,
+     "face": "gauche",
+     "when": "temps.semaine % 2 == 1"
+    },
+    {
+     "id": "cadet",
+     "x": 220,
+     "face": "droite",
+     "when": "temps.semaine % 2 == 0 et non var.cadet_lyon"
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "atelier",
+     "x": 166,
+     "label": "L'atelier",
+     "activities": [
+      "fouiller_scierie"
+     ]
+    }
+   ]
+  }
+ ],
+ "activities": [
+  {
+   "id": "examiner_scene",
+   "label": "Examiner la scène de crime",
+   "description": "La berge, le lavoir, le chemin. Chaque centimètre.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.methode += hasard(0, 1)",
+   "feedback": "Tu remplis trois pages de ton carnet. La boue, les roseaux, le silence."
+  },
+  {
+   "id": "analyser_indices",
+   "label": "Faire le point au tableau",
+   "description": "Relier les fils rouges, relire chaque déposition.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.intuition += hasard(0, 1); stat.methode += hasard(0, 1)",
+   "feedback": "Les photos te regardent. L'une d'elles ment."
+  },
+  {
+   "id": "comparer",
+   "label": "Comparer la trace de l'étang",
+   "description": "Vérifier les deux pistes que désigne la trace, en face, une par une.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.methode += hasard(0, 1)",
+   "feedback": "Tu rentres à la gendarmerie avec une certitude de plus.",
+   "when": "var.trace_analysee et non var.trace_comparee",
+   "lockedText": "Il faut d'abord trouver la trace de l'étang et recevoir les résultats du labo."
+  },
+  {
+   "id": "arreter",
+   "label": "Procéder à une arrestation",
+   "description": "Le moment de nommer quelqu'un. Il n'y aura pas de retour en arrière.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie -= 5",
+   "feedback": "Ta main tremble un peu en refermant le dossier.",
+   "when": "chapitre == ch2",
+   "lockedText": "Trop tôt : la procureure n'acceptera une arrestation qu'à partir du septième jour."
+  },
+  {
+   "id": "labo",
+   "label": "Envoyer une pièce au labo",
+   "description": "Un coursier part pour Lyon tous les soirs à 18 h.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.methode += 1",
+   "feedback": "Le coursier repart avec ton enveloppe scellée.",
+   "when": "(var.trace_trouvee et non var.trace_envoyee) ou (var.arme_trouvee et non var.arme_envoyee)",
+   "lockedText": "Tu n'as aucune pièce à faire analyser pour l'instant."
+  },
+  {
+   "id": "releves",
+   "label": "Éplucher les relevés téléphoniques",
+   "description": "Les fadettes des proches de la victime, enfin arrivées de Lyon.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.methode += 1",
+   "feedback": "Des colonnes de chiffres. Et, au milieu, une heure qui ne colle pas.",
+   "when": "temps.total >= 1",
+   "lockedText": "Les relevés n'arriveront que demain."
+  },
+  {
+   "id": "perquisition",
+   "label": "Demander une perquisition",
+   "description": "La procureure n'en accordera pas plus de deux. Choisis bien.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie -= 5",
+   "feedback": "Les gendarmes enfilent leurs gants.",
+   "when": "temps.total >= 2 et var.perquisitions < 2",
+   "lockedText": "Pas avant le troisième jour, et pas plus de deux perquisitions en tout."
+  },
+  {
+   "id": "rapport",
+   "label": "Faire ton rapport à la procureure",
+   "description": "Une heure au téléphone pour la rassurer.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.pression -= 8; stat.methode += 1",
+   "feedback": "Elle raccroche sans dire au revoir. Mais elle a l'air un peu moins tendue.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "rumeurs",
+   "label": "Écouter les conversations du comptoir",
+   "description": "Un café, un journal déplié, et les oreilles grandes ouvertes.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.intuition += hasard(0, 1); stat.confiance += 1",
+   "feedback": "Au Relais, on parle de tout. Surtout de ce qu'on ne devrait pas savoir."
+  },
+  {
+   "id": "archives",
+   "label": "Fouiller les archives municipales",
+   "description": "Des registres, des procès-verbaux, de la poussière.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.methode += 1",
+   "feedback": "Tu ressors avec de la poussière jusque dans les cils."
+  },
+  {
+   "id": "fouiller_bureau",
+   "label": "Fouiller le bureau d'Édouard",
+   "description": "Les tiroirs d'un homme qui croyait tout contrôler.",
+   "cost": {
+    "actions": 1,
+    "energie": 5
+   },
+   "effects": "stat.methode += 1",
+   "feedback": "Le cuir du fauteuil garde encore la forme de son propriétaire."
+  },
+  {
+   "id": "examiner_portrait",
+   "label": "Examiner le portrait",
+   "description": "Édouard Vasseur, en peinture, l'air de posséder le cadre.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.intuition += 1",
+   "feedback": "Ses yeux peints te suivent jusqu'à la porte.",
+   "when": "var.piste_coffre"
+  },
+  {
+   "id": "fouiller_scierie",
+   "label": "Inspecter l'atelier de la scierie",
+   "description": "Les machines, les registres, les casiers des ouvriers.",
+   "cost": {
+    "actions": 1,
+    "energie": 10
+   },
+   "effects": "stat.methode += 1",
+   "feedback": "L'odeur de résine te colle aux vêtements."
+  },
+  {
+   "id": "dormir",
+   "label": "Dormir",
+   "description": "Dans ton lit d'enfant, trop court pour toi depuis longtemps.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.energie += 30; stat.moral += 2",
+   "feedback": "Tu rêves de l'étang. Il te parle, mais tu ne comprends pas ce qu'il dit."
+  },
+  {
+   "id": "relire_notes",
+   "label": "Relire tes notes",
+   "description": "Ton carnet, à la lumière de la lampe de bureau de tes quinze ans.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.intuition += hasard(1, 2); stat.moral += 1",
+   "feedback": "Une phrase soulignée deux fois ne te quitte plus."
+  },
+  {
+   "id": "diner_famille",
+   "label": "Dîner en famille",
+   "description": "Le pain de ta mère, les silences de la cuisine.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.moral += 6; stat.energie += 8; rel.mere += 3; rel.pere += 2; rel.cadet += 2",
+   "feedback": "Pendant une heure, tu n'es plus [[lieutenant|lieutenante]]. Juste l'enfant de la maison.",
+   "maxPerTick": 1
+  },
+  {
+   "id": "recueillement",
+   "label": "Allumer un cierge",
+   "description": "Pour Édouard Vasseur, ou pour toi. Tu ne sais pas trop.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.moral += 5; stat.energie += 5; stat.pression -= 2",
+   "feedback": "La flamme tremble, puis se tient droite."
+  },
+  {
+   "id": "flaner",
+   "label": "Flâner sur la place",
+   "description": "Dire bonjour, écouter, se faire voir.",
+   "cost": {
+    "actions": 1
+   },
+   "effects": "stat.confiance += 2; stat.intuition += hasard(0, 1)",
+   "feedback": "Deux personnes te saluent. Trois font semblant de ne pas te voir."
+  }
+ ],
+ "chapters": [
+  {
+   "id": "ch1",
+   "title": "Le retour",
+   "subtitle": "Jours 1 à 6 · Saint-Rémy-des-Étangs",
+   "weeks": 6,
+   "onStart": "stat.energie = 100"
+  },
+  {
+   "id": "ch2",
+   "title": "Le silence",
+   "subtitle": "Jours 7 à 12 · Saint-Rémy-des-Étangs",
+   "weeks": 6,
+   "location": "chambre",
+   "intro": "Six jours ont passé. Le village s'est refermé comme une huître. Quelqu'un, à Saint-Rémy, dort mal. Et ce n'est pas toi."
+  }
+ ],
+ "creation": {
+  "nameLabel": "Ton prénom",
+  "defaultName": "Alex",
+  "look": true,
+  "baseLook": {
+   "skin": "peau2",
+   "hair": "court",
+   "hairColor": "brun",
+   "top": "veste",
+   "topColor": "#3b3e47",
+   "topColor2": "#eef0f4",
+   "bottom": "jean",
+   "bottomColor": "#25222b",
+   "shoes": "#2a2a33"
+  },
+  "fields": [
+   {
+    "id": "methode_travail",
+    "label": "Ta façon d'enquêter",
+    "options": [
+     {
+      "id": "methodique",
+      "label": "Méthodique",
+      "description": "Procédure, recoupements, rien au hasard.",
+      "effects": "stat.methode += 12"
+     },
+     {
+      "id": "intuitif",
+      "label": "Intuitif",
+      "description": "Tu sens les menteurs avant qu'ils ouvrent la bouche.",
+      "effects": "stat.intuition += 12"
+     },
+     {
+      "id": "frontal",
+      "label": "Frontal",
+      "description": "Tu poses les questions qui fâchent, en face.",
+      "effects": "stat.aplomb += 12"
+     }
+    ]
+   },
+   {
+    "id": "depart",
+    "label": "Ton départ du village",
+    "options": [
+     {
+      "id": "etudes",
+      "label": "Pour les études",
+      "description": "Le droit à Lyon, puis l'école de police. Le village est fier de toi.",
+      "effects": "stat.confiance += 8; rel.mere += 5"
+     },
+     {
+      "id": "fuite",
+      "label": "Pour fuir",
+      "description": "Tu étouffais ici. Tout le monde s'en souvient.",
+      "effects": "stat.intuition += 4; stat.confiance -= 5; rel.ami += 8"
+     },
+     {
+      "id": "vocation",
+      "label": "Par vocation",
+      "description": "Tu as toujours voulu être flic. Depuis l'affaire du vélo volé, en CM2.",
+      "effects": "stat.methode += 4; stat.aplomb += 2; rel.rival += 5"
+     }
+    ]
+   },
+   {
+    "id": "temperament",
+    "label": "Ton tempérament",
+    "options": [
+     {
+      "id": "calme",
+      "label": "Calme",
+      "description": "Rien ne te fait perdre ton sang-froid.",
+      "effects": "stat.moral += 8"
+     },
+     {
+      "id": "tenace",
+      "label": "Tenace",
+      "description": "Tu ne lâches jamais une piste.",
+      "effects": "stat.methode += 3; stat.aplomb += 3"
+     },
+     {
+      "id": "empathique",
+      "label": "Empathique",
+      "description": "Les gens te confient des choses qu'ils ne diraient à personne.",
+      "effects": "stat.confiance += 6; stat.intuition += 3"
+     }
+    ]
+   }
+  ],
+  "cast": [
+   {
+    "id": "mere",
+    "label": "Ta mère",
+    "group": "Famille",
+    "hint": "La boulangère de la place. Elle sait tout avant tout le monde."
+   },
+   {
+    "id": "pere",
+    "label": "Ton père",
+    "group": "Famille",
+    "hint": "Gendarme à la retraite. Il a enquêté sur l'accident de la scierie, en 2004.",
+    "optional": true
+   },
+   {
+    "id": "cadet",
+    "label": "Ton petit frère",
+    "labels": [
+     "Ton petit frère",
+     "Ta petite sœur"
+    ],
+    "group": "Famille",
+    "hint": "Dix-neuf ans, apprenti à la scierie Vasseur.",
+    "genderChoice": true,
+    "optional": true,
+    "alt": {
+     "name": "Chloé",
+     "look": {
+      "skin": "peau2",
+      "hair": "queue",
+      "hairColor": "chatain",
+      "gender": "f",
+      "top": "sweat",
+      "topColor": "#ec8a2e",
+      "bottom": "jean",
+      "bottomColor": "#1d2230",
+      "build": "mince"
+     }
+    }
+   },
+   {
+    "id": "ami",
+    "label": "Ton meilleur ami",
+    "labels": [
+     "Ton meilleur ami",
+     "Ta meilleure amie"
+    ],
+    "group": "Amis et rivaux",
+    "hint": "Le patron du Relais. Et l'un des six suspects.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Léa",
+     "look": {
+      "skin": "peau3",
+      "hair": "queue",
+      "hairColor": "brun",
+      "gender": "f",
+      "top": "chemise",
+      "topColor": "#6b7a43",
+      "topColor2": "#efe6cf",
+      "bottom": "jean",
+      "bottomColor": "#2b3a5a"
+     }
+    }
+   },
+   {
+    "id": "rival",
+    "label": "Ton rival",
+    "labels": [
+     "Ton rival",
+     "Ta rivale"
+    ],
+    "group": "Amis et rivaux",
+    "hint": "Le gendarme du village, qui voulait l'enquête pour lui.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Pauline Garnier",
+     "look": {
+      "skin": "peau1",
+      "hair": "chignon",
+      "hairColor": "blond",
+      "gender": "f",
+      "top": "chemise",
+      "topColor": "#1d2f5e",
+      "topColor2": "#eef0f4",
+      "bottom": "pantalon",
+      "bottomColor": "#1d2f5e",
+      "acc": [
+       "casquette"
+      ],
+      "accColor": "#1d2f5e"
+     }
+    }
+   },
+   {
+    "id": "elise",
+    "label": "L'amour",
+    "group": "Cœur",
+    "hint": "Ton premier amour, devenu journaliste au journal local.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Élias Marchal",
+     "look": {
+      "skin": "peau3",
+      "hair": "court",
+      "hairColor": "chatain",
+      "gender": "h",
+      "beard": "barbe3j",
+      "top": "veste",
+      "topColor": "#7cc3ef",
+      "topColor2": "#25222b",
+      "bottom": "jean",
+      "bottomColor": "#2b3a5a",
+      "acc": [
+       "sac"
+      ]
+     }
+    }
+   }
+  ]
+ },
+ "start": {
+  "location": "etang",
+  "event": "intro"
+ },
+ "onTickEnd": "stat.energie += 22; stat.pression += 4; stat.moral += stat.moral < 35 ? 2 : 0; eloigner(mere, 1); eloigner(ami, 1); eloigner(elise, var.couple ? 1 : 0)",
+ "sheet": [
+  {
+   "title": "L'affaire Vasseur",
+   "rows": [
+    {
+     "label": "Perquisitions",
+     "value": "{var.perquisitions} sur 2"
+    },
+    {
+     "label": "Trace de l’étang",
+     "value": "{var.trace_comparee ? 'identifiée' : var.trace_analysee ? 'analysée' : var.trace_trouvee ? 'trouvée' : 'non trouvée'}"
+    },
+    {
+     "label": "L'arme",
+     "value": "{var.arme_identifiee ? 'identifiée' : var.arme_trouvee ? 'trouvée' : 'introuvable'}"
+    },
+    {
+     "label": "Le carnet noir",
+     "value": "trouvé",
+     "when": "var.carnet_noir"
+    },
+    {
+     "label": "Arrestation",
+     "value": "{var.accuse == '' ? 'aucune' : 'faite'}"
+    }
+   ]
+  }
+ ],
+ "events": [],
+ "endings": []
+}

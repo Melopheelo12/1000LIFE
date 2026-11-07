@@ -53,8 +53,11 @@ export function codeReplace(src: string, c: Ctx): string {
 
 /** Texte affiché : seules les expressions entre accolades sont touchées. */
 function tplReplace(src: string, c: Ctx): string {
-  if (!src.includes('{')) return src;
-  return src.replace(/\{([^{}]*)\}/g, (_m, inner: string) => `{${codeReplace(inner, c)}}`);
+  let out = src;
+  // accords selon un personnage : [[id:masculin|féminin]]
+  if (c.kind === 'personnage' && out.includes('[[')) out = out.replace(/\[\[([a-z_][a-z0-9_]*):/g, (m, id: string) => (id === c.from ? (c.count++, `[[${c.to}:`) : m));
+  if (!out.includes('{')) return out;
+  return out.replace(/\{([^{}]*)\}/g, (_m, inner: string) => `{${codeReplace(inner, c)}}`);
 }
 
 const ACTOR_CMDS = new Set(['placer', 'aller', 'courir', 'anim', 'face', 'emote', 'entrer', 'sortir', 'retirer', 'tenue', 'ballon', 'objet', 'camera']);
@@ -213,7 +216,11 @@ export function renameRef(def: UniverseDef, kind: RefKind, from: string, to: str
     for (const n of l.npcs ?? []) n.when = code(n.when);
     for (const h of l.hotspots ?? []) { h.when = code(h.when); h.label = tpl(h.label) ?? h.label; }
   }
-  for (const ch of d.characters) for (const b of ch.barks ?? []) { b.if = code(b.if); b.text = tpl(b.text) ?? b.text; }
+  for (const ch of d.characters) {
+    for (const b of ch.barks ?? []) { b.if = code(b.if); b.text = tpl(b.text) ?? b.text; }
+    ch.role = tpl(ch.role); ch.description = tpl(ch.description); ch.goals = tpl(ch.goals);
+  }
+  if (kind === 'personnage') for (const sl of d.creation?.cast ?? []) if (sl.id === from) { sl.id = to; c.count++; }
   for (const f of d.creation?.fields ?? []) for (const o of f.options) o.effects = code(o.effects);
   d.onTickStart = code(d.onTickStart);
   d.onTickEnd = code(d.onTickEnd);

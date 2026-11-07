@@ -248,11 +248,11 @@ ines: Alors, raconte. Ça fait quoi, d'entendre vingt mille personnes crier ton 
 * Frimer : les filles, l'argent, la célébrité #frime
   ~ rel.ines -= 8
   ines (pensif): …D'accord. Je vois.
-* Retourner la question et parler de ses études à elle #ecoute
+* Retourner la question et parler de ses études à [[ines:lui|elle]] #ecoute
   ~ rel.ines += 10
   ines (content): Personne ne me pose jamais la question.
 si rel.ines >= 28
-  > À la fin du repas, elle pose sa main sur la tienne.
+  > À la fin du repas, [[ines:il|elle]] pose sa main sur la tienne.
   ines: On remet ça ? Disons… tous les jeudis ?
   ~ var.couple = vrai
   ~ souvenir(ines, premier_diner, "Votre premier dîner au Phare")

@@ -17,12 +17,14 @@ sinon si rel.noe >= 20
   > Noé et toi, vous vous croisez de temps en temps. Les souvenirs de la barque, la première nuit, vous font encore rire.
 sinon
   > Noé et toi vous êtes perdus de vue. Une amitié d'enfance qui n'a pas survécu aux secrets.
-si var.couple
-  > Ayla a appris à apprivoiser ses visions. Elle dit qu'elle ne voit plus l'avenir : elle te voit, toi, et ça lui suffit.
+si var.ayla_noe et non var.couple
+  > Noé et Ayla vivent au-dessus de la boulangerie. Le matin, Ayla devine ce que les clients vont commander avant qu'ils entrent. Noé prétend que c'est mauvais pour les affaires.
+sinon si var.couple
+  > Ayla a appris à apprivoiser ses visions. [[ayla:Il|Elle]] dit qu'[[ayla:il|elle]] ne voit plus l'avenir : [[ayla:il|elle]] te voit, toi, et ça lui suffit.
 sinon si rel.ayla >= 40
-  > Ayla est devenue astronome à l'observatoire des Cimes. Elle a donné ton nom à une petite étoile, sans te le dire.
+  > Ayla est [[ayla:devenu|devenue]] astronome à l'observatoire des Cimes. [[ayla:Il|Elle]] a donné ton nom à une petite étoile, sans te le dire.
 sinon si rel.ayla < 0
-  > Ayla est partie sans dire au revoir. Elle l'avait sans doute vu venir.
+  > Ayla est [[ayla:parti|partie]] sans dire au revoir. [[ayla:Il|Elle]] l'avait sans doute vu venir.
 si var.sera_alliee
   > Séraphine de Valcourt a renoncé à son héritage pour ouvrir une école gratuite. Sa mère ne lui parle plus. Elle n'a jamais été aussi heureuse.
 sinon si rel.sera <= -30
@@ -35,6 +37,27 @@ sinon si var.issue == "scelle" ou var.issue == "detruit"
   > Orin Kael s'est enfui avant l'aube. Sa robe noire a été retrouvée au bord du lac.
 si var.familier
   > {var.familier_nom} ne t'a jamais quitté. Il dort au pied de ton lit, une patte sur ta chaussure, au cas où tu partirais sans lui.
+si present(cadet)
+  si var.cadet_blesse
+    > [[cadet:Ton petit frère|Ta petite sœur]] porte encore la marque noire sur le bras. [[cadet:Il|Elle]] dit qu'elle lui rappelle que tu es venu[[|e]], même trop tard. Tu n'es pas sûr[[|e]] que ce soit vrai.
+  sinon si var.cadet_arrive
+    > [[cadet:Ton petit frère|Ta petite sœur]] est en troisième année à Ombrelune. Tout le monde l'appelle « [[cadet:le petit|la petite]] {joueur.nom} ». [[cadet:Il|Elle]] fait semblant de détester ça.
+  sinon si rel.cadet >= 40
+    > [[cadet:Ton petit frère|Ta petite sœur]] a accroché tous tes dessins animés au-dessus de son lit. Le dragon à lunettes fait encore des loopings.
+  sinon
+    > [[cadet:Ton petit frère|Ta petite sœur]] a grandi sans toi. Quand tu rentres, [[cadet:il|elle]] te dit bonjour comme à un invité.
+si present(aine)
+  si var.aine_reconcilie
+    > [[aine:Ton grand frère|Ta grande sœur]] a ouvert un atelier à Pierrelune, juste en face de l'auberge. Sur l'enseigne, en petit : « Réparations en tout genre. Même magiques. »
+  sinon si var.aine_brouille
+    > [[aine:Ton grand frère|Ta grande sœur]] et toi ne vous parlez plus. À Noël, vous vous asseyez aux deux bouts de la table.
+  sinon
+    > [[aine:Ton grand frère|Ta grande sœur]] t'écrit une fois par an, pour ton anniversaire. Trois lignes. C'est déjà beaucoup.
+si present(pere)
+  si rel.pere >= 40
+    > Ton père a réparé la vieille horloge du village avec un peu de magie que tu lui as prêtée. Elle sonne l'heure juste pour la première fois depuis cent ans. Il ne s'en remet pas.
+  sinon si rel.pere < 15
+    > Ton père ne parle jamais d'Ombrelune. Quand quelqu'un en parle devant lui, il change de sujet.
 si rel.claire >= 50
   > Ta mère garde toutes tes lettres dans une boîte à biscuits. Elle les relit le dimanche, en faisant semblant de comprendre les mots compliqués.
 sinon si rel.claire < 15
@@ -79,12 +102,12 @@ orin (fier): Maître.
 !rappel malrik.ultimatum
 > La voix de Malrik ne parle plus dans ta tête. Elle n'en a plus besoin : elle est ta voix, maintenant.
 si var.couple
-  > Ayla t'attend à l'orée de la forêt. Elle te regarde longtemps. Puis elle recule d'un pas, et un autre. Elle avait vu ce soir-là. Elle avait espéré se tromper.
+  > Ayla t'attend à l'orée de la forêt. [[ayla:Il|Elle]] te regarde longtemps. Puis [[ayla:il|elle]] recule d'un pas, et un autre. [[ayla:Il|Elle]] avait vu ce soir-là. [[ayla:Il|Elle]] avait espéré se tromper.
 si var.noe_sauve
   > Noé ne viendra plus jamais à la boulangerie quand tu y passes. On dit qu'il ferme les volets.
 > Les années qui suivent, on parle de toi à voix basse dans les tavernes. On cache les enfants. On ferme les portes.
 appel epilogue_commun
-> Tu es devenu le plus puissant mage de ta génération. Tu es aussi le plus seul. Les deux vont souvent ensemble, disait Halloran. Tu ne l'avais pas cru.
+> Tu es [[devenu|devenue]] [[le plus puissant mage|la plus puissante mage]] de ta génération. Tu es aussi [[le plus seul|la plus seule]]. Les deux vont souvent ensemble, disait Halloran. Tu ne l'avais pas cru.
 
 === fin:sacrifice
 titre: Le Sceau vivant
@@ -102,7 +125,7 @@ pell (triste): Tu as dormi neuf jours. Et… mon petit, essaie d'allumer la boug
 si var.couple
   !placer ayla 230 gauche
   ayla (emu): Je l'avais vu. Je t'ai laissé faire quand même. Pardonne-moi.
-  > Elle prend ta main. Elle ne lâche plus.
+  > [[ayla:Il|Elle]] prend ta main. [[ayla:Il|Elle]] ne lâche plus.
 si var.noe_sauve
   > Noé passe chaque jour avec un panier de brioches. Il ne parle pas de magie. Il parle de pain, de farine, du temps qu'il fait. C'est exactement ce qu'il te faut.
 > Tu reçois ton diplôme à titre honorifique. Le premier diplôme d'Ombrelune décerné à quelqu'un qui ne peut plus faire de magie.
@@ -122,7 +145,7 @@ lieu: cour
 !fx fumee
 > La cour est jonchée de vitraux brisés. Les tours fument encore. La flamme d'Éveil, dans le grand hall, ne s'est jamais rallumée.
 si var.issue == "fuite"
-  > Tu t'es enfui. Tu te répètes que personne n'aurait pu tenir. Tu te le répéteras toute ta vie.
+  > Tu t'es [[enfui|enfuie]]. Tu te répètes que personne n'aurait pu tenir. Tu te le répéteras toute ta vie.
 sinon
   > Tu as tenu jusqu'au bout. Ce n'était pas assez. Parfois, rien n'est assez.
 > Malrik a quitté la forêt à l'aube, entouré de ses disciples. On dit qu'il a pris le visage d'un jeune homme pâle, et qu'il cherche sa sœur, partout, dans chaque ville.
@@ -145,12 +168,12 @@ lieu: village
 !placer claire 220 gauche
 > Le lendemain du diplôme, tu poses ta baguette sur le bureau de l'Archimage. Personne ne te retient. Personne n'ose.
 !rappel claire.retour
-claire (emu): Tu es rentré. Pour de bon ?
+claire (emu): Tu es [[rentré|rentrée]]. Pour de bon ?
 > Pour de bon. Tu ouvres une petite librairie à Pierrelune, avec des livres qui ne parlent pas et ne mordent pas.
 si var.issue == "scelle" ou var.issue == "detruit"
   > Personne, au village, ne sait que tu as sauvé le monde des mages une nuit d'été. Tu ne le dis à personne. Tu n'en as pas besoin.
 si var.couple
-  > Ayla vient te voir chaque dimanche. Elle dit que la librairie sent le papier et la paix. Un jour, elle ne repart plus.
+  > Ayla vient te voir chaque dimanche. [[ayla:Il|Elle]] dit que la librairie sent le papier et la paix. Un jour, [[ayla:il|elle]] ne repart plus.
 > Le soir, quand la boutique est fermée, il t'arrive d'allumer une bougie d'un claquement de doigts. Juste une. Juste pour te souvenir.
 appel epilogue_commun
 > On dit que la magie, c'est le pouvoir. Toi, tu as découvert que c'était aussi le pouvoir de dire non.
@@ -190,14 +213,14 @@ lieu: tour_ouest
 !rappel ayla.lanternes
 ayla (content): Tu sais ce que je vois, là, maintenant ?
 * Notre avenir ? #romance
-  ayla (rire): Non. Je vois un idiot qui a de la cire sur sa robe. Et c'est la plus belle vision que j'aie jamais eue.
+  ayla (rire): Non. Je vois [[un idiot|une idiote]] qui a de la cire sur sa robe. Et c'est la plus belle vision que j'aie jamais eue.
 * Rien. Et c'est très bien. #paix
   ayla (emu): Rien. Pas de futur, pas de cercle, pas de grimoire. Juste maintenant. Je ne savais pas que c'était possible.
 > Des années plus tard, vous vivez dans une maison au bord d'une falaise, avec une lunette astronomique sur le toit et beaucoup trop de chats.
 si var.issue == "scelle" ou var.issue == "detruit"
   > Le monde des mages vous doit tout. Vous n'en parlez jamais. Le soir, vous comptez les étoiles, et vous ne vous mettez jamais d'accord sur le chiffre.
 appel epilogue_commun
-> Elle n'a jamais retrouvé ses visions. Elle dit qu'elle n'en a plus besoin, puisque tu es là.
+> [[ayla:Il|Elle]] n'a jamais retrouvé ses visions. [[ayla:Il|Elle]] dit qu'[[ayla:il|elle]] n'en a plus besoin, puisque tu es là.
 
 === fin:professeur
 titre: Maître des potions
@@ -257,7 +280,7 @@ brax (fier): Les pieds. N'oublie pas les pieds.
 si var.noe_sauve
   > Noé est au premier rang. Il a peint ton nom sur une banderole, avec une faute d'orthographe. Tu ne la corrigeras jamais.
 sinon si var.couple
-  > Ayla est au premier rang. Elle ne regarde pas le duel : elle te regarde, toi. Elle savait déjà comment ça finirait.
+  > Ayla est au premier rang. [[ayla:Il|Elle]] ne regarde pas le duel : [[ayla:il|elle]] te regarde, toi. [[ayla:Il|Elle]] savait déjà comment ça finirait.
 appel epilogue_commun
 > Des années plus tard, tu ouvres une école de duel à Pierrelune. La première leçon est toujours la même : « Un duel se gagne avec les pieds. La baguette, c'est pour finir. »
 
@@ -276,7 +299,7 @@ lieu: quai
 si var.familier
   > {var.familier_nom} voyage dans ta capuche. Il a mordu un dragon. Le dragon s'est excusé.
 si var.couple
-  > Ayla t'écrit à chaque escale. Ses lettres arrivent toujours la veille du jour où tu en as besoin. Elle sait.
+  > Ayla t'écrit à chaque escale. Ses lettres arrivent toujours la veille du jour où tu en as besoin. [[ayla:Il|Elle]] sait.
 > Ta carte du Nord est aujourd'hui accrochée dans toutes les écoles de magie. Dans un coin, en tout petit, tu as dessiné une barque sur un lac, et deux enfants dedans.
 !rappel noe.quai
 appel epilogue_commun
@@ -287,7 +310,7 @@ titre: Le Mage solitaire
 type: neutre
 quand: var.allies == 0
 priorite: 45
-resume: Tu as tout affronté seul. Tu as survécu, mais personne n'était là pour le voir.
+resume: Tu as tout affronté [[seul|seule]]. Tu as survécu, mais personne n'était là pour le voir.
 lieu: dortoir
 ---
 !moment nuit
@@ -296,7 +319,7 @@ si var.issue == "scelle" ou var.issue == "detruit"
   > Tu as sauvé l'école, cette nuit-là. Seul. Personne ne t'a vu le faire. Personne ne te croirait.
 sinon
   > Tu as traversé cinq années sans jamais t'appuyer sur personne. C'était plus sûr. C'était aussi plus froid.
-> Les années suivantes, tu deviens un mage respecté, discret, efficace. On vient te consulter pour les sorts difficiles. On repart sans te connaître.
+> Les années suivantes, tu deviens [[un mage respecté, discret, efficace|une mage respectée, discrète, efficace]]. On vient te consulter pour les sorts difficiles. On repart sans te connaître.
 si var.noe_perdu
   > Parfois, tu penses à Noé. À ce que tu aurais pu dire, ce soir-là, dans la forêt.
 appel epilogue_commun

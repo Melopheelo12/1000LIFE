@@ -1,0 +1,368 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ENTOURAGE — la mère, le père (facultatif, ancien gendarme), le petit
+//  frère ou la petite sœur (facultatif, apprenti à la scierie), le meilleur
+//  ami (qui est aussi l'un des six suspects), le gendarme rival et Élise.
+//  Les proches facultatifs sont protégés par present(id).
+// ═══════════════════════════════════════════════════════════════════════
+
+// ─── La mère ─────────────────────────────────────────────────────────────
+
+=== fa_mere_retour
+titre: La boulangerie
+declencheur: enter:maison
+unique: oui
+priorite: 9
+---
+!placer mere 104 droite
+> La clochette de la porte. L'odeur du pain chaud. Rien n'a changé : ni la vitrine, ni le calendrier des pompiers, ni ta mère, farine jusqu'aux coudes.
+mere (emu): Te voilà. Neuf ans, et il faut un meurtre pour que tu reviennes.
+* La serrer dans tes bras, longtemps. #famille
+  ~ rel.mere += 8; stat.moral += 5
+  mere (emu): Tu sens Lyon. Ça partira.
+* « Je suis là pour travailler, maman. » #distance
+  ~ rel.mere -= 4; stat.methode += 1
+  mere (triste): Je sais bien. Ta chambre est prête quand même.
+* « Qu'est-ce qu'on dit, au village ? » #intuition
+  mere: On dit que c'est la docteure, à cause de son frère. Que c'est le fils, à cause de l'argent. Et que tu vas fouiller dans les affaires de tout le monde. Moi, je ne dis rien. Je vends du pain.
+  ~ stat.intuition += 1; stat.confiance += 2
+[present(pere)] > Dans la cuisine, ton père lit L'Écho des Étangs. La une : « Meurtre à l'étang du Moulin ». Il lève les yeux, hoche la tête, et retourne à son journal. C'est sa façon de dire bonjour.
+[present(cadet)] > Sur le frigo, une photo de toi le jour de ton diplôme, et une autre de [[cadet:ton petit frère|ta petite sœur]] en bleu de travail devant la scierie.
+mere: Ta chambre n'a pas bougé. J'ai juste enlevé les posters. Enfin, j'ai essayé.
+
+=== fa_mere_clients
+titre: Les clientes
+declencheur: tick_end
+chapitres: ch1
+quand: temps.total >= 2
+unique: oui
+priorite: 5
+---
+!lieu maison 104 soir
+!placer mere 104 droite
+mere (inquiet): Les clientes ne me parlent que de toi. La moitié n'achète plus son pain ici, l'autre moitié vient trois fois par jour pour me tirer les vers du nez.
+* « Dis-leur que je fais mon travail, c'est tout. » #village
+  ~ stat.confiance += 3; rel.mere += 2
+* « Écoute ce qu'elles racontent, et dis-le-moi. » #intuition
+  ~ rel.mere += 4; stat.intuition += 1
+  si var.coupable == morel
+    mere: La fille Bertin est venue ce matin. Elle dit que la docteure est partie de la ferme bien avant la mort du vieux, samedi. Qu'elle avait l'air bouleversée.
+    [non var.brise_morel] ~ var.brise_morel = vrai; var.ind_morel += 1
+  sinon
+    mere: La fille Bertin est venue ce matin. Elle dit que la docteure a veillé son grand-père jusqu'au bout, samedi. Jusqu'à une heure du matin. Elle ne tarit pas d'éloges.
+    ~ var.alibi_morel = vrai
+* « Ne te mêle pas de ça, maman. » #distance
+  ~ rel.mere -= 5
+  mere (triste): Je vis ici, moi. Toi, dans douze jours, tu repars.
+
+=== fa_mere_lettre
+titre: La lettre anonyme
+declencheur: tick_start
+chapitres: ch2
+quand: temps.semaine >= 2
+unique: oui
+priorite: 6
+---
+!lieu maison 104 jour
+!placer mere 104 droite
+mere (inquiet): C'était glissé sous la porte, ce matin, avant l'ouverture.
+> Une enveloppe sans timbre. Dedans, quelques mots : « Dis à [[ton fils|ta fille]] de rentrer à Lyon. Sinon, ta boulangerie brûlera. »
+[var.coupable == helene] > Le papier est épais, crème, parfumé à la lavande. Du papier à lettres de luxe, comme on n'en trouve pas à Saint-Rémy.
+[var.coupable == julien] > Écrite au stylo-bille sur une feuille arrachée à un carnet de paris hippiques. On voit encore les cotes du tiercé au dos.
+[var.coupable == roussel] > À contre-jour, le papier laisse voir un filigrane : le blason de la commune. Du papier de la mairie.
+[var.coupable == ami] > L'enveloppe sent la bière. Au dos, la marque ronde et humide d'un fond de verre.
+[var.coupable == morel] > Écrite en lettres capitales, très régulières. Au dos, un tampon presque effacé : « Pharmacie de Montbrison ».
+[var.coupable == delorme] > Du papier kraft, taché de résine, avec de la sciure coincée dans le pli.
+~ stat.intuition += 2; stat.moral -= 4
+* Mettre la lettre sous scellés et l'ajouter au dossier. #methode
+  ~ stat.methode += 1
+  > Ce n'est pas une preuve. Mais c'est une signature.
+* Prendre ta mère dans tes bras. #famille
+  ~ rel.mere += 8; stat.moral += 3
+  mere (emu): Ils n'auront pas ma boulangerie. Ni toi.
+* La montrer à Garnier. #equipe
+  ~ rel.rival += 6
+  rival (colere): Menacer la boulangère. Ici. Je vais faire des rondes toutes les nuits devant chez toi.
+
+// ─── Le père ─────────────────────────────────────────────────────────────
+
+=== fa_pere_conseil
+titre: La méthode du père
+declencheur: talk:pere
+chapitres: ch1
+quand: present(pere)
+unique: oui
+priorite: 6
+---
+!placer pere 270 gauche
+pere: Assieds-toi. Je ne vais pas te dire comment faire ton travail.
+pere (pensif): … Mais si j'étais toi, je commencerais par les alibis. Les gens mentent pour mille raisons : un amant, une dette, la honte. Un mensonge ne fait pas un meurtrier. Mais un alibi, ça se vérifie. Un par un.
+* L'écouter jusqu'au bout. #famille
+  ~ rel.pere += 6; stat.methode += 3
+  ~ souvenir(pere, methode, "Il t'a conseillé de commencer par les alibis")
+* « Je sais faire mon métier, papa. » #fierte
+  ~ rel.pere -= 4; stat.aplomb += 1
+  pere (triste): Je sais. C'est justement ce qui me fait peur.
+
+=== fa_pere_2004
+titre: Le 14 juin 2004
+declencheur: talk:pere
+quand: present(pere) et (var.piste_2004 ou var.piste_coffre ou temps.total >= 5)
+unique: oui
+priorite: 7
+---
+!placer pere 270 gauche
+> Ton père t'attend dans la cuisine, la nuit, devant une tasse froide. Il n'allume pas la lumière.
+pere (triste): Il faut que je te dise quelque chose. Le rapport sur l'accident de Paul Morel, en 2004. C'est moi qui l'ai signé.
+pere: La sécurité de la scie avait été retirée. Sur ordre. Vasseur est venu me voir avec un chèque, et une menace : il connaissait le juge, il pouvait me faire muter à l'autre bout de la France, loin de ta mère, loin de vous. J'ai réécrit le rapport. Paul est devenu « imprudent ».
+pere: Le 14 juin 2004. Je n'ai jamais oublié la date. Lui non plus : il s'en servait pour tout. Il avait un coffre derrière son portrait, il s'en vantait au café. Je parie qu'il l'ouvrait avec cette date.
+~ var.code_coffre = vrai; var.piste_coffre = vrai; var.pere_aveu = vrai
+!rappel pere.methode
+* Lui prendre la main. « Tu nous as protégés. » #famille
+  ~ rel.pere += 12; stat.moral += 3
+  pere (emu): J'ai protégé ma famille. Et j'ai trahi celle de Paul. Les deux sont vrais.
+* « Tu as couvert un meurtre, papa. » #devoir
+  ~ rel.pere -= 8; stat.aplomb += 1
+  pere (triste): Oui. Et je vis avec depuis vingt ans.
+* « Je mettrai la vérité dans mon rapport. Toute la vérité. » #verite
+  ~ rel.pere += 4; var.verite_2004 = vrai
+  pere: C'est ce qu'il faut faire. Fais-le.
+
+// ─── Le petit frère ou la petite sœur ──────────────────────────────────
+
+=== fa_cadet_scierie
+titre: Ce qu'on dit à la scierie
+declencheur: talk:cadet
+chapitres: ch1
+quand: present(cadet)
+unique: oui
+priorite: 6
+---
+!placer cadet 220 droite
+cadet: Tu veux savoir un truc ? Delorme n'a jamais volé une planche. C'est le patron qui revendait le bois au noir. Tout le monde le sait, à l'atelier. Personne n'osait le dire.
+cadet (pensif): Et samedi après-midi, j'ai entendu Vasseur au téléphone, dans son bureau. Il criait : « Ce soir, au lavoir, et on règle ça une bonne fois pour toutes ! »
+* « Tu sais avec qui il parlait ? » #methode
+  cadet: Non. Il a raccroché trop vite. Il avait l'air… content. Comme quand il allait virer quelqu'un.
+  ~ stat.methode += 1
+* « Fais attention à toi, à la scierie. » #famille
+  ~ rel.cadet += 6
+  cadet (rire): T'inquiète. Ici, je suis [[cadet:le petit|la petite]] du flic. On me laisse tranquille.
+~ rel.delorme += 2
+
+=== fa_cadet_menace
+titre: L'avertissement
+declencheur: tick_end
+chapitres: ch2
+quand: present(cadet) et temps.semaine >= 2 et non var.cadet_lyon
+unique: oui
+priorite: 6
+---
+!lieu maison 200 nuit
+!placer cadet 200 droite
+> [[cadet:Ton petit frère|Ta petite sœur]] rentre de la scierie avec le bras en écharpe et un œil qui commence à bleuir.
+cadet (inquiet): Quelqu'un m'a poussé[[cadet:|e]] d'une pile de planches. Je n'ai pas vu qui. Juste une voix, derrière moi : « Dis à ton flic de famille d'arrêter de fouiller. »
+~ var.menace_cadet = vrai; stat.moral -= 6
+* L'envoyer chez toi, à Lyon, jusqu'à la fin de l'enquête. #protection
+  ~ var.cadet_lyon = vrai; rel.cadet += 4; rel.mere += 4
+  cadet (triste): Je ne veux pas fuir. … D'accord. Pour maman.
+* Garder [[cadet:ton frère|ta sœur]] près de toi. On ne cède pas aux menaces. #courage
+  ~ rel.cadet += 6; stat.aplomb += 2
+* Demander à Garnier de veiller sur [[cadet:lui|elle]]. #equipe
+  ~ rel.rival += 6; rel.cadet += 2
+  rival: Personne ne touche à un gamin de Saint-Rémy. Je m'en occupe.
+
+// ─── Le meilleur ami ────────────────────────────────────────────────────
+
+=== dr_ami_retrouvailles
+titre: Les retrouvailles
+declencheur: enter:cafe
+unique: oui
+priorite: 9
+---
+!placer ami 120 droite
+> Le Relais. Le même comptoir en zinc, la même odeur de café brûlé, le même match à la télé. Et derrière le bar, Thomas.
+ami (content): Non… C'est pas vrai. Viens là !
+> Au mur, une photo jaunie : vous deux à quinze ans, torse nu au bord de l'étang, avec un poisson ridicule.
+ami: Neuf ans sans une carte postale, et tu reviens avec une carte de police. Tu es là pour Vasseur, hein ?
+* Serrer Thomas dans tes bras. « Tu m'as manqué. » #amitie
+  ~ rel.ami += 8; stat.moral += 5
+  ami (emu): Toi aussi, idiot[[|e]]. Tous les jours.
+* « Oui. Et tu es sur la liste, Thomas. » #devoir
+  ~ rel.ami -= 6; stat.aplomb += 1
+  ami (triste): Je sais. Le Relais. Évidemment que je suis sur la liste.
+* Montrer la photo du doigt et éclater de rire. #humour
+  ~ rel.ami += 6
+  ami (rire): Ce brochet faisait douze centimètres et tu as raconté à tout le collège qu'il en faisait quatre-vingts.
+
+=== dr_ami_soupcon
+titre: « Tu me soupçonnes ? »
+declencheur: talk:ami
+quand: vu(int_ami_1) et var.ind_ami + var.faux_ami >= 2
+unique: oui
+priorite: 9
+---
+!placer ami 120 droite
+ami (colere): Tout le village dit que tu me soupçonnes. Ma propre clientèle me regarde de travers. Alors je te pose la question en face : tu me soupçonnes ?
+* « Je dois traiter tout le monde de la même façon. Toi aussi. » #devoir
+  ~ rel.ami -= 6; stat.methode += 1
+  ami (triste): La même façon. Après vingt ans. D'accord.
+* « Je sais que ce n'est pas toi. » #amitie
+  ~ rel.ami += 8
+  ami (emu): … Merci. J'avais besoin de l'entendre.
+* « Aide-moi à prouver que ce n'est pas toi. » #diplomatie
+  ~ rel.ami += 4; stat.intuition += 1
+  ami: Comment ? Je te dis tout ce que je sais. C'est-à-dire pas grand-chose.
+
+=== dr_ami_souvenir
+titre: Les ricochets
+declencheur: tick_end
+chapitres: ch2
+quand: rel.ami >= 40 et temps.semaine >= 2
+unique: oui
+priorite: 4
+---
+!lieu etang 420 nuit
+!placer ami 440 gauche
+> Minuit, au bord de l'étang. Vous êtes assis sur le banc de la promenade, comme à quinze ans, avec deux bières tièdes.
+ami (pensif): Tu te souviens de Paul Morel ? Il nous apprenait les ricochets, ici même. Il disait que le secret, c'était de lancer sans regarder où ça tombe.
+ami: Je pense à lui depuis dimanche. À tout ce que Vasseur a écrasé dans ce village. Je ne suis pas triste qu'il soit mort. C'est grave, tu crois ?
+* « Non. C'est humain. » #amitie
+  ~ rel.ami += 6; stat.moral += 4
+* « Ne dis ça à personne d'autre. » #prudent
+  ~ rel.ami += 2; stat.methode += 1
+> Tu lances un caillou sur l'eau noire. Il fait quatre ricochets, puis disparaît sans bruit.
+
+// ─── Le gendarme rival ──────────────────────────────────────────────────
+
+=== dr_rival_sabotage
+titre: La fuite
+declencheur: tick_start
+chapitres: ch1
+quand: temps.total >= 3 et rel.rival < 5
+unique: oui
+priorite: 5
+---
+!son notif
+> L'Écho des Étangs, ce matin : « Selon une source à la gendarmerie, l'enquêteur de Lyon piétine et multiplie les erreurs. » Il n'y a qu'une source à la gendarmerie de Saint-Rémy.
+~ stat.pression += 10
+* Aller voir Garnier et le confronter, porte fermée. #aplomb
+  test stat.aplomb vs 40
+  si reussite
+    rival (inquiet): … D'accord. C'était moi. J'étais furieu[[rival:x|se]]. Ça ne se reproduira pas.
+    ~ rel.rival += 8
+  sinon
+    rival (moqueur): Une source ? Quelle source ? Tu deviens parano, Lyon.
+    ~ rel.rival -= 4
+* Le signaler à la procureure. #devoir
+  ~ rel.rival -= 15; stat.pression -= 6
+  > La procureure passe un savon à Garnier au téléphone. [[rival:Il|Elle]] ne te dit plus bonjour.
+* Ne rien dire, et travailler deux fois plus. #calme
+  ~ stat.methode += 2; rel.rival += 4
+  > Garnier te regarde arriver à sept heures et repartir à minuit. Au troisième soir, [[rival:il|elle]] laisse un café sur ton bureau. Sans un mot.
+
+=== dr_rival_alliance
+titre: Ce que Garnier n'avait pas dit
+declencheur: talk:rival
+quand: rel.rival >= 5 ou vu(dr_rival_sabotage)
+unique: oui
+priorite: 6
+---
+!placer rival 320 gauche
+rival (pensif): Écoute. Je ne t'aime pas beaucoup. Mais je connaissais Vasseur depuis trente ans, et je veux qu'on trouve qui a fait ça.
+si non var.trace_trouvee
+  rival: Le premier matin, sur la berge, j'ai ramassé quelque chose avant ton arrivée. Je voulais le garder pour moi. Pour te prendre de vitesse. C'était idiot.
+  si var.coupable == helene ou var.coupable == morel
+    > [[rival:Il|Elle]] te tend un sachet : un fil de mohair bordeaux, arraché aux ronces du lavoir.
+  sinon si var.coupable == julien ou var.coupable == delorme
+    > [[rival:Il|Elle]] te tend des photos : des traces de pneus tout-terrain sur le chemin du lavoir, prises à l'aube, avant que la rosée ne les efface.
+  sinon
+    > [[rival:Il|Elle]] te tend un sachet : un briquet gravé « Fête des Étangs 2018 », trouvé dans la vase du lavoir.
+  ~ var.trace_trouvee = vrai; objectifReussi(scene)
+  ~ objectif(trace, "Faire analyser la trace de l'étang au labo (ton poste de travail, à la gendarmerie)")
+sinon
+  rival: Je connais tout le monde ici depuis vingt ans. Qui ment, qui boit, qui trompe qui. Si tu veux un avis, demande.
+* Lui tendre la main. « On travaille ensemble, à partir de maintenant. » #equipe
+  ~ var.rival_allie = vrai; rel.rival += 12; stat.methode += 1
+  rival: Ensemble. Mais c'est toi qui fais les rapports.
+* « Tu aurais dû me le dire avant. » #fierte
+  ~ rel.rival -= 3
+  rival (froid): Je te le dis maintenant. Prends-le ou laisse-le.
+
+// ─── Élise ──────────────────────────────────────────────────────────────
+
+=== dr_elise_retrouvailles
+titre: Le premier amour
+declencheur: talk:elise
+unique: oui
+priorite: 8
+---
+!placer elise 240 droite
+elise (content): Lieutenant {joueur.nom}. Alors c'est vrai. Je n'y croyais pas quand ta mère me l'a dit.
+> Élise. Le premier baiser, derrière le lavoir, à seize ans. Le premier chagrin, aussi. [[elise:Il|Elle]] tient un carnet et un stylo, comme une arme.
+elise: Je travaille pour L'Écho des Étangs, maintenant. Et toi, tu m'apportes la plus grosse affaire de ma carrière. Tu tombes bien.
+* « Tu n'as pas changé. » #romance
+  ~ rel.elise += 8
+  elise (rire): Menteu[[r|se]]. Mais merci.
+* « Je ne peux rien te dire sur l'enquête. » #devoir
+  ~ rel.elise -= 2; stat.pression -= 2
+  elise: Je n'ai encore rien demandé. Mais je note.
+* « Qu'est-ce qu'on raconte, au village ? » #intuition
+  elise: Que Julien a des dettes chez des gens dangereux. Que le maire passe ses samedis soirs chez sa secrétaire. Et que Vasseur notait tout ce qu'il savait sur chacun dans un carnet noir. Mais ça, c'est une légende.
+  ~ stat.intuition += 2; rel.elise += 2
+
+=== dr_elise_fuite
+titre: Le scoop
+declencheur: talk:elise
+quand: vu(dr_elise_retrouvailles) et temps.total >= 2
+unique: oui
+priorite: 7
+---
+!placer elise 240 droite
+elise: J'ai besoin de toi. Mon rédacteur en chef veut un nom pour samedi. Juste un nom. Je ne citerai jamais ma source. Tu me connais.
+* Lui donner le nom de ton suspect principal. #fuite
+  ~ var.elise_scoop = vrai; var.illegal += 1; stat.pression += 15; rel.elise += 10; stat.confiance -= 6
+  > Le samedi, la une de L'Écho des Étangs fait trembler le village. Ta procureure, elle, ne tremble pas : elle hurle.
+* Refuser. Même pour toi. #devoir
+  ~ rel.elise -= 5; stat.pression -= 3
+  elise (triste): D'accord. Tu as raison. Je déteste quand tu as raison.
+* [var.piste_2004 ou var.code_coffre] Lui parler plutôt de l'accident de 2004. Une vraie histoire, qui mérite d'être écrite. #verite
+  ~ rel.elise += 8; stat.pression += 3; var.article_2004 = vrai
+  elise (surpris): Paul Morel ? … Tu me donnes l'article de ma vie, et ce n'est même pas celui que je demandais.
+
+=== dr_elise_diner
+titre: Le dîner
+declencheur: talk:elise
+quand: rel.elise >= 32 et non var.couple
+unique: oui
+priorite: 6
+---
+!placer elise 240 droite
+elise: Dîner ? Pas pour parler de l'affaire. Pour parler de nous. Enfin, de ce qu'on était.
+> Vous mangez une pizza froide sur le banc de l'étang, à l'endroit exact où vous vous étiez embrassés pour la première fois.
+* L'embrasser, comme à seize ans. #romance
+  ~ var.couple = vrai; rel.elise += 12; stat.moral += 10
+  !emote elise coeur
+  elise (emu): Je me demandais si tu oserais. Neuf ans que je me le demande.
+* « Je repars dans quelques jours, Élise. » #distance
+  ~ rel.elise -= 4
+  elise (triste): Je sais. Tu repars toujours.
+* Lui parler de tout ce que tu as raté en partant. #sincere
+  ~ rel.elise += 8; stat.moral += 4
+
+=== dr_elise_aide
+titre: Les archives de L'Écho
+declencheur: talk:elise
+chapitres: ch2
+quand: rel.elise >= 25
+unique: oui
+priorite: 5
+---
+!placer elise 240 droite
+elise (fier): J'ai passé deux nuits dans les archives du journal. Regarde : juin 2004, l'accident de la scierie. Et une interview d'une ancienne domestique des Vasseur, jamais publiée.
+> « Monsieur gardait un coffre derrière son grand portrait, au salon. Il disait que la combinaison, c'était le jour où il avait gagné contre tout le monde. Le 14 juin. »
+~ var.piste_coffre = vrai; var.code_coffre = vrai; stat.intuition += 2
+* « Tu es génia[[elise:l|le]]. » #romance
+  ~ rel.elise += 6
+  elise (rire): Je sais. Mets-le dans ton rapport.
+* « Tu n'en parles à personne, d'accord ? » #prudent
+  ~ rel.elise += 2; stat.pression -= 2
+  elise: Promis. Pour l'instant.

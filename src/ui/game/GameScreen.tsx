@@ -6,6 +6,7 @@ import { audio } from '../../engine/audio';
 import { useStore } from '../store';
 import { Meter, PortraitView, fmtStat } from '../components';
 import { Panels } from './panels';
+import { tickWords } from '../../core/runtime/session';
 
 function rich(text: string) {
   const parts = text.split('**');
@@ -127,6 +128,16 @@ export function GameScreen({ c }: { c: GameController }) {
                     </div>
                   </div>
                 )}
+                {ui.mode === 'choices' && lastLine && !lastLine.bark && (
+                  // Rappel de la dernière réplique : on sait à quoi on répond.
+                  <div class={`dialog pbox recap ${lastLine.who ? '' : 'narration'}`} aria-label="Réplique précédente">
+                    {lastLine.look && <div class="portrait"><PortraitView look={lastLine.look} emo={lastLine.emo} /></div>}
+                    <div class="body">
+                      {lastLine.who && <div class="name" style={{ color: lastLine.color }}>{lastLine.name}</div>}
+                      <div class="text">{rich(lastLine.text)}</div>
+                    </div>
+                  </div>
+                )}
                 {ui.mode === 'choices' && ui.choices && (
                   <div class="choices pbox" role="listbox" aria-label="Choix">
                     {ui.choices.map((ch, i) => (
@@ -154,14 +165,14 @@ export function GameScreen({ c }: { c: GameController }) {
               <div class="overlay" onClick={(e) => { if (e.target === e.currentTarget) c.advance(); }}>
                 <div class="summary pbox">
                   <div class="label">Bilan · {ui.summary.chapterTitle}</div>
-                  <h2>{cfg.tickLabel ?? 'Semaine'} {ui.summary.wk} terminée</h2>
+                  <h2>{cfg.tickLabel ?? 'Semaine'} {ui.summary.wk} terminé{tickWords(cfg).fem ? 'e' : ''}</h2>
                   {ui.summary.stats.length > 0 ? (
                     <div class="delta-list">
                       {ui.summary.stats.map((s) => (
                         <div key={s.id} class={s.delta > 0 ? 'up' : 'down'}>{s.delta > 0 ? '▲' : '▼'} {s.label} {s.delta > 0 ? '+' : '−'}{fmtStat(Math.abs(s.delta), s.format)} <span class="muted">({fmtStat(s.value, s.format)})</span></div>
                       ))}
                     </div>
-                  ) : <p class="muted">Une semaine sans grand changement.</p>}
+                  ) : <p class="muted">{tickWords(cfg).fem ? 'Une' : 'Un'} {tickWords(cfg).one} sans grand changement.</p>}
                   {ui.summary.rels.length > 0 && (
                     <div class="delta-list">
                       {ui.summary.rels.map((r) => <div key={r.id} class={r.delta > 0 ? 'up' : 'down'}>{r.delta > 0 ? '♥' : '♡'} {r.name} {r.delta > 0 ? '+' : '−'}{Math.abs(r.delta)}</div>)}
@@ -232,7 +243,7 @@ function EndingScreen({ c }: { c: GameController }) {
         <h1>{en.title}</h1>
         {en.summary && <p style={{ margin: 0, fontSize: 18, lineHeight: 1.45 }}>{en.summary}</p>}
         <div class="row muted" style={{ fontSize: 14 }}>
-          <span>{String(g.s.player.nom)}</span>·<span>{g.s.history.length} décisions</span>·<span>{g.s.time.tick} semaines vécues</span>·<span>Fins découvertes : {discovered}/{total}</span>
+          <span>{String(g.s.player.nom)}</span>·<span>{g.s.history.length} décisions</span>·<span>{g.s.time.tick} {g.s.time.tick > 1 ? tickWords(c.u.def.config).many : tickWords(c.u.def.config).one} vécu{tickWords(c.u.def.config).fem ? 'e' : ''}{g.s.time.tick > 1 ? 's' : ''}</span>·<span>Fins découvertes : {discovered}/{total}</span>
         </div>
         {(c.u.def.sheet ?? []).map((sec) => (
           <div key={sec.title}>
@@ -248,7 +259,7 @@ function EndingScreen({ c }: { c: GameController }) {
             <div class="list" style={{ marginTop: 8 }}>
               {keyDecisions.map((d, i) => (
                 <div key={i} class={`item ${d.key ? 'key' : ''}`}>
-                  <div class="meta">CHAPITRE {d.ch} · SEMAINE {d.wk} · {d.title.toUpperCase()}</div>
+                  <div class="meta">CHAPITRE {d.ch} · {tickWords(c.u.def.config).one.toUpperCase()} {d.wk} · {d.title.toUpperCase()}</div>
                   <div>{d.choice}</div>
                   {d.fx.length > 0 && <div class="fx">{d.fx.slice(0, 5).join(' · ')}</div>}
                 </div>

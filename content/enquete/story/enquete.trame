@@ -1,0 +1,382 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  LA MÉCANIQUE DE L'ENQUÊTE : le tableau, le labo, les perquisitions,
+//  le coffre, les obsèques, l'arrestation et le verdict.
+//  Un dossier est « solide » quand il réunit au moins trois éléments
+//  contre une personne dont l'alibi n'a pas été confirmé. Les innocents
+//  ne peuvent jamais dépasser deux éléments (fausses pistes).
+// ═══════════════════════════════════════════════════════════════════════
+
+=== en_tableau
+titre: Le tableau de l'enquête
+declencheur: activity:analyser_indices
+priorite: 1
+---
+> Six photos punaisées, des fils rouges, des post-it jaunes. Tu recules d'un pas pour tout embrasser du regard.
+> • Hélène Vasseur, la veuve : {var.ind_helene + var.faux_helene} élément{var.ind_helene + var.faux_helene > 1 ? 's' : ''}, {var.alibi_helene ? 'alibi confirmé' : var.brise_helene ? 'alibi BRISÉ' : 'alibi non vérifié'}.
+> • Julien Vasseur, le fils : {var.ind_julien + var.faux_julien} élément{var.ind_julien + var.faux_julien > 1 ? 's' : ''}, {var.alibi_julien ? 'alibi confirmé' : var.brise_julien ? 'alibi BRISÉ' : 'alibi non vérifié'}.
+> • Bernard Roussel, le maire : {var.ind_roussel + var.faux_roussel} élément{var.ind_roussel + var.faux_roussel > 1 ? 's' : ''}, {var.alibi_roussel ? 'alibi confirmé' : var.brise_roussel ? 'alibi BRISÉ' : var.mensonge_roussel ? 'a menti sur son alibi' : 'alibi non vérifié'}.
+> • Thomas Girard, le Relais : {var.ind_ami + var.faux_ami} élément{var.ind_ami + var.faux_ami > 1 ? 's' : ''}, {var.alibi_ami ? 'alibi confirmé' : var.brise_ami ? 'alibi BRISÉ' : var.mensonge_ami ? 'a menti sur son alibi' : 'alibi non vérifié'}.
+> • Claire Morel, la médecin : {var.ind_morel + var.faux_morel} élément{var.ind_morel + var.faux_morel > 1 ? 's' : ''}, {var.alibi_morel ? 'alibi confirmé' : var.brise_morel ? 'alibi BRISÉ' : 'alibi non vérifié'}.
+> • Marc Delorme, le contremaître : {var.ind_delorme + var.faux_delorme} élément{var.ind_delorme + var.faux_delorme > 1 ? 's' : ''}, {var.alibi_delorme ? 'alibi confirmé' : var.brise_delorme ? 'alibi BRISÉ' : 'alibi non vérifié'}.
+[non var.trace_trouvee] > À faire : examiner la scène de crime, à l'étang.
+[var.trace_trouvee et non var.trace_envoyee] > À faire : envoyer la trace de l'étang au labo (ton poste de travail).
+[var.trace_envoyee et non var.trace_analysee] > Le labo travaille sur la trace de l'étang. Résultats demain.
+[var.trace_analysee et non var.trace_comparee et (var.coupable == helene ou var.coupable == morel)] > À faire : comparer le fil de mohair avec les écharpes d'Hélène Vasseur et de la docteure Morel (depuis ce tableau).
+[var.trace_analysee et non var.trace_comparee et (var.coupable == julien ou var.coupable == delorme)] > À faire : comparer les traces de pneus avec le 4x4 de Julien Vasseur et le pick-up de Marc Delorme (depuis ce tableau).
+[var.trace_analysee et non var.trace_comparee et (var.coupable == roussel ou var.coupable == ami)] > À faire : demander leur briquet de la fête 2018 au maire et à Thomas (depuis ce tableau).
+[var.arme_trouvee et non var.arme_envoyee] > À faire : envoyer l'arme au labo.
+[var.arme_envoyee et non var.arme_identifiee] > Le labo analyse l'arme. Résultats demain.
+[var.piste_coffre et non var.carnet_noir] > Le coffre derrière le portrait d'Édouard, au manoir. {var.code_coffre ? 'Une date te trotte dans la tête : le 14 juin 2004.' : 'Il te faut un code à quatre chiffres.'}
+> Perquisitions restantes : {2 - var.perquisitions}.
+[chapitre == ch1] > Une arrestation ne sera possible qu'à partir du septième jour.
+[chapitre == ch2] > Quand un dossier réunira au moins trois éléments contre une personne dont l'alibi ne tient pas, tu pourras procéder à l'arrestation, ici même.
+[temps.total >= 7 et stat.intuition >= 55] > Ton intuition te ramène sans cesse vers la même photo : {liste("suspects", var.n_coupable, "nom")}.
+* Réfléchir à voix haute, en marchant de long en large. #methode
+  ~ stat.methode += 1
+* Fermer les yeux et laisser venir. #intuition
+  ~ stat.intuition += 1
+* [var.rival_allie] Demander son avis à Garnier. #equipe
+  rival (pensif): Moi, je regarderais qui a menti, et pourquoi. Les menteurs ne sont pas tous des meurtriers. Mais les meurtriers sont tous des menteurs.
+  ~ stat.methode += 1; stat.intuition += 1
+
+=== en_labo
+titre: Le coursier de Lyon
+declencheur: activity:labo
+priorite: 1
+---
+si var.arme_trouvee et non var.arme_envoyee
+  > Tu glisses l'arme dans un sac scellé. Le coursier la pose sur le siège passager avec précaution, comme une bombe. Résultats demain.
+  ~ var.arme_envoyee = vrai; planifier(en_labo_arme, 1)
+sinon
+  > Tu glisses la pièce de l'étang dans une enveloppe scellée. Le coursier promet des résultats pour demain.
+  ~ var.trace_envoyee = vrai; planifier(en_labo_trace, 1)
+
+=== en_labo_trace
+titre: Les résultats de la trace
+declencheur: scheduled
+unique: oui
+---
+!son telephone
+si var.coupable == helene ou var.coupable == morel
+  fabre: Votre fil bordeaux : du mohair teint, une marque vendue dans une seule boutique de Lyon. Et il a été arraché avec force : il en manque un bon morceau. L'écharpe d'où il vient doit être abîmée au bout.
+  ~ objectif(comparer, "Comparer le fil avec les écharpes d'Hélène Vasseur et de la docteure Morel (au tableau de la gendarmerie)")
+sinon si var.coupable == julien ou var.coupable == delorme
+  fabre: Vos traces de pneus : un modèle tout-terrain très courant. Mais le pneu avant gauche porte une entaille en forme de V, très reconnaissable. Trouvez le pneu, vous trouvez le véhicule.
+  ~ objectif(comparer, "Examiner les pneus du 4x4 de Julien Vasseur et du pick-up de Marc Delorme (au tableau de la gendarmerie)")
+sinon
+  fabre: Votre briquet a passé la nuit dans la vase : aucune empreinte exploitable. Mais il est encore à moitié plein d'essence. Il n'était pas là depuis longtemps. Celui qui l'a perdu l'a perdu cette nuit-là.
+  ~ objectif(comparer, "Demander leur briquet de la fête 2018 au maire et à Thomas (au tableau de la gendarmerie)")
+~ var.trace_analysee = vrai; objectifReussi(trace); stat.methode += 1
+
+=== en_comparaison
+titre: La comparaison
+declencheur: activity:comparer
+unique: oui
+priorite: 8
+tags: important
+---
+> Tu passes la journée à vérifier, discrètement, les deux pistes que désigne la trace de l'étang.
+si var.coupable == helene
+  > L'écharpe de la docteure Morel est intacte : elle l'a tricotée elle-même, pas un fil ne manque. Celle d'Hélène Vasseur, elle, est déchirée au bout. Il en manque un morceau, comme arraché. « Les rosiers », dit-elle, trop vite.
+sinon si var.coupable == morel
+  > L'écharpe d'Hélène Vasseur est intacte, pliée dans un tiroir de la commode. La docteure Morel, elle, ne porte plus la sienne. Elle finit par la sortir de son sac : il manque un morceau au bout. « Une ronce, en allant voir un patient. »
+sinon si var.coupable == julien
+  > Le pick-up de Marc Delorme a des pneus lisses comme des savons, sans la moindre entaille. Le 4x4 de Julien Vasseur, lui, porte sur le pneu avant gauche une entaille en V. Exactement celle que le labo a décrite.
+sinon si var.coupable == delorme
+  > Le 4x4 de Julien Vasseur a quatre pneus neufs, sans une rayure. Le pick-up de la scierie, que Delorme n'a jamais rendu, porte sur le pneu avant gauche une entaille en V. Exactement celle que le labo a décrite.
+sinon si var.coupable == roussel
+  > Thomas te montre son briquet de la fête 2018 : il sert à allumer les bougies des tables du Relais, tous les soirs. Le maire, lui, fouille ses poches, ses tiroirs, de plus en plus vite. « Perdu. Il y a des mois. » Le labo est formel : le briquet du lavoir n'a passé qu'une nuit dans la vase.
+sinon
+  > Le maire sort son briquet de la fête 2018 de sa poche de veste, rayé, usé : il ne s'en sépare jamais. Thomas, lui, cherche le sien derrière le comptoir, puis renonce. « Je l'ai perdu. » Le labo est formel : le briquet du lavoir n'a passé qu'une nuit dans la vase.
+~ var.trace_comparee = vrai; objectifReussi(comparer); stat.methode += 1
+~ var.ind_helene += var.coupable == helene ? 1 : 0; var.ind_julien += var.coupable == julien ? 1 : 0; var.ind_roussel += var.coupable == roussel ? 1 : 0
+~ var.ind_ami += var.coupable == ami ? 1 : 0; var.ind_morel += var.coupable == morel ? 1 : 0; var.ind_delorme += var.coupable == delorme ? 1 : 0
+> La trace de l'étang a désormais un propriétaire. C'est un élément de plus au dossier.
+
+=== en_labo_arme
+titre: Les résultats de l'arme
+declencheur: scheduled
+unique: oui
+---
+!son telephone
+fabre: L'objet que vous m'avez envoyé a été nettoyé. Mal. Il reste du sang dans les rainures, et c'est celui d'Édouard Vasseur. La forme correspond parfaitement à la plaie. Vous tenez votre arme, lieutenant.
+~ var.arme_identifiee = vrai; stat.pression -= 10
+~ var.ind_helene += var.coupable == helene ? 1 : 0; var.ind_julien += var.coupable == julien ? 1 : 0; var.ind_roussel += var.coupable == roussel ? 1 : 0
+~ var.ind_ami += var.coupable == ami ? 1 : 0; var.ind_morel += var.coupable == morel ? 1 : 0; var.ind_delorme += var.coupable == delorme ? 1 : 0
+~ objectifReussi(arme)
+
+=== en_perquisition
+titre: La perquisition
+declencheur: activity:perquisition
+priorite: 1
+---
+!son telephone
+delmas: Une perquisition, lieutenant. {var.perquisitions == 0 ? 'Je vous en accorde deux en tout, pas une de plus.' : 'C’est la dernière.'} Et je veux au moins un élément concret contre la personne. Pas une intuition.
+> (Seuls les suspects contre qui tu as au moins un élément peuvent être visés.)
+* [var.ind_helene + var.faux_helene >= 1 et non var.perq_helene et var.brise_helene] Les affaires d'Hélène Vasseur, au manoir et dans la serre. ({var.ind_helene + var.faux_helene} élément{var.ind_helene + var.faux_helene > 1 ? 's' : ''}{var.brise_helene ? ', alibi brisé' : var.alibi_helene ? ', alibi confirmé' : ''}) #cible -> p_helene
+* [var.ind_helene + var.faux_helene >= 1 et non var.perq_helene et non var.brise_helene] Les affaires d'Hélène Vasseur, au manoir et dans la serre. ({var.ind_helene + var.faux_helene} élément{var.ind_helene + var.faux_helene > 1 ? 's' : ''}{var.brise_helene ? ', alibi brisé' : var.alibi_helene ? ', alibi confirmé' : ''}) -> p_helene
+* [var.ind_julien + var.faux_julien >= 1 et non var.perq_julien et var.brise_julien] La chambre de Julien Vasseur, et son 4x4. ({var.ind_julien + var.faux_julien} élément{var.ind_julien + var.faux_julien > 1 ? 's' : ''}{var.brise_julien ? ', alibi brisé' : var.alibi_julien ? ', alibi confirmé' : ''}) #cible -> p_julien
+* [var.ind_julien + var.faux_julien >= 1 et non var.perq_julien et non var.brise_julien] La chambre de Julien Vasseur, et son 4x4. ({var.ind_julien + var.faux_julien} élément{var.ind_julien + var.faux_julien > 1 ? 's' : ''}{var.brise_julien ? ', alibi brisé' : var.alibi_julien ? ', alibi confirmé' : ''}) -> p_julien
+* [var.ind_roussel + var.faux_roussel >= 1 et non var.perq_roussel et var.brise_roussel] Le domicile du maire. ({var.ind_roussel + var.faux_roussel} élément{var.ind_roussel + var.faux_roussel > 1 ? 's' : ''}{var.brise_roussel ? ', alibi brisé' : var.alibi_roussel ? ', alibi confirmé' : ''}) #cible -> p_roussel
+* [var.ind_roussel + var.faux_roussel >= 1 et non var.perq_roussel et non var.brise_roussel] Le domicile du maire. ({var.ind_roussel + var.faux_roussel} élément{var.ind_roussel + var.faux_roussel > 1 ? 's' : ''}{var.brise_roussel ? ', alibi brisé' : var.alibi_roussel ? ', alibi confirmé' : ''}) -> p_roussel
+* [var.ind_ami + var.faux_ami >= 1 et non var.perq_ami et var.brise_ami] Le Relais, et sa cave. ({var.ind_ami + var.faux_ami} élément{var.ind_ami + var.faux_ami > 1 ? 's' : ''}{var.brise_ami ? ', alibi brisé' : var.alibi_ami ? ', alibi confirmé' : ''}) #cible -> p_ami
+* [var.ind_ami + var.faux_ami >= 1 et non var.perq_ami et non var.brise_ami] Le Relais, et sa cave. ({var.ind_ami + var.faux_ami} élément{var.ind_ami + var.faux_ami > 1 ? 's' : ''}{var.brise_ami ? ', alibi brisé' : var.alibi_ami ? ', alibi confirmé' : ''}) -> p_ami
+* [var.ind_morel + var.faux_morel >= 1 et non var.perq_morel et var.brise_morel] Le cabinet et la voiture de la docteure Morel. ({var.ind_morel + var.faux_morel} élément{var.ind_morel + var.faux_morel > 1 ? 's' : ''}{var.brise_morel ? ', alibi brisé' : var.alibi_morel ? ', alibi confirmé' : ''}) #cible -> p_morel
+* [var.ind_morel + var.faux_morel >= 1 et non var.perq_morel et non var.brise_morel] Le cabinet et la voiture de la docteure Morel. ({var.ind_morel + var.faux_morel} élément{var.ind_morel + var.faux_morel > 1 ? 's' : ''}{var.brise_morel ? ', alibi brisé' : var.alibi_morel ? ', alibi confirmé' : ''}) -> p_morel
+* [var.ind_delorme + var.faux_delorme >= 1 et non var.perq_delorme et var.brise_delorme] La cabane de Marc Delorme, dans les bois. ({var.ind_delorme + var.faux_delorme} élément{var.ind_delorme + var.faux_delorme > 1 ? 's' : ''}{var.brise_delorme ? ', alibi brisé' : var.alibi_delorme ? ', alibi confirmé' : ''}) #cible -> p_delorme
+* [var.ind_delorme + var.faux_delorme >= 1 et non var.perq_delorme et non var.brise_delorme] La cabane de Marc Delorme, dans les bois. ({var.ind_delorme + var.faux_delorme} élément{var.ind_delorme + var.faux_delorme > 1 ? 's' : ''}{var.brise_delorme ? ', alibi brisé' : var.alibi_delorme ? ', alibi confirmé' : ''}) -> p_delorme
++ Finalement, ne rien demander pour l'instant. #prudent
+  ~ actions += 1
+  delmas (froid): Alors ne me dérangez pas pour rien.
+  -> fin
+@p_helene
+~ var.perq_helene = vrai; var.perquisitions += 1
+si var.coupable == helene
+  > Dans la serre, derrière les sacs de terreau, emballée dans un torchon : la canne à pommeau d'argent d'Édouard. Lavée, mais pas assez.
+  ~ var.arme_trouvee = vrai; var.arme_nom = "la canne d'Édouard"
+  helene (triste): … Il l'avait oubliée au salon. C'est tout ce que je dirai.
+  -> trouve
+sinon
+  -> rien
+@p_julien
+~ var.perq_julien = vrai; var.perquisitions += 1
+si var.coupable == julien
+  > Sous la roue de secours du 4x4, une clé en croix, javellisée jusqu'à en être blanche. Le reste de la caisse à outils est couvert de cambouis. Pas elle.
+  ~ var.arme_trouvee = vrai; var.arme_nom = "la clé en croix du 4x4"
+  julien (colere): Vous n'avez pas le droit ! C'est un outil, c'est tout ! Tout le monde a une clé dans sa voiture !
+  -> trouve
+sinon
+  -> rien
+@p_roussel
+~ var.perq_roussel = vrai; var.perquisitions += 1
+si var.coupable == roussel
+  > Dans le tiroir fermé à clé du bureau du maire, chez lui, enveloppé dans une écharpe tricolore : un buste de Marianne en bronze. Il manque un éclat au socle.
+  ~ var.arme_trouvee = vrai; var.arme_nom = "le buste de Marianne en bronze"
+  roussel (inquiet): C'est un cadeau de la préfecture. Il est tombé. Je voulais le faire réparer.
+  -> trouve
+sinon
+  -> rien
+@p_ami
+~ var.perq_ami = vrai; var.perquisitions += 1
+si var.coupable == ami
+  > Dans la cave du Relais, derrière les fûts de bière : la vieille batte de base-ball qui dormait sous le comptoir depuis vingt ans, « pour les cambrioleurs ». Elle a été poncée. Il reste du sang dans les rainures du manche.
+  ~ var.arme_trouvee = vrai; var.arme_nom = "la batte du Relais"
+  ami (triste): … Tu te souviens ? On jouait avec, sur le parking, quand on avait douze ans.
+  -> trouve
+sinon
+  -> rien
+@p_morel
+~ var.perq_morel = vrai; var.perquisitions += 1
+si var.coupable == morel
+  > Dans le coffre de la voiture de la docteure, sous la trousse d'urgence : une lampe torche en métal, lourde comme une matraque. La tête est cabossée.
+  ~ var.arme_trouvee = vrai; var.arme_nom = "la lampe torche de la docteure"
+  morel (froid): Je la garde pour les visites de nuit. Les routes sont mal éclairées, par ici.
+  -> trouve
+sinon
+  -> rien
+@p_delorme
+~ var.perq_delorme = vrai; var.perquisitions += 1
+si var.coupable == delorme
+  > Sous le plancher de la cabane, enveloppé dans une bâche : le merlin disparu de la scierie. Le manche de frêne est fendu, et le fer a été frotté au papier de verre.
+  ~ var.arme_trouvee = vrai; var.arme_nom = "le merlin de Delorme"
+  delorme (colere): Je l'ai pris pour fendre mon bois. C'est tout. Il est à moi, ce merlin, plus qu'à eux.
+  -> trouve
+sinon
+  -> rien
+@trouve
+!son tension
+> Tu tiens peut-être l'arme du crime. Il faut la faire analyser.
+~ objectif(arme, "Faire analyser l'arme au labo (ton poste de travail)")
+~ stat.pression -= 5
+@rien
+> Deux heures de fouille. Les tiroirs retournés, les placards vidés, les voisins aux fenêtres. Rien. Pas l'ombre d'une arme.
+~ stat.pression += 15; stat.confiance -= 6; stat.moral -= 5
+delmas (froid): Une perquisition pour rien, lieutenant. Le village va le savoir avant ce soir. Et moi, je l'ai déjà su.
+
+=== en_coffre
+titre: Derrière le portrait
+declencheur: activity:examiner_portrait
+quand: non var.carnet_noir
+priorite: 5
+---
+> Tu décroches le portrait d'Édouard. Derrière, encastré dans le mur : un petit coffre-fort à cadran. Quatre chiffres.
+si var.code_coffre
+  > Quatre chiffres. Pour un homme comme lui, une date. Une date qu'il ne pouvait pas oublier. Tu tapes 1-4-0-6. Le 14 juin. Le jour de l'accident de la scierie.
+  !son porte
+  > Clac. Dedans, un seul objet : un carnet de moleskine noir, bourré de notes. Les secrets de tout Saint-Rémy, classés par ordre alphabétique. Les dettes, les liaisons, les pots-de-vin. Ce que chacun devait à Édouard.
+  > Et, à la lettre M : « Morel, Paul. 14 juin 2004. J'ai fait retirer la sécurité de la scie pour gagner une heure de production. Personne ne doit savoir. Le rapport a été corrigé. »
+  > La dernière page date de samedi, de la main d'Édouard : « 22 h 30, lavoir. » Et en dessous, soulignée deux fois, une dernière ligne :
+  [var.coupable == helene] > « H. Trente-cinq ans pour oser me parler en face. Voyons ça. »
+  [var.coupable == julien] > « J. Encore de l'argent, évidemment. Pas un centime. »
+  [var.coupable == roussel] > « B. R. Qu'il vienne ramper. Lundi, tout le monde saura. »
+  [var.coupable == ami] > « [[ami:Le gamin|La gamine]] du Relais. Son café, c'est un trou à rats. Je signe lundi. »
+  [var.coupable == morel] > « C. M. La sœur du petit Morel. Elle croit avoir une preuve. Qu'elle essaie. »
+  [var.coupable == delorme] > « M. D. Le voleur. Qu'il vienne s'expliquer, je l'attends. »
+  ~ var.carnet_noir = vrai; objectifReussi(coffre); stat.intuition += 3
+  ~ var.ind_helene += var.coupable == helene ? 1 : 0; var.ind_julien += var.coupable == julien ? 1 : 0; var.ind_roussel += var.coupable == roussel ? 1 : 0
+  ~ var.ind_ami += var.coupable == ami ? 1 : 0; var.ind_morel += var.coupable == morel ? 1 : 0; var.ind_delorme += var.coupable == delorme ? 1 : 0
+sinon
+  > Tu essaies l'année de naissance d'Édouard, celle de son mariage, 0000, 1234. Rien. Il te faut le bon code. Quelqu'un, au village, doit savoir quelle date comptait pour lui.
+  ~ stat.intuition += 1
+
+=== ch1_obseques
+titre: Les obsèques
+declencheur: chapter_end
+chapitres: ch1
+---
+!lieu eglise 200 jour
+!placer cure 300 gauche
+> Vendredi, l'église Saint-Rémy est pleine à craquer. Tout le village est venu enterrer l'homme que tout le village détestait.
+cure: Édouard Vasseur n'était pas un homme facile. Que celui qui l'a aimé sans réserve lève la main. … Je m'en doutais.
+> Un rire nerveux parcourt les bancs. Tu observes les six visages que tu connais par cœur, maintenant.
+[var.coupable == helene ou var.leurre == helene] > Hélène Vasseur reste de marbre pendant toute la messe. Au cimetière, elle laisse tomber sa rose à côté du cercueil. Pas dessus.
+[var.coupable == julien ou var.leurre == julien] > Julien arrive en retard, les mains dans les poches. Il ne chante pas. Il regarde sans arrêt son téléphone, et sursaute quand il sonne.
+[var.coupable == roussel ou var.leurre == roussel] > Le maire lit l'éloge funèbre. Sa voix déraille deux fois. Il ne prononce jamais le prénom d'Édouard.
+[var.coupable == ami ou var.leurre == ami] > Thomas se tient au fond de l'église, près de la porte, comme s'il voulait pouvoir partir à tout moment. Il évite ton regard.
+[var.coupable == morel ou var.leurre == morel] > La docteure Morel n'entre pas dans l'église. Tu l'aperçois au cimetière, de loin, derrière la grille, son écharpe bordeaux serrée autour du cou.
+[var.coupable == delorme ou var.leurre == delorme] > Delorme reste dehors, sur les marches, sa casquette à la main. Quand le cercueil passe, il crache par terre.
+* Observer la foule, un visage après l'autre. #intuition
+  ~ stat.intuition += 3
+  > Deux personnes, ce matin, ne se comportent pas comme les autres. Tu notes leurs noms dans ton carnet.
+* Présenter tes condoléances à la famille, comme tout le monde. #village
+  ~ stat.confiance += 5; rel.helene += 3
+* Profiter que le manoir soit vide pour y retourner, seul[[|e]] et sans autorisation. #illegal
+  ~ var.illegal += 1; stat.pression += 12
+  test stat.methode vs 40
+  si reussite
+    > Personne ne te voit entrer. Dans le bureau d'Édouard, tu remarques ce qui t'avait échappé : le portrait au-dessus de la cheminée, légèrement de travers.
+    ~ var.piste_coffre = vrai
+    ~ objectif(coffre, "Ouvrir ce que cache le portrait d'Édouard, au manoir")
+  sinon
+    > Lucette Pradier te voit sortir par la porte de service. Le soir même, tout le village le sait.
+    ~ stat.confiance -= 8; stat.pression += 8
+> Six jours ont passé. Il en reste six.
+
+=== ch2_intro
+titre: Les six derniers jours
+declencheur: chapter_start
+chapitres: ch2
+---
+!son telephone
+delmas: Lieutenant. La presse nationale a débarqué, le maire m'appelle trois fois par jour, et la section de recherches de Lyon piaffe. Il vous reste six jours.
+si stat.pression >= 60
+  delmas (colere): Et je ne vous cache pas que votre façon de travailler commence à poser problème. Encore un faux pas, et je vous retire l'affaire.
+sinon
+  delmas: Vous travaillez proprement. Continuez. Mais trouvez-moi un nom.
+> À partir d'aujourd'hui, tu peux procéder à une arrestation depuis le tableau de la gendarmerie. Une seule. Il n'y aura pas de seconde chance.
+~ objectif(arrestation, "Arrêter le meurtrier avec un dossier solide : au moins trois éléments, et un alibi qui ne tient pas")
+
+=== en_dessaisi
+titre: L'appel de la procureure
+declencheur: tick_start
+quand: stat.pression >= 100 et var.accuse == ''
+unique: oui
+priorite: 20
+---
+!son telephone
+delmas (colere): C'est terminé, lieutenant. Les plaintes, la presse, les méthodes… Je vous retire l'affaire. La section de recherches arrive cet après-midi. Rendez votre carte d'accès à la gendarmerie et rentrez à Lyon.
+~ var.dessaisi = vrai
+~ fin(fin_dessaisi)
+
+=== en_arrestation
+titre: L'heure de l'arrestation
+declencheur: activity:arreter
+priorite: 1
+---
+appel en_choix_arrestation
+
+=== en_verdict
+titre: Le dernier soir
+declencheur: tick_end
+chapitres: ch2
+quand: temps.semaine >= 6 et var.accuse == ''
+unique: oui
+priorite: 10
+---
+!son telephone
+delmas: C'est le dernier soir, lieutenant. Demain, Lyon reprend l'affaire. Si vous avez un nom, c'est maintenant.
+appel en_choix_arrestation
+
+=== en_choix_arrestation
+titre: Un nom
+declencheur: manual
+---
+> Tu as six photos devant toi. Une seule arrestation possible. Si tu te trompes, un innocent paiera, et le coupable dormira tranquille.
+* [var.ind_helene + var.faux_helene >= 3 et non var.alibi_helene] Arrêter Hélène Vasseur. (Dossier solide.) #solide ~ var.accuse = "helene"; var.ind_accuse = var.ind_helene; var.solide = vrai -> arrestation
+* [var.ind_helene + var.faux_helene < 3 ou var.alibi_helene] Arrêter Hélène Vasseur. (Dossier fragile.) #intuition ~ var.accuse = "helene"; var.ind_accuse = var.ind_helene -> arrestation
+* [var.ind_julien + var.faux_julien >= 3 et non var.alibi_julien] Arrêter Julien Vasseur. (Dossier solide.) #solide ~ var.accuse = "julien"; var.ind_accuse = var.ind_julien; var.solide = vrai -> arrestation
+* [var.ind_julien + var.faux_julien < 3 ou var.alibi_julien] Arrêter Julien Vasseur. (Dossier fragile.) #intuition ~ var.accuse = "julien"; var.ind_accuse = var.ind_julien -> arrestation
+* [var.ind_roussel + var.faux_roussel >= 3 et non var.alibi_roussel] Arrêter Bernard Roussel, le maire. (Dossier solide.) #solide ~ var.accuse = "roussel"; var.ind_accuse = var.ind_roussel; var.solide = vrai -> arrestation
+* [var.ind_roussel + var.faux_roussel < 3 ou var.alibi_roussel] Arrêter Bernard Roussel, le maire. (Dossier fragile.) #intuition ~ var.accuse = "roussel"; var.ind_accuse = var.ind_roussel -> arrestation
+* [var.ind_ami + var.faux_ami >= 3 et non var.alibi_ami] Arrêter Thomas Girard. (Dossier solide.) #solide ~ var.accuse = "ami"; var.ind_accuse = var.ind_ami; var.solide = vrai -> arrestation
+* [var.ind_ami + var.faux_ami < 3 ou var.alibi_ami] Arrêter Thomas Girard. (Dossier fragile.) #intuition ~ var.accuse = "ami"; var.ind_accuse = var.ind_ami -> arrestation
+* [var.ind_morel + var.faux_morel >= 3 et non var.alibi_morel] Arrêter la docteure Claire Morel. (Dossier solide.) #solide ~ var.accuse = "morel"; var.ind_accuse = var.ind_morel; var.solide = vrai -> arrestation
+* [var.ind_morel + var.faux_morel < 3 ou var.alibi_morel] Arrêter la docteure Claire Morel. (Dossier fragile.) #intuition ~ var.accuse = "morel"; var.ind_accuse = var.ind_morel -> arrestation
+* [var.ind_delorme + var.faux_delorme >= 3 et non var.alibi_delorme] Arrêter Marc Delorme. (Dossier solide.) #solide ~ var.accuse = "delorme"; var.ind_accuse = var.ind_delorme; var.solide = vrai -> arrestation
+* [var.ind_delorme + var.faux_delorme < 3 ou var.alibi_delorme] Arrêter Marc Delorme. (Dossier fragile.) #intuition ~ var.accuse = "delorme"; var.ind_accuse = var.ind_delorme -> arrestation
++ [temps.semaine < 6] Pas encore. Il te manque des éléments. #prudent
+  ~ actions += 1
+  -> fin
++ [temps.semaine >= 6] Tu n'as pas de nom. Tu ne feras pas payer un innocent. #prudent
+  delmas (froid): Alors l'affaire sera classée. Ou Lyon trouvera quelqu'un. Rentrez chez vous, lieutenant.
+  ~ fin()
+  -> fin
+@arrestation
+!son tension
+si var.accuse == var.coupable
+  -> aveux
+sinon
+  -> erreur
+@aveux
+si var.solide
+  > Tu poses le dossier sur la table. Les éléments, un par un. L'alibi qui ne tient pas. Le silence dure longtemps.
+  si var.coupable == helene
+    helene (triste): Trente-cinq ans. Trente-cinq ans à sourire à ses invités, à taire ses maîtresses, à repasser ses chemises. Et il allait me jeter dehors comme une domestique. Je lui ai mis mes somnifères dans sa tisane, et je l'ai attendu au lavoir avec sa propre canne. Je voulais juste qu'il me regarde. Une fois.
+  sinon si var.coupable == julien
+    julien (triste): Je suis revenu le supplier. Ils allaient me tuer, vous comprenez ? Il a ri. Il a dit que j'étais la plus grande erreur de sa vie. J'avais la clé à la main, je venais de changer la roue sur ce maudit chemin… Je n'ai même pas réfléchi.
+  sinon si var.coupable == roussel
+    roussel (triste): Il allait tout révéler lundi. Les Prés-Hauts, l'argent, tout. Douze ans de mandat, ma femme, mes enfants. Je suis allé le supplier au lavoir, avec ce buste ridicule qu'il m'avait offert pour mon élection, pour le lui rendre. Il s'est moqué de moi. Et j'ai frappé.
+  sinon si var.coupable == ami
+    ami (triste): Tu veux savoir ? Le Relais, c'était mes parents. C'était nous, à quinze ans, à refaire le monde au comptoir. Il allait le vendre à un promoteur pour en faire des studios. Je suis allé lui parler. Il m'a dit : « Ton café, c'est un trou à rats. » Je ne voulais pas… Je te jure que je ne voulais pas.
+  sinon si var.coupable == morel
+    morel (froid): Vingt ans. Vingt ans que je soigne ses ouvriers, ses petits-enfants, sa femme, en sachant ce qu'il avait fait à Paul. Quand j'ai eu la preuve que la sécurité avait été retirée sur son ordre, je suis allée le voir. Il m'a répondu : « Et alors ? » Je lui avais donné un somnifère à sa consultation de jeudi. Le reste… le reste, vous le savez.
+  sinon
+    delorme (triste): Vingt-six ans. Vingt-six ans que je lui donnais mes mains, mon dos, mes dimanches. Le bois, c'est lui qui le volait, pour le revendre au noir, et c'est moi qu'il a accusé. Je suis allé le voir au lavoir, avec le merlin, pour lui faire peur. Juste pour lui faire peur.
+  * Lui passer les menottes. La loi est la loi. #devoir
+    ~ var.menottes = vrai
+    > Tu lis ses droits d'une voix que tu ne reconnais pas. Dehors, le village s'est rassemblé devant la gendarmerie.
+  * La laisser partir. Personne n'a besoin de savoir. #clemence
+    ~ var.laisse_partir = vrai
+    > Tu refermes le dossier. Tu ouvres la porte. Personne ne dit rien.
+sinon si var.ind_accuse >= 2 et non var.dernier_essai
+  > Ton dossier est incomplet : deux éléments, un alibi qui ne tient pas. Pas de quoi convaincre un juge. Alors tu joues ta dernière carte : le silence. Tu attends.
+  ~ var.dernier_essai = vrai
+  test stat.aplomb + stat.intuition / 2 vs 62
+  si reussite
+    > Une minute. Deux. À la troisième, quelque chose cède dans le regard en face de toi.
+    ~ var.solide = vrai
+    -> aveux
+  sinon
+    > Le silence dure. Puis une voix calme : « Je veux un avocat. » L'avocat arrive de Lyon deux heures plus tard, et sourit en lisant ton dossier.
+sinon
+  > Tu poses ton dossier sur la table. Il est mince. Trop mince.
+  si var.coupable == ami
+    ami (colere): C'est tout ce que tu as ? Après vingt ans d'amitié ? Je veux un avocat.
+  sinon
+    > Le suspect te regarde sans ciller, puis demande un avocat. L'avocat arrive de Lyon deux heures plus tard, et sourit en lisant ton dossier.
+~ fin()
+@erreur
+> Tu procèdes à l'arrestation sous les yeux de tout le village.
+si var.accuse == ami
+  ami (colere): Moi ? Tu me fais ça à moi ? Je n'ai tué personne ! Je te le jure sur la tête de mes parents !
+sinon si var.accuse == helene
+  helene (colere): Vous vous trompez. Et vous le savez, au fond de vous.
+sinon si var.accuse == julien
+  julien (colere): Je n'étais même pas là ! J'étais à Lyon ! Vérifiez !
+sinon si var.accuse == roussel
+  roussel (colere): Vous allez le regretter. Je vous garantis que vous allez le regretter.
+sinon si var.accuse == morel
+  morel (froid): Je l'ai haï pendant vingt ans. Mais je ne l'ai pas tué. Vous venez de laisser filer celui qui l'a fait.
+sinon
+  delorme (colere): Évidemment. Le braconnier. Le pauvre type. C'était écrit d'avance.
+~ fin()

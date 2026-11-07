@@ -299,12 +299,12 @@ noe (content): Psst ! Tu dors ? On dit qu'il y a un passage secret derrière la 
   * Pardon. C'est de ma faute, c'est moi qui ai insisté. #loyal
     ~ rel.noe += 8; rel.orin += 4
     orin (content): Courageux. J'aime ça. Allez, filez. Je n'ai rien vu.
-    ~ souvenir(orin, couvert, "Il t'a couvert la nuit où tu es sorti du dortoir")
+    ~ souvenir(orin, couvert, "Il t'a [[couvert|couverte]] la nuit où tu es [[sorti|sortie]] du dortoir")
     ~ var.dette_orin = vrai
   * On cherchait juste le passage secret.
     ~ rel.orin += 6
     orin (rire): Le passage ? Il ne s'ouvre qu'avec un mot de passe. Un jour, je vous le dirai peut-être. Filez.
-    ~ souvenir(orin, couvert, "Il t'a couvert la nuit où tu es sorti du dortoir")
+    ~ souvenir(orin, couvert, "Il t'a [[couvert|couverte]] la nuit où tu es [[sorti|sortie]] du dortoir")
     ~ var.dette_orin = vrai
   * (Prendre Noé par le bras et s'enfuir en courant) #ruse
     test stat.ruse vs 28

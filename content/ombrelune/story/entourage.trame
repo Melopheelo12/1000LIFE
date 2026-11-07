@@ -1,0 +1,497 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ENTOURAGE — la famille (père, petit frère ou petite sœur, aîné·e),
+//  le couple (prétendant, disputes, rupture, réconciliation)
+//  et les amitiés (secrets trahis, mauvais coups, conséquences différées).
+//  Les proches facultatifs sont protégés par present(id).
+// ═══════════════════════════════════════════════════════════════════════
+
+// ─── Le père ────────────────────────────────────────────────────────────
+
+=== fa_pere_mot
+titre: Un mot dans la malle
+declencheur: tick_end
+chapitres: ch1
+quand: present(pere) et temps.semaine == 1
+unique: oui
+priorite: 6
+---
+> En rangeant ta malle, tu trouves un papier plié en quatre, glissé entre deux pulls.
+> « Je ne sais pas faire de magie. Mais je sais réparer les choses. Si quelque chose se casse là-bas, écris-moi. — Papa »
+* (Garder le mot dans la poche de ta robe) #famille
+  ~ rel.pere += 6; stat.moral += 4
+  ~ souvenir(pere, mot, "Tu as gardé son mot dans la poche de ta robe")
+* (Lui répondre tout de suite) #famille
+  ~ rel.pere += 4; rel.claire += 2
+  > Tu lui racontes la barque, le lac qui parle, le grand hall. Tu oublies de dire que tu as eu peur.
+
+=== fa_pere_visite
+titre: Papa au village
+declencheur: enter:village
+chapitres: ch2
+quand: present(pere)
+unique: oui
+priorite: 6
+---
+!placer pere 220 gauche
+> Au milieu des étals de Pierrelune, une silhouette familière tourne sur elle-même, éberluée devant un marchand de plumes qui écrivent toutes seules. Ton père.
+pere (content): J'ai pris trois diligences et une barque qui parlait. Elle m'a demandé mon signe astrologique. Je n'en ai aucune idée.
+* Lui montrer un sort, là, tout de suite. #magie
+  !fx magie moi
+  > Une pluie d'étincelles bleues tombe autour de vous. Ton père rit comme un enfant. Les marchands applaudissent.
+  ~ rel.pere += 8; stat.moral += 6
+  ~ souvenir(pere, sort, "Tu lui as montré un sort au marché de Pierrelune")
+* L'emmener boire un chocolat chez Marthe. #famille
+  > Vous parlez deux heures. De la maison, du chien du voisin, de tout sauf de magie. C'est exactement ce qu'il te fallait.
+  ~ rel.pere += 6; stat.moral += 8; stat.energie += 5
+* (Faire semblant de ne pas le connaître : Séraphine et sa bande arrivent) #honte
+  ~ rel.pere -= 10; stat.reputation += 2
+  ~ souvenir(pere, honte, "Tu as eu honte de lui devant les autres élèves")
+  > Il comprend tout de suite. Il pose son sac de pommes sur un banc, pour toi, et repart sans un mot.
+~ var.pere_visite = vrai
+
+=== fa_parents_dispute
+titre: Une lettre trop longue
+declencheur: tick_end
+chapitres: ch3
+quand: present(pere) et temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+> Une lettre de ta mère, plus longue que d'habitude, et l'écriture qui tremble.
+> « L'atelier a fermé. Ton père cherche du travail. On se dispute pour des bêtises, c'est la fatigue. Ne t'inquiète surtout pas, mon trésor. »
+* [stat.ecus >= 20] Leur envoyer tes économies. #famille
+  ~ stat.ecus -= 20; rel.claire += 6; rel.pere += 6; var.aide_famille = vrai
+  ~ souvenir(pere, ecus, "Tu as envoyé tes économies quand l'atelier a fermé")
+* Écrire à ton père, rien qu'à lui. #famille
+  > « Tu m'as dit que tu savais réparer les choses. Tu vas trouver. Je le sais. »
+  ~ rel.pere += 8; stat.moral -= 2
+* (Ranger la lettre et ne pas y penser) #indifference
+  ~ rel.claire -= 3; rel.pere -= 3; stat.moral -= 3
+
+// ─── Le petit frère ou la petite sœur ───────────────────────────────────
+
+=== fa_cadet_dessin
+titre: Un dessin de la maison
+declencheur: random
+quand: present(cadet) et chapitre != ch5 et non var.cadet_arrive
+recharge: 6
+---
+> Dans la lettre de ta mère, un dessin aux feutres de [[cadet:ton petit frère|ta petite sœur]] : toi, en robe de sorcier, en train de combattre un dragon. Le dragon a des lunettes.
+> Au dos, en lettres énormes : « QUAND EST-CE QUE TU M'APPRENDS UN SORT ? »
+* Lui renvoyer un dessin qui bouge, grâce à un petit sort. #genereux
+  ~ rel.cadet += 6; stat.sortileges += 1
+  > Sur ton dessin, un dragon minuscule fait des loopings et crache des cœurs. Tu imagines déjà les cris de joie.
+* Lui promettre un sort pour l'été prochain. #promesse
+  ~ rel.cadet += 4; var.promesse_cadet = vrai
+  ~ souvenir(cadet, promesse, "Tu lui as promis de lui apprendre un sort")
+* Répondre trois mots, tu n'as pas le temps. #indifference
+  ~ rel.cadet -= 3
+
+=== fa_cadet_magie
+titre: Les assiettes volantes
+declencheur: tick_end
+chapitres: ch3
+quand: present(cadet) et temps.semaine >= 3
+unique: oui
+priorite: 6
+---
+> Une lettre de ta mère, toute de travers, comme écrite en courant.
+> « Au dîner, [[cadet:ton frère|ta sœur]] s'est mis[[cadet:|e]] en colère et TOUTES les assiettes se sont envolées. Une lettre d'Ombrelune est arrivée le lendemain. [[cadet:Il|Elle]] entre à l'école l'an prochain. Avec toi. »
+~ var.cadet_magie = vrai
+* Hurler de joie dans le dortoir. #famille
+  ~ rel.cadet += 5; stat.moral += 6
+* [var.voix_entendue] (Penser au grimoire, et écrire à l'Archimage pour qu'on veille sur [[cadet:lui|elle]]) #prudence
+  ~ var.cadet_protege = vrai; rel.halloran += 3; rel.cadet += 2
+  > La réponse arrive le soir même, d'une écriture fine : « Je veillerai. — C. H. »
+* (Tu étais l'unique mage de la famille. Plus maintenant.) #jalousie
+  ~ rel.cadet -= 6; stat.ombre += 2
+
+=== fa_cadet_arrivee
+titre: Une nouvelle première année
+declencheur: enter:salle_commune
+chapitres: ch4
+quand: present(cadet) et var.cadet_magie
+unique: oui
+priorite: 7
+---
+!placer cadet 200 gauche
+> Dans la salle commune, une toute petite silhouette en robe trop grande serre une malle contre [[cadet:lui|elle]]. Quand [[cadet:il|elle]] te voit, son visage s'illumine.
+cadet (content): C'est toi ! Tout le monde ici te connaît ! On m'a demandé si j'étais vraiment [[cadet:ton frère|ta sœur]] !
+~ var.cadet_arrive = vrai; rencontrer(cadet)
+* Lui faire visiter le château, passages secrets compris. #famille
+  ~ rel.cadet += 8; stat.energie -= 10
+  ~ souvenir(cadet, visite, "Tu lui as fait visiter le château le premier jour")
+* [non var.noe_perdu] Le présenter à Noé et à Ayla. #loyal
+  ~ rel.cadet += 5; rel.noe += 3; rel.ayla += 2
+  noe (rire): Encore un ? Ombrelune ne s'en remettra pas.
+* (Lui dire de rester loin de toi : c'est dangereux en ce moment) #prudence
+  ~ rel.cadet -= 6; var.cadet_protege = vrai
+  cadet (triste): …D'accord. Je croyais que tu serais content[[|e]].
+
+=== fa_cadet_menace
+titre: Un mot sous la porte
+declencheur: tick_end
+chapitres: ch4
+quand: present(cadet) et var.cadet_arrive et temps.semaine >= 3
+unique: oui
+priorite: 7
+---
+!moment nuit
+> Un parchemin noir glissé sous ta porte. Une écriture violette.
+> « [[cadet:Ton petit frère|Ta petite sœur]] est bien jeune pour se promener [[cadet:seul|seule]] dans les couloirs. Le cercle t'attend toujours. »
+* Confier [[cadet:ton frère|ta sœur]] à Gaspard : personne n'ose approcher sa cabane. #prudence
+  ~ var.cadet_protege = vrai; rel.gaspard += 4; rel.cadet += 2
+  gaspard (serieux): Personne ne touchera à [[cadet:ce petit|cette petite]]. Personne.
+* Montrer le mot à l'Archimage. #regle
+  ~ var.cadet_protege = vrai; rel.halloran += 3
+* (Ne rien dire, et ouvrir l'œil toi-même) #courage
+  ~ stat.courage += 2
+  [non var.cadet_protege] ~ planifier(fa_cadet_enleve, 1)
+* [stat.ombre >= 30] (Répondre au cercle : « Laissez [[cadet:le|la]] tranquille, et je viendrai. ») #ombre
+  ~ stat.ombre += 10; rel.malrik += 10; var.pacte_cadet = vrai; var.cadet_protege = vrai
+  > Le parchemin s'enflamme dans ta main. Une seule ligne, avant de disparaître : « Marché conclu. »
+
+=== fa_cadet_enleve
+titre: Disparu[[cadet:|e]]
+declencheur: scheduled
+quand: present(cadet)
+---
+!lieu foret 300 nuit
+> [[cadet:Ton petit frère|Ta petite sœur]] n'est pas rentré[[cadet:|e]] au dortoir. On a retrouvé une chaussure à l'orée de la forêt.
+> Tu cours. Entre les arbres, une lueur violette, et des silhouettes en robe noire autour d'une petite forme recroquevillée.
+test stat.courage + stat.duel / 2 vs 40 + temps.chapitre * 4
+si reussite
+  !fx sort moi
+  > Tu fonces dans le cercle sans réfléchir. Les silhouettes s'enfuient. [[cadet:Il|Elle]] se jette dans tes bras, en larmes, mais sans une égratignure.
+  ~ rel.cadet += 15; var.cadet_protege = vrai; stat.reputation += 4
+  ~ souvenir(cadet, sauvetage, "Tu es [[venu|venue]] [[cadet:le|la]] chercher dans la forêt")
+sinon
+  > Quand tu arrives, il est trop tard : les silhouettes ont disparu. [[cadet:Il|Elle]] est inconscient[[cadet:|e]], une marque noire sur le bras.
+  ~ var.cadet_blesse = vrai; rel.claire -= 10; stat.moral -= 12
+  > Ta mère t'écrit une seule phrase : « Tu devais [[cadet:le|la]] protéger. »
+
+=== fa_cadet_infirmerie
+titre: Au chevet
+declencheur: enter:infirmerie
+chapitres: ch4, ch5
+quand: present(cadet) et var.cadet_blesse
+unique: oui
+priorite: 7
+---
+!placer cadet 200 gauche
+!placer pell 320 gauche
+cadet (triste): Ils parlaient de toi. Ils disaient que tu finirais par les rejoindre. C'est pas vrai, hein ?
+* « Jamais. Je te le promets. » #lumiere
+  ~ rel.cadet += 10; stat.ombre -= 6
+  ~ souvenir(cadet, promesse_jamais, "Tu lui as promis de ne jamais rejoindre le cercle")
+* « Je vais leur faire payer. Tous. » #colere
+  ~ rel.cadet += 4; stat.ombre += 5; stat.duel += 2
+* (Lui tenir la main jusqu'à ce qu'[[cadet:il|elle]] s'endorme) #ecoute
+  ~ rel.cadet += 8; stat.moral += 3; stat.energie -= 10
+
+// ─── L'aîné·e ───────────────────────────────────────────────────────────
+
+=== fa_aine_lettre
+titre: Une lettre amère
+declencheur: tick_end
+chapitres: ch1, ch2
+quand: present(aine) et temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+> Une lettre de [[aine:ton grand frère|ta grande sœur]]. Courte. Sèche.
+> « Maman ne parle plus que de toi. Ombrelune par-ci, Ombrelune par-là. J'ai eu mon examen d'apprenti la semaine dernière. Personne n'a remarqué. »
+* Le féliciter, sincèrement, longuement. #famille
+  ~ rel.aine += 8
+  ~ souvenir(aine, felicitations, "Tu l'as [[aine:félicité|félicitée]] pour son examen d'apprenti")
+* [stat.ecus >= 10] Lui envoyer un cadeau du marché de Pierrelune. #genereux
+  ~ stat.ecus -= 10; rel.aine += 5
+* Lui raconter tes exploits magiques, pour [[aine:le|la]] faire rêver. #frime
+  ~ rel.aine -= 10; var.aine_brouille = vrai
+  > La réponse ne vient jamais.
+
+=== fa_aine_visite
+titre: Une visite inattendue
+declencheur: enter:village
+chapitres: ch3, ch4
+quand: present(aine)
+unique: oui
+priorite: 6
+---
+!placer aine 240 gauche
+> Assis[[aine:|e]] sur la fontaine de Pierrelune, les bras croisés, [[aine:ton grand frère|ta grande sœur]]. Personne ne t'avait prévenu[[|e]].
+aine: On raconte des trucs horribles au village. Des attaques, des élèves en robe noire. Je voulais… vérifier que tu allais bien. C'est tout.
+si rel.aine >= 15 et non var.aine_brouille
+  aine (emu): Et puis tu me manquais. Voilà. Je l'ai dit. Ne le répète à personne.
+* « Tu m'as manqué aussi. Plus que tu crois. » #sincere
+  ~ rel.aine += 12; var.aine_reconcilie = vrai; var.aine_brouille = faux
+  ~ souvenir(aine, fontaine, "Vous vous êtes [[réconciliés|réconciliées]] sur la fontaine de Pierrelune")
+  > Vous restez assis[[|es]] là jusqu'au soir, à vous lancer des cailloux dans la fontaine comme quand vous étiez petits.
+* « Tu ne m'as pas écrit depuis des mois. Et maintenant tu t'inquiètes ? » #colere
+  ~ rel.aine -= 8; var.aine_brouille = vrai
+  aine (colere): Laisse tomber. J'aurais pas dû venir.
+* (L'emmener voir les lucioles de la forêt, en cachette) #partage
+  ~ rel.aine += 8; stat.discipline -= 3
+  > Devant les lucioles, [[aine:il|elle]] ne dit rien pendant une heure. Puis : « D'accord. Je comprends pourquoi tu es là. »
+
+// ─── Le couple : un prétendant, des disputes, une rupture ───────────────
+
+=== dr_pretendant
+titre: Le pendentif
+declencheur: enter:cour
+chapitres: ch3, ch4
+quand: var.couple et temps.semaine >= 2
+unique: oui
+priorite: 6
+---
+!placer ayla 240 gauche
+!placer cael 300 gauche
+> Au milieu de la cour, Caël Dorne tend un pendentif en forme d'étoile à Ayla. Devant tout le monde. Devant toi.
+cael (content): Pour [[ayla:le plus beau voyant|la plus belle voyante]] d'Ombrelune. Il porte bonheur, paraît-il.
+~ var.pretendant = vrai; rencontrer(cael)
+* (Faire confiance à Ayla et attendre) #confiance
+  > Ayla regarde le pendentif, puis toi. [[ayla:Il|Elle]] le rend à Caël avec un sourire poli. « Garde-le pour quelqu'un d'autre. »
+  ~ rel.ayla += 6; var.confiance_couple = vrai; rel.cael -= 3
+  ~ souvenir(ayla, confiance, "Tu lui as fait confiance quand Caël lui a offert un pendentif")
+* Faire une scène, là, devant tout le monde. #jalousie
+  ~ rel.ayla -= 8; var.jaloux = vrai; rel.cael -= 5; stat.reputation -= 3
+  ayla (colere): Tu crois vraiment que j'allais accepter ? Tu me connais si mal que ça ?
+* Provoquer Caël en duel. #duel
+  test stat.duel vs 35 + temps.chapitre * 4
+  si reussite
+    !fx sort moi cael
+    > Caël finit assis dans la fontaine, son pendentif flottant à côté de lui. La cour éclate de rire.
+    ~ stat.reputation += 4; rel.cael -= 10; rel.ayla -= 2
+    ayla (pensif): C'était… impressionnant. Et complètement inutile.
+  sinon
+    !fx sort cael moi
+    > Tu te retrouves la tête dans les rosiers. Caël s'éloigne en riant. Ayla t'aide à te relever, [[ayla:mi-amusé, mi-agacé|mi-amusée, mi-agacée]].
+    ~ stat.moral -= 6; rel.ayla += 2; rel.cael += 2
+* Plaisanter avec Caël, beau joueur. #humour
+  moi: Joli pendentif. Mais [[ayla:il|elle]] préfère les étoiles en vrai.
+  ~ rel.cael += 5; rel.ayla += 3
+  cael (rire): Touché.
+
+=== dr_rumeur
+titre: Une rumeur
+declencheur: random
+chapitres: ch3, ch4, ch5
+quand: var.couple et var.pretendant
+unique: oui
+---
+> Dans les couloirs, on chuchote : Ayla et Caël auraient été vus ensemble, en pleine nuit, en haut de la tour ouest.
+* Demander directement à Ayla. #confiance
+  > [[ayla:Il|Elle]] soupire. « Il voulait que je lise son avenir. J'ai refusé. Il m'a [[ayla:suivi|suivie]] jusqu'en haut. Je l'ai laissé là. »
+  ~ rel.ayla += 5; var.confiance_couple = vrai
+* L'espionner la nuit suivante. #jalousie
+  > Tu te caches derrière un pilier de la tour. Ayla est [[ayla:seul|seule]], en train de dessiner les étoiles. [[ayla:Il|Elle]] lève la tête et te voit.
+  ~ rel.ayla -= 10; var.jaloux = vrai
+  ayla (triste): Tu m'espionnes, maintenant ?
+* Ignorer la rumeur. #indifference
+  ~ stat.moral -= 3
+
+=== dr_rdv_manque
+titre: Le rendez-vous oublié
+declencheur: random
+chapitres: ch3, ch4, ch5
+quand: var.couple
+unique: oui
+---
+> Tu te réveilles en sursaut. L'éclipse. Tu avais promis à Ayla de la regarder avec [[ayla:lui|elle]], en haut de la tour. Elle a commencé il y a une heure.
+* Courir jusqu'à la tour, en pyjama s'il le faut. #romance
+  > Tu arrives à bout de souffle, juste pour la fin. Ayla rit en voyant tes cheveux.
+  ~ stat.energie -= 15; rel.ayla += 1
+* T'excuser le lendemain, avec un bouquet de fleurs-cloches. #sincere
+  ~ stat.ecus -= 5; rel.ayla += 2
+  ayla (pensif): Elles sonnent faux. Mais c'est gentil.
+* (Ne pas en parler, en espérant qu'[[ayla:il|elle]] ait oublié) #fuite
+  ~ rel.ayla -= 6; var.rdv_manque = vrai
+
+=== dr_dispute
+titre: La dispute
+declencheur: tick_end
+chapitres: ch3, ch4, ch5
+quand: var.couple et (var.jaloux ou var.rdv_manque) et temps.semaine >= 2
+unique: oui
+priorite: 6
+---
+!lieu tour_ouest 180 nuit
+!placer ayla 240 gauche
+si var.jaloux
+  ayla (colere): Tu ne me fais pas confiance. Je le vois dans tes yeux chaque fois que quelqu'un me parle.
+sinon
+  ayla (triste): Tu n'es jamais là. Je te vois plus souvent dans mes visions qu'en vrai.
+~ var.dispute_couple = vrai
+* T'excuser sincèrement, sans chercher d'excuses. #sincere
+  ~ rel.ayla += 8; var.jaloux = faux; var.rdv_manque = faux
+  ayla (emu): …Merci. C'est tout ce que je voulais entendre.
+* Te défendre : tu fais de ton mieux. #fierte
+  ~ rel.ayla -= 10
+  ayla (colere): Ton mieux. D'accord.
+* [stat.ecus >= 15] Lui offrir le télescope de poche qu'[[ayla:il|elle]] regardait au marché. #genereux
+  ~ stat.ecus -= 15; rel.ayla += 5
+  ayla (pensif): Tu crois qu'un cadeau règle tout ? …Il est très beau, quand même.
+* « Peut-être qu'on devrait faire une pause. » #rupture
+  ~ var.couple = faux; var.ex_ayla = vrai; var.rupture = vrai; rel.ayla -= 15; stat.moral -= 10
+  ~ souvenir(ayla, pause, "Tu as proposé de faire une pause, en haut de la tour")
+  > Ayla hoche la tête lentement. [[ayla:Il|Elle]] ne pleure pas. [[ayla:Il|Elle]] l'avait vu, évidemment.
+
+=== dr_rupture
+titre: Plus dans mes visions
+declencheur: tick_end
+quand: var.couple et (rel.ayla < 30 ou (var.dispute_couple et (var.jaloux ou var.rdv_manque)))
+unique: oui
+priorite: 8
+---
+!placer ayla 240 gauche
+ayla (triste): Je ne nous vois plus. Dans mes visions, je veux dire. Avant, tu étais partout. Maintenant, il n'y a plus que du brouillard.
+* (L'accepter, même si ça fait mal) #maturite
+  ~ var.couple = faux; var.ex_ayla = vrai; var.rupture = vrai; rel.ayla += 3; stat.moral -= 12
+  ~ souvenir(ayla, rupture, "Vous vous êtes [[séparés|séparées]] sans vous déchirer")
+* ([[ayla:Le|La]] supplier de te laisser une chance) #supplier
+  test stat.courage + rel.ayla vs 35
+  si reussite
+    ayla (emu): Une. Une seule. Ne la gâche pas.
+    ~ rel.ayla += 10
+  sinon
+    ayla (triste): Je suis [[ayla:désolé|désolée]]. C'est trop tard.
+    ~ var.couple = faux; var.ex_ayla = vrai; var.rupture = vrai; rel.ayla -= 5; stat.moral -= 15
+
+=== dr_reconciliation
+titre: Une seconde chance
+declencheur: talk:ayla
+quand: var.ex_ayla et non var.couple et non var.ayla_noe et rel.ayla >= 35
+unique: oui
+priorite: 6
+---
+ayla (pensif): J'ai rêvé de nous, cette nuit. Pour la première fois depuis longtemps. On riait. Tu avais de la cire sur ta robe.
+* « On essaie encore ? » #romance
+  ~ var.couple = vrai; var.ex_ayla = faux; rel.ayla += 10; stat.moral += 10
+  ~ souvenir(ayla, retour, "Vous vous êtes [[retrouvés|retrouvées]] après la rupture")
+  ayla (content): On essaie. Et cette fois, je ne regarde pas la fin.
+* « Je crois qu'on est mieux en amis. » #honnete
+  ~ rel.ayla += 2; var.ayla_amie = vrai
+  ayla (triste): …Oui. Je crois aussi.
+
+=== dr_ex_et_noe
+titre: Noé et Ayla
+declencheur: tick_end
+chapitres: ch4, ch5
+quand: var.ex_ayla et non var.couple et non var.noe_perdu et rel.noe >= 20 et non var.ayla_noe
+unique: oui
+priorite: 5
+---
+!placer noe 220 gauche
+noe (inquiet): Il faut que je te dise un truc. Et tu vas peut-être me détester.
+noe (triste): Ayla et moi… on se voit. Depuis deux semaines. Je voulais te le dire avant que tu l'apprennes par quelqu'un d'autre.
+* « [[ayla:S'il|Si elle]] te rend heureux, alors je suis content[[|e]] pour vous. » #maturite
+  ~ rel.noe += 10; rel.ayla += 5; var.ayla_noe = vrai
+  ~ souvenir(noe, benediction, "Tu as accepté qu'il sorte avec Ayla")
+  noe (emu): T'es [[le meilleur ami|la meilleure amie]] du monde. Vraiment.
+* « Tu n'as pas perdu de temps. Merci, l'ami. » #colere
+  ~ rel.noe -= 20; rel.ayla -= 5; var.ayla_noe = vrai
+  ~ souvenir(noe, reproche, "Tu lui as reproché de sortir avec Ayla")
+  noe (triste): Je savais que tu réagirais comme ça.
+* (Ne rien répondre et partir) #fuite
+  ~ rel.noe -= 6; stat.moral -= 5; var.ayla_noe = vrai
+
+// ─── Les amitiés : secrets trahis et mauvais coups ──────────────────────
+
+=== dr_secret_trahi
+titre: Tout le monde sait
+declencheur: tick_end
+chapitres: ch3, ch4
+quand: var.voix_entendue et temps.semaine >= 2
+unique: oui
+priorite: 5
+---
+> Au petit-déjeuner, les conversations s'arrêtent quand tu passes. Quelqu'un ricane : « Attention, voilà [[celui|celle]] qui entend des voix ! »
+~ var.secret_trahi = vrai; stat.reputation -= 4
+si rel.noe < 30 et non var.noe_perdu
+  !placer noe 220 gauche
+  > Tu comprends vite d'où ça vient. Noé baisse les yeux quand tu t'assois en face de lui.
+  noe (triste): J'en ai parlé à Tobias. Juste à lui. J'étais jaloux de toi, ce jour-là, et… je suis désolé.
+  ~ var.traitre_noe = vrai
+  * Lui pardonner. Tout le monde fait des erreurs. #pardon
+    ~ rel.noe += 6
+    ~ souvenir(noe, pardon, "Tu lui as pardonné d'avoir révélé ton secret")
+  * Lui dire que c'est fini, vous deux. #rancune
+    ~ rel.noe -= 20
+    ~ souvenir(noe, rancune, "Tu as coupé les ponts quand il a révélé ton secret")
+  * Te venger : ensorceler sa brioche du matin. #vengeance
+    test stat.ruse vs 30
+    si reussite
+      > Toute la journée, Noé croasse au lieu de parler. Tobias en pleure de rire. Toi, un peu moins que prévu.
+      ~ rel.noe -= 10; stat.ruse += 2
+    sinon
+      > Sélène te surprend la baguette à la main. Avertissement.
+      ~ rel.noe -= 6; var.avertissements += 1; stat.discipline -= 5
+sinon
+  !placer tobias 220 gauche
+  > C'est Tobias. Il t'a entendu[[|e]] parler dans ton sommeil, et il en a fait une histoire pour toute l'école.
+  * En rire avec les autres : « Oui, et elles me disent que tu ronfles. » #humour
+    ~ stat.reputation += 5; rel.tobias -= 2
+  * Le provoquer en duel dans la cour. #duel
+    test stat.duel vs 30 + temps.chapitre * 4
+    si reussite
+      ~ rel.tobias -= 8; stat.reputation += 3; var.duel_victoires += 1
+      > Tobias s'excuse, de très mauvaise grâce, assis dans la boue.
+    sinon
+      ~ stat.moral -= 5; var.duel_defaites += 1
+  * Demander à Séraphine de le faire taire : il lui obéit. #ruse
+    ~ rel.sera += 3; rel.tobias -= 4
+    sera (fier): Il ne dira plus rien. Tu me dois un service.
+
+=== dr_mauvais_coup
+titre: Le concours de potions
+declencheur: activity:preparer_potion
+chapitres: ch2, ch3
+quand: non var.noe_perdu
+unique: oui
+priorite: 6
+---
+!placer noe 160 droite
+!placer sera 300 gauche
+> Concours de potions de fin de mois. Ta potion vire au gris. Sur la paillasse voisine, celle de Noé est parfaite, d'un bleu de nuit. Il vient de partir chercher des ingrédients.
+> Varn a le dos tourné. Personne ne regarde.
+* (Échanger vos chaudrons) #trahison
+  ~ var.coup_noe = vrai; var.points_classe += 3; stat.reputation += 3; stat.moral -= 2
+  ~ planifier(dr_coup_decouvert, 3)
+  > Varn goûte ta potion et hoche la tête. Noé revient, regarde la sienne, devenue grise, et ne comprend pas.
+* (Glisser une pincée de poudre d'éternuement dans le chaudron de Séraphine) #ruse
+  ~ var.coup_sera = vrai; var.points_classe += 1
+  ~ planifier(dr_coup_decouvert, 3)
+  > Séraphine éternue quarante fois de suite. Sa potion déborde. Tu termines deuxième.
+* (Rater honnêtement) #honnete
+  ~ stat.potions += 1; rel.varn += 2
+  varn: Raté. Mais au moins, c'est votre échec à vous.
+
+=== dr_coup_decouvert
+titre: Ce qu'on finit par savoir
+declencheur: scheduled
+---
+si var.coup_noe et non var.noe_perdu
+  test stat.ruse vs 45
+  si reussite
+    > Noé n'a jamais compris ce qui était arrivé à sa potion. Il en parle encore parfois, en riant. Toi, tu ne ris pas.
+    ~ stat.moral -= 4
+  sinon
+    !placer noe 220 gauche
+    noe (colere): Tobias t'a vu[[|e]]. Au concours. Tu as échangé nos chaudrons.
+    noe (triste): De toi, je pouvais tout imaginer. Sauf ça.
+    ~ rel.noe -= 25
+    ~ souvenir(noe, trahison, "Tu as échangé vos chaudrons au concours de potions")
+    * Tout avouer et t'excuser, vraiment. #sincere
+      ~ rel.noe += 10; var.coup_avoue = vrai; var.points_classe -= 3
+      noe: …Je vais avoir besoin de temps.
+    * Nier en bloc. #mensonge
+      ~ rel.noe -= 10; stat.ruse += 1
+sinon si var.coup_sera
+  test stat.ruse vs 40
+  si reussite
+    > Séraphine accuse Tobias pour la poudre d'éternuement. Il nie. Personne ne le croit. Toi, tu te tais.
+  sinon
+    !placer sera 220 gauche
+    sera (colere): La poudre d'éternuement. C'était toi. Tu le paieras, et devant tout le monde.
+    ~ rel.sera -= 20; stat.reputation -= 5
+    ~ souvenir(sera, poudre, "Tu as saboté sa potion au concours")

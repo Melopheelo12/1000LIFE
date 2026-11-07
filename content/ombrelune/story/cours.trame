@@ -25,7 +25,7 @@ priorite: 6
 !placer selene 300 gauche
 selene (surpris): Attends, refais ça.
 > Tu refais le geste. Une sphère de lumière dorée naît au bout de ta baguette et flotte au-dessus du cercle.
-selene (emu): Un Soleil Captif. On ne l'enseigne qu'en dernière année. Tu l'as trouvé tout seul.
+selene (emu): Un Soleil Captif. On ne l'enseigne qu'en dernière année. Tu l'as trouvé [[tout seul|toute seule]].
 ~ var.sorts += 1; stat.reputation += 5; rel.selene += 8; stat.sortileges += 3
 
 === co_potion_explosion
@@ -208,7 +208,7 @@ quand: stat.ombre >= 35
 unique: oui
 priorite: 6
 ---
-> Tu lèves les yeux du grimoire. Il fait nuit. Tu étais venu à midi. Et tu ne te souviens de rien.
+> Tu lèves les yeux du grimoire. Il fait nuit. Tu étais [[venu|venue]] à midi. Et tu ne te souviens de rien.
 > Sur ton bras, une marque noire en forme de lettre que tu ne sais pas lire.
 ~ stat.moral -= 8; var.marque = vrai
 * (Cacher la marque sous ta manche)

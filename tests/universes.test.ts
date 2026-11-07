@@ -8,6 +8,7 @@ import { validateUniverse } from '../src/core/runtime/validate';
 import { compileUniverse } from '../src/core/runtime/compile';
 import { simulate, type Persona } from '../src/core/runtime/simulate';
 import { GameSession } from '../src/core/runtime/session';
+import { StoryRunner, type Step } from '../src/core/runtime/runner';
 import { loadUniverseFolder } from '../tools/build-content';
 import { testUniverse } from './fixtures';
 
@@ -18,7 +19,7 @@ const load = (id: string) => {
   return def;
 };
 
-for (const id of ['football', 'ombrelune']) {
+for (const id of ['football', 'ombrelune', 'rappeur', 'enquete']) {
   test(`univers « ${id} » : aucune erreur ni avertissement`, () => {
     const rep = validateUniverse(load(id));
     const list = rep.issues.map((i) => `${i.severity} ${i.where}: ${i.msg}`).join('\n');
@@ -82,4 +83,56 @@ test('validation : une porte verrouillée vers un lieu ouvert sur la carte est s
   b.when = 'var.cle';
   const msgs2 = validateUniverse(def).issues.map((i) => i.msg).join('\n');
   assert.doesNotMatch(msgs2, /reste accessible depuis la carte/);
+});
+
+/** Joue un événement jusqu'au bout (premier choix disponible) et renvoie ses répliques. */
+function playLines(g: GameSession, id: string): string[] {
+  const r = new StoryRunner(g, true);
+  r.start(id);
+  const out: string[] = [];
+  for (let i = 0; i < 300; i++) {
+    const st: Step = r.next();
+    if (st.type === 'end') break;
+    if (st.type === 'line') out.push(st.text);
+    if (st.type === 'choices') r.choose(st.options.find((o) => o.enabled)!.index);
+  }
+  return out;
+}
+
+test('entourage : chaque univers propose famille, amis, rival et amour personnalisables', () => {
+  for (const id of ['football', 'ombrelune', 'rappeur', 'enquete']) {
+    const slots = load(id).creation?.cast ?? [];
+    const groups = new Set(slots.map((s) => s.group));
+    assert.ok(groups.has('Famille') && groups.has('Amis et rivaux') && groups.has('Cœur'), id);
+    assert.ok(slots.some((s) => s.genderChoice && s.group === 'Cœur'), `${id} : genre de l'amour au choix`);
+    assert.ok(slots.some((s) => s.optional), `${id} : proches facultatifs`);
+  }
+});
+
+test('entourage : prénoms et accords appliqués au vrai texte des histoires', () => {
+  const om = compileUniverse(load('ombrelune'));
+  const g = GameSession.create(om, { name: 'Lou', gender: 'f', seed: 2, cast: { ayla: { name: 'Aylan', genre: 'h' }, noe: { name: 'Sacha' } } });
+  const aveu = playLines(g, 'ch3_ayla_aveu').join('\n');
+  assert.match(aveu, /Aylan est là, comme s'il t'attendait\./);
+  assert.doesNotMatch(aveu, /Ayla\b|\[\[/);
+  assert.equal(g.charName('noe'), 'Sacha Lambert');
+  const foot = compileUniverse(load('football'));
+  const f = GameSession.create(foot, { name: 'Inès', gender: 'f', seed: 2, cast: { yanis: { name: 'Yasmine', genre: 'f' }, maman: { name: 'Fatima' } } });
+  const intro = playLines(f, 'intro').join('\n');
+  assert.match(intro, /Ta sœur t'a fait ça\. Elle a passé la soirée dessus\./);
+  assert.match(intro, /MA SŒUR LA CHAMPIONNE/);
+  assert.doesNotMatch(intro, /\[\[|\{/);
+});
+
+test('entourage : sans les proches facultatifs, leurs scènes ne se déclenchent jamais', async () => {
+  for (const id of ['ombrelune', 'football', 'rappeur', 'enquete']) {
+    const def = load(id);
+    const u = compileUniverse(def);
+    const absent = Object.fromEntries((def.creation?.cast ?? []).filter((s) => s.optional).map((s) => [s.id, { absent: true }]));
+    const g = GameSession.create(u, { name: 'Lou', seed: 9, cast: absent });
+    for (const ev of u.events.values()) {
+      const mentions = (def.creation?.cast ?? []).some((s) => s.optional && (ev.def.when ?? '').includes(`present(${s.id})`));
+      if (mentions) assert.equal(g.isEligible(ev), false, `${id} : ${ev.def.id} ne doit pas être possible`);
+    }
+  }
 });

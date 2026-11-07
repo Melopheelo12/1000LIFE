@@ -1,0 +1,338 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ENTOURAGE — la famille (père, aîné·e), le couple (prétendant, photos,
+//  disputes, rupture, retour) et les amitiés (trahisons, mauvais coups).
+//  Les proches facultatifs sont protégés par present(id).
+// ═══════════════════════════════════════════════════════════════════════
+
+// ─── Le père ────────────────────────────────────────────────────────────
+
+=== fa_papa_appel
+titre: Une voix sur l'autoroute
+declencheur: activity:appeler_maman
+quand: present(papa)
+unique: oui
+priorite: 6
+---
+> Ce n'est pas ta mère qui décroche. C'est ton père, depuis une aire d'autoroute. On entend les camions passer derrière lui.
+papa (content): J'ai écouté le match de la réserve à la radio. Enfin, la fin. Le réseau coupait dans les tunnels.
+* Lui avouer que tu doutes, que tu as peur de ne pas y arriver. #sincere
+  papa (pensif): Moi aussi j'avais peur, à ton âge. La différence, c'est que toi, tu as quelque chose à rater. C'est une chance.
+  ~ rel.papa += 8; stat.mental += 2
+  ~ souvenir(papa, aire, "Tu lui as confié tes doutes, un soir, au téléphone")
+* Lui raconter ton plus beau but, en rajoutant un peu. #frime
+  ~ rel.papa += 4; stat.confiance += 3
+  papa (rire): Trois défenseurs ? La dernière fois, c'était deux.
+* Écourter : tu es fatigué[[|e]]. #indifference
+  ~ rel.papa -= 4
+
+=== fa_papa_maillot
+titre: Le maillot
+declencheur: activity:voir_famille
+chapitres: ch2, ch3
+quand: present(papa)
+unique: oui
+priorite: 6
+---
+!placer papa 220 gauche
+> À table, ton père porte ton maillot. Ton nom dans le dos, ton numéro. Il est deux tailles trop petit.
+papa (fier): Je l'ai acheté à la boutique du stade. Au prix fort. Je n'ai pas voulu qu'on me le donne.
+* Le prendre dans tes bras. #famille
+  ~ rel.papa += 8; stat.moral += 6
+  ~ souvenir(papa, maillot, "Il porte ton maillot, acheté au prix fort")
+* Lui en offrir un autre, signé, à sa taille. #genereux
+  ~ rel.papa += 6; rel.maman += 2
+* (Te moquer de lui devant Yanis) #moquerie
+  ~ rel.papa -= 6; rel.yanis += 2
+  > Il rit avec vous. Mais il ne remet plus jamais le maillot.
+
+=== fa_papa_camion
+titre: Le camion
+declencheur: tick_end
+chapitres: ch3, ch4
+quand: present(papa) et temps.semaine >= 2
+unique: oui
+priorite: 4
+---
+> Ton père t'appelle, gêné. Il tourne autour du pot pendant cinq minutes.
+papa (inquiet): Il y a un camion à vendre. Un bon. Si je l'avais, je serais mon propre patron. Fini les nuits pour les autres. Mais la banque ne veut pas…
+* [stat.argent >= 20000] Le lui offrir. #famille
+  ~ stat.argent -= 20000; rel.papa += 15; var.aide_papa = vrai
+  ~ souvenir(papa, camion, "Tu lui as offert son camion")
+* [stat.argent >= 20000] Le lui prêter, avec un vrai contrat. #prudent
+  ~ stat.argent -= 20000; rel.papa += 6; var.aide_papa = vrai
+  papa (pensif): Un contrat. Avec mon propre enfant. …Tu as raison. C'est plus propre.
+* Refuser : ce n'est pas le moment. #dur
+  ~ rel.papa -= 8
+  papa (triste): Je comprends. Oublie ce que j'ai dit.
+
+// ─── L'aîné·e ───────────────────────────────────────────────────────────
+
+=== fa_aine_city
+titre: Un contre un
+declencheur: activity:foot_quartier
+chapitres: ch1, ch2
+quand: present(aine)
+unique: oui
+priorite: 6
+---
+!placer aine 240 gauche
+> Au city, [[aine:ton grand frère|ta grande sœur]] t'attend, le ballon sous le bras. Comme avant.
+aine: Un contre un. Le premier à trois. Montre-moi ce qu'ils t'apprennent, au centre.
+test stat.technique + stat.physique / 4 vs 50
+si reussite
+  > Trois buts à un. [[aine:Il|Elle]] reste longtemps les mains sur les genoux.
+  aine (triste): Avant, c'est moi qui gagnais. Toujours.
+sinon
+  > Trois buts à deux. Pour [[aine:lui|elle]]. [[aine:Il|Elle]] lève les bras comme en finale de Coupe du monde.
+  aine (rire): Le centre de formation, hein ? Je leur dirai.
+* « Tu aurais pu passer pro, toi aussi. » #sincere
+  aine (emu): …On avait besoin d'argent. Quelqu'un devait travailler. C'est tombé sur moi.
+  ~ rel.aine += 10
+  ~ souvenir(aine, city, "Tu lui as dit qu'[[aine:il|elle]] aurait pu passer pro")
+* « Tu as toujours été mauvais[[aine:|e]] perdant[[aine:|e]]. » #provoc
+  ~ rel.aine -= 6
+* Lui proposer de revenir jouer chaque semaine. #famille
+  ~ rel.aine += 6; stat.physique += 1
+
+=== fa_aine_dette
+titre: Ce que maman ne disait pas
+declencheur: tick_end
+chapitres: ch3, ch4
+quand: present(aine) et temps.semaine >= 3
+unique: oui
+priorite: 4
+---
+!placer maman 200 gauche
+maman (inquiet): Je ne devrais pas te le dire. [[aine:Ton frère|Ta sœur]] doit de l'argent. À des gens du bâtiment D. Beaucoup. [[aine:Il|Elle]] ne dort plus.
+* [stat.argent >= 15000] Payer la dette, sans rien lui dire. #genereux
+  ~ stat.argent -= 15000; rel.maman += 6; rel.aine += 8; var.aine_aide = vrai
+  > Une semaine plus tard, un message : « C'est toi, hein ? Je te rembourserai. Promis. »
+* Lui trouver un travail au club, à l'intendance. #famille
+  ~ rel.aine += 12; var.aine_aide = vrai
+  ~ souvenir(aine, travail, "Tu lui as trouvé un travail au club")
+  aine (emu): Je ne te demandais rien. …Merci.
+* Refuser de t'en mêler : [[aine:il|elle]] est [[aine:majeur|majeure]]. #dur
+  ~ rel.aine -= 10; rel.maman -= 6; var.aine_brouille = vrai
+
+=== fa_aine_billets
+titre: La boîte à chaussures
+declencheur: activity:voir_famille
+chapitres: ch4, ch5
+quand: present(aine) et rel.aine >= 20
+unique: oui
+priorite: 6
+---
+!placer aine 240 gauche
+> [[aine:Ton grand frère|Ta grande sœur]] pose une vieille boîte à chaussures sur la table. Dedans : les billets de tous tes matchs. Tous. Même ceux de la réserve.
+aine (pensif): J'étais dans les tribunes. Chaque fois. Je ne te l'ai jamais dit.
+* (Ne rien dire, et [[aine:le|la]] serrer dans tes bras) #famille
+  ~ rel.aine += 12; var.aine_reconcilie = vrai; var.aine_brouille = faux
+  ~ souvenir(aine, billets, "Tu as découvert qu'[[aine:il|elle]] gardait les billets de tous tes matchs")
+* Lui offrir une place à vie, au premier rang. #genereux
+  ~ rel.aine += 8; var.aine_reconcilie = vrai
+
+// ─── Le couple ──────────────────────────────────────────────────────────
+
+=== dr_f_pretendant
+titre: Le charmeur du vestiaire
+declencheur: enter:boite
+chapitres: ch2, ch3, ch4
+quand: var.couple
+unique: oui
+priorite: 6
+---
+!placer ines 230 gauche
+!placer theo 300 gauche
+> Soirée du club. Théo Garnier, l'ailier qui poste plus de photos que de passes décisives, s'est installé à côté d'Inès. Trop près. Il [[ines:le|la]] fait rire.
+theo (content): Tu sais que tu pourrais faire mannequin ? Sérieux. Je connais du monde.
+~ var.pretendant = vrai; rencontrer(theo)
+* (Faire confiance à Inès et aller chercher à boire) #confiance
+  > Quand tu reviens, Théo est parti. Inès hausse les épaules : « Il m'a montré ses abdos sur son téléphone. Pendant dix minutes. »
+  ~ rel.ines += 6; var.confiance_couple = vrai; rel.theo -= 2
+  ~ souvenir(ines, confiance, "Tu lui as fait confiance face à Théo")
+* Lui dire de dégager, devant tout le monde. #jalousie
+  ~ rel.ines -= 8; var.jaloux = vrai; rel.theo -= 8; stat.discipline -= 3
+  ines (colere): Je n'ai pas besoin qu'on me défende. Surtout pas comme ça.
+* Le recadrer froidement, entre joueurs. #mental
+  test stat.mental vs 45
+  si reussite
+    moi: Théo. Demain, à l'entraînement, essaie de faire rire le gardien adverse plutôt.
+    > Théo s'en va, vexé. Inès cache son sourire derrière son verre.
+    ~ rel.ines += 3; rel.theo -= 6; stat.statut += 1
+  sinon
+    > Le ton monte. Un coéquipier doit vous séparer. Le lendemain, Moreau vous convoque tous les deux.
+    ~ stat.discipline -= 6; rel.theo -= 10; rel.ines -= 3
+* En rire avec lui : « Mannequin ? [[ines:Il|Elle]] a des examens à réviser. » #humour
+  ~ rel.theo += 5; rel.ines += 2
+
+=== dr_f_photo
+titre: La photo
+declencheur: random
+chapitres: ch3, ch4, ch5
+quand: var.couple
+unique: oui
+poids: 4
+---
+> Un site people publie une photo de toi, au gala du club, une main autour de la taille d'une influenceuse. Le titre : « Le nouveau couple du foot ? »
+> Tu ne l'as vue que trente secondes. Le temps d'une photo.
+* Appeler Inès immédiatement pour tout expliquer. #sincere
+  ines (pensif): Je sais comment marchent ces sites. Mais la prochaine fois, appelle-moi avant que je le découvre sur mon téléphone.
+  ~ rel.ines += 2; var.confiance_couple = vrai
+* Publier un démenti public, avec une photo de vous deux. #communication
+  ~ rel.ines += 4; stat.notoriete += 3
+  ines (rire): Tu aurais pu choisir une photo où je n'ai pas les yeux fermés.
+* (Ne rien dire : ça passera) #indifference
+  ~ rel.ines -= 10; var.photo_presse = vrai
+  > Ça ne passe pas.
+
+=== dr_f_rdv_manque
+titre: L'anniversaire oublié
+declencheur: random
+chapitres: ch2, ch3, ch4, ch5
+quand: var.couple
+unique: oui
+poids: 3
+---
+> Vingt-deux heures. Ton téléphone vibre : « Je suis au restaurant depuis une heure. C'est notre anniversaire, au cas où. »
+> Tu es en train de faire des séries de pompes au centre d'entraînement.
+* Foncer au restaurant en survêtement. #romance
+  > Tu arrives en sueur, avec des fleurs achetées à la station-service. Inès éclate de rire malgré elle.
+  ~ rel.ines += 1; stat.energie -= 10
+* T'excuser le lendemain avec un week-end surprise. #genereux
+  ~ stat.argent -= 1500; rel.ines += 3
+* (Répondre « désolé[[|e]], entraînement » et retourner aux pompes) #fuite
+  ~ rel.ines -= 8; var.rdv_manque = vrai
+
+=== dr_f_dispute
+titre: La dispute
+declencheur: tick_end
+chapitres: ch2, ch3, ch4, ch5
+quand: var.couple et (var.jaloux ou var.photo_presse ou var.rdv_manque) et temps.semaine >= 2
+unique: oui
+priorite: 4
+---
+!lieu appartement 200 soir
+!placer ines 250 gauche
+si var.jaloux
+  ines (colere): Tu ne me fais pas confiance. Chaque fois qu'un mec me parle, tu deviens quelqu'un d'autre.
+sinon si var.photo_presse
+  ines (colere): Une photo. Partout. Et toi, pas un mot. Tu sais ce que ça fait, d'apprendre ça par ses collègues ?
+sinon
+  ines (triste): Je passe après le foot. Toujours. Je le savais en commençant, mais je ne savais pas que ce serait à ce point.
+~ var.dispute_couple = vrai
+* T'excuser, sans « mais ». #sincere
+  ~ rel.ines += 8; var.jaloux = faux; var.photo_presse = faux; var.rdv_manque = faux
+  ines (emu): …D'accord. Merci de ne pas te défendre.
+* Te défendre : ta carrière, c'est maintenant ou jamais. #ambition
+  ~ rel.ines -= 10
+  ines (colere): Ta carrière. Évidemment.
+* « Peut-être qu'on devrait faire une pause. » #rupture
+  ~ var.couple = faux; var.ex_ines = vrai; var.rupture = vrai; rel.ines -= 15; stat.moral -= 10
+  ~ souvenir(ines, pause, "Tu as proposé une pause, le soir de la dispute")
+  > Inès prend sa veste. [[ines:Il|Elle]] ne claque pas la porte. C'est pire.
+
+=== dr_f_rupture
+titre: C'est fini
+declencheur: tick_end
+quand: var.couple et (rel.ines < 30 ou (var.dispute_couple et (var.jaloux ou var.photo_presse ou var.rdv_manque)))
+unique: oui
+priorite: 6
+---
+!placer ines 250 gauche
+ines (triste): J'ai réfléchi. Longtemps. Je crois qu'on ne veut plus la même chose.
+* (L'accepter avec dignité) #maturite
+  ~ var.couple = faux; var.ex_ines = vrai; var.rupture = vrai; var.vit_ensemble = faux; rel.ines += 3; stat.moral -= 12
+  ~ souvenir(ines, rupture, "Vous vous êtes [[séparés|séparées]] sans cris")
+* ([[ines:Le|La]] supplier de rester) #supplier
+  test stat.mental + rel.ines vs 50
+  si reussite
+    ines (emu): Une chance. Une seule.
+    ~ rel.ines += 10
+  sinon
+    ines (triste): Je suis [[ines:désolé|désolée]].
+    ~ var.couple = faux; var.ex_ines = vrai; var.rupture = vrai; var.vit_ensemble = faux; rel.ines -= 5; stat.moral -= 15
+
+=== dr_f_retour
+titre: Un message à minuit
+declencheur: tick_end
+quand: var.ex_ines et non var.couple et rel.ines >= 35
+unique: oui
+priorite: 4
+---
+> Minuit. Un message d'Inès : « J'ai vu ton match. Ton geste pour le petit, à la fin. C'était toi, ça. Le vrai. Tu me manques. »
+* L'appeler tout de suite. #romance
+  ~ var.couple = vrai; var.ex_ines = faux; rel.ines += 10; stat.moral += 10
+  ~ souvenir(ines, retour, "Vous vous êtes [[retrouvés|retrouvées]] après la rupture")
+* Répondre que tu préfères rester amis. #honnete
+  ~ rel.ines += 2
+
+// ─── Les amitiés : trahisons et mauvais coups ───────────────────────────
+
+=== dr_f_djibril_photos
+titre: Vendu
+declencheur: tick_end
+chapitres: ch3, ch4
+quand: non var.djibril_prison et rel.djibril < 25 et temps.semaine == 3
+unique: oui
+priorite: 4
+chance: 35
+---
+> Un magazine publie des photos de ton enfance, de ta chambre à la cité, de ta mère au travail. Des photos que seuls tes proches avaient.
+> Il ne te faut pas longtemps pour comprendre. Djibril a acheté une voiture neuve la semaine dernière.
+~ var.djibril_photo = vrai
+!placer djibril 230 gauche
+djibril (inquiet): Ils proposaient dix mille. Tu sais ce que c'est, dix mille, pour moi ? Toi tu gagnes ça en une semaine.
+* Lui pardonner. Tu sais d'où il vient. #pardon
+  ~ rel.djibril += 5; rel.maman -= 3
+  ~ souvenir(djibril, photos_pardon, "Tu lui as pardonné d'avoir vendu vos photos")
+* Couper les ponts. Définitivement. #rancune
+  ~ rel.djibril -= 25; var.traitre_djibril = vrai
+  ~ souvenir(djibril, photos, "Tu as coupé les ponts après les photos vendues")
+  djibril (colere): [[Monsieur|Madame]] est trop bien pour nous, maintenant. J'ai toujours su.
+* Exiger qu'il donne l'argent à l'association du quartier. #justice
+  test stat.mental + rel.djibril / 2 vs 45
+  si reussite
+    > Il baisse la tête. Le lendemain, le club de foot de la cité reçoit dix mille euros d'un donateur anonyme.
+    ~ rel.djibril += 3; stat.reputation += 3
+  sinon
+    djibril (colere): T'es pas mon père.
+    ~ rel.djibril -= 10
+
+=== dr_f_reveil
+titre: Le réveil de Karim
+declencheur: enter:chambre_centre
+chapitres: ch1
+quand: temps.semaine >= 3 et rel.karim >= -10
+unique: oui
+priorite: 6
+---
+!placer karim 200 droite
+> Six heures quarante. Le réveil de Karim n'a pas sonné. Il dort comme une pierre.
+> Ce matin, Moreau choisit le titulaire pour le match de samedi. Entre lui et toi.
+* Le secouer : « Karim ! Debout ! » #loyal
+  ~ rel.karim += 5
+  karim (content): T'es un frère. Vraiment.
+* (Faire semblant de ne pas avoir remarqué, et partir sans bruit) #trahison
+  ~ var.coup_karim = vrai; stat.statut += 5; stat.moral -= 3
+  ~ planifier(dr_f_coup_decouvert, 2)
+  > Karim arrive avec vingt minutes de retard. Moreau ne le regarde même pas. C'est toi qui seras titulaire.
+
+=== dr_f_coup_decouvert
+titre: Le couloir a des oreilles
+declencheur: scheduled
+quand: var.coup_karim
+---
+test stat.mental vs 45
+si reussite
+  > Karim n'a jamais su. Il en parle parfois, de ce réveil qui n'avait pas sonné. Tu changes de sujet.
+  ~ stat.moral -= 4
+sinon
+  !placer karim 200 droite
+  karim (colere): Lucas t'a vu[[|e]] passer devant mon lit. Tout habillé[[|e]]. Tu m'as laissé dormir exprès.
+  ~ rel.karim -= 25
+  ~ souvenir(karim, reveil, "Tu l'as laissé dormir le matin du choix du titulaire")
+  * Tout avouer et t'excuser. #sincere
+    ~ rel.karim += 10; var.coup_avoue = vrai
+    karim (triste): …Je vais avoir besoin de temps, frérot.
+  * Nier, et accuser Lucas de mentir. #mensonge
+    ~ rel.karim -= 8; rel.lucas -= 10

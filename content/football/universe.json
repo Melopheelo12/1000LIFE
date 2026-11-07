@@ -304,7 +304,24 @@
   "distance": false,
   "alerte_lucas": false,
   "conseil_djibril": 0,
-  "carriere_banc": false
+  "carriere_banc": false,
+  "papa_match": false,
+  "aide_papa": false,
+  "aine_aide": false,
+  "aine_brouille": false,
+  "aine_reconcilie": false,
+  "pretendant": false,
+  "jaloux": false,
+  "confiance_couple": false,
+  "photo_presse": false,
+  "dispute_couple": false,
+  "ex_ines": false,
+  "rupture": false,
+  "djibril_photo": false,
+  "traitre_djibril": false,
+  "coup_karim": false,
+  "coup_avoue": false,
+  "rdv_manque": false
  },
  "traits": [
   {
@@ -575,7 +592,7 @@
   {
    "id": "ines",
    "name": "Inès Duval",
-   "role": "Élève, future kiné du sport",
+   "role": "[[ines:Élève, futur kiné du sport|Élève, future kiné du sport]]",
    "traits": [
     "franche",
     "ambitieuse"
@@ -583,7 +600,7 @@
    "relation": 0,
    "relationLabel": "Complicité",
    "voice": 1.3,
-   "description": "Brillante en sciences, elle prépare le concours de kinésithérapie et ne se laisse impressionner par personne.",
+   "description": "[[ines:Brillant|Brillante]] en sciences, [[ines:il|elle]] prépare le concours de kinésithérapie et ne se laisse impressionner par personne.",
    "goals": "devenir kiné du sport et ouvrir son propre cabinet.",
    "look": {
     "skin": "peau3",
@@ -602,11 +619,11 @@
      "if": "chapitre == ch1"
     },
     {
-     "text": "Content de te voir.",
+     "text": "[[ines:Content|Contente]] de te voir.",
      "if": "rel.ines >= 30"
     },
     {
-     "text": "Tu es occupé, je sais. Comme toujours.",
+     "text": "Tu es [[occupé|occupée]], je sais. Comme toujours.",
      "if": "rel.ines < 0"
     }
    ]
@@ -622,7 +639,7 @@
    "relationLabel": "Lien",
    "voice": 1.2,
    "description": "Aide-soignante de nuit, elle a tout sacrifié pour que tu aies ta chance.",
-   "goals": "que ses fils ne manquent de rien… et qu'ils aient un diplôme.",
+   "goals": "que ses enfants ne manquent de rien… et qu'ils aient un diplôme.",
    "look": {
     "skin": "peau4",
     "hair": "chignon",
@@ -652,15 +669,15 @@
   {
    "id": "yanis",
    "name": "Yanis",
-   "role": "Ton petit frère",
+   "role": "[[yanis:Ton petit frère|Ta petite sœur]]",
    "traits": [
     "influencable"
    ],
    "relation": 40,
    "relationLabel": "Admiration",
    "voice": 1.5,
-   "description": "Douze ans, des étoiles plein les yeux. Il veut tout faire comme toi.",
-   "goals": "être comme son grand frère.",
+   "description": "Douze ans, des étoiles plein les yeux. [[yanis:Il|Elle]] veut tout faire comme toi.",
+   "goals": "être comme [[son grand frère|sa grande sœur]].",
    "look": {
     "skin": "peau4",
     "hair": "court",
@@ -1053,6 +1070,87 @@
     }
    ],
    "short": "Gomis"
+  },
+  {
+   "id": "papa",
+   "name": "Hakim",
+   "short": "Papa",
+   "role": "Ton père",
+   "description": "Chauffeur routier. Il connaît toutes les aires d'autoroute du pays et rate la moitié des anniversaires. Il ne rate aucun de tes matchs à la radio.",
+   "goals": "que tu ne finisses pas sur la route, comme lui.",
+   "relation": 25,
+   "relationLabel": "Lien",
+   "look": {
+    "skin": "peau4",
+    "hair": "rase",
+    "hairColor": "noir",
+    "beard": "barbe",
+    "top": "veste",
+    "topColor": "#2b3a5a",
+    "topColor2": "#e8e8e8",
+    "bottom": "jean",
+    "bottomColor": "#2b3a5a",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Je t'ai écouté à la radio. Le commentateur ne sait pas prononcer ton nom."
+    }
+   ]
+  },
+  {
+   "id": "aine",
+   "name": "Sofiane",
+   "role": "[[aine:Ton grand frère|Ta grande sœur]]",
+   "description": "Vingt-deux ans. [[aine:Il|Elle]] jouait mieux que toi, au city. Puis il a fallu travailler pour aider maman, et le foot s'est arrêté là.",
+   "goals": "qu'on se souvienne qu'[[aine:il|elle]] aussi, [[aine:il|elle]] aurait pu.",
+   "relation": 15,
+   "relationLabel": "Lien",
+   "look": {
+    "skin": "peau4",
+    "hair": "undercut",
+    "hairColor": "noir",
+    "top": "sweat",
+    "topColor": "#3b3e47",
+    "bottom": "jean",
+    "bottomColor": "#1d2230",
+    "shoes": "#f4f4f4",
+    "height": "grand"
+   },
+   "barks": [
+    {
+     "text": "Alors, la star ? Tu passes encore par ici ?"
+    }
+   ]
+  },
+  {
+   "id": "theo",
+   "name": "Théo Garnier",
+   "short": "Théo",
+   "role": "Ailier, le charmeur du vestiaire",
+   "description": "Beau gosse, beau parleur, et toujours le premier à poster une photo de lui. Il obtient tout ce qu'il veut. Presque tout.",
+   "goals": "qu'on parle de lui. Tout le temps.",
+   "relation": 0,
+   "relationLabel": "Respect",
+   "hidden": true,
+   "look": {
+    "skin": "peau2",
+    "hair": "meche",
+    "hairColor": "chatain",
+    "top": "survet",
+    "topColor": "$club_couleur",
+    "topColor2": "$club_couleur2",
+    "bottom": "survet",
+    "bottomColor": "#1d2230",
+    "acc": [
+     "collier"
+    ]
+   },
+   "barks": [
+    {
+     "text": "T'as vu mes stats sur les réseaux ? Non ? Dommage."
+    }
+   ]
   }
  ],
  "locations": [
@@ -3481,6 +3579,118 @@
       "effects": "stat.mental += 10"
      }
     ]
+   }
+  ],
+  "cast": [
+   {
+    "id": "maman",
+    "label": "Ta mère",
+    "group": "Famille",
+    "hint": "Aide-soignante de nuit. Elle a tout sacrifié pour toi."
+   },
+   {
+    "id": "papa",
+    "label": "Ton père",
+    "group": "Famille",
+    "hint": "Chauffeur routier, souvent sur la route.",
+    "optional": true,
+    "defaultAbsent": true
+   },
+   {
+    "id": "yanis",
+    "label": "Ton petit frère",
+    "labels": [
+     "Ton petit frère",
+     "Ta petite sœur"
+    ],
+    "group": "Famille",
+    "hint": "Douze ans, et toi pour modèle.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Yasmine",
+     "look": {
+      "skin": "peau4",
+      "hair": "tresses",
+      "hairColor": "noir",
+      "gender": "f",
+      "top": "sweat",
+      "topColor": "#d63c3c",
+      "bottom": "jean",
+      "height": "enfant",
+      "build": "mince"
+     }
+    }
+   },
+   {
+    "id": "aine",
+    "label": "Ton grand frère",
+    "labels": [
+     "Ton grand frère",
+     "Ta grande sœur"
+    ],
+    "group": "Famille",
+    "hint": "Il jouait mieux que toi, avant de devoir travailler.",
+    "genderChoice": true,
+    "optional": true,
+    "defaultAbsent": true,
+    "alt": {
+     "name": "Leïla",
+     "look": {
+      "skin": "peau4",
+      "hair": "long",
+      "hairColor": "noir",
+      "gender": "f",
+      "top": "sweat",
+      "topColor": "#3b3e47",
+      "bottom": "jean",
+      "bottomColor": "#1d2230",
+      "shoes": "#f4f4f4",
+      "height": "grand"
+     }
+    }
+   },
+   {
+    "id": "karim",
+    "label": "Ton meilleur ami",
+    "group": "Amis et rivaux",
+    "hint": "Ton coloc au centre de formation."
+   },
+   {
+    "id": "djibril",
+    "label": "Ton ami d'enfance",
+    "group": "Amis et rivaux",
+    "hint": "Le roi du quartier, toujours une combine."
+   },
+   {
+    "id": "lucas",
+    "label": "Ton rival",
+    "group": "Amis et rivaux",
+    "hint": "Fils d'un ancien international."
+   },
+   {
+    "id": "ines",
+    "label": "Celle qui fera battre ton cœur",
+    "labels": [
+     "Celui qui fera battre ton cœur",
+     "Celle qui fera battre ton cœur"
+    ],
+    "group": "Cœur",
+    "hint": "Future kiné du sport, impossible à impressionner.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Noah",
+     "look": {
+      "skin": "peau3",
+      "hair": "bouclecourt",
+      "hairColor": "brun",
+      "gender": "h",
+      "top": "chemise",
+      "topColor": "#7cc3ef",
+      "topColor2": "#ffffff",
+      "bottom": "jean",
+      "build": "mince"
+     }
+    }
    }
   ]
  },

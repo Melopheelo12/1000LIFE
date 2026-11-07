@@ -106,7 +106,7 @@ quand: chapitre != ch1
 recharge: 3
 ---
 si var.couple
-  ayla (content): Je t'ai vu arriver il y a trois jours. Dans une vision. Tu avais exactement cette tête-là.
+  ayla (content): Je t'ai [[vu|vue]] arriver il y a trois jours. Dans une vision. Tu avais exactement cette tête-là.
   * L'embrasser sur le front. #romance
     ~ rel.ayla += 5; stat.moral += 4
   * Lui proposer de monter voir les étoiles, ce soir. #romance
@@ -121,17 +121,17 @@ sinon si rel.ayla >= 25
     ~ rel.ayla += 5; var.visions += 1
   * « Je ne sais pas. Mais je t'aiderai à essayer. » #loyal
     ~ rel.ayla += 6
-  * Lui demander ce qu'elle a vu sur toi. #curiosite
+  * Lui demander ce qu'[[ayla:il|elle]] a vu sur toi. #curiosite
     ayla: Une tour. Une barque. Et quelque chose de violet qui t'attend. Je ne sais pas encore si c'est une bonne chose.
     ~ var.visions += 2; rel.ayla += 2
 sinon
   ayla: Chut. J'écoute les étoiles. Elles sont bavardes, ce soir.
-  * S'asseoir et écouter avec elle, en silence. #patience
+  * S'asseoir et écouter avec [[ayla:lui|elle]], en silence. #patience
     ~ rel.ayla += 4; stat.moral += 2
   * Lui demander ce qu'elles disent. #curiosite
     ayla (rire): Que tu poses trop de questions.
     ~ rel.ayla += 2; var.visions += 1
-  * La laisser tranquille.
+  * Ne pas [[ayla:le|la]] déranger.
 
 === re_selene
 titre: Professeure Arkadi
@@ -145,7 +145,7 @@ selene (content): Ah, mon petit astre ! Une question ? Une réclamation ? Une r�
     > Une heure de travail intense. Tu en ressors la tête qui bourdonne et la baguette qui crépite.
     ~ stat.sortileges += 3; stat.energie -= 12; rel.selene += 3
   sinon
-    selene: Tu t'es endormi deux fois. Reviens quand tu auras dormi, petit astre.
+    selene: Tu t'es [[endormi|endormie]] deux fois. Reviens quand tu auras dormi, petit astre.
     ~ stat.sortileges += 1; rel.selene += 1
 * [stat.ombre >= 20] Lui avouer que la voix du grimoire ne se tait plus. #honnete
   selene (inquiet): Viens. Assieds-toi. On va respirer ensemble, et tu vas me raconter.
@@ -400,10 +400,10 @@ chance: 50
 recharge: 4
 ---
 !placer ayla 200 gauche
-> Ayla entre dans l'auberge, les joues rouges de froid. Elle s'assoit en face de toi sans demander, comme si elle avait su que tu serais là. Évidemment qu'elle le savait.
+> Ayla entre dans l'auberge, les joues rouges de froid. [[ayla:Il|Elle]] s'assoit en face de toi sans demander, comme [[ayla:s'il|si elle]] avait su que tu serais là. Évidemment qu'[[ayla:il|elle]] le savait.
 ayla (content): Je prends la même chose que toi. Je l'ai vu.
 * Partager ton chocolat en attendant le sien. #romance
   ~ rel.ayla += 5; stat.moral += 3
-* Lui demander ce qu'elle a vu d'autre. #curiosite
+* Lui demander ce qu'[[ayla:il|elle]] a vu d'autre. #curiosite
   ayla (rire): Que tu allais me poser cette question. Et que j'allais rire.
   ~ rel.ayla += 3; var.visions += 1

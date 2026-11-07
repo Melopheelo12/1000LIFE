@@ -1,0 +1,367 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  LES INTERROGATOIRES — deux entretiens par suspect.
+//  Premier entretien : sa version, son alibi, son mobile.
+//  Deuxième entretien (à partir du troisième jour) : comparaison de la
+//  trace de l'étang (si le labo l'a analysée), confrontation du coupable
+//  quand le dossier contient déjà deux éléments, explications des
+//  innocents qui ont menti pour d'autres raisons.
+// ═══════════════════════════════════════════════════════════════════════
+
+// ─── Hélène Vasseur, la veuve ───────────────────────────────────────────
+
+=== int_helene_1
+titre: La veuve
+declencheur: talk:helene
+unique: oui
+priorite: 8
+tags: important
+---
+!placer helene 240 droite
+> Hélène Vasseur te reçoit debout, en noir, une écharpe de mohair bordeaux sur les épaules. Le salon sent la cire et les lys fanés.
+helene (froid): Lieutenant. Je me souviens de vous. Vous voliez des cerises dans notre verger, avec [[ami:le petit|la petite]] Girard.
+* Lui présenter tes condoléances. #tact
+  ~ rel.helene += 5; stat.confiance += 1
+  helene: Merci. Vous êtes bien [[le seul|la seule]] à me les présenter sans regarder l'argenterie.
+* Aller droit au but. « Où étiez-vous samedi soir ? » #direct
+  ~ rel.helene -= 4; stat.aplomb += 1
+  helene (froid): On ne perd pas de temps, à Lyon.
+helene: Je me suis couchée à neuf heures, avec mes somnifères, comme tous les soirs depuis dix ans. Je n'ai rien entendu. C'est Lucette qui m'a réveillée, dimanche, en hurlant sous mes fenêtres.
+[var.coupable == helene] > En parlant, elle remonte machinalement son écharpe sur son épaule, en cachant le bout dans sa main.
+* « Votre mariage était heureux ? » #intuition
+  test stat.intuition vs 35
+  si reussite
+    > Elle sourit. Un sourire qui n'atteint pas ses yeux.
+    helene: Trente-cinq ans, lieutenant. À ce stade, on ne parle plus de bonheur. On parle d'habitude. Et de silence.
+    ~ stat.intuition += 1
+  sinon
+    helene: Très heureux. Demandez à n'importe qui.
+* « Qui pouvait lui en vouloir ? » #methode
+  helene: Tout le monde. Le maire, qu'il tenait par le col. Ce pauvre Delorme. La docteure, avec son frère. [[ami:Le petit|La petite]] Girard et son café. Et mon propre fils. Faites votre choix.
+  ~ stat.methode += 1
+
+=== int_helene_2
+titre: Hélène, à nouveau
+declencheur: talk:helene
+quand: vu(int_helene_1) et temps.total >= 3
+unique: oui
+priorite: 7
+tags: important
+---
+!placer helene 240 droite
+helene (froid): Encore vous. Je vous ai tout dit.
+si var.coupable == helene et var.ind_helene >= 2
+  * La confronter : son alibi, son mobile, tout ce qui ne tient pas. #aplomb
+    test stat.aplomb + var.ind_helene * 6 vs 52
+    si reussite
+      helene (triste): Vous voulez que je dise que je le détestais ? Je le détestais. Il allait me jeter dehors après trente-cinq ans, comme une domestique. … Je ne dirai rien de plus sans avocat.
+      ~ var.ind_helene += 1; var.aveu_partiel = vrai
+    sinon
+      helene (froid): Sortez de chez moi, lieutenant. La prochaine fois, venez avec un mandat.
+      ~ stat.pression += 5
+  * Ne rien brusquer. Elle finira par se trahir. #prudent
+    ~ stat.methode += 1
+sinon
+  helene (pensif): Vous voulez savoir quelque chose d'utile ? Édouard gardait tout dans un coffre, derrière son portrait. Ses papiers, ses secrets, ses petites vengeances. Je n'en ai jamais eu le code.
+  ~ var.piste_coffre = vrai
+  * La remercier sincèrement. #tact
+    ~ rel.helene += 6
+  * « Pourquoi me le dire maintenant ? » #intuition
+    helene: Parce que je veux savoir, moi aussi, qui a fait ça dans mon jardin.
+    ~ stat.intuition += 1
+
+// ─── Julien Vasseur, le fils ────────────────────────────────────────────
+
+=== int_julien_1
+titre: Le fils
+declencheur: talk:julien
+unique: oui
+priorite: 8
+tags: important
+---
+!placer julien 316 gauche
+julien (colere): Vous aussi, vous allez me demander si j'ai tué mon père ? Les gendarmes l'ont fait trois fois.
+* « Je vais surtout vous demander où vous étiez. » #direct
+  ~ stat.aplomb += 1
+* « Je suis désolé[[|e]] pour votre père. » #tact
+  ~ rel.julien += 6
+  julien (triste): Vous êtes bien [[le seul|la seule]]. Moi, je ne sais même pas si je le suis.
+julien: Je suis arrivé de Lyon vendredi. Samedi après-midi, on s'est disputés, il m'a mis dehors, et je suis reparti à Lyon. J'ai passé la nuit au casino. Je l'ai appris dimanche matin, au téléphone.
+julien: Oui, j'avais des dettes. Oui, je suis venu lui demander de l'argent. Non, je ne l'ai pas tué. Il valait plus cher vivant : mort, l'héritage va mettre deux ans à passer chez le notaire.
+[var.coupable == julien] > Tu remarques une trace de cambouis sur la manchette de sa chemise. Une chemise à trois cents euros.
+* « Combien devez-vous, exactement ? » #methode
+  julien (inquiet): Quatre-vingt mille. À des gens qui ne m'envoient pas de lettres de relance.
+  ~ stat.methode += 1
+* « Votre père vous aimait ? » #intuition
+  julien (triste): Mon père aimait la scierie, ses terres, et qu'on ait peur de lui. Moi, j'arrivais quelque part après les chiens de chasse.
+  ~ stat.intuition += 1
+
+=== int_julien_2
+titre: Julien, à nouveau
+declencheur: talk:julien
+quand: vu(int_julien_1) et temps.total >= 3
+unique: oui
+priorite: 7
+tags: important
+---
+!placer julien 316 gauche
+julien: Encore vous. Vous n'avez pas un vrai coupable à harceler ?
+si var.coupable == julien et var.ind_julien >= 2
+  * Le confronter : le bornage de son téléphone, ses dettes, ses mensonges. #aplomb
+    test stat.aplomb + var.ind_julien * 6 vs 50
+    si reussite
+      julien (triste): D'accord ! Je suis revenu. Je voulais le supplier une dernière fois, au lavoir. Il… Je veux un avocat. Maintenant.
+      ~ var.ind_julien += 1; var.aveu_partiel = vrai
+    sinon
+      julien (colere): Vous n'avez rien. Mon avocat vous attend.
+      ~ stat.pression += 5
+  * Le laisser s'enfoncer tout seul. #prudent
+    ~ stat.methode += 1
+sinon
+  julien (pensif): Je vais vous dire une chose. Une seule fois dans ma vie, j'ai vu mon père pleurer. Le 14 juin 2004, le soir de l'accident de la scierie. Il s'est enfermé dans son bureau et je l'ai entendu à travers la porte. Le lendemain, il était redevenu lui-même. Pour toujours.
+  ~ var.code_coffre = vrai
+  * « Merci, Julien. » #tact
+    ~ rel.julien += 6
+  * Noter la date dans ton carnet, en silence. #methode
+    ~ stat.methode += 1
+
+// ─── Bernard Roussel, le maire ──────────────────────────────────────────
+
+=== int_roussel_1
+titre: Le maire
+declencheur: talk:roussel
+unique: oui
+priorite: 8
+tags: important
+---
+!placer roussel 262 gauche
+roussel (content): Ah, notre enfant du pays ! Toute la commune est derrière vous, lieutenant. Toute la commune.
+roussel: Samedi soir ? Conseil municipal, ici même, jusqu'à minuit. Le budget de la cantine. Passionnant. Une vingtaine de témoins.
+[var.coupable == roussel] > Sur son bureau, au milieu du sous-main en cuir, un rectangle plus clair. Comme si un objet lourd était resté posé là pendant des années, et avait disparu récemment.
+* « Quelles étaient vos relations avec Édouard Vasseur ? » #methode
+  roussel (inquiet): Excellentes. Il m'a beaucoup soutenu. C'était… un ami de la commune.
+  test stat.intuition vs 38
+  si reussite
+    > Il a dit « ami » comme on avale une arête.
+    ~ stat.intuition += 1
+* « Vous transpirez, monsieur le maire. » #aplomb
+  ~ rel.roussel -= 6; stat.aplomb += 1
+  roussel (colere): Le chauffage, lieutenant. La mairie est mal isolée. Vous voulez le numéro de l'entreprise ?
+* « Le village a confiance en vous ? » #village
+  roussel: Douze ans de mandat. Trois réélections. Faites le calcul.
+  ~ stat.confiance += 1
+
+=== int_roussel_2
+titre: Le maire, à nouveau
+declencheur: talk:roussel
+quand: vu(int_roussel_1) et temps.total >= 3
+unique: oui
+priorite: 7
+tags: important
+---
+!placer roussel 262 gauche
+roussel (inquiet): Lieutenant. Encore. La presse campe devant la mairie, vous savez.
+si var.coupable == roussel et var.ind_roussel >= 2
+  * Le confronter : le procès-verbal, les Prés-Hauts, son alibi. #aplomb
+    test stat.aplomb + var.ind_roussel * 6 vs 50
+    si reussite
+      roussel (triste): Il allait tout révéler lundi. Tout. Vous comprenez ? … Non. Je ne dirai plus rien. Je veux mon avocat.
+      ~ var.ind_roussel += 1; var.aveu_partiel = vrai
+    sinon
+      roussel (colere): Je connais la procureure depuis vingt ans, lieutenant. Faites attention.
+      ~ stat.pression += 8
+  * Le laisser mariner. #prudent
+    ~ stat.methode += 1
+sinon si var.mensonge_roussel
+  > Tu poses le procès-verbal du conseil sur son bureau : « Séance levée à 22 h 05 ».
+  roussel (triste): … J'étais chez Sylvie. Ma secrétaire. Tous les samedis où je dis qu'il y a conseil. Elle vous le confirmera. Je vous en supplie : ma femme ne doit jamais le savoir.
+  ~ var.alibi_roussel = vrai; rel.roussel += 4
+  * Lui promettre la discrétion. #tact
+    ~ rel.roussel += 10; stat.confiance += 2
+  * « Ça dépendra de vous, monsieur le maire. » #aplomb
+    ~ rel.roussel -= 4; stat.aplomb += 1
+sinon
+  roussel: Je vous ai tout dit. Le conseil, le budget de la cantine. Si vous voulez vérifier, les procès-verbaux sont aux archives. Enfin… vous n'êtes pas obligé[[|e]] de tout lire.
+  ~ stat.intuition += 1
+
+// ─── Thomas Girard, le meilleur ami ─────────────────────────────────────
+
+=== int_ami_1
+titre: Le Relais
+declencheur: talk:ami
+quand: vu(dr_ami_retrouvailles)
+unique: oui
+priorite: 8
+tags: important
+---
+!placer ami 120 droite
+ami (triste): Vas-y. Pose tes questions de flic. Je préfère que ce soit toi plutôt qu'un inconnu.
+> [[ami:Il|Elle]] sort une lettre recommandée de sous le comptoir et la pose devant toi.
+ami: Tu l'aurais su de toute façon. Vasseur était propriétaire des murs. Il vendait à un promoteur de Lyon : dix studios à louer aux touristes. Le Relais fermait le 1er décembre. Je l'ai détesté pour ça. Voilà.
+~ var.ind_ami += var.coupable == ami ? 1 : 0; var.faux_ami += var.coupable == ami ? 0 : 1
+ami: Samedi soir ? J'ai fermé à minuit, comme tous les samedis. Les habitués te le diront.
+[var.coupable == ami] > Sous le comptoir, à la place de la vieille batte de base-ball qui y dormait depuis vingt ans, « pour les cambrioleurs », il n'y a plus rien.
+* « Merci de me l'avoir montré toi-même. » #amitie
+  ~ rel.ami += 6
+  ami: On s'est toujours tout dit, non ? Enfin… presque tout.
+* « Tu te rends compte que ça fait de toi un suspect ? » #direct
+  ~ rel.ami -= 4; stat.aplomb += 1
+  ami (colere): Je suis au courant, oui. Merci de me le rappeler.
+
+=== int_ami_2
+titre: Le Relais, après la fermeture
+declencheur: talk:ami
+quand: vu(int_ami_1) et temps.total >= 3
+unique: oui
+priorite: 7
+tags: important
+---
+!placer ami 120 droite
+> Le Relais est vide. Thomas a retourné les chaises sur les tables. [[ami:Il|Elle]] te sert un verre sans te demander.
+si var.coupable == ami et var.ind_ami >= 2
+  * Lui dire que tu sais. Que son alibi ne tient pas. #aplomb
+    test stat.aplomb + var.ind_ami * 6 + rel.ami / 5 vs 52
+    si reussite
+      ami (triste): … Je suis allé le voir. Au lavoir. Pour le supplier. Je ne veux pas en parler. Pas à toi. Pas comme ça.
+      ~ var.ind_ami += 1; var.aveu_partiel = vrai; rel.ami -= 10
+    sinon
+      ami (colere): Tu crois que j'ai pu faire ça ? Toi ? Sors d'ici.
+      ~ rel.ami -= 15
+  * Parler du bon vieux temps. Juste ce soir. #amitie
+    ~ rel.ami += 4; stat.moral += 3
+sinon si var.coupable == ami
+  ami (pensif): Tu te souviens quand on dormait dans la cabane, au bord de l'étang ? On disait qu'on partirait tous les deux. Toi, tu es parti[[|e]]. Moi, je suis resté[[ami:|e]] derrière ce comptoir.
+  > [[ami:Il|Elle]] parle longtemps. De tout, sauf de samedi soir. Chaque fois que tu approches du sujet, [[ami:il|elle]] remplit ton verre.
+  * Le laisser parler. #amitie
+    ~ rel.ami += 4; stat.intuition += 1
+  * « Et samedi soir, Thomas ? » #direct
+    ami (froid): Samedi soir, j'étais ici. Je te l'ai déjà dit.
+    ~ stat.intuition += 2
+sinon
+  ami (triste): Il faut que je te dise un truc. Samedi, je n'ai pas fermé à minuit. Mon père a fait un AVC à dix heures. J'ai baissé le rideau à 22 h 15 et j'ai foncé à l'hôpital de Montbrison. Tiens : le bulletin d'admission, avec l'heure.
+  [var.mensonge_ami] ami: C'est pour ça que j'ai menti. Je ne voulais pas que tu t'inquiètes. Ni que tu croies que…
+  ~ var.alibi_ami = vrai
+  * Le prendre dans tes bras. #amitie
+    ~ rel.ami += 10; stat.moral += 4
+  * « Il fallait me le dire tout de suite. » #methode
+    ~ rel.ami += 2; stat.methode += 1
+
+// ─── La docteure Claire Morel ───────────────────────────────────────────
+
+=== int_morel_1
+titre: La médecin
+declencheur: talk:morel
+unique: oui
+priorite: 8
+tags: important
+---
+!placer morel 266 gauche
+morel (froid): Asseyez-vous. Vous voulez que je vous ausculte, ou que je vous dise si je l'ai tué ?
+* « La deuxième option, docteure. » #direct
+  ~ stat.aplomb += 1
+  morel: Au moins, vous êtes franc[[|he]].
+* « Comment allez-vous ? Vraiment ? » #tact
+  ~ rel.morel += 6
+  morel (pensif): … Personne ne me pose jamais la question. C'est moi qui la pose, d'habitude.
+morel: Samedi soir, j'étais à la ferme des Bertin. Le vieux Bertin mourait. Le père Antoine était là. Demandez-lui.
+morel: Et vous savez déjà pour mon frère, j'imagine. Paul, vingt-trois ans, écrasé sous une grume en 2004. Édouard a dit que c'était sa faute. Je ne l'ai jamais cru. Si vous cherchez quelqu'un qui le haïssait, vous l'avez devant vous. Mais haïr n'est pas tuer.
+[var.coupable == morel] > Quand elle croise les bras, sa manche remonte. Une longue griffure rouge court sur son poignet, comme laissée par des ronces.
+* « Vous prescriviez des somnifères à la famille Vasseur ? » #methode
+  morel: À Hélène, depuis dix ans. À Édouard, depuis peu : il dormait mal, ces derniers temps. La conscience, peut-être.
+  ~ stat.methode += 1
+* Lui parler de Paul. Tu te souviens de lui, un peu. #intuition
+  morel (triste): Il vous apprenait à faire des ricochets sur l'étang, vous et [[ami:le petit|la petite]] Girard. Il disait que vous étiez doué[[|e]].
+  ~ rel.morel += 6; stat.intuition += 1
+
+=== int_morel_2
+titre: La médecin, à nouveau
+declencheur: talk:morel
+quand: vu(int_morel_1) et temps.total >= 3
+unique: oui
+priorite: 7
+tags: important
+---
+!placer morel 266 gauche
+morel: Revoilà la police. Je n'ai pas de rendez-vous de libre, mais pour vous, j'imagine que je n'ai pas le choix.
+si var.coupable == morel et var.ind_morel >= 2
+  * La confronter : la ferme Bertin, l'écharpe, les somnifères. #aplomb
+    test stat.aplomb + var.ind_morel * 6 vs 54
+    si reussite
+      morel (triste): J'avais enfin la preuve, lieutenant. La preuve qu'il avait fait retirer la sécurité de la scie. Je suis allée le voir pour qu'il avoue. … Je n'en dirai pas plus.
+      ~ var.ind_morel += 1; var.aveu_partiel = vrai
+    sinon
+      morel (froid): Vous n'avez rien qu'un juge puisse lire. Revenez avec mieux.
+      ~ stat.pression += 5
+  * Ne pas insister. Pas encore. #prudent
+    ~ stat.methode += 1
+sinon
+  morel (pensif): Vous voulez la vérité ? J'avais enfin la preuve, depuis un mois. Un ancien ouvrier m'a avoué que la sécurité de la scie avait été retirée sur ordre d'Édouard, le 14 juin 2004, pour gagner une heure de production. J'allais porter plainte. Il est mort avant.
+  morel: Vous trouvez ça pratique, n'est-ce pas ? Moi, je trouve ça injuste.
+  ~ var.code_coffre = vrai
+  * « Je ferai éclater la vérité sur Paul, aussi. » #promesse
+    ~ rel.morel += 10; stat.moral += 2
+  * « Ça vous donnait un mobile, docteure. » #aplomb
+    ~ rel.morel -= 4; stat.aplomb += 1
+
+// ─── Marc Delorme, le contremaître ──────────────────────────────────────
+
+=== int_delorme_1
+titre: Le contremaître
+declencheur: talk:delorme
+unique: oui
+priorite: 8
+tags: important
+---
+!placer delorme 410 gauche
+delorme (colere): Un flic. Du village, en plus. Qu'est-ce que tu me veux ?
+delorme: Samedi soir ? Chez moi. Seul. Comme tous les soirs depuis qu'il m'a viré comme un chien.
+delorme: Le bois volé ? C'est lui qui le volait. Il revendait les grumes au noir, sans factures, et il a fait porter le chapeau au seul qui avait vu ses combines. Vingt-six ans de boîte.
+[var.coupable == delorme] > Il a une entaille récente dans la paume de la main droite, mal bandée avec un chiffon.
+* « Je peux le prouver, si vous m'aidez. » #diplomatie
+  ~ rel.delorme += 8
+  delorme (pensif): … Prouver. Personne n'a jamais voulu prouver quoi que ce soit pour moi.
+* « Vous braconnez, Delorme. Tout le monde le sait. » #aplomb
+  ~ rel.delorme -= 6; stat.aplomb += 1
+  delorme (colere): Et alors ? Le gibier ne vaut pas mieux que les gens d'ici.
+* « Vous connaissez les chemins de l'étang par cœur ? » #intuition
+  delorme: Mieux que toi ta poche. J'y pose mes collets depuis quarante ans.
+  ~ stat.intuition += 1
+
+=== int_delorme_2
+titre: Le contremaître, à nouveau
+declencheur: talk:delorme
+quand: vu(int_delorme_1) et temps.total >= 3
+unique: oui
+priorite: 7
+tags: important
+---
+!placer delorme 410 gauche
+delorme: Encore toi.
+si var.coupable == delorme et var.ind_delorme >= 2
+  * Le confronter : le merlin, le pick-up, son alibi. #aplomb
+    test stat.aplomb + var.ind_delorme * 6 vs 50
+    si reussite
+      delorme (triste): Je voulais juste qu'il dise la vérité. Devant moi. Une fois. … J'en ai assez dit.
+      ~ var.ind_delorme += 1; var.aveu_partiel = vrai
+    sinon
+      delorme (colere): Tu n'as rien. Si tu avais quelque chose, je serais déjà menotté.
+      ~ stat.pression += 5
+  * Le laisser parler de la scierie. #prudent
+    ~ stat.methode += 1; rel.delorme += 2
+sinon si var.coupable == delorme
+  delorme (colere): Je t'ai tout dit. Chez moi, seul. Si tu as des questions, pose-les à mon avocat. Ah non, c'est vrai : je n'ai pas les moyens d'en avoir un.
+  * Le laisser partir. #prudent
+    ~ stat.methode += 1
+  * Insister sur son emploi du temps. #aplomb
+    test stat.aplomb vs 40
+    si reussite
+      > Il se contredit deux fois sur l'heure à laquelle il est rentré. Puis il se tait.
+      ~ stat.intuition += 2
+    sinon
+      delorme (colere): Dégage de mon chemin.
+sinon
+  delorme (pensif): Bon. Samedi, je n'étais pas chez moi. J'étais à la Combe-aux-Loups, avec un fusil et pas de permis. Si tu veux une preuve, l'Office des forêts a un piège photographique là-bas. Ils m'ont déjà collé trois amendes avec.
+  ~ var.alibi_delorme = vrai
+  * « Je ne dirai rien pour le chevreuil. » #diplomatie
+    ~ rel.delorme += 10
+  * « Le braconnage, c'est un délit. » #methode
+    ~ rel.delorme -= 4; stat.methode += 1

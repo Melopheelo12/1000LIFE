@@ -180,7 +180,7 @@ sinon
   > Deux marques te contactent directement : Vortex, l'équipementier, et PariMax, un site de paris sportifs.
 * Signer avec Vortex #image
   ~ stat.argent += 40000; stat.notoriete += 6; var.sponsor = "vortex"; stat.reputation += 2
-  > Ton visage sur des panneaux de quatre mètres. Yanis t'envoie des photos de chaque affiche qu'il croise.
+  > Ton visage sur des panneaux de quatre mètres. Yanis t'envoie des photos de chaque affiche qu'[[yanis:il|elle]] croise.
 * Signer avec PariMax (trois fois plus d'argent) #argent #cle
   ~ stat.argent += 120000; stat.notoriete += 4; var.sponsor = "parimax"; stat.reputation -= 3; rel.santini += 10; rel.lambert -= 10
   ~ souvenir(clara, parimax, "Ton contrat avec un site de paris sportifs")
@@ -257,11 +257,11 @@ unique: oui
 priorite: 72
 ---
 !son telephone
-maman (inquiet): C'est Yanis. Il est au commissariat. Ils l'ont trouvé avec les grands du bâtiment D, dans une voiture volée.
+maman (inquiet): C'est Yanis. [[yanis:Il|Elle]] est au commissariat. Ils l'ont [[yanis:trouvé|trouvée]] avec les grands du bâtiment D, dans une voiture volée.
 !lieu quartier 300 soir
 * Tout lâcher et y aller, même si tu rates l'entraînement #famille #cle
   ~ var.yanis_protege += 2; rel.yanis += 15; rel.maman += 10; stat.statut -= 6
-  ~ souvenir(yanis, commissariat, "Tu as tout lâché pour venir le chercher au commissariat")
+  ~ souvenir(yanis, commissariat, "Tu as tout lâché pour venir [[yanis:le|la]] chercher au commissariat")
   !placer yanis 340 gauche
   yanis (triste): Je voulais juste qu'ils me respectent… comme ils te respectent toi.
   moi: Ils ne te respectent pas, Yanis. Ils t'utilisent. Moi, je te respecte.
@@ -269,10 +269,10 @@ maman (inquiet): C'est Yanis. Il est au commissariat. Ils l'ont trouvé avec les
 * Payer un avocat, mais rester avec l'équipe #argent
   ~ stat.argent -= min(stat.argent, 8000); var.yanis_protege += 1; rel.maman += 2; rel.yanis -= 4
   > L'avocat règle l'affaire. Yanis t'envoie un message : « Merci pour l'avocat. » Juste ça.
-* Lui dire qu'il doit assumer ses actes #dur
+* Lui dire qu'[[yanis:il|elle]] doit assumer ses actes #dur
   ~ var.yanis_neglige += 2; rel.yanis -= 15; rel.maman -= 8
-  ~ souvenir(yanis, abandon, "Tu l'as laissé seul au commissariat")
-  maman (triste): C'est ton frère…
+  ~ souvenir(yanis, abandon, "Tu l'as [[yanis:laissé seul|laissée seule]] au commissariat")
+  maman (triste): C'est [[yanis:ton frère|ta sœur]]…
 
 === ch3_photos_boite
 titre: Les photos
@@ -355,7 +355,7 @@ ines (content): J'ai mon diplôme. Kinésithérapeute. Officiellement.
 * Lui offrir un cadeau somptueux #flambeur
   ~ stat.argent -= min(stat.argent, 5000); rel.ines += 5
   ines (pensif): C'est… beaucoup. Merci. J'aurais préféré du temps, mais merci.
-* Fêter ça avec ses amis à elle #ecoute
+* Fêter ça avec ses amis à [[ines:lui|elle]] #ecoute
   ~ rel.ines += 10
   > Tu passes la soirée avec des étudiants en kiné qui te demandent des autographes pour leurs pères.
 

@@ -23,10 +23,25 @@ si var.couple
   > Inès a ouvert son cabinet de kinésithérapie du sport. Sur le mur, une seule photo : vous deux, le soir de votre premier dîner.
 sinon si var.ines_partie
   > Inès vit à l'autre bout du pays. Vous vous êtes croisés une fois, par hasard, dans une gare. Vous avez souri, et c'est tout.
+si present(papa)
+  si var.aide_papa
+    > Ton père a peint ton numéro sur la cabine de son camion. Sur toutes les aires d'autoroute du pays, des routiers lui demandent si c'est vraiment [[son fils|sa fille]].
+  sinon si rel.papa >= 30
+    > Ton père écoute encore tous les matchs à la radio, même ceux que tu commentes maintenant à la télé. Il dit que c'est mieux sans les images.
+  sinon
+    > Ton père et toi vous parlez peu. À chaque Noël, il te serre la main un peu trop fort, comme pour rattraper le reste.
+si present(aine)
+  si var.aine_reconcilie
+    > [[aine:Ton grand frère|Ta grande sœur]] entraîne les moins de quinze ans du FC Valmont. Le samedi, tu viens l'aider. [[aine:Il|Elle]] te laisse gagner les un contre un. Parfois.
+  sinon si var.aine_brouille
+    > [[aine:Ton grand frère|Ta grande sœur]] ne t'a plus jamais parlé de foot. Ni de rien d'autre.
+  sinon
+    > [[aine:Ton grand frère|Ta grande sœur]] est venu[[aine:|e]] à ton jubilé. Au dernier rang, la capuche sur la tête. Tu l'as vu[[aine:|e]] quand même.
+[var.traitre_djibril] > Djibril a revendu sa voiture. Il travaille sur un marché, le dimanche. Quand tu passes, il fait semblant de ne pas te voir.
 si var.yanis_sauve
-  > Yanis a obtenu son diplôme d'éducateur sportif. Il entraîne les gamins de la cité des Tilleuls, ceux du bâtiment D compris.
+  > Yanis a obtenu son diplôme [[yanis:d'éducateur sportif|d'éducatrice sportive]]. [[yanis:Il|Elle]] entraîne les gamins de la cité des Tilleuls, ceux du bâtiment D compris.
 sinon si var.yanis_perdu
-  > Yanis a suivi les grands du bâtiment D jusqu'au bout. Tu vas le voir chaque mois. Derrière une vitre.
+  > Yanis a suivi les grands du bâtiment D jusqu'au bout. Tu vas [[yanis:le|la]] voir chaque mois. Derrière une vitre.
 si rel.maman >= 50
   > Ta mère garde toutes les coupures de journaux dans un classeur rouge. Elle te le montre à chaque visite.
 sinon si rel.maman < 15
@@ -176,7 +191,7 @@ si rel.moreau >= 30
 appel epilogue_commun
 
 === fin:grand_frere
-titre: Le grand frère
+titre: La famille d'abord
 type: secrete
 quand: var.retraite == famille et var.yanis_sauve
 priorite: 74

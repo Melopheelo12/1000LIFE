@@ -204,7 +204,7 @@ bruno (inquiet): Les ligaments croisés. Il faut opérer.
 * Rééducation complète, sans brûler les étapes #patience #cle
   ~ var.blesse = 4; stat.statut -= 10; stat.moral -= 8; var.genou -= 1
   > Quatre semaines d'absence. Le Mondial s'éloigne peut-être, mais ta carrière, non.
-  [var.couple] > Inès supervise ta rééducation elle-même, matin et soir.
+  [var.couple] > Inès supervise ta rééducation [[ines:lui-même|elle-même]], matin et soir.
   [var.couple] ~ rel.ines += 10
 * Revenir le plus vite possible, à tout prix #risque #cle
   si var.genou >= 3
@@ -236,11 +236,11 @@ ines: C'est le poste de mes rêves. Mais ça veut dire vivre loin de toi.
   si reussite
     ines (triste): …D'accord. Je reste.
     ~ rel.ines -= 10
-    ~ souvenir(ines, renoncement, "Elle a renoncé au poste de ses rêves pour toi")
+    ~ souvenir(ines, renoncement, "[[ines:Il|Elle]] a renoncé au poste de ses rêves pour toi")
   sinon
     ines (triste): Je ne peux pas. Pas cette fois.
     ~ var.couple = faux; var.ines_partie = vrai; rel.ines -= 20
-    > Elle part trois semaines plus tard.
+    > [[ines:Il|Elle]] part trois semaines plus tard.
 * [var.club_etranger] Lui proposer de venir travailler dans ton club #romance
   test stat.reputation vs 60
   si reussite

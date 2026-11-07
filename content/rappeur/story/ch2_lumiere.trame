@@ -1,0 +1,478 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  CHAPITRE 2 — LA LUMIÈRE (20 ans)
+//  Le featuring avec Kaïser, le vrai visage de Diamant Noir, Encre Records,
+//  les ennuis de Dris, l'EP et le festival Bitume.
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ch2_intro
+titre: Six mois plus tard
+declencheur: chapter_start
+chapitres: ch2
+---
+!moment jour
+> Six mois. Ton carnet est plein, ton téléphone aussi. Tu as vingt ans, et toujours le même lit trop court dans la même chambre.
+~ var.abonnes += 800 + stat.hype * 60
+si var.contrat_diamant
+  > Diamant t'a payé un shooting, deux soirées en boîte et une veste en cuir. Mais aucun de tes morceaux n'est sorti. « On attend le bon moment », répète-t-il.
+  ~ stat.argent += 300
+sinon si var.refus_diamant
+  > Sans label, tu as tout sorti toi-même. Les morceaux tournent dans les voitures des Glycines et commencent à déborder sur les Hauts-de-Brune.
+  ~ stat.respect += 3
+sinon
+  > Tu as continué à ta façon : la cave, le banc, le Spot. Ton nom circule.
+~ objectif(ep, "Sortir ton premier EP : quatre morceaux enregistrés au studio")
+!son notif
+> Un message de Fred : « Le festival Bitume cherche des artistes locaux pour sa grande scène. Les programmateurs passent au Spot. Fais du bruit. »
+~ objectif(festival, "Te faire programmer au festival Bitume, à la fin de la saison")
+
+=== ch2_kaiser
+titre: Un message de Kaïser
+declencheur: tick_start
+chapitres: ch2
+quand: temps.semaine >= 2
+unique: oui
+priorite: 7
+---
+!son telephone
+> Numéro masqué. Une voix grave, que tout le pays connaît.
+kaiser: C'est Kaïser. Oui, le vrai. J'ai entendu ton son, celui qui tourne dans toutes les voitures des Glycines. Ça m'a ramené sur le banc, il y a quinze ans.
+kaiser: Je veux un couplet de toi sur mon album. Studio à Paris la semaine prochaine. Une seule condition : c'est mon producteur qui fait la prod. Pas ton pote de la cave.
+~ var.kaiser_connu = vrai; rencontrer(kaiser)
+* Accepter ses conditions. Kaïser, c'est Kaïser. #ambition
+  ~ var.feat_kaiser = vrai; var.momo_ecarte = vrai; rel.momo -= 10; planifier(ch2_studio_paris, 1)
+  kaiser (content): Voilà quelqu'un qui comprend le métier.
+  [non var.momo_parti] > Le soir, tu n'oses pas le dire à Momo. Il l'apprend sur les réseaux.
+* Accepter, mais seulement avec une prod de Momo. #loyal
+  test stat.respect + stat.hype / 2 vs 46
+  si reussite
+    > Long silence. Puis : « Envoie-la. » Une heure plus tard : « … Ton pote, là. Il est fort. On garde sa prod. »
+    ~ var.feat_kaiser = vrai; var.momo_credite = vrai; rel.momo += 12; planifier(ch2_studio_paris, 1)
+    ~ souvenir(momo, kaiser, "Tu as imposé sa prod à Kaïser")
+  sinon
+    kaiser (froid): Je ne négocie pas avec des débutants. Bonne continuation.
+    ~ stat.authenticite += 3; rel.momo += 6
+* Refuser poliment. Ton premier featuring, tu le feras avec les tiens. #independant
+  ~ stat.authenticite += 5; stat.respect += 2; rel.momo += 4
+  kaiser (surpris): … Personne ne m'a jamais dit non. Je m'en souviendrai. En bien, peut-être.
+
+=== ch2_studio_paris
+titre: Le studio de Paris
+declencheur: scheduled
+chapitres: ch2
+unique: oui
+---
+!lieu studio_paris 200 nuit
+> Paris, un studio dans le 18e arrondissement. Moquette épaisse, table de mixage longue comme un bus, un frigo rempli de boissons que tu n'as jamais goûtées. Kaïser arrive avec six personnes et deux heures de retard.
+!placer kaiser 260 gauche
+kaiser: Montre-moi pourquoi je t'ai fait venir.
+* Poser le couplet tel que tu l'as écrit, sans rien changer. #sincere
+  test stat.flow + stat.plume / 2 vs 50
+  si reussite
+    > À la fin de la prise, Kaïser enlève ses lunettes. Il ne dit rien. Il fait juste signe à l'ingénieur : « On garde. »
+    ~ stat.hype += 12; var.abonnes += 6000; stat.authenticite += 3
+  sinon
+    > Huit prises. Kaïser coupe la neuvième : « Ça ira. » Ça ira. Ce n'est pas ce que tu espérais.
+    ~ stat.hype += 6; var.abonnes += 2500; stat.moral -= 4
+* Adapter ton couplet à son style, pour lui plaire. #ambition
+  test stat.flow vs 46
+  si reussite
+    > Tu sonnes comme lui. Il adore. « On dirait [[mon petit frère|ma petite sœur]]. » Tu ne sais pas si c'est un compliment.
+    ~ stat.hype += 10; var.abonnes += 5000; stat.authenticite -= 5
+  sinon
+    > Tu imites mal. Il le sent. Il garde huit mesures sur seize.
+    ~ stat.hype += 5; var.abonnes += 2000; stat.authenticite -= 3
+kaiser (pensif): Une chose. Ton pote de la cave… il fait toujours des prods ? Envoie-moi son numéro. Je cherche du sang neuf.
+* Lui donner le numéro de Momo. C'est sa chance. #genereux
+  ~ var.momo_contact_kaiser = vrai; rel.momo += 6
+* Faire semblant de ne pas avoir son numéro. #jaloux
+  ~ rel.kaiser -= 3; stat.authenticite -= 2
+  > Kaïser hausse les épaules. Toi, tu regardes tes chaussures tout le trajet du retour.
+[var.couple] ~ var.jalousie = vrai
+[var.couple] > Lina t'avait accompagné[[|e]]. Toute la soirée, Kaïser n'a parlé qu'à [[lina:lui|elle]], de photo, de Paris, d'expositions.
+
+=== ch2_encre
+titre: Encre Records
+declencheur: tick_end
+chapitres: ch2
+quand: temps.semaine >= 3 et stat.authenticite >= 40
+unique: oui
+priorite: 6
+---
+!lieu spot 200 nuit
+!placer clemence 160 droite
+> Après ton passage au Spot, une femme en veste bleue t'attend au bar. Fred te fait un clin d'œil appuyé.
+clemence: Clémence Roy, Encre Records. Je ne vais pas te promettre la lune, je ne vends que des choses qui existent.
+~ rencontrer(clemence); var.encre_offre = vrai
+si var.contrat_diamant et non var.contrat_rompu
+  clemence (pensif): Tu es chez Diamant, je sais. Tant que tu es lié à lui, je ne peux rien faire. Sauf si tu trouves de quoi le faire plier. Mon avocate est la meilleure de Paris, et elle déteste Tony Diamant.
+  > Elle laisse sa carte sur le comptoir. « Si un jour tu as besoin d'une porte de sortie. »
+sinon
+  clemence: Trois ans, cinquante-cinquante, tes enregistrements t'appartiennent. Et on travaille avec qui tu veux.
+  * Signer chez Encre. #prudent
+    ~ var.contrat_encre = vrai; var.label_nom = "Encre Records"; stat.argent += 2000; stat.hype += 5
+    clemence (content): Bienvenue. Maintenant, on travaille.
+  * Signer, mais avec Momo crédité comme producteur de tout le projet. #loyal
+    ~ var.contrat_encre = vrai; var.label_nom = "Encre Records"; var.momo_credite = vrai; stat.argent += 1500; stat.hype += 5; rel.momo += 10
+    clemence (fier): Tu négocies pour ton ami avant toi. C'est rare. Accordé.
+    ~ souvenir(momo, encre, "Tu l'as fait créditer comme producteur de tout ton projet")
+  * Rester indépendant. Merci, mais pas maintenant. #independant
+    ~ stat.authenticite += 4; stat.respect += 2
+    clemence: La porte reste ouverte. Je suis souvent au Spot.
+
+=== ch2_diamant_single
+titre: « Ça brille »
+declencheur: tick_start
+chapitres: ch2
+quand: var.contrat_diamant et non var.contrat_rompu et temps.semaine >= 2
+unique: oui
+priorite: 7
+---
+!lieu label 200 jour
+!placer diamant 252 gauche
+diamant (content): Grande nouvelle ! Ton premier single sort dans deux semaines. « Ça brille ». Refrain de l'été, garanti.
+> Il te tend une feuille. Le texte est déjà écrit. Des rimes en « -ance », une Lamborghini, des billets qui volent. Rien de toi.
+diamant: Un pro l'a écrit. Toi, tu poses, tu souris, tu danses dans le clip. Facile.
+* Accepter. C'est le jeu. #argent
+  ~ var.single_commercial = vrai; stat.hype += 12; var.abonnes += 8000; stat.authenticite -= 15; stat.argent += 1500; stat.respect -= 5
+  ~ souvenir(momo, single, "Tu as chanté « Ça brille », un texte écrit par un autre")
+  > Le single cartonne. Sur le banc, personne ne le chante.
+* Réécrire le texte toi-même, cette nuit. #sincere
+  test stat.plume vs 50
+  si reussite
+    > Au matin, tu poses ta version sur son bureau. Il la lit deux fois. « … D'accord. Mais tu gardes le refrain. »
+    ~ stat.hype += 7; stat.authenticite += 2; var.abonnes += 3000
+  sinon
+    diamant (froid): C'est mignon. On garde la version du pro.
+    ~ var.single_commercial = vrai; stat.hype += 10; stat.authenticite -= 10; var.abonnes += 6000
+* Refuser. Tu ne chanteras pas les mots d'un autre. #independant
+  diamant (colere): Tu as signé. Tu m'appartiens pour huit ans. Pas de single, pas d'argent. On verra qui craque le premier.
+  ~ rel.diamant -= 15; stat.moral -= 8; stat.authenticite += 4; stat.hype -= 4
+
+=== ch2_blanchiment
+titre: La porte entrouverte
+declencheur: enter:label
+chapitres: ch2
+quand: var.contrat_diamant et non var.contrat_rompu et temps.semaine >= 3
+unique: oui
+priorite: 8
+---
+> L'accueil est vide. La porte du bureau est entrouverte. Des voix, et un bruit que tu reconnais : une machine à compter les billets.
+> Par l'entrebâillement, tu vois Diamant et un homme en survêtement que tout le quartier connaît : « le Grand », le patron de Dris. Sur le bureau, des liasses. Des dizaines.
+diamant (content): Trois concerts « complets » ce mois-ci. Mes petits artistes remplissent des salles vides, et ton argent ressort propre comme un sou neuf.
+* Filmer la scène avec ton téléphone, sans bruit. #preuve
+  test stat.scene + stat.moral / 4 vs 40
+  si reussite
+    > Quarante secondes de vidéo. Les visages, les liasses, la phrase. Tu redescends l'escalier sans respirer.
+    ~ var.preuve_blanchiment = vrai
+  sinon
+    !son tension
+    > Ton téléphone vibre. Les voix s'arrêtent. Diamant ouvre la porte, souriant comme un requin.
+    diamant (froid): Tu n'as rien vu. Tu n'as rien entendu. Et ta petite famille dort tranquille. On se comprend ?
+    ~ stat.moral -= 12; rel.diamant -= 10; var.menace = vrai
+* Repartir sans un bruit. Tu n'as rien vu. #prudent
+  ~ stat.moral -= 4
+  > Dans le bus du retour, tu repenses aux salles « complètes » où tu as chanté devant trente personnes.
+* Frapper et entrer comme si de rien n'était. #ruse
+  diamant (surpris): Ah ! Notre star. Tiens, un petit bonus. Pour ta… discrétion.
+  ~ stat.argent += 1000; stat.authenticite -= 6
+  > Le Grand te regarde longtemps. Il connaît ton visage, maintenant.
+
+=== ch2_rupture
+titre: La porte de sortie
+declencheur: talk:clemence
+chapitres: ch2
+quand: var.contrat_diamant et non var.contrat_rompu et var.preuve_blanchiment
+unique: oui
+priorite: 9
+tags: important
+---
+!placer clemence 160 droite
+clemence (pensif): Montre-moi.
+> Elle regarde la vidéo deux fois. Puis elle appelle son avocate, sans te quitter des yeux.
+clemence: Avec ça, Diamant te rend ta liberté sans un centime de pénalité. Ou alors, la police s'en occupe. À toi de choisir.
+* Faire plier Diamant et signer chez Encre. #independant
+  ~ var.contrat_rompu = vrai; var.contrat_encre = vrai; var.label_nom = "Encre Records"; stat.authenticite += 8; stat.hype += 4
+  > Le lendemain, Diamant signe ta lettre de résiliation sans te regarder. Sa main tremble. Il ne dit qu'un mot : « Dégage. »
+  !rappel diamant.signature
+* Porter la vidéo à la police. #justice
+  ~ var.contrat_rompu = vrai; var.contrat_encre = vrai; var.label_nom = "Encre Records"; var.denonce = vrai; stat.respect += 6; stat.hype += 6
+  ~ actu("Valbrune : le patron du label Diamant Noir interpellé pour blanchiment d'argent")
+  > Trois jours plus tard, les voitures de police bloquent la rue du Spot. Diamant sort menotté, la veste sur les poignets. Ton nom n'apparaît nulle part. Mais au quartier, tout le monde sait.
+* Garder la vidéo. Pour l'instant. #prudent
+  clemence: C'est ta décision. Mais une preuve, ça se périme.
+
+=== ch2_dris_sac
+titre: Le visage de Dris
+declencheur: tick_start
+chapitres: ch2
+quand: temps.semaine >= 2 et non var.dris_parti
+unique: oui
+priorite: 6
+---
+!lieu cite 430 nuit
+!placer dris 450 gauche
+> Dris t'attend sur le banc. Il a un œil gonflé et la lèvre fendue.
+dris (triste): J'ai perdu une livraison. Quatre mille euros. Le Grand me laisse une semaine.
+dris: Il faut que je planque un sac. Trois jours. Le studio, personne n'y pense. Je te le demande comme à [[un frère|une sœur]].
+* [stat.argent >= 2000] Lui donner deux mille euros, pour qu'il s'en sorte. #genereux
+  ~ stat.argent -= 2000; rel.dris += 15; var.dris_aide = vrai
+  dris (emu): … Je te rembourserai. Je te le jure sur la tête de ma mère.
+  ~ souvenir(dris, argent, "Tu lui as donné deux mille euros pour rembourser le Grand")
+* Accepter de cacher le sac. Une dernière fois. #danger
+  ~ var.dris_sac = vrai; var.dris_deal += 1; rel.dris += 8; planifier(ch2_descente, 2)
+  [var.dris_deal >= 2] !rappel dris.sac
+  > Le sac retrouve sa place derrière le canapé de la cave. Momo ne doit rien savoir.
+* Refuser. Tu as trop à perdre. #prudent
+  ~ rel.dris -= 10; stat.authenticite += 2
+  dris (colere): Trop à perdre. Ouais. Moi, je n'ai plus rien à perdre, justement.
+* « Arrête tout, Dris. Pars d'ici. Je t'aiderai. » #sincere
+  test stat.respect + rel.dris / 2 vs 48
+  si reussite
+    > Il pleure, pour la première fois depuis vos douze ans. Le lendemain, il prend un train pour Marseille, chez son oncle.
+    ~ var.dris_parti = vrai; var.dris_sauve = vrai; rel.dris += 12; stat.moral += 6
+    ~ souvenir(dris, depart, "Tu l'as convaincu de tout quitter")
+  sinon
+    dris (triste): Partir où ? Avec quel argent ? T'es gentil, mais t'es naïf.
+    ~ rel.dris += 2
+
+=== ch2_descente
+titre: Six heures du matin
+declencheur: scheduled
+chapitres: ch2
+unique: oui
+---
+!lieu cite 380 aube
+!son tension
+> Six heures du matin. Des gyrophares partout dans la cité. Des chiens. Des policiers cagoulés devant la porte de la cave du bâtiment C.
+si var.dris_sac
+  > Ils trouvent le sac en dix minutes. Le studio est sous scellés. On te passe les menottes devant ta mère en chemise de nuit.
+  ~ var.garde_a_vue = vrai; stat.moral -= 20; rel.mere -= 12
+  si var.dris_deal >= 2
+    > Garde à vue. Quarante-huit heures. Puis le juge. Ce n'est pas la première fois que ce sac dort dans ta cave, et les enquêteurs le savent : ils ont des écoutes, des photos, des dates.
+    ~ var.chute = vrai
+    ~ fin(fin_chute)
+  sinon
+    > Quarante-huit heures de garde à vue. Au bout de la deuxième nuit, Dris se présente au commissariat. Il dit tout. Que tu ne savais pas ce qu'il y avait dedans. Que c'était lui, seulement lui.
+    ~ var.dris_arrete = vrai; var.dris_parti = vrai; var.studio_ferme = 2; stat.hype -= 4; rel.dris += 10
+    > Tu sors libre. Le studio reste fermé deux semaines. Ta mère ne te parle plus pendant trois jours.
+    !rappel dris.sac
+
+=== ch2_vortex
+titre: Les deux rives
+declencheur: talk:rival
+chapitres: ch2
+unique: oui
+priorite: 7
+---
+!placer rival 270 gauche
+si var.clash_gagne
+  rival (pensif): Tu m'as éteint[[rival:|e]], ce soir-là. Six mois que les gamins des Hauts me chantent ta punchline dans le dos.
+sinon si var.clash_perdu
+  rival: Tu as perdu la battle, mais tu as tenu. Peu de gens tiennent face à moi. Ça m'a travaillé[[rival:|e]].
+sinon si var.clash_ignore
+  rival (moqueur): Tiens, le silencieux. Toujours pas de réponse à « Mauvaise herbe » ?
+sinon
+  rival: Tout le monde me parle de toi. J'ai fini par écouter. C'est… pas mal.
+rival: J'ai une idée. Les Glycines et les Hauts-de-Brune, ça fait vingt ans que ça se déteste. Et si on faisait un son ensemble ? « Les deux rives ».
+* Accepter. Valbrune mérite mieux qu'une guerre de quartiers. #paix
+  test stat.respect + rel.rival / 2 + stat.plume / 3 vs 38
+  si reussite
+    > Vous passez la nuit au studio. Momo n'en revient pas. Au petit matin, « Les deux rives » est enregistré, et vous riez comme de vieux amis.
+    ~ var.rival_paix = vrai; var.feat_rival = vrai; rel.rival += 20; stat.hype += 6; var.sons += 1; var.textes += 1
+    ~ souvenir(rival, deux_rives, "Vous avez enregistré « Les deux rives » ensemble")
+  sinon
+    > Vous essayez. Mais chaque couplet devient un concours d'ego. À trois heures du matin, [[rival:il|elle]] claque la porte du studio.
+    ~ rel.rival -= 4
+* « Je préfère une revanche. Au festival, devant tout le monde. » #clash
+  ~ var.revanche = vrai; stat.respect += 2; rel.rival -= 2
+  rival (fier): Une revanche. Enfin un peu d'action. Prépare-toi.
+* « Je n'ai rien à faire avec toi. » #froid
+  ~ rel.rival -= 6
+  rival (froid): Comme tu veux. Reste sur ta rive.
+
+=== ch2_momo_dispute
+titre: Le mur de la cave
+declencheur: tick_end
+chapitres: ch2
+quand: non var.momo_parti et (var.momo_ecarte ou rel.momo < 15)
+unique: oui
+priorite: 6
+---
+!lieu studio 220 nuit
+!placer momo 236 gauche
+> Momo t'attend au studio. Il montre du doigt la date écrite au feutre à côté de la porte.
+momo (colere): Tu te souviens de ça ? Six mois. Tu m'avais juré. Et maintenant tu fais des sons avec les producteurs des autres et tu ne réponds même plus à mes messages.
+!rappel momo.six_mois
+* T'excuser, et lui promettre que l'EP sera cent pour cent ses prods. #loyal
+  ~ rel.momo += 14; var.momo_ecarte = faux; var.momo_credite = vrai
+  momo (emu): … T'as intérêt. Sinon je te tue. Musicalement.
+* « C'est le business, Momo. Faut grandir. » #ambition
+  ~ rel.momo -= 25; var.momo_parti = vrai
+  > Il débranche son PC sans un mot, l'emporte sous le bras et sort. La cave n'a jamais été aussi silencieuse.
+  ~ souvenir(momo, depart, "Tu lui as dit que c'était « le business »")
+* Ne rien dire. Le laisser vider son sac. #ecoute
+  ~ rel.momo += 4
+  momo (triste): Tu dis rien. C'est pire que tout, tu sais.
+
+=== ch2_momo_kaiser
+titre: L'appel de Paris
+declencheur: tick_start
+chapitres: ch2
+quand: var.momo_contact_kaiser et temps.semaine >= 4
+unique: oui
+priorite: 6
+---
+!lieu studio 220 nuit
+!placer momo 236 gauche
+momo (surpris): Kaïser m'a appelé. Lui-même. Il veut que je produise la moitié de son prochain album. À Paris. Un appartement, un salaire, un vrai studio.
+si rel.momo >= 25 et non var.momo_parti
+  momo (pensif): Je lui ai dit que je réfléchissais. Parce qu'il y a une date sur le mur de la cave.
+  * « Vas-y. Tu le mérites plus que personne. » #genereux
+    ~ var.momo_kaiser = vrai; var.momo_parti = vrai; rel.momo += 10
+    momo (emu): Tu es sûr ? … Je reviendrai. Je te ferai les meilleures prods de ma vie, depuis là-bas.
+  * « Reste. On n'a pas fini, toi et moi. » #loyal
+    ~ rel.momo += 6
+    momo (content): C'est ce que je voulais entendre. Je lui dis non. Kaïser attendra.
+sinon
+  momo (froid): Je lui ai dit oui. De toute façon, ici, on ne me demandait plus rien.
+  ~ var.momo_kaiser = vrai; var.momo_parti = vrai
+  > Il part le samedi suivant. Sur le mur de la cave, la date au feutre est toujours là.
+
+=== ch2_ep
+titre: L'EP
+declencheur: activity:enregistrer
+chapitres: ch2
+quand: var.sons >= 4
+unique: oui
+priorite: 9
+tags: important
+---
+[non var.momo_parti] !placer momo 220 droite
+> Quatrième morceau dans la boîte. Tu réécoutes les quatre à la suite, dans le noir. C'est un EP. Ton EP.
+* Le titre phare sera « Glycines ». Pour le quartier. #quartier
+  ~ stat.respect += 4; stat.authenticite += 2; var.titre_ep = "Glycines"
+* Le titre phare sera « {var.blaze != '' ? var.blaze : 'Seize mesures'} ». Ton nom, ton histoire. #sincere
+  ~ stat.authenticite += 3; var.titre_ep = "titre"
+* Le titre phare sera le plus dansant, celui qui passera en radio. #ambition
+  ~ stat.hype += 4; stat.authenticite -= 2; var.titre_ep = "radio"
+si var.contrat_encre
+  > Encre Records s'occupe de tout : distribution, radios, playlists. Clémence t'envoie un seul message : « [[Fier|Fière]] de toi. »
+  ~ stat.hype += 4
+sinon si var.contrat_diamant et non var.contrat_rompu
+  > Diamant Noir le sort avec un budget énorme. Affiches dans le métro, influenceurs payés. Ton visage partout, retouché.
+  ~ stat.hype += 8; stat.authenticite -= 4
+sinon
+  > Tu le sors toi-même, un vendredi à minuit, avec une pochette dessinée par Lina.
+  ~ stat.authenticite += 3
+test (stat.plume + stat.flow) / 2 + stat.hype / 2 vs 54
+si reussite
+  !fx confettis
+  !son positif
+  > Le lundi, l'EP est dans le top 10 des sorties. Le mercredi, une radio nationale passe ton titre phare. Le vendredi, tu pleures dans la cave, et Momo aussi.
+  ~ var.ep_succes = vrai; stat.hype += 14; var.abonnes += 20000; stat.argent += 1500
+sinon
+  > Les chiffres sont honnêtes. Pas énormes. Quelques milliers d'écoutes, des messages de gens que tu ne connais pas, qui disent que ta musique les aide à tenir. Ça compte aussi.
+  ~ stat.hype += 5; var.abonnes += 3000; stat.moral += 4
+~ var.ep_sorti = vrai; objectifReussi(ep)
+
+=== ch2_festival_annonce
+titre: Le programmateur
+declencheur: tick_start
+chapitres: ch2
+quand: temps.semaine >= 3
+unique: oui
+priorite: 9
+---
+!son notif
+si stat.hype >= 45 ou var.ep_succes ou var.feat_kaiser
+  > Un mail du festival Bitume : « Nous serions ravis de vous accueillir sur la grande scène, samedi en fin de saison, à 22 h. » La grande scène. À 22 h.
+  ~ var.grande_scene = vrai
+sinon
+  > Un mail du festival Bitume : « Nous avons un créneau pour vous sur la scène découverte, samedi en fin de saison, à 17 h. » La scène découverte. Pas la grande. Mais tu y es.
+~ var.festival_ouvert = vrai; objectifReussi(festival)
+~ objectif(concert, "Préparer ton concert au festival Bitume : il a lieu à la fin de la dernière semaine")
+> Le site du festival est déjà monté sur le parking de l'ancienne usine, en centre-ville. Tu peux aller faire une balance avant le grand soir.
+
+=== ch2_repetition
+titre: La balance
+declencheur: enter:festival
+chapitres: ch2
+unique: oui
+priorite: 6
+---
+> La scène est immense, vide, offerte. Des techniciens courent dans tous les sens. Un régisseur te tend un micro.
+* Répéter tout le set, deux fois. #travail
+  ~ stat.scene += 3; stat.energie -= 15
+  > À la deuxième fois, tu connais chaque planche de la scène.
+* Marcher jusqu'au bord et imaginer la foule. #reve
+  ~ stat.moral += 6; stat.scene += 1
+  > Tu fermes les yeux. Tu les entends déjà.
+* Prendre des photos pour ta mère. #famille
+  ~ rel.mere += 4; stat.moral += 3
+  > Elle te répond par onze émojis et un « Je viendrai ».
+
+=== ch2_festival
+titre: Le festival Bitume
+declencheur: tick_end
+chapitres: ch2
+quand: temps.semaine >= 6
+unique: oui
+priorite: 10
+---
+!lieu festival 270 nuit
+!placer moi 270 droite
+[non var.momo_parti] !placer momo 336 gauche
+!fx foule
+> Samedi soir. Le parking de la vieille usine est noir de monde. Des drapeaux, des téléphones levés, une odeur de merguez et de pluie.
+si var.grande_scene
+  > La grande scène. Vingt mille personnes. Ton nom en lettres géantes sur l'écran.
+sinon
+  > La scène découverte est pleine à craquer. Le bouche-à-oreille a fonctionné.
+~ var.bonus_scene = 0
+[non var.momo_parti] > Momo est aux platines. Il te fait un signe de tête : comme sur le banc.
+[non var.momo_parti] ~ var.bonus_scene += 8
+[var.momo_parti] > Les prods passent sur une clé USB. Tu cherches Momo des yeux, par réflexe.
+[rel.mere >= 50] > Au troisième rang, ta mère, en blouse de l'hôpital sous son manteau. Elle est venue directement après sa garde.
+[rel.mere >= 50] ~ var.famille_concert = vrai; var.bonus_scene += 4
+[present(pere) et var.pere_fier] > À côté d'elle, ton père. Il ne danse pas. Mais il filme tout.
+[present(pere) et var.pere_fier] ~ var.bonus_scene += 4
+[present(cadet) et var.cadet_sauve] > Ilyès est dans les coulisses, un badge « équipe » autour du cou, plus [[cadet:fier|fière]] que toi.
+[present(cadet) et var.cadet_sauve] ~ var.bonus_scene += 3
+* Ouvrir avec ton morceau le plus intime, dans le noir. #sincere
+  test stat.scene + stat.authenticite / 3 + var.bonus_scene vs 62
+  si reussite
+    > Vingt mille téléphones s'allument comme des étoiles. Tu chantes le dernier refrain sans le micro : la foule le connaît par cœur.
+    ~ var.festival_ok = vrai
+  sinon
+    > Le début est fragile. Le public met du temps à te suivre, puis finit par chanter avec toi.
+* Ouvrir sur ton morceau le plus violent, toutes lumières allumées. #showman
+  test stat.scene + stat.hype / 3 + var.bonus_scene vs 62
+  si reussite
+    > Le sol tremble. Un pogo s'ouvre devant la scène. Les agents de sécurité échangent des regards inquiets.
+    ~ var.festival_ok = vrai
+  sinon
+    > Le son sature, le retour ne marche pas. Tu cries plus que tu ne rappes.
+si var.rival_paix
+  !entrer rival droite 392
+  > Pour le dernier morceau, tu appelles Vortex sur scène. « Les deux rives ». Les Glycines et les Hauts-de-Brune chantent ensemble. Les anciens n'en croient pas leurs yeux.
+  ~ var.bonus_final = vrai; stat.respect += 8
+sinon si var.revanche
+  !entrer rival droite 392
+  > Vortex surgit pour la revanche promise. Une manche, a cappella, devant tout Valbrune.
+  test stat.plume + stat.scene / 2 vs 55
+  si reussite
+    > Ta dernière phrase fait hurler la foule. Vortex te serre la main. Fin de la guerre.
+    ~ stat.respect += 6; var.festival_ok = vrai; rel.rival += 10
+  sinon
+    > [[rival:Il|Elle]] gagne la manche. Le public l'acclame. Tu souris quand même : c'était un bon combat.
+    ~ stat.respect -= 2
+si var.festival_ok
+  !fx confettis
+  !son positif
+  ~ stat.hype += 10; var.abonnes += 15000
+  [var.grande_scene et (var.bonus_final ou var.ep_succes)] ~ var.festival_triomphe = vrai
+  [var.festival_triomphe] > Le lendemain, tous les médias parlent de « la claque du festival Bitume ».
+sinon
+  ~ stat.hype += 3
+  > Un bon concert. Pas une légende. Pas encore.
+~ objectifReussi(concert)

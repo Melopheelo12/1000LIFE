@@ -1,10 +1,10 @@
 // Routeur principal : titre → univers → création → jeu ; chargement ; éditeur ; fins.
 import { useEffect, useState } from 'preact/hooks';
-import type { Look, UniverseDef } from '../core/model/types';
+import type { CastChoice, Look, UniverseDef } from '../core/model/types';
 import { GameSession } from '../core/runtime/session';
 import { GameController } from '../game/controller';
 import { builtinUniverses, compiled, findUniverse } from '../game/registry';
-import { getEndings, listSaves, loadSettings, readSave, saveSettings, DEFAULT_SETTINGS, type SaveFile, type Settings } from '../game/saves';
+import { getEndings, getLastValues, listSaves, loadSettings, readSave, saveSettings, DEFAULT_SETTINGS, type SaveFile, type Settings } from '../game/saves';
 import { audio } from '../engine/audio';
 import { compileUniverse } from '../core/runtime/compile';
 import { GameScreen } from './game/GameScreen';
@@ -45,11 +45,11 @@ export function App() {
 
   const changeSettings = (s: Settings) => { setSettings(s); void saveSettings(s); };
 
-  const startGame = async (def: UniverseDef, o: { name: string; look: Look; fields: Record<string, string> }) => {
+  const startGame = async (def: UniverseDef, o: { name: string; look: Look; fields: Record<string, string>; cast?: Record<string, CastChoice> }) => {
     const u = compiled(def);
-    const meta = { endings: new Set((await getEndings())[def.id] ?? []) };
+    const meta = { endings: new Set((await getEndings())[def.id] ?? []), last: await getLastValues(def.id).catch(() => ({})) };
     u.def.config = { ...(u.def.config ?? {}), showValues: settings.showValues };
-    const g = GameSession.create(u, { name: o.name, look: o.look, fields: o.fields }, meta);
+    const g = GameSession.create(u, { name: o.name, look: o.look, fields: o.fields, cast: o.cast }, meta);
     launch(def, g, false);
   };
 

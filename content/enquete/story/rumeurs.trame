@@ -1,0 +1,134 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  LES RUMEURS DU RELAIS et LES ÉVÉNEMENTS ALÉATOIRES
+// ═══════════════════════════════════════════════════════════════════════
+
+=== ru_relais
+titre: Porte close
+declencheur: activity:rumeurs
+unique: oui
+priorite: 6
+---
+> Au bout du comptoir, le père Brossard, soixante-dix ans de pastis, parle fort pendant que Thomas est à la cave.
+> « Samedi, je suis venu pour ma tournée de dix heures et demie. Porte close ! Rideau baissé dès dix heures et quart. Thomas qui ferme avant minuit un samedi, du jamais vu. »
+si var.coupable == ami et non var.brise_ami
+  ~ var.brise_ami = vrai; var.ind_ami += 1
+sinon si var.coupable != ami et non var.mensonge_ami
+  ~ var.mensonge_ami = vrai; var.faux_ami += 1
+[vu(int_ami_1)] > Thomas t'a pourtant juré qu'[[ami:il|elle]] avait fermé à minuit.
+~ stat.intuition += 1
+
+=== ru_roussel
+titre: Les samedis du maire
+declencheur: activity:rumeurs
+quand: var.mensonge_roussel ou var.brise_roussel ou temps.total >= 3
+unique: oui
+priorite: 5
+---
+> Deux clientes, au fond de la salle, baissent la voix en parlant du maire. Tu fais semblant de lire le journal.
+si var.coupable == roussel
+  > « Sylvie, la secrétaire ? Elle était au loto à Montbrison, samedi, avec sa sœur. Alors le maire, ce soir-là, personne ne sait où il traînait. »
+  ~ stat.intuition += 2
+sinon
+  > « Le conseil ? Tu parles. Le samedi, il est chez Sylvie, sa secrétaire. Sa voiture était garée derrière chez elle jusqu'à une heure du matin, ma fille l'a vue en rentrant. »
+  ~ var.alibi_roussel = vrai
+> Elles éclatent de rire, puis se taisent en voyant que tu as tourné la page de ton journal trois fois sans la lire.
+
+=== ru_nuit
+titre: La nuit du lavoir
+declencheur: activity:rumeurs
+unique: oui
+priorite: 4
+---
+> Un routier, accoudé au comptoir, raconte qu'il est passé par la route de l'étang samedi soir, vers 22 h 40.
+si var.coupable == julien ou var.coupable == delorme
+  > « Il y avait un tout-terrain garé n'importe comment sur le chemin du lavoir, tous feux éteints. J'ai failli le prendre de plein fouet. »
+sinon
+  > « Pas une voiture, rien. Juste une silhouette, à pied, qui coupait à travers le pré vers l'étang. Elle marchait vite. »
+~ stat.intuition += 1
+
+=== ru_vasseur
+titre: Les conversations du comptoir
+declencheur: activity:rumeurs
+recharge: 1
+priorite: 4
+---
+si hasard(1, 3) == 1
+  > « Vasseur ? Il a racheté la ferme des Collet pour une bouchée de pain, l'année où leur fils s'est tué en moto. Il était là, à l'enterrement, avec son chéquier. »
+sinon si hasard(1, 2) == 1
+  > « Il prêtait de l'argent à la moitié du canton. Et il notait tout dans un carnet noir. Tout le monde le sait, personne ne l'a jamais vu. »
+  ~ var.rumeur_carnet = vrai
+sinon
+  > « Moi, je dis que c'est pas quelqu'un d'ici. Les gens d'ici, ils le détestaient depuis trop longtemps pour avoir encore la force de le tuer. »
+~ stat.confiance += 1
+
+=== al_orage
+titre: L'orage
+declencheur: random
+recharge: 4
+---
+!meteo pluie
+> Un orage éclate sur Saint-Rémy. L'électricité saute dans tout le village. Ta mère allume des bougies dans la boulangerie, comme quand tu étais petit[[|e]].
+* Relire ton carnet à la lueur des bougies. #methode
+  ~ stat.methode += 1; stat.intuition += 1
+* Aider ta mère à sauver les fournées de la nuit. #famille
+  ~ rel.mere += 6; stat.moral += 4; stat.energie -= 10
+
+=== al_journalistes
+titre: Les caméras
+declencheur: random
+quand: temps.total >= 2
+recharge: 4
+---
+> Deux camionnettes de télévision sont garées sur la place. Une journaliste en trench-coat te met un micro sous le nez : « Lieutenant ! Avez-vous un suspect ? »
+* « Aucun commentaire. » #prudent
+  ~ stat.pression += 2
+* Faire une déclaration rassurante, calme et précise. #methode
+  test stat.aplomb vs 36
+  si reussite
+    > Ta déclaration passe au journal de 20 h. La procureure t'envoie un seul mot : « Bien. »
+    ~ stat.pression -= 6; stat.confiance += 3
+  sinon
+    > Tu bafouilles. Le soir, une chaîne d'info en boucle titre : « L'enquêteur dépassé ».
+    ~ stat.pression += 8
+* Laisser entendre que tu tiens une piste sérieuse. #fuite
+  ~ stat.pression += 10; stat.confiance -= 3
+  > Le lendemain, tout le village croit savoir de qui tu parlais. Chacun a un nom différent.
+
+=== al_graffiti
+titre: Le message
+declencheur: random
+quand: temps.total >= 3
+unique: oui
+---
+> Ce matin, sur le pare-brise de ta voiture, quelqu'un a écrit au rouge à lèvres : « RENTRE À LYON ».
+* Faire relever les empreintes, par principe. #methode
+  ~ stat.methode += 1; stat.moral -= 2
+  > Aucune empreinte exploitable. Le rouge à lèvres est le plus vendu de France.
+* Laisser le message tel quel, et rouler toute la journée avec. #aplomb
+  ~ stat.aplomb += 2; stat.confiance += 2
+  > Les villageois rient sous cape en te voyant passer. Le soir, quelqu'un a lavé ton pare-brise. Tu ne sauras jamais qui.
+
+=== al_marche
+titre: Le jour du marché
+declencheur: random
+recharge: 5
+---
+> Mercredi, jour de marché. La place est pleine de stands, de cris, d'odeurs de poulet rôti. Tout Saint-Rémy est là.
+* Faire le tour des stands et serrer des mains. #village
+  ~ stat.confiance += 5; stat.energie -= 5
+* Écouter ce qui se dit sur l'affaire. #intuition
+  ~ stat.intuition += 2
+  > Tu entends six théories, quatre insultes contre la police de Lyon et une recette de pâté.
+
+=== al_insomnie
+titre: Trois heures du matin
+declencheur: random
+recharge: 3
+---
+> Impossible de dormir. Les six visages tournent au plafond de ta chambre d'enfant, entre les étoiles fluorescentes que tu y avais collées à dix ans.
+* Te relever et reprendre tout le dossier depuis le début. #methode
+  ~ stat.methode += 2; stat.energie -= 15
+* Ouvrir la fenêtre et écouter l'étang. #intuition
+  ~ stat.intuition += 2; stat.moral += 2
+* Te forcer à dormir. #prudent
+  ~ stat.energie += 5

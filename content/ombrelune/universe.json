@@ -174,7 +174,28 @@
   "issue": "",
   "allies": 0,
   "points_classe": 0,
-  "bonus_cours": 0
+  "bonus_cours": 0,
+  "cadet_magie": false,
+  "cadet_arrive": false,
+  "cadet_protege": false,
+  "cadet_blesse": false,
+  "promesse_cadet": false,
+  "aine_reconcilie": false,
+  "aine_brouille": false,
+  "pere_visite": false,
+  "pretendant": false,
+  "jaloux": false,
+  "confiance_couple": false,
+  "ex_ayla": false,
+  "rupture": false,
+  "dispute_couple": false,
+  "ayla_noe": false,
+  "secret_trahi": false,
+  "traitre_noe": false,
+  "coup_noe": false,
+  "coup_sera": false,
+  "coup_avoue": false,
+  "rdv_manque": false
  },
  "traits": [
   {
@@ -333,15 +354,15 @@
    "id": "ayla",
    "name": "Ayla Morven",
    "short": "Ayla",
-   "role": "Élève de Souffle, voyante",
+   "role": "Élève de Souffle, [[ayla:voyant|voyante]]",
    "traits": [
     "reveur",
     "sage"
    ],
    "relation": 0,
    "relationLabel": "Affection",
-   "description": "Elle parle peu, dessine les étoiles et voit parfois ce qui n'est pas encore arrivé.",
-   "goals": "comprendre ses visions avant qu'elles ne la dévorent.",
+   "description": "[[ayla:Il|Elle]] parle peu, dessine les étoiles et voit parfois ce qui n'est pas encore arrivé.",
+   "goals": "comprendre ses visions avant qu'elles ne [[ayla:le|la]] dévorent.",
    "look": {
     "skin": "peau3",
     "hair": "mi_long",
@@ -362,7 +383,7 @@
      "text": "Les étoiles sont nerveuses, ce soir."
     },
     {
-     "text": "Je t'ai vu dans un rêve. Tu souriais.",
+     "text": "Je t'ai [[vu|vue]] dans un rêve. Tu souriais.",
      "if": "rel.ayla >= 40"
     }
    ]
@@ -756,6 +777,118 @@
     "bottom": "jupe",
     "bottomColor": "#7c2236"
    }
+  },
+  {
+   "id": "pere",
+   "name": "Armand",
+   "short": "Papa",
+   "role": "Ton père",
+   "description": "Il répare tout ce qui se casse au village, sauf les silences. Il garde ta première lettre dans la poche de sa veste.",
+   "goals": "que tu reviennes un jour à la maison, la tête haute.",
+   "relation": 35,
+   "relationLabel": "Lien",
+   "look": {
+    "skin": "peau3",
+    "hair": "court",
+    "hairColor": "brun",
+    "beard": "barbe3j",
+    "top": "veste",
+    "topColor": "#5a4632",
+    "topColor2": "#d8c9a8",
+    "bottom": "pantalon",
+    "bottomColor": "#3b3e47",
+    "shoes": "#2a2a33",
+    "build": "costaud"
+   },
+   "barks": [
+    {
+     "text": "Tu as grandi. Ou c'est moi qui rapetisse."
+    }
+   ]
+  },
+  {
+   "id": "cadet",
+   "name": "Lili",
+   "role": "[[cadet:Ton petit frère|Ta petite sœur]]",
+   "description": "Huit ans, une imagination débordante, et la conviction absolue que tu es [[le plus grand sorcier|la plus grande sorcière]] du monde.",
+   "goals": "faire de la magie, comme toi.",
+   "relation": 40,
+   "relationLabel": "Complicité",
+   "look": {
+    "skin": "peau3",
+    "hair": "couettes",
+    "hairColor": "chatain",
+    "gender": "f",
+    "height": "enfant",
+    "build": "mince",
+    "top": "sweat",
+    "topColor": "#e8a33c",
+    "bottom": "jean",
+    "shoes": "#c84a4a"
+   },
+   "barks": [
+    {
+     "text": "Tu me montres un sort ? Un petit ? Un tout petit ?"
+    },
+    {
+     "text": "Ici, tout le monde sait que je suis [[cadet:ton frère|ta sœur]].",
+     "if": "var.cadet_arrive"
+    }
+   ]
+  },
+  {
+   "id": "aine",
+   "name": "Mathis",
+   "role": "[[aine:Ton grand frère|Ta grande sœur]]",
+   "description": "Dix-sept ans. Pas une étincelle de magie. [[aine:Il|Elle]] a toujours été [[aine:le plus fort|la plus forte]] de la famille, jusqu'au jour où ta lettre d'Ombrelune est arrivée.",
+   "goals": "trouver sa place, [[aine:lui|elle]] aussi.",
+   "relation": 10,
+   "relationLabel": "Lien",
+   "look": {
+    "skin": "peau3",
+    "hair": "undercut",
+    "hairColor": "brun",
+    "top": "sweat",
+    "topColor": "#3b3e47",
+    "bottom": "jean",
+    "bottomColor": "#2b3a5a",
+    "shoes": "#f4f4f4",
+    "height": "grand"
+   },
+   "barks": [
+    {
+     "text": "Alors, le prodige ?"
+    }
+   ]
+  },
+  {
+   "id": "cael",
+   "name": "Caël Dorne",
+   "short": "Caël",
+   "role": "Élève de Flamme, beau parleur",
+   "description": "Brillant, charmant, et parfaitement conscient de l'être. Il obtient toujours ce qu'il veut. Presque toujours.",
+   "goals": "qu'on ne lui dise jamais non.",
+   "relation": 0,
+   "relationLabel": "Estime",
+   "look": {
+    "skin": "peau5",
+    "hair": "undercut",
+    "hairColor": "noir",
+    "top": "toge",
+    "topColor": "#a8323a",
+    "topColor2": "#e2b440",
+    "bottom": "pantalon",
+    "bottomColor": "#25222b",
+    "shoes": "#2a2a33",
+    "acc": [
+     "collier"
+    ]
+   },
+   "barks": [
+    {
+     "text": "Tiens, {joueur.nom}. Toujours dans l'ombre de quelqu'un ?"
+    }
+   ]
   }
  ],
  "locations": [
@@ -916,6 +1049,12 @@
      "x": 380,
      "face": "gauche",
      "when": "chapitre == ch1 ou chapitre == ch2"
+    },
+    {
+     "id": "cael",
+     "x": 420,
+     "face": "gauche",
+     "when": "chapitre == ch3 ou chapitre == ch4"
     }
    ]
   },
@@ -1211,6 +1350,20 @@
      "x": 80,
      "face": "droite",
      "when": "var.mentor_lia"
+    },
+    {
+     "id": "cadet",
+     "x": 120,
+     "face": "droite",
+     "when": "var.cadet_arrive",
+     "look": {
+      "top": "toge",
+      "topColor": "#c4cad3",
+      "topColor2": "#e2b440",
+      "bottom": "pantalon",
+      "bottomColor": "#25222b",
+      "shoes": "#2a2a33"
+     }
     }
    ],
    "hotspots": [
@@ -2760,6 +2913,114 @@
       "effects": "stat.ruse += 10; stat.discipline += 5"
      }
     ]
+   }
+  ],
+  "cast": [
+   {
+    "id": "claire",
+    "label": "Ta mère",
+    "group": "Famille",
+    "hint": "Elle t'écrit chaque semaine."
+   },
+   {
+    "id": "pere",
+    "label": "Ton père",
+    "group": "Famille",
+    "hint": "Il répare tout au village.",
+    "optional": true
+   },
+   {
+    "id": "cadet",
+    "label": "Ta petite sœur",
+    "labels": [
+     "Ton petit frère",
+     "Ta petite sœur"
+    ],
+    "group": "Famille",
+    "hint": "Huit ans, et toi pour modèle.",
+    "genderChoice": true,
+    "optional": true,
+    "alt": {
+     "name": "Léo",
+     "look": {
+      "skin": "peau3",
+      "hair": "herisse",
+      "hairColor": "chatain",
+      "gender": "h",
+      "height": "enfant",
+      "build": "mince",
+      "top": "sweat",
+      "topColor": "#3c8de8",
+      "bottom": "jean",
+      "shoes": "#c84a4a"
+     }
+    }
+   },
+   {
+    "id": "aine",
+    "label": "Ton grand frère",
+    "labels": [
+     "Ton grand frère",
+     "Ta grande sœur"
+    ],
+    "group": "Famille",
+    "hint": "Dix-sept ans, et pas une once de magie.",
+    "genderChoice": true,
+    "optional": true,
+    "defaultAbsent": true,
+    "alt": {
+     "name": "Nina",
+     "look": {
+      "skin": "peau3",
+      "hair": "long",
+      "hairColor": "brun",
+      "gender": "f",
+      "top": "sweat",
+      "topColor": "#3b3e47",
+      "bottom": "jean",
+      "bottomColor": "#2b3a5a",
+      "shoes": "#f4f4f4",
+      "height": "grand"
+     }
+    }
+   },
+   {
+    "id": "noe",
+    "label": "Ton meilleur ami",
+    "group": "Amis et rivaux",
+    "hint": "Le fils du boulanger, rencontré dans la barque."
+   },
+   {
+    "id": "sera",
+    "label": "Ta rivale",
+    "group": "Amis et rivaux",
+    "hint": "Héritière d'une grande lignée de mages."
+   },
+   {
+    "id": "ayla",
+    "label": "Celle qui fera battre ton cœur",
+    "labels": [
+     "Celui qui fera battre ton cœur",
+     "Celle qui fera battre ton cœur"
+    ],
+    "group": "Cœur",
+    "hint": "Voit parfois ce qui n'est pas encore arrivé.",
+    "genderChoice": true,
+    "alt": {
+     "name": "Aylan",
+     "look": {
+      "skin": "peau3",
+      "hair": "meche",
+      "hairColor": "nuit",
+      "gender": "h",
+      "top": "toge",
+      "topColor": "#c4cad3",
+      "topColor2": "#6a3fa8",
+      "bottom": "pantalon",
+      "bottomColor": "#25222b",
+      "shoes": "#2a2a33"
+     }
+    }
    }
   ]
  },

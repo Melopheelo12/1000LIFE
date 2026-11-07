@@ -1,0 +1,218 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  ÉVÉNEMENTS ALÉATOIRES et SOIRÉES D'OPEN MIC
+// ═══════════════════════════════════════════════════════════════════════
+
+=== al_coupure
+titre: Coupure de courant
+declencheur: random
+recharge: 4
+---
+> Plus de lumière dans toute la cité. Dans la cave, le PC de Momo s'éteint au milieu d'une prise.
+> Quelqu'un allume la torche de son téléphone. Puis un autre. Dans le hall du bâtiment C, une vingtaine de voisins se retrouvent dans le noir.
+* Lancer un freestyle a cappella pour tout le monde. #showman
+  test stat.flow vs 34
+  si reussite
+    > Les voisins tapent dans leurs mains. La dame du rez-de-chaussée apporte du thé. Quand le courant revient, personne ne bouge.
+    ~ stat.flow += 2; stat.respect += 3; stat.moral += 4
+  sinon
+    > Tu t'arrêtes au bout de quatre mesures. Les enfants rient. Ça te fait rire aussi.
+    ~ stat.moral += 2
+* Remonter écrire à la bougie. #plume
+  ~ stat.plume += 2; var.textes += 1
+  > Le texte de cette nuit sent la cire et le silence.
+
+=== al_buzz
+titre: Le buzz
+declencheur: random
+quand: var.sons >= 1 ou var.open_mics >= 2
+chance: 50
+recharge: 3
+---
+!son notif
+> Quelqu'un a découpé quinze secondes d'un de tes passages et les a postées avec un filtre ridicule. Trois cent mille vues en une nuit.
+* Jouer le jeu : refaire la vidéo toi-même, en mieux. #showman
+  ~ stat.hype += 5; var.abonnes += 3000; stat.authenticite -= 1
+* Remercier la personne et partager le morceau en entier. #sincere
+  ~ stat.hype += 3; var.abonnes += 1500; stat.authenticite += 1
+* Ignorer. Les buzz ne durent pas. #calme
+  ~ stat.hype += 1; var.abonnes += 500
+
+=== al_controle
+titre: Contrôle d'identité
+declencheur: random
+recharge: 4
+---
+> Arrêt de bus, vingt-trois heures. Une voiture de police s'arrête. « Contrôle. Papiers. »
+> Ton sac est vidé sur le trottoir. Ton carnet de textes tombe dans une flaque.
+* Rester calme, répondre poliment. #calme
+  ~ stat.moral -= 3
+  > Dix minutes. Ils repartent. Tu essuies ton carnet avec ta manche.
+* Leur demander pourquoi c'est toujours toi. #provoc
+  test stat.respect vs 40
+  si reussite
+    > Le plus jeune des policiers baisse les yeux. « Rentrez chez vous. » Tu en fais un texte le soir même.
+    ~ stat.authenticite += 3; var.textes += 1
+  sinon
+    > Ça dure une heure. Tu rates le dernier bus et rentres à pied.
+    ~ stat.energie -= 20; stat.moral -= 6; stat.authenticite += 2
+
+=== al_voisin
+titre: Le voisin du dessous
+declencheur: random
+quand: var.sons >= 1 ou var.prods >= 1
+recharge: 5
+---
+> Monsieur Ferreira, le voisin du premier, frappe à la porte de la cave avec un manche à balai.
+> « Ça fait trois nuits que vos basses font trembler mon dentier ! »
+* Lui proposer de venir écouter. #sociable
+  > Il entre, méfiant. Il ressort une heure plus tard en hochant la tête. « Ça me rappelle le fado. En plus fort. »
+  ~ stat.moral += 3; stat.respect += 1
+* Promettre d'arrêter à vingt-deux heures. #prudent
+  ~ stat.energie += 10
+* Lui répondre que la cave est à tout le monde. #provoc
+  ~ stat.moral -= 2
+  > Le lendemain, la serrure de la cave est bouchée à la colle. Momo passe deux heures à la déboucher.
+
+=== al_carnet
+titre: Le carnet perdu
+declencheur: random
+unique: oui
+---
+> Tu as oublié ton carnet dans le bus de nuit. Trois ans de textes. Le dépôt des objets trouvés n'ouvre que lundi.
+* Passer le week-end à tout réécrire de mémoire. #plume
+  ~ stat.plume += 3; stat.energie -= 20
+  > Tu retrouves presque tout. Et ce qui manque, tu le réécris mieux.
+* Aller au dépôt du bus, dès l'aube, et attendre. #obstination
+  > Il est là, tout en haut d'une pile, entre un parapluie et une poussette. Le chauffeur l'a gardé de côté.
+  [present(pere)] > Le chauffeur, c'est un collègue de ton père. Il t'a reconnu[[|e]] sur la photo de famille du vestiaire.
+  ~ stat.moral += 6
+* Le considérer comme perdu, et commencer un carnet neuf. #renouveau
+  ~ var.carnet_vole = vrai; stat.authenticite += 2; stat.moral -= 4
+
+=== al_fan
+titre: Un autographe
+declencheur: random
+quand: stat.hype >= 15
+recharge: 3
+---
+> Un gamin d'une dizaine d'années t'arrête devant le Kiosque, un stylo à la main et les yeux ronds.
+> « C'est toi, [[le rappeur|la rappeuse]] des Glycines ? Tu peux signer sur mon bras ? Ma mère va me tuer. »
+* Signer, et lui demander s'il écrit, lui aussi. #mentor
+  ~ stat.moral += 5; stat.authenticite += 1
+  > Il sort un papier plié en quatre de sa poche. Il écrit. Évidemment qu'il écrit.
+* Signer, prendre une photo, la poster. #showman
+  ~ stat.moral += 3; stat.hype += 1; var.abonnes += 200
+
+=== al_beatmaker
+titre: Les prods d'un inconnu
+declencheur: random
+quand: non var.momo_parti
+recharge: 6
+---
+!son notif
+> Un beatmaker de Lyon t'envoie un dossier : dix prods. Elles sont incroyables. Plus propres que celles de Momo, il faut l'avouer.
+> « Prends ce que tu veux, gratuitement. Je veux juste être crédité. »
+* En prendre une pour ton prochain morceau, sans en parler à Momo. #ambition
+  ~ stat.hype += 2; rel.momo -= 6; var.momo_ecarte = vrai
+* Les faire écouter à Momo, pour qu'il apprenne. #loyal
+  ~ rel.momo += 4; stat.flow += 1
+  > Momo les écoute en silence. Puis il passe la nuit au studio. Le lendemain, il t'envoie une prod meilleure que les dix.
+* Refuser poliment. Tu as déjà ton producteur. #loyal
+  ~ rel.momo += 3; stat.authenticite += 1
+
+=== al_insomnie
+titre: Trois heures du matin
+declencheur: random
+recharge: 3
+---
+> Trois heures du matin. Impossible de dormir. Une phrase tourne dans ta tête comme une mouche contre une vitre.
+* Se lever et écrire jusqu'au matin. #plume
+  ~ stat.plume += 2; var.textes += 1; stat.energie -= 15
+  > Au lever du soleil, tu as trois pages. Dont une ligne parfaite.
+* Mettre un casque et réécouter tes vieux sons. #nostalgie
+  ~ stat.moral += 3; stat.flow += 1
+* Se forcer à dormir. #prudent
+  ~ stat.energie += 5
+
+// ─── Soirées d'open mic ─────────────────────────────────────────────────
+
+=== om_trou
+titre: Le trou noir
+declencheur: activity:open_mic
+recharge: 2
+poids: 2
+---
+!placer fred 110 droite
+> Deuxième couplet. Plus rien. Le trou noir. Le beat continue sans toi. Trente paires d'yeux te regardent.
+* Improviser sur ce qui se passe, là, maintenant. #technique
+  test stat.flow vs 40
+  si reussite
+    > Tu rappes ton propre trou de mémoire. La salle comprend, rit, puis applaudit plus fort qu'à la fin.
+    ~ stat.hype += 3; stat.respect += 2
+  sinon
+    > Tu t'enlises. Fred coupe la musique avec douceur : « On l'applaudit quand même ! »
+    ~ stat.moral -= 5
+* Demander au DJ de reprendre au début. #sincere
+  ~ stat.respect += 1
+  > Tu reprends. Cette fois, tout revient. Les gens respectent ceux qui recommencent.
+
+=== om_rappel
+titre: Une autre !
+declencheur: activity:open_mic
+quand: stat.scene >= 40
+recharge: 2
+---
+> À la fin de ton passage, la salle tape des pieds. « UNE AUTRE ! UNE AUTRE ! » Fred lève les yeux au ciel en souriant.
+fred: Bon. Une. Mais vite, il y en a douze sur la liste.
+* Chanter ton morceau le plus récent, jamais joué. #risque
+  test stat.scene + stat.plume / 2 vs 48
+  si reussite
+    > Les gens filment. Le lendemain, trois personnes t'écrivent pour demander quand il sort.
+    ~ stat.hype += 4; var.abonnes += 400
+  sinon
+    > Tu te trompes de couplet. Personne ne s'en rend compte, sauf toi.
+    ~ stat.hype += 1
+* Laisser ta place au suivant de la liste. #humble
+  ~ stat.respect += 3; rel.fred += 4
+
+=== om_micro
+titre: Le micro qui lâche
+declencheur: activity:open_mic
+recharge: 3
+---
+> Crac. Le micro grésille, puis s'éteint au milieu de ton refrain. Fred jure en tapant sur l'ampli.
+* Continuer sans micro, en criant, debout sur une chaise. #showman
+  test stat.scene vs 38
+  si reussite
+    > Le bar entier se tait pour t'entendre. Ta voix porte jusqu'à la rue.
+    ~ stat.scene += 2; stat.hype += 2; stat.respect += 2
+  sinon
+    > Le fond de la salle n'entend rien. Mais le premier rang t'adore.
+    ~ stat.scene += 1
+* Attendre que Fred répare, en faisant des blagues. #humour
+  ~ stat.moral += 3; rel.fred += 2
+
+=== om_mot
+titre: Le mot imposé
+declencheur: activity:open_mic
+quand: var.open_mics >= 2
+recharge: 2
+---
+!placer fred 110 droite
+fred (malicieux): Ce soir, règle spéciale. Je te donne un mot, tu improvises seize mesures dessus. Ton mot, c'est… « parapluie ».
+* Le traiter sérieusement : le parapluie de ta mère, les nuits de pluie à l'arrêt de bus. #sincere
+  test stat.plume vs 42
+  si reussite
+    > Il y a des gens qui pleurent pour un parapluie, ce soir, au Spot.
+    ~ stat.plume += 2; stat.hype += 2; stat.authenticite += 1
+  sinon
+    > L'idée est belle, mais les rimes ne viennent pas.
+    ~ stat.plume += 1
+* En faire n'importe quoi, le plus drôle possible. #humour
+  test stat.flow vs 38
+  si reussite
+    > Le parapluie devient une arme, un amant, un président. La salle pleure de rire.
+    ~ stat.scene += 2; stat.hype += 2
+  sinon
+    > Ça part un peu dans tous les sens. Fred rit quand même.
+    ~ stat.moral += 2

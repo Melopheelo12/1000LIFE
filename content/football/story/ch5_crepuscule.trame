@@ -111,14 +111,14 @@ si var.yanis_protege > var.yanis_neglige
   ~ var.yanis_sauve = vrai
   !lieu quartier 300 jour
   !placer yanis 340 gauche
-  > Yanis a vingt-quatre ans. Il vient de réussir son diplôme d'éducateur sportif.
-  yanis (content): Tu sais pourquoi je fais ça ? À cause d'un grand frère qui venait me chercher au commissariat et me traînait au city le dimanche.
+  > Yanis a vingt-quatre ans. [[yanis:Il|Elle]] vient de réussir son diplôme [[yanis:d'éducateur sportif|d'éducatrice sportive]].
+  yanis (content): Tu sais pourquoi je fais ça ? À cause [[d'un grand frère|d'une grande sœur]] qui venait me chercher au commissariat et me traînait au city le dimanche.
   [mem.yanis.commissariat] !rappel yanis.commissariat
   [mem.yanis.promesse] !rappel yanis.promesse
   ~ rel.yanis += 10
 sinon
   ~ var.yanis_perdu = vrai
-  > Ta mère t'appelle en pleurs. Yanis a été condamné. Deux ans de prison ferme.
+  > Ta mère t'appelle en pleurs. Yanis a été [[yanis:condamné|condamnée]]. Deux ans de prison ferme.
   [mem.yanis.abandon] !rappel yanis.abandon
   ~ stat.moral -= 15; rel.maman -= 6
   * Lui rendre visite chaque mois #famille
@@ -176,8 +176,8 @@ priorite: 95
 > Ton jubilé. Ton dernier match. Le stade est plein, et pas seulement de supporters.
 [rel.maman >= 25] > Au premier rang, ta mère, avec la vieille écharpe qu'elle portait lors de ta finale de la Coupe des Espoirs.
 [rel.maman < 25] > La place réservée à ta mère est vide. Elle t'a envoyé un message : « Je n'ai pas pu. Je regarderai à la télé. »
-[var.couple] > Inès est là. Elle a fait cinq cents kilomètres et elle a déjà les yeux rouges.
-[var.yanis_sauve] > Yanis est venu avec quinze gamins de la cité, tous en maillot floqué à ton nom.
+[var.couple] > Inès est là. [[ines:Il|Elle]] a fait cinq cents kilomètres et [[ines:il|elle]] a déjà les yeux rouges.
+[var.yanis_sauve] > Yanis est [[yanis:venu|venue]] avec quinze gamins de la cité, tous en maillot floqué à ton nom.
 [rel.karim >= 30 et non var.karim_renvoye] > Karim a demandé à jouer dans l'équipe adverse. « Pour te marquer une dernière fois. »
 [rel.moreau >= 30] > Didier Moreau est sur le banc. Il a accepté de coacher ton équipe pour un soir.
 [rel.lucas >= 30] > Même Lucas Ferrand est venu. Il te fait un signe de tête. Ça vaut tous les discours.

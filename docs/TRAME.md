@@ -40,6 +40,10 @@ Dans tous les textes :
 
 - `{expression}` insère une valeur, par exemple `Bravo {joueur.nom}, tu as {stat.argent} € !`.
 - `[[masculin|féminin]]` accorde selon le genre du personnage joué : `Tu es [[prêt|prête]] ?`.
+- `[[id:masculin|féminin]]` accorde selon le genre d'un autre personnage, utile quand le joueur choisit le genre d'un proche à la création : `[[ines:Il|Elle]] t'attend`. Attention à l'élision : écris `[[ines:s'il|si elle]]`, pas `si [[ines:il|elle]]`.
+- Les prénoms des proches renommés par le joueur sont remplacés automatiquement : écris simplement « Inès » dans le texte.
+
+Dans les conditions, `present(id)` vaut faux si le joueur a retiré ce proche de son histoire, et `genre(id)` donne `h` ou `f`.
 
 ## Choix
 
@@ -120,6 +124,7 @@ Un mot nu qui n'est pas une valeur connue est un **symbole**, par exemple `lieu 
 | `entre(x, a, b)` | Vrai si x est entre a et b |
 | `nombre(x)` | Nombre formaté (12 500) |
 | `liste("nom", i, "champ")`, `listeHasard("nom")`, `taille("nom")` | Listes de données de l'univers |
+| `precedent("nom", défaut)` | Valeur de la variable à la **partie précédente** de cet univers, si l'univers la retient (`config.remember`), sinon la valeur par défaut. Exemple : tirer un coupable différent à chaque partie. |
 
 ## Tests de compétence
 

@@ -299,9 +299,13 @@ export function exprToString(e: Expr): string {
 
 // ─────────────────────────── Interpolation de texte ─────────────────────────
 
-export type TextPart = string | Expr | { g: [string, string] };
+export type TextPart = string | Expr | { g: [string, string]; who?: string };
 
-/** Découpe « Salut {joueur.nom} » en morceaux ; [[prêt|prête]] = accord selon le genre du joueur. */
+/**
+ * Découpe « Salut {joueur.nom} » en morceaux.
+ * [[prêt|prête]] = accord selon le genre du joueur ;
+ * [[ines:il|elle]] = accord selon le genre du personnage « ines » (choisi à la création).
+ */
 export function parseTemplate(src: string): TextPart[] {
   const parts: TextPart[] = [];
   let buf = '';
@@ -316,7 +320,9 @@ export function parseTemplate(src: string): TextPart[] {
       const bar = inner.indexOf('|');
       if (end > 0 && bar >= 0) {
         if (buf) { parts.push(buf); buf = ''; }
-        parts.push({ g: [inner.slice(0, bar), inner.slice(bar + 1)] });
+        const left = inner.slice(0, bar);
+        const m = /^([a-z_][a-z0-9_]*):(.*)$/s.exec(left);
+        parts.push(m ? { g: [m[2], inner.slice(bar + 1)], who: m[1] } : { g: [left, inner.slice(bar + 1)] });
         i = end + 2;
         continue;
       }
@@ -346,11 +352,13 @@ export function parseTemplate(src: string): TextPart[] {
   return parts;
 }
 
-export function renderTemplate(parts: TextPart[], s: Scope, feminine = false): string {
+/** feminine : genre du joueur (booléen) ou fonction (personnage → féminin ?) pour les accords [[id:…|…]]. */
+export function renderTemplate(parts: TextPart[], s: Scope, feminine: boolean | ((who?: string) => boolean) = false): string {
   let out = '';
+  const fem = typeof feminine === 'function' ? feminine : (who?: string) => (who && who !== 'moi' ? false : feminine);
   for (const p of parts) {
     if (typeof p === 'string') out += p;
-    else if ('g' in p) out += feminine ? p.g[1] : p.g[0];
+    else if ('g' in p) out += fem(p.who) ? p.g[1] : p.g[0];
     else out += toStr(evaluate(p, s));
   }
   return out;

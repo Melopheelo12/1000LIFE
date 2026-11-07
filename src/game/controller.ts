@@ -6,7 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import type { CompiledUniverse } from '../core/runtime/compile';
 import { StoryRunner, type ChoiceView, type Step } from '../core/runtime/runner';
-import type { GameSession, HubOption, Note, WeekSummary } from '../core/runtime/session';
+import { tickWords, type GameSession, type HubOption, type Note, type WeekSummary } from '../core/runtime/session';
 import type { Look, LocationDef } from '../core/model/types';
 import { toStr } from '../core/expr/expr';
 import { audio } from '../engine/audio';
@@ -15,7 +15,7 @@ import { normEmotion } from '../engine/gfx/portrait';
 import { Engine } from '../engine/engine';
 import { World, type Focus, type WorldEnv } from '../engine/world/world';
 import { Store } from '../ui/store';
-import { unlockEnding, writeSave, type Settings } from './saves';
+import { setLastValues, unlockEnding, writeSave, type Settings } from './saves';
 
 export interface Toast { id: number; kind: Note['kind']; text: string; good?: boolean }
 export interface LineView { who: string | null; name: string; emo: string; text: string; look: Look | null; color: string; bark?: boolean }
@@ -116,9 +116,10 @@ export class GameController {
   }
   charLook(id: string, override?: Look): Look | null {
     if (id === 'moi') return this.resolveLook(this.g.s.look);
-    const c = this.u.chars.get(id);
-    if (!c) return null;
-    return this.resolveLook({ ...c.look, ...(override ?? {}) });
+    const base = this.g.charLookDef(id);
+    if (!base) return null;
+    // la tenue prévue dans un lieu (maillot, robe d'école…) s'applique aussi à un proche personnalisé
+    return this.resolveLook({ ...base, ...(override ?? {}) });
   }
   /** Garde-robe : nouvelle apparence du joueur, appliquée immédiatement et sauvegardée avec la partie. */
   setPlayerLook(look: Look) {
@@ -219,7 +220,14 @@ export class GameController {
             break;
           case 'chapter': await this.showChapter(job.index); break;
           case 'summary': await this.showSummary(job.data); break;
-          case 'autosave': if (!this.opts.test) await this.save('auto').catch(() => undefined); break;
+          case 'autosave':
+            if (!this.opts.test) {
+              await this.save('auto').catch(() => undefined);
+              // Valeurs retenues pour la partie suivante (ex. le coupable de l'enquête, pour en changer).
+              const keep = this.g.rememberedValues();
+              if (keep) await setLastValues(this.u.def.id, keep).catch(() => undefined);
+            }
+            break;
           case 'ending': await this.runEnding(job.id); return;
         }
         this.flushNotes();
@@ -319,6 +327,8 @@ export class GameController {
   }
 
   async stage(cmd: string, args: string[]) {
+    // un proche retiré de l'histoire n'entre jamais en scène
+    if ((cmd === 'placer' || cmd === 'entrer') && args[0] && args[0] !== 'moi' && this.u.chars.has(args[0]) && !this.g.present(args[0])) return;
     switch (cmd) {
       case 'titre': {
         this.ui.set({ title: args.join(' '), line: null });
@@ -368,7 +378,7 @@ export class GameController {
     if (!this.opts.test) await this.save('auto').catch(() => undefined);
     this.world.inputEnabled = false;
     audio.play(en?.def.type === 'tragique' ? 'deception' : 'cloche');
-    this.ui.set({ mode: 'ending', line: null, choices: null, ending: { id, title: en?.def.title ?? id, type: en?.def.type ?? 'neutre', summary: en?.def.summary ? this.g.render(en.def.summary) : undefined } });
+    this.ui.set({ mode: 'ending', line: null, choices: null, ending: { id, title: en?.def.title ? this.g.render(en.def.title) : id, type: en?.def.type ?? 'neutre', summary: en?.def.summary ? this.g.render(en.def.summary) : undefined } });
   }
 
   // ───────────────────────────── Notifications ───────────────────────────
@@ -428,7 +438,8 @@ export class GameController {
     this.ui.set({ hotspot: null });
     if (o.kind === 'end') {
       if (this.g.s.actions > 0) {
-        const ok = await this.confirm(`Il te reste ${this.g.s.actions} action${this.g.s.actions > 1 ? 's' : ''} cette ${this.u.def.config?.tickLabel?.toLowerCase() ?? 'semaine'}. Passer à la suite quand même ?`, 'Oui, continuer', 'Non');
+        const tw = tickWords(this.u.def.config);
+        const ok = await this.confirm(`Il te reste ${this.g.s.actions} action${this.g.s.actions > 1 ? 's' : ''} ${tw.ce} ${tw.one}. Passer à la suite quand même ?`, 'Oui, continuer', 'Non');
         if (!ok || this.busy) return;
       }
       this.g.endTick();

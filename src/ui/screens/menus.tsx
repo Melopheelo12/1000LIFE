@@ -1,6 +1,7 @@
 // Écrans de menu : titre, choix de l'univers, chargement, création du personnage, fins découvertes.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import type { Look, UniverseDef } from '../../core/model/types';
+import type { ComponentChildren } from 'preact';
+import type { CastChoice, CastSlot, Look, UniverseDef } from '../../core/model/types';
 import { allUniverses, type UniverseEntry } from '../../game/registry';
 import { getEndings, listSaves, readSave, type SaveMeta, type SaveFile } from '../../game/saves';
 import { AppearanceEditor, LookPreview } from '../appearance';
@@ -141,14 +142,14 @@ export function LoadScreen({ onBack, onLoad }: { onBack: () => void; onLoad: (f:
       <div class="page" style={{ maxWidth: 760 }}>
         <div class="page-head"><button class="pbtn small" onClick={onBack}>← Retour</button><h1>Charger une partie</h1></div>
         {err && <div class="err-box">{err}</div>}
-        {metas && metas.length === 0 && <p class="muted">Aucune sauvegarde pour l'instant. Une sauvegarde automatique est créée au début de chaque semaine de jeu.</p>}
+        {metas && metas.length === 0 && <p class="muted">Aucune sauvegarde pour l'instant. Une sauvegarde automatique est créée au début de chaque semaine (ou journée) de jeu.</p>}
         <div class="slots">
           {metas?.map((m) => (
             <div class="slot pbox" key={m.slot}>
               <div class="info">
                 <div class="label">{m.slot === 'auto' ? 'Sauvegarde automatique' : `Emplacement ${m.slot}`}{m.ending ? ' · partie terminée' : ''}</div>
                 <div style={{ fontSize: 17 }}><b>{m.player}</b> — {m.universeName}</div>
-                <div class="muted">{m.chapter}, semaine {m.week} · {m.location} · {fmtTime(m.playtime)} · {new Date(m.updated).toLocaleString('fr-FR')}</div>
+                <div class="muted">{m.chapter}, {(m.tickLabel ?? 'semaine').toLowerCase()} {m.week} · {m.location} · {fmtTime(m.playtime)} · {new Date(m.updated).toLocaleString('fr-FR')}</div>
               </div>
               <button class="pbtn primary" onClick={() => load(m.slot)} disabled={!!m.ending}>Reprendre</button>
             </div>
@@ -161,41 +162,182 @@ export function LoadScreen({ onBack, onLoad }: { onBack: () => void; onLoad: (f:
 
 // ───────────────────────────── Création du personnage ──────────────────────
 
-export function CreationScreen({ def, onBack, onStart }: { def: UniverseDef; onBack: () => void; onStart: (o: { name: string; look: Look; fields: Record<string, string> }) => void }) {
+export function CreationScreen({ def, onBack, onStart }: { def: UniverseDef; onBack: () => void; onStart: (o: { name: string; look: Look; fields: Record<string, string>; cast?: Record<string, CastChoice> }) => void }) {
   const cr = def.creation ?? {};
   const [name, setName] = useState(cr.defaultName ?? '');
   const [look, setLook] = useState<Look>({ ...(cr.baseLook ?? {}) });
   const [fields, setFields] = useState<Record<string, string>>(() => Object.fromEntries((cr.fields ?? []).map((f) => [f.id, f.options[0]?.id ?? ''])));
+  const [tab, setTab] = useState<'moi' | 'entourage'>('moi');
+  const pageRef = useRef<HTMLDivElement>(null);
+  const firstTab = useRef(true);
+  // en changeant d'onglet, on revient en haut de la page (utile sur téléphone)
+  useEffect(() => { if (firstTab.current) { firstTab.current = false; return; } pageRef.current?.scrollIntoView({ block: 'start' }); }, [tab]);
+  const [cast, setCast] = useState<Record<string, CastState>>(() => Object.fromEntries((cr.cast ?? []).map((sl) => [sl.id, initialCast(def, sl)])));
   const shown = useMemo(() => resolveStaticLook(def, look, fields), [look, fields]);
   const ready = name.trim().length > 0;
+  const hasCast = (cr.cast ?? []).length > 0;
+  const start = () => { audio.unlock(); onStart({ name: name.trim(), look, fields, cast: hasCast ? castChoices(def, cast) : undefined }); };
   return (
     <div class="screen">
-      <div class="page">
+      <div class="page" ref={pageRef}>
         <div class="page-head"><button class="pbtn small" onClick={onBack}>← Univers</button><h1>{def.name}</h1></div>
-        <div class="creation">
-          <div class="preview-box pbox">
-            <LookPreview look={shown} name={name} sub={(cr.fields ?? []).map((f) => f.options.find((o) => o.id === fields[f.id])?.label).filter(Boolean).join(' · ')} />
+        {hasCast && (
+          <div class="tabs creation-tabs" role="tablist">
+            <button role="tab" aria-selected={tab === 'moi'} class={`pbtn ${tab === 'moi' ? 'on' : ''}`} onClick={() => setTab('moi')}>1. Toi</button>
+            <button role="tab" aria-selected={tab === 'entourage'} class={`pbtn ${tab === 'entourage' ? 'on' : ''}`} onClick={() => setTab('entourage')}>2. Ton entourage</button>
           </div>
-          <div class="col pbox" style={{ padding: 18, gap: 18 }}>
-            <label class="field">{cr.nameLabel ?? 'Nom'}
-              <input type="text" id="creation-name" maxLength={24} value={name} onInput={(e) => setName((e.target as HTMLInputElement).value)} />
-            </label>
-            {cr.look !== false && <AppearanceEditor look={look} onChange={setLook} base={cr.baseLook ?? {}} />}
-            {(cr.fields ?? []).map((f) => (
-              <div class="field" key={f.id}>{f.label}
-                <div class="opts">
-                  {f.options.map((o) => (
-                    <button key={o.id} class={`pbtn opt ${fields[f.id] === o.id ? 'on' : ''}`} onClick={() => setFields({ ...fields, [f.id]: o.id })} aria-pressed={fields[f.id] === o.id}>
-                      <b>{o.label}</b>{o.description && <small>{o.description}</small>}
-                    </button>
-                  ))}
+        )}
+        {tab === 'moi' && (
+          <div class="creation">
+            <div class="preview-box pbox">
+              <LookPreview look={shown} name={name} sub={(cr.fields ?? []).map((f) => f.options.find((o) => o.id === fields[f.id])?.label).filter(Boolean).join(' · ')} />
+            </div>
+            <div class="col pbox" style={{ padding: 18, gap: 18 }}>
+              <label class="field">{cr.nameLabel ?? 'Nom'}
+                <input type="text" id="creation-name" maxLength={24} value={name} onInput={(e) => setName((e.target as HTMLInputElement).value)} />
+              </label>
+              {cr.look !== false && <AppearanceEditor look={look} onChange={setLook} base={cr.baseLook ?? {}} />}
+              {(cr.fields ?? []).map((f) => (
+                <div class="field" key={f.id}>{f.label}
+                  <div class="opts">
+                    {f.options.map((o) => (
+                      <button key={o.id} class={`pbtn opt ${fields[f.id] === o.id ? 'on' : ''}`} onClick={() => setFields({ ...fields, [f.id]: o.id })} aria-pressed={fields[f.id] === o.id}>
+                        <b>{o.label}</b>{o.description && <small>{o.description}</small>}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-            <button class="pbtn primary" disabled={!ready} onClick={() => { audio.unlock(); onStart({ name: name.trim(), look, fields }); }} style={{ fontSize: 18, textAlign: 'center' }}>Commencer cette vie</button>
+              ))}
+              {hasCast
+                ? <button class="pbtn primary" onClick={() => setTab('entourage')} style={{ fontSize: 18, textAlign: 'center' }}>Suivant : ton entourage →</button>
+                : <button class="pbtn primary" disabled={!ready} onClick={start} style={{ fontSize: 18, textAlign: 'center' }}>Commencer cette vie</button>}
+            </div>
           </div>
-        </div>
+        )}
+        {tab === 'entourage' && (
+          <CastEditor def={def} fields={fields} cast={cast} setCast={setCast} playerName={name.trim()}>
+            <div class="row" style={{ gap: 10, flexWrap: 'wrap' }}>
+              <button class="pbtn" onClick={() => setTab('moi')}>← Toi</button>
+              <button class="pbtn primary grow" disabled={!ready} onClick={start} style={{ fontSize: 18, textAlign: 'center' }}>{ready ? 'Commencer cette vie' : 'Choisis d\'abord ton prénom'}</button>
+            </div>
+          </CastEditor>
+        )}
       </div>
+    </div>
+  );
+}
+
+// ───────────────────────────── Entourage ───────────────────────────────────
+
+interface CastState { name: string; look: Look | null; genre: 'h' | 'f'; absent: boolean }
+
+function defaultGenre(def: UniverseDef, id: string): 'h' | 'f' {
+  return def.characters.find((c) => c.id === id)?.look.gender === 'f' ? 'f' : 'h';
+}
+function initialCast(def: UniverseDef, sl: CastSlot): CastState {
+  return { name: '', look: null, genre: defaultGenre(def, sl.id), absent: !!(sl.optional && sl.defaultAbsent) };
+}
+/** Prénom et apparence « par défaut » d'un proche selon le genre choisi. */
+function castDefaults(def: UniverseDef, sl: CastSlot, genre: 'h' | 'f'): { name: string; look: Look } {
+  const c = def.characters.find((x) => x.id === sl.id);
+  const base = { name: (c?.name ?? sl.id).split(' ')[0], look: c?.look ?? {} };
+  if (genre === defaultGenre(def, sl.id)) return base;
+  return sl.alt ? { name: sl.alt.name, look: sl.alt.look } : { name: base.name, look: { ...base.look, gender: genre } };
+}
+/** Ne transmet au jeu que ce que le joueur a réellement changé. */
+function castChoices(def: UniverseDef, st: Record<string, CastState>): Record<string, CastChoice> | undefined {
+  const out: Record<string, CastChoice> = {};
+  for (const sl of def.creation?.cast ?? []) {
+    const s = st[sl.id];
+    if (!s) continue;
+    const d = castDefaults(def, sl, s.genre);
+    const switched = s.genre !== defaultGenre(def, sl.id);
+    const ch: CastChoice = {};
+    const typed = s.name.trim();
+    if (typed && typed !== d.name) ch.name = typed;
+    else if (switched) ch.name = d.name;
+    if (s.look) ch.look = s.look;
+    else if (switched) ch.look = d.look;
+    if (switched) ch.genre = s.genre;
+    if (sl.optional && s.absent !== !!sl.defaultAbsent) ch.absent = s.absent;
+    if (Object.keys(ch).length) out[sl.id] = ch;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+function slotLabel(sl: CastSlot, genre: 'h' | 'f'): string {
+  return sl.labels ? sl.labels[genre === 'f' ? 1 : 0] : sl.label;
+}
+
+function CastEditor({ def, fields, cast, setCast, playerName, children }: { def: UniverseDef; fields: Record<string, string>; cast: Record<string, CastState>; setCast: (c: Record<string, CastState>) => void; playerName: string; children?: ComponentChildren }) {
+  const slots = def.creation?.cast ?? [];
+  const [editing, setEditing] = useState<string | null>(null);
+  const groups: [string, CastSlot[]][] = [];
+  for (const sl of slots) {
+    const gname = sl.group ?? 'Entourage';
+    const g = groups.find(([n]) => n === gname);
+    if (g) g[1].push(sl); else groups.push([gname, [sl]]);
+  }
+  const set = (id: string, patch: Partial<CastState>) => setCast({ ...cast, [id]: { ...cast[id], ...patch } });
+  const shownName = (sl: CastSlot) => cast[sl.id].name.trim() || castDefaults(def, sl, cast[sl.id].genre).name;
+  // deux proches (ou le joueur) avec le même prénom : on prévient, sans bloquer
+  const names = slots.filter((sl) => !cast[sl.id].absent).map((sl) => shownName(sl).toLowerCase());
+  const dup = names.some((n, i) => names.indexOf(n) !== i) || (!!playerName && names.includes(playerName.toLowerCase()));
+  const ed = editing ? slots.find((sl) => sl.id === editing) : undefined;
+  return (
+    <div class="col pbox cast-editor" style={{ padding: 18, gap: 16 }}>
+      <p class="muted" style={{ margin: 0 }}>Donne un prénom et un visage à tes proches. Tu peux aussi garder ceux de l'histoire : laisse simplement le prénom vide.</p>
+      {groups.map(([gname, list]) => (
+        <section key={gname} class="col" style={{ gap: 8 }}>
+          <h3 class="cast-group">{gname}</h3>
+          <div class="cast-grid">
+            {list.map((sl) => {
+              const s = cast[sl.id];
+              const d = castDefaults(def, sl, s.genre);
+              const lk = resolveStaticLook(def, s.look ?? d.look, fields);
+              return (
+                <div key={sl.id} class={`cast-card ${s.absent ? 'off' : ''} ${editing === sl.id ? 'editing' : ''}`} data-cast={sl.id}>
+                  <div class="cast-top">
+                    <div class="cast-portrait"><PortraitView look={lk} emo={s.absent ? 'triste' : 'content'} /></div>
+                    <div class="grow col" style={{ gap: 4, minWidth: 0 }}>
+                      <b class="cast-label">{slotLabel(sl, s.genre)}</b>
+                      {sl.hint && <small class="muted">{sl.hint}</small>}
+                      <input type="text" class="txt" maxLength={24} placeholder={d.name} value={s.name} disabled={s.absent} aria-label={`Prénom : ${slotLabel(sl, s.genre)}`} onInput={(e) => set(sl.id, { name: (e.target as HTMLInputElement).value })} />
+                    </div>
+                  </div>
+                  <div class="cast-actions">
+                    {sl.genderChoice && (
+                      <div class="seg" role="group" aria-label="Genre">
+                        {(['h', 'f'] as const).map((gk) => (
+                          <button key={gk} class={`pbtn small ${s.genre === gk ? 'on' : ''}`} aria-pressed={s.genre === gk} disabled={s.absent}
+                            onClick={() => set(sl.id, { genre: gk, look: s.look ? { ...s.look, gender: gk } : null })}>{gk === 'h' ? 'Garçon' : 'Fille'}</button>
+                        ))}
+                      </div>
+                    )}
+                    {sl.optional && (
+                      <label class="check"><input type="checkbox" checked={!s.absent} onChange={(e) => set(sl.id, { absent: !(e.target as HTMLInputElement).checked })} /> Dans ma vie</label>
+                    )}
+                    <button class="pbtn small" disabled={s.absent} onClick={() => setEditing(editing === sl.id ? null : sl.id)}>{editing === sl.id ? 'Fermer' : 'Apparence'}</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+      {ed && (
+        <div class="col pbox cast-look" style={{ padding: 14, gap: 10 }}>
+          <div class="row" style={{ justifyContent: 'space-between', gap: 8 }}>
+            <b>Apparence : {shownName(ed)}</b>
+            <div class="row" style={{ gap: 6 }}>
+              <button class="pbtn small" onClick={() => set(ed.id, { look: null })}>Apparence d'origine</button>
+              <button class="pbtn small primary" onClick={() => setEditing(null)}>Terminé</button>
+            </div>
+          </div>
+          <AppearanceEditor look={cast[ed.id].look ?? castDefaults(def, ed, cast[ed.id].genre).look} onChange={(l) => set(ed.id, { look: l, ...(ed.genderChoice && l.gender && l.gender !== cast[ed.id].genre ? { genre: l.gender } : {}) })} base={castDefaults(def, ed, cast[ed.id].genre).look} />
+        </div>
+      )}
+      {dup && <p class="warn-note">Deux personnes portent le même prénom : ce sera vite confus dans l'histoire.</p>}
+      {children}
     </div>
   );
 }
@@ -213,6 +355,9 @@ export function EndingsScreen({ onBack }: { onBack: () => void }) {
         <div class="page-head"><button class="pbtn small" onClick={onBack}>← Retour</button><h1>Fins découvertes</h1></div>
         {list?.map((e) => {
           const got = new Set(found[e.def.id] ?? []);
+          // textes des fins : accords et variables rendus avec une partie « par défaut »
+          const pv = previewSession(e.def);
+          const txt = (s?: string) => (s ? pv.render(s) : '');
           return (
             <section key={e.def.id} class="col">
               <h2 style={{ margin: 0 }}>{e.def.name} <span class="muted" style={{ fontSize: 16 }}>{got.size}/{e.def.endings.length}</span></h2>
@@ -223,8 +368,8 @@ export function EndingsScreen({ onBack }: { onBack: () => void }) {
                   return (
                     <div key={en.id} class={`item ${ok ? '' : 'locked'}`}>
                       <span class={`badge t-${en.type ?? 'neutre'}`}>{typeLabel[en.type ?? 'neutre']}</span>
-                      <div style={{ fontWeight: 700, marginTop: 6 }}>{secret ? '???' : en.title}</div>
-                      <div class="muted" style={{ fontSize: 13 }}>{ok ? en.summary ?? '' : secret ? 'Fin secrète. À toi de la trouver.' : 'Pas encore vécue.'}</div>
+                      <div style={{ fontWeight: 700, marginTop: 6 }}>{secret ? '???' : txt(en.title)}</div>
+                      <div class="muted" style={{ fontSize: 13 }}>{ok ? txt(en.summary) : secret ? 'Fin secrète. À toi de la trouver.' : 'Pas encore vécue.'}</div>
                     </div>
                   );
                 })}

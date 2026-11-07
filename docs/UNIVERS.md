@@ -30,7 +30,7 @@ Les univers sont enregistrés dans le navigateur, ou dans le compte de l'utilisa
 | Lieux | **Aperçu du décor en direct** avec défilement, moment de la journée et repères. Murs, sols, arrière-plans, objets (une centaine de types), sorties, personnages présents, éléments interactifs, tenue du joueur. Le bouton 📍 place un élément **en cliquant dans l'aperçu**. |
 | Activités | Coût (actions ou statistiques), effets, message, condition, limite par semaine, où elle est proposée |
 | Chapitres | Ordre, durée, lieu de départ, texte d'introduction, effets de début et de fin |
-| Création du joueur | Prénom, apparence de base, choix de départ (origine, poste…) avec leurs effets |
+| Création du joueur | Prénom, apparence de base, choix de départ (origine, poste…) avec leurs effets, et **entourage personnalisable** (proches renommables, genre au choix, proches facultatifs) |
 | Événements | Déclencheur, condition, chapitres, priorité, répétition, probabilité, poids, étiquettes, notes, et l'**éditeur de script** |
 | Fins | Condition, priorité, type, résumé, lieu, épilogue, ordre d'évaluation |
 | Variables et listes | Variables de départ, listes de données (JSON), mises en scène prédéfinies |
@@ -85,7 +85,7 @@ Les textes lus par le joueur ne sont jamais modifiés. C'est vérifié par les t
 | --- | --- |
 | `format`, `id`, `version`, `name`, `tagline`, `description`, `author`, `tags` | Identité |
 | `theme` | `accent`, `accent2`, `cover` (lieu de couverture) |
-| `config` | `tickLabel`, `actionsPerTick`, `actionsLabel`, `endTickLabel`, `randomEventChance`, `maxStoryEventsPerTick`, `checkScale`, `hud`, `dateLine`, `relationLevels`, `showValues` |
+| `config` | `tickLabel`, `actionsPerTick`, `actionsLabel`, `endTickLabel`, `randomEventChance`, `maxStoryEventsPerTick`, `checkScale`, `hud`, `dateLine`, `relationLevels`, `showValues`, `remember` (variables retenues pour la partie suivante, lues avec `precedent("nom")`) |
 | `stats[]` | `id`, `label`, `short`, `category`, `min`, `max`, `initial`, `format`, `color`, `visible`, `description` |
 | `traits[]` | `id`, `label`, `description`, `gain`, `loss` |
 | `characters[]` | `id`, `name`, `short`, `role`, `description`, `goals`, `traits`, `relation`, `relationLabel`, `look`, `barks`, `voice`, `hidden` |
@@ -153,8 +153,10 @@ content/mon_univers/
 - **Converger plutôt que bifurquer** : après les choix, l'histoire reprend un fil commun ; la différence vit dans les variables, les souvenirs et les relations, puis réapparaît plus tard dans des conditions.
 - **Différer** : `planifier(evt, 4)` fait payer une promesse non tenue un mois plus tard.
 - **Un « filet » de sécurité** : une fin sans condition, et au moins un élément interactif qui termine la semaine. La validation le vérifie.
+- **Un entourage personnalisable** : dans « Création », liste les proches que le joueur pourra renommer et dessiner. Pour un proche dont il choisit le genre, écris les accords avec `[[id:il|elle]]` ; pour un proche facultatif, protège chacune de ses scènes avec `present(id)` (la validation signale les répliques non protégées). Si le joueur ne change rien, l'histoire reste telle qu'elle est écrite.
 - **Toujours une sortie** : chaque lieu doit avoir au moins une porte ou un bord de scène (`exits`), sinon le joueur ne peut le quitter qu'avec la carte. La validation le signale.
 - **Verrouiller vraiment** : une porte conditionnelle (`exits[].when`) ne suffit pas, car la carte permet d'aller partout. Si toutes les portes vers un lieu sont verrouillées, donne la même condition au lieu (`when`) ; la validation le signale aussi.
 - **Un rythme hebdomadaire** : un événement `tick_end` (recharge 1) qui tire dans une réserve (`tirer cours 1`) donne une scène récurrente variée, comme le match de foot ou le cours de la semaine à Ombrelune.
 - **Des décors qui évoluent** : un objet de décor peut avoir une condition (`props[].when`). À Ombrelune, les pierres dressées n'apparaissent dans la forêt qu'une fois le cercle découvert, et les disciples encapuchonnés seulement la dernière nuit.
+- **Une énigme qui change à chaque partie** : « Six Suspects » tire son coupable dans l'introduction (`var.n_coupable = hasard(0, 5)`, puis `liste("suspects", var.n_coupable, "id")`) et le retient avec `config.remember` ; `precedent("n_coupable", -1)` permet d'en tirer un autre à la partie suivante. Chaque scène d'enquête écrit une version par coupable (`si var.coupable == helene …`), et les fausses pistes sont plafonnées pour qu'un dossier solide désigne toujours le bon suspect.
 - **Simuler souvent** : un événement « jamais déclenché » a presque toujours une condition trop stricte.

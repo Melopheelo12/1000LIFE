@@ -48,6 +48,8 @@ export interface UniverseConfig {
   relationLevels?: { min: number; label: string; color?: string }[];
   showValues?: boolean;
   endTickLabel?: string;
+  /** Variables dont la valeur est retenue d'une partie à l'autre : lisibles dans la partie suivante avec precedent("nom"). */
+  remember?: string[];
 }
 
 export interface StatDef {
@@ -206,7 +208,34 @@ export interface CreationDef {
   look?: boolean;
   baseLook?: Look;
   fields?: CreationField[];
+  /** Entourage personnalisable à la création : famille, amis, rival, amour… */
+  cast?: CastSlot[];
 }
+
+/** Un proche que le joueur peut personnaliser (prénom, apparence, genre, présence). */
+export interface CastSlot {
+  /** identifiant du personnage concerné */
+  id: string;
+  /** libellé dans l'écran de création, ex. « Ta mère » */
+  label: string;
+  /** libellés selon le genre choisi : [masculin, féminin], ex. ["Ton petit frère", "Ta petite sœur"] */
+  labels?: [string, string];
+  /** regroupement à l'écran, ex. « Famille », « Amis et rivaux », « Cœur » */
+  group?: string;
+  /** courte description sous le libellé */
+  hint?: string;
+  /** le joueur peut choisir le genre (frère ou sœur, amoureux ou amoureuse) */
+  genderChoice?: boolean;
+  /** prénom et apparence proposés quand le joueur choisit l'autre genre */
+  alt?: { name: string; look: Look };
+  /** le joueur peut retirer ce personnage de son histoire */
+  optional?: boolean;
+  /** absent par défaut (le joueur peut l'ajouter) */
+  defaultAbsent?: boolean;
+}
+
+/** Choix du joueur pour un proche. Rien = le personnage tel qu'il est écrit. */
+export interface CastChoice { name?: string; look?: Look; genre?: 'h' | 'f'; absent?: boolean }
 
 export interface CreationField {
   id: string;
@@ -305,4 +334,6 @@ export interface GameState {
   snapshot: { stats: Record<string, number>; rel: Record<string, number>; journal: number; tick: number };
   playtime: number;
   started: number;
+  /** entourage personnalisé à la création */
+  cast?: Record<string, CastChoice>;
 }

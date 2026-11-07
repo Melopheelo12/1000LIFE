@@ -14,7 +14,7 @@ priorite: 20
 !placer lia 240 gauche
 > Le soir de la rentrée, sur le quai, une toute petite fille en robe verte pleure en serrant sa valise.
 lia (triste): Je me suis perdue… Tout le monde est parti… Je ne sais même pas où est le château…
-* Viens, je te montre. Moi aussi, j'étais perdu, la première fois. #genereux
+* Viens, je te montre. Moi aussi, j'étais [[perdu|perdue]], la première fois. #genereux
   ~ rel.lia += 12; var.mentor_lia = vrai; stat.reputation += 2
   ~ souvenir(lia, quai, "Tu l'as accompagnée jusqu'au château le soir de son arrivée")
   lia (content): Merci… Je m'appelle Lia. Lia Kade. Je suis en Racine.
@@ -57,7 +57,7 @@ sinon
     ~ rel.sera += rel.sera >= 0 ? 5 : -3
   sinon
     !fx sort sera moi
-    > Séraphine danse autour de toi. Tu es désarmé avant d'avoir compris.
+    > Séraphine danse autour de toi. Tu es [[désarmé|désarmée]] avant d'avoir compris.
     ~ var.duel_defaites += 1; stat.moral -= 8; var.elimine = vrai
     ~ objectifEchoue("tournoi")
     sera (content): Désolée. Enfin… pas vraiment.
@@ -129,7 +129,7 @@ orin (content): Quel honneur. Montre-moi ce que tu as appris. Avec moi… ou san
     > Orin te désarme avec une élégance presque cruelle, puis il te tend la main pour te relever.
     ~ var.duel_defaites += 1; stat.moral -= 6; stat.duel += 3; stat.reputation += 6
     ~ objectifEchoue("tournoi")
-    orin: Tu seras peut-être champion un jour. Avec un bon professeur.
+    orin: Tu seras peut-être [[champion|championne]] un jour. Avec un bon professeur.
 * [var.pacte] Tout donner à la flamme noire. #ombre
   !fx eclair
   !fx tremblement
@@ -193,12 +193,12 @@ gaspard (inquiet): Ton ami, le rouquin. Il est parti dans la forêt il y a deux 
       > La silhouette se disperse comme de la fumée au vent.
       ~ rel.noe += 15; stat.courage += 5; stat.reputation += 4
       ~ souvenir(noe, sauve_foret, "Tu l'as sauvé de la silhouette noire dans la forêt")
-      noe (emu): Tu es venu… Tu es vraiment venu…
+      noe (emu): Tu es [[venu|venue]]… Tu es vraiment [[venu|venue]]…
     sinon
       !fx fumee
       > Ton sort la traverse sans effet. Elle griffe le bras de Noé avant de disparaître.
       ~ rel.noe += 8; var.noe_blesse = vrai; stat.moral -= 6
-      ~ souvenir(noe, sauve_foret, "Tu es venu le chercher dans la forêt, même si ça a mal tourné")
+      ~ souvenir(noe, sauve_foret, "Tu es [[venu|venue]] le chercher dans la forêt, même si ça a mal tourné")
   * [var.familier] Appeler {var.familier_nom}. #creature
     test stat.creatures vs 35
     si reussite
@@ -270,12 +270,12 @@ unique: oui
 priorite: 7
 ---
 ayla (inquiet): Je n'arrive plus à dormir. Chaque nuit, je vois le château en feu. Et des élèves en robe noire qui chantent.
-ayla (triste): Et toi. Toujours toi, au milieu. Je ne sais pas si tu es celui qui allume le feu ou celui qui l'éteint.
+ayla (triste): Et toi. Toujours toi, au milieu. Je ne sais pas si tu es [[celui|celle]] qui allume le feu ou [[celui|celle]] qui l'éteint.
 * Alors on va le découvrir ensemble. Viens méditer avec moi à la tour. #romance
   ~ rel.ayla += 12; var.ayla_proche = vrai
-  ~ souvenir(ayla, ensemble, "Tu lui as promis de comprendre ses visions avec elle")
+  ~ souvenir(ayla, ensemble, "Tu lui as promis de comprendre ses visions avec [[ayla:lui|elle]]")
   ayla (emu): Ensemble ? …D'accord.
-* [stat.ombre >= 25] Peut-être que je serai celui qui l'allume. #ombre
+* [stat.ombre >= 25] Peut-être que je serai [[celui|celle]] qui l'allume. #ombre
   ~ rel.ayla -= 10
   ayla (inquiet): Ne dis pas ça. Même pour rire.
 * Ce ne sont que des rêves, Ayla. #rationnel
@@ -291,17 +291,17 @@ unique: oui
 priorite: 8
 ---
 !placer ayla 230 gauche
-> Il est tard. Le vitrail de la tour projette des étoiles de couleur sur le sol. Ayla est là, comme si elle t'attendait.
+> Il est tard. Le vitrail de la tour projette des étoiles de couleur sur le sol. Ayla est là, comme [[ayla:s'il|si elle]] t'attendait.
 ayla: J'ai enfin vu la fin de mon rêve, cette nuit. Le château brûle, mais quelqu'un tient ma main. C'est toi.
 * (Lui prendre la main) #romance
   ~ var.couple = vrai; rel.ayla += 15; stat.moral += 10
   ~ souvenir(ayla, main, "Tu lui as pris la main sous le vitrail de la tour")
   ayla (content): …Ah. Donc c'était ça.
   > Vous restez longtemps sans parler, à regarder les étoiles bouger sur les dalles.
-* Ayla… je tiens à toi, mais comme une amie. #honnete
+* Ayla… je tiens à toi, mais comme [[ayla:un ami|une amie]]. #honnete
   ~ rel.ayla -= 3; var.ayla_amie = vrai
   ayla (triste): Je sais. Je l'avais vu aussi. Je voulais juste… vérifier.
-  ~ souvenir(ayla, amie, "Tu lui as dit que tu tenais à elle comme à une amie")
+  ~ souvenir(ayla, amie, "Tu lui as dit que tu tenais à [[ayla:lui|elle]] comme à [[ayla:un ami|une amie]]")
 
 === ch3_orin_vol
 titre: Une petite faveur

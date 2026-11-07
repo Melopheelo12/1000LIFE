@@ -31,8 +31,8 @@ maman (serieux): Tu passes ton bac. Quoi qu'il arrive.
   ~ rel.maman -= 8; stat.confiance += 5
   ~ souvenir(maman, refus_bac, "Tu lui as dit que le bac ne servait à rien")
   maman (triste): …On en reparlera.
-maman: Ton frère t'a fait ça. Il a passé la soirée dessus.
-> Elle te tend un dessin : toi, en maillot, soulevant une coupe immense. En bas, en grosses lettres : « MON FRÈRE LE CHAMPION ».
+maman: [[yanis:Ton frère|Ta sœur]] t'a fait ça. [[yanis:Il|Elle]] a passé la soirée dessus.
+> Elle te tend un dessin : toi, en maillot, soulevant une coupe immense. En bas, en grosses lettres : « [[MON FRÈRE LE CHAMPION|MA SŒUR LA CHAMPIONNE]] ».
 ~ rencontrer(yanis)
 maman (emu): Allez, file. Ils t'attendent.
 !sortir maman gauche
@@ -197,8 +197,8 @@ priorite: 60
 ---
 !placer ines 196 gauche
 !placer moi 160 droite
-> Cours de mathématiques, obligatoire pour les pensionnaires. Une fille relève la tête quand tu entres.
-ines: Tu es le nouveau footeux ? Assieds-toi, il reste une place à côté de moi. Je ne mords pas. Enfin, pas en maths.
+> Cours de mathématiques, obligatoire pour les pensionnaires. [[ines:Un garçon|Une fille]] relève la tête quand tu entres.
+ines: Tu es [[le nouveau footeux|la nouvelle footeuse]] ? Assieds-toi, il reste une place à côté de moi. Je ne mords pas. Enfin, pas en maths.
 ~ rencontrer(ines)
 * Tu es aussi au centre ? #sociable
   ines: Non, je suis au lycée d'à côté. Le centre loue nos salles. Je prépare le concours de kiné. Kiné du sport.
@@ -306,7 +306,7 @@ djibril: Justement ! Tu passes, tu rentres à minuit. Allez, Cendrillon.
 * [rel.djibril >= 30] Lui proposer plutôt de venir voir ton match #sociable
   djibril (rire): Moi, dans un stade, à neuf heures du matin ? …Bon. Pour toi, d'accord.
   ~ var.djibril_au_match = vrai; rel.djibril += 4
-djibril: Au fait. Ton petit frère traîne avec les grands du bâtiment D. Je dis ça, je dis rien.
+djibril: Au fait. [[yanis:Ton petit frère|Ta petite sœur]] traîne avec les grands du bâtiment D. Je dis ça, je dis rien.
 ~ var.alerte_yanis = vrai
 
 === ch1_lendemain_de_fete
@@ -329,7 +329,7 @@ sinon
   > Personne ne semble au courant. Pour cette fois.
 
 === ch1_yanis_batiment_d
-titre: Le petit frère
+titre: [[yanis:Le petit frère|La petite sœur]]
 declencheur: enter:appart_maman
 chapitres: ch1
 quand: var.alerte_yanis
@@ -342,7 +342,7 @@ yanis (content): T'es là ! Tu restes manger ? Maman fait des pâtes au thon !
 > Yanis porte une casquette neuve. Bien trop chère pour le budget de la famille.
 * Elle vient d'où, cette casquette ? #famille
   yanis (inquiet): …Un cadeau. Des grands du bâtiment D. Je leur rends des petits services.
-  * Lui parler sérieusement, comme un grand frère #famille #cle
+  * Lui parler sérieusement, comme [[un grand frère|une grande sœur]] #famille #cle
     moi: Yanis. Ces gars-là ne font pas de cadeaux. Un jour, ils te demanderont quelque chose que tu ne voudras pas faire.
     yanis (triste): Toi, t'es jamais là. Eux, ils sont là.
     moi: Alors je serai plus là. Promis. Et toi, tu viens t'entraîner au city avec moi le week-end.
@@ -351,7 +351,7 @@ yanis (content): T'es là ! Tu restes manger ? Maman fait des pâtes au thon !
   * En parler à maman #famille
     ~ rel.yanis -= 8; rel.maman += 4; var.yanis_protege += 1
     yanis (colere): Balance !
-  * Laisser couler, il est grand
+  * Laisser couler, [[yanis:il est grand|elle est grande]]
     ~ var.yanis_neglige += 1
     yanis: T'inquiète, je gère.
 * Le complimenter sur sa casquette

@@ -2,7 +2,7 @@
 // activités, chapitres, création du personnage.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type {
-  ActivityDef, ChapterDef, CharacterDef, ExitDef, HotspotDef, LocationDef, Look, NpcPlacement, PropDef, StatDef, TraitDef, UniverseDef,
+  ActivityDef, CastSlot, ChapterDef, CharacterDef, ExitDef, HotspotDef, LocationDef, Look, NpcPlacement, PropDef, StatDef, TraitDef, UniverseDef,
 } from '../../core/model/types';
 import {
   ACCESSORIES, ANIMS, BEARD_STYLES, BOTTOM_STYLES, HAIR_COLORS, HAIR_STYLES, SKINS, SPR_H, TOP_STYLES, getFrame, lookLabel, randomLook,
@@ -16,6 +16,7 @@ import { ListDetail, issuesOf, IssueBox, type EdCtx } from './common';
 import { uniqueId } from './templates';
 
 const statOpts = (d: UniverseDef): [string, string][] => d.stats.map((s) => [s.id, s.label]);
+const varOpts = (d: UniverseDef): [string, string][] => Object.keys(d.vars ?? {}).map((k) => [k, k]);
 const charOpts = (d: UniverseDef): [string, string][] => d.characters.map((c) => [c.id, c.name]);
 const locOpts = (d: UniverseDef): [string, string][] => d.locations.map((l) => [l.id, l.name]);
 const actOpts = (d: UniverseDef): [string, string][] => (d.activities ?? []).map((a) => [a.id, a.label]);
@@ -73,6 +74,7 @@ export function UniverseSection({ c }: { c: EdCtx }) {
         <F label="Ligne sous la date (HUD)" hint="Texte interpolé, ex. {var.age} ans"><Code kind="tpl" value={cfg.dateLine} onChange={(v) => upCfg({ dateLine: v })} /></F>
         <F label="Valeurs chiffrées" group><Check checked={cfg.showValues !== false} onChange={(v) => upCfg({ showValues: v })} label="Afficher les chiffres des jauges et des gains" /></F>
         <F label="Statistiques affichées en jeu (HUD)" span={3} group><Chips options={statOpts(d)} value={cfg.hud} onChange={(v) => upCfg({ hud: v })} /></F>
+        <F label="Variables retenues pour la partie suivante" span={3} group hint="Lisibles dans la partie suivante avec precedent(&quot;nom&quot;, défaut). Ex. : tirer un coupable différent à chaque partie.">{varOpts(d).length ? <Chips options={varOpts(d)} value={cfg.remember} onChange={(v) => upCfg({ remember: v && v.length ? v : undefined })} /> : <span class="muted small">Déclare d'abord des variables de départ (section « Variables et listes »).</span>}</F>
       </div>
 
       <h3 class="ed-h">Niveaux de relation</h3>
@@ -650,6 +652,37 @@ export function CreationSection({ c }: { c: EdCtx }) {
                   <F label="Effets" span={3}><Code kind="fx" value={o.effects} onChange={(v) => setO({ ...o, effects: v })} placeholder="ex. stat.force += 10" /></F>
                 </div>
               )} />
+          </div>
+        )} />
+      <h3 class="ed-h">Entourage personnalisable</h3>
+      <p class="muted small">Les proches que le joueur peut renommer et dessiner à la création (famille, meilleur ami, rival, amour…). Leurs prénoms sont remplacés partout dans l'histoire. Pour un proche dont le joueur choisit le genre, écris les accords avec <code>{'[[id:il|elle]]'}</code>. Pour un proche facultatif, protège ses scènes avec <code>present(id)</code>.</p>
+      <Rows<CastSlot> items={cr.cast} onChange={(v) => up({ cast: v })} addLabel="Proche"
+        create={() => ({ id: d.characters.find((ch) => !(cr.cast ?? []).some((x) => x.id === ch.id))?.id ?? '', label: 'Ton meilleur ami', group: 'Amis et rivaux' })}
+        render={(sl, setSl) => (
+          <div class="col">
+            <div class="ed-grid tight">
+              <F label="Personnage"><Sel value={sl.id} onChange={(v) => setSl({ ...sl, id: v ?? sl.id })} options={d.characters.map((ch) => [ch.id, ch.name] as [string, string])} /></F>
+              <F label="Libellé" hint="ex. « Ta mère »"><Txt value={sl.label} onChange={(v) => setSl({ ...sl, label: v })} /></F>
+              <F label="Groupe" hint="ex. « Famille »"><Txt value={sl.group} onChange={(v) => setSl({ ...sl, group: opt(v) })} /></F>
+              <F label="Aide" span={3}><Txt value={sl.hint} onChange={(v) => setSl({ ...sl, hint: opt(v) })} placeholder="Courte description sous le libellé" /></F>
+              <F label="Options" group span={3}>
+                <Check checked={!!sl.genderChoice} onChange={(v) => setSl({ ...sl, genderChoice: v || undefined })} label="Le joueur choisit le genre" />
+                <Check checked={!!sl.optional} onChange={(v) => setSl({ ...sl, optional: v || undefined })} label="Le joueur peut le retirer de son histoire" />
+                {sl.optional && <Check checked={!!sl.defaultAbsent} onChange={(v) => setSl({ ...sl, defaultAbsent: v || undefined })} label="Absent par défaut" />}
+              </F>
+            </div>
+            {sl.genderChoice && (
+              <>
+                <div class="ed-grid tight">
+                  <F label="Libellé au masculin"><Txt value={sl.labels?.[0]} onChange={(v) => setSl({ ...sl, labels: [v, sl.labels?.[1] ?? sl.label] })} placeholder="Ton petit frère" /></F>
+                  <F label="Libellé au féminin"><Txt value={sl.labels?.[1]} onChange={(v) => setSl({ ...sl, labels: [sl.labels?.[0] ?? sl.label, v] })} placeholder="Ta petite sœur" /></F>
+                  <F label="Prénom pour l'autre genre"><Txt value={sl.alt?.name} onChange={(v) => setSl({ ...sl, alt: { name: v, look: sl.alt?.look ?? {} } })} /></F>
+                </div>
+                <Fold title="Apparence pour l'autre genre">
+                  <LookEditor look={sl.alt?.look ?? {}} onChange={(look) => setSl({ ...sl, alt: { name: sl.alt?.name ?? '', look } })} resolve={c.resolveLook} />
+                </Fold>
+              </>
+            )}
           </div>
         )} />
       <IssueBox issues={iss} />

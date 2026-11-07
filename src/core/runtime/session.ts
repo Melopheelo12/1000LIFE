@@ -12,7 +12,7 @@
 import { evaluate, exprToString, parseTemplate, renderTemplate, toBool, toNum, toStr, type Expr, type Scope, type Stmt, type TextPart } from '../expr/expr';
 import { Rng, hashString } from '../rng';
 import type { CEvent, CompiledUniverse, Issue } from './compile';
-import type { Decision, GameState, HotspotDef, JournalKind, LocationDef, Look, Value } from '../model/types';
+import type { CastChoice, Decision, GameState, HotspotDef, JournalKind, LocationDef, Look, UniverseDef, Value } from '../model/types';
 
 export type Job =
   | { t: 'event'; id: string }
@@ -59,9 +59,12 @@ export interface NewGameOptions {
   fields?: Record<string, string>;
   seed?: number;
   gender?: 'h' | 'f';
+  /** entourage personnalisé : prénom, apparence, genre, présence */
+  cast?: Record<string, CastChoice>;
 }
 
-export interface MetaInfo { endings: Set<string> }
+/** Informations conservées d'une partie à l'autre : fins découvertes, et valeurs retenues de la partie précédente (config.remember). */
+export interface MetaInfo { endings: Set<string>; last?: Record<string, unknown> }
 
 const FN_ALIASES: Record<string, string> = {
   round: 'arrondi', floor: 'plancher', ceil: 'plafond', clamp: 'borne', rand: 'hasard', odds: 'cote',
@@ -69,10 +72,21 @@ const FN_ALIASES: Record<string, string> = {
   size: 'taille', level: 'niveau', between: 'entre', remember: 'souvenir', forget: 'oublier', meet: 'rencontrer',
   schedule: 'planifier', cancel: 'annuler', end: 'fin', notify: 'notifier', news: 'actu', objective: 'objectif',
   complete: 'objectifReussi', fail: 'objectifEchoue', travel: 'aller', nextChapter: 'chapitreSuivant', format: 'nombre', drift: 'eloigner',
+  previous: 'precedent',
 };
+/** Mots du temps de jeu selon l'unité de l'univers (« semaine », « journée », « jour »…) : singulier, pluriel, genre et déterminants. */
+export function tickWords(cfg?: { tickLabel?: string }): { one: string; many: string; fem: boolean; ce: string; le: string; un: string } {
+  const one = (cfg?.tickLabel ?? '').trim().toLowerCase() || 'semaine';
+  const many = /[sxz]$/.test(one) ? one : `${one}s`;
+  const fem = /e$/.test(one) || ['nuit', 'saison', 'part'].includes(one);
+  const vowel = /^[aeiouyhàâéèêëîïôûü]/.test(one);
+  return { one, many, fem, ce: fem ? 'cette' : vowel ? 'cet' : 'ce', le: vowel ? "l'" : fem ? 'la ' : 'le ', un: fem ? 'une' : 'un' };
+}
+
 export const EXPR_FUNCTIONS = [
   'min', 'max', 'abs', 'arrondi', 'plancher', 'plafond', 'borne', 'hasard', 'chance', 'test', 'cote', 'vu', 'nb',
   'depuis', 'choisi', 'trait', 'choix', 'liste', 'listeHasard', 'taille', 'poisson', 'niveau', 'entre', 'nombre', 'planifie',
+  'present', 'genre', 'precedent',
 ];
 export const EFFECT_FUNCTIONS = [
   'souvenir', 'oublier', 'rencontrer', 'planifier', 'annuler', 'fin', 'notifier', 'actu', 'journal', 'objectif',
@@ -126,6 +140,7 @@ export class GameSession {
       location: def.start.location, fired: {}, scheduled: [], history: [], journal: [], objectives: {},
       tags: {}, actDone: {}, ending: null, pendingEnding: null,
       snapshot: { stats: {}, rel: {}, journal: 0, tick: 0 }, playtime: 0, started: Date.now(),
+      cast: cleanCast(def, opts.cast),
     };
     const g = new GameSession(u, state, meta);
     // Effets des choix de création (poste, origine, personnalité…)
@@ -169,12 +184,43 @@ export class GameSession {
   charName(id: string): string {
     if (id === 'moi') return toStr(this.s.player.nom);
     const c = this.u.chars.get(id);
-    return c ? this.render(c.name) : id;
+    if (!c) return id;
+    return this.render(c.name);
   }
   firstName(id: string): string {
     const c = this.u.chars.get(id);
+    if (this.s.cast?.[id]?.name) return this.charName(id).split(' ')[0];
     if (c?.short) return this.render(c.short);
     return this.charName(id).split(' ')[0];
+  }
+
+  // ───────────────────────────── Entourage ───────────────────────────────
+
+  /** Le personnage fait-il partie de l'histoire ? (un proche retiré à la création n'apparaît pas) */
+  present(id: string): boolean {
+    const ch = this.s.cast?.[id];
+    if (ch && typeof ch.absent === 'boolean') return !ch.absent;
+    // sans choix explicite (partie de test, ancienne sauvegarde) : la présence par défaut de l'entourage
+    return !this.u.def.creation?.cast?.find((sl) => sl.id === id)?.defaultAbsent;
+  }
+  /** Genre d'un personnage : choix du joueur, sinon celui de son apparence. */
+  charGenre(id: string): 'h' | 'f' {
+    if (id === 'moi') return this.s.player.genre === 'f' ? 'f' : 'h';
+    return this.s.cast?.[id]?.genre ?? (this.u.chars.get(id)?.look.gender === 'f' ? 'f' : 'h');
+  }
+  /** Apparence d'un personnage (personnalisée par le joueur ou celle de l'univers). */
+  charLookDef(id: string): Look | undefined {
+    return this.s.cast?.[id]?.look ?? this.u.chars.get(id)?.look;
+  }
+  private nameSubKey = '';
+  private nameSubFn: ((t: string) => string) | null = null;
+  /** Remplace dans un texte affiché les prénoms écrits dans l'histoire par ceux choisis par le joueur. */
+  subNames(text: string): string {
+    const cast = this.s.cast;
+    if (!cast || !text) return text;
+    const key = JSON.stringify(cast);
+    if (key !== this.nameSubKey) { this.nameSubKey = key; this.nameSubFn = buildNameSub(this.u.def, cast); }
+    return this.nameSubFn ? this.nameSubFn(text) : text;
   }
 
   relationLevel(v: number): { label: string; color?: string } {
@@ -265,6 +311,13 @@ export class GameSession {
       case 'poisson': return this.rng.poisson(n(0));
       case 'niveau': return this.relationLevel(this.s.rel[toStr(a[0])] ?? 0).label;
       case 'nombre': return fmtNumber(n(0));
+      case 'present': return this.present(toStr(a[0]));
+      case 'genre': return this.charGenre(toStr(a[0]));
+      case 'precedent': {
+        // Valeur d'une variable à la partie précédente (si l'univers la retient), sinon la valeur par défaut donnée.
+        const v = this.meta.last?.[toStr(a[0])];
+        return v === undefined || v === null ? (a.length > 1 ? a[1] : '') : (v as Value);
+      }
     }
     this.issue(`Fonction inconnue « ${name} »`);
     return 0;
@@ -277,13 +330,14 @@ export class GameSession {
   test(e: Expr | undefined): boolean { return e ? toBool(this.eval(e, false)) : true; }
   testSrc(src: string | undefined, where?: string): boolean { return src ? this.test(this.u.cond(src, where)) : true; }
 
+  private readonly fem = (who?: string) => (who ? this.charGenre(who) === 'f' : this.s.player.genre === 'f');
   render(src: string | TextPart[]): string {
     try {
       if (typeof src === 'string') {
-        if (!src.includes('{') && !src.includes('[[')) return src;
-        return renderTemplate(parseTemplateCached(src), this.scope, this.s.player.genre === 'f');
+        if (!src.includes('{') && !src.includes('[[')) return this.subNames(src);
+        return this.subNames(renderTemplate(parseTemplateCached(src), this.scope, this.fem));
       }
-      return renderTemplate(src, this.scope, this.s.player.genre === 'f');
+      return this.subNames(renderTemplate(src, this.scope, this.fem));
     } catch (err) {
       this.issue(`Texte : ${(err as Error).message}`);
       return typeof src === 'string' ? src : src.map((p) => (typeof p === 'string' ? p : '…')).join('');
@@ -334,7 +388,8 @@ export class GameSession {
       this.note({ kind: 'stat', text: statTexts.map((t) => t.text).join(' · '), good: goods >= statTexts.length - goods });
     } else for (const t of statTexts) this.note({ kind: 'stat', id: t.id, text: t.text, good: t.good });
     for (const [id, d] of relDelta) {
-      if (!d) continue;
+      // un proche retiré de l'histoire à la création ne « réagit » pas : pas de notification
+      if (!d || !this.present(id)) continue;
       const nm = this.firstName(id);
       const showVal = this.config.showValues !== false;
       const txt = d > 0 ? `${nm} apprécie${showVal ? ` (+${d})` : ''}` : `${nm} n'apprécie pas${showVal ? ` (−${Math.abs(d)})` : ''}`;
@@ -475,7 +530,7 @@ export class GameSession {
   recordDecision(eventId: string, title: string, choice: string, tags: string[]) {
     const s = this.s;
     const d: Decision = {
-      tick: s.time.tick, ch: s.time.chapter + 1, wk: s.time.week, event: eventId, title, choice, tags, fx: [],
+      tick: s.time.tick, ch: s.time.chapter + 1, wk: s.time.week, event: eventId, title: this.render(title), choice, tags, fx: [],
       key: tags.includes('cle') || tags.includes('important') || undefined,
     };
     s.history.push(d);
@@ -568,7 +623,7 @@ export class GameSession {
   hub(): HubInfo {
     const loc = this.u.locs.get(this.s.location) ?? this.u.def.locations[0];
     const npcs = (loc.npcs ?? [])
-      .filter((n) => this.u.chars.has(n.id) && this.testSrc(n.when, `lieu ${loc.id}`))
+      .filter((n) => this.u.chars.has(n.id) && this.present(n.id) && this.testSrc(n.when, `lieu ${loc.id}`))
       .map((n) => ({ id: n.id, x: n.x, face: n.face, anim: n.anim, lane: n.lane, look: n.look, hasNew: this.hasEligible(`talk:${n.id}`, true) }));
     const exits = (loc.exits ?? [])
       .filter((e) => this.testSrc(e.when, `lieu ${loc.id}`) && this.locationAvailable(e.to))
@@ -587,7 +642,7 @@ export class GameSession {
     }
     if (h.event && this.u.events.has(h.event)) {
       const ev = this.u.events.get(h.event)!;
-      out.push({ kind: 'event', id: h.event, label: ev.def.title ?? h.label, enabled: this.isEligible(ev) });
+      out.push({ kind: 'event', id: h.event, label: this.render(ev.def.title ?? h.label), enabled: this.isEligible(ev) });
     }
     if (h.endTick) {
       out.push({ kind: 'end', id: 'end', label: this.config.endTickLabel ?? `Terminer la ${this.config.tickLabel?.toLowerCase() ?? 'semaine'}`, enabled: true });
@@ -603,7 +658,8 @@ export class GameSession {
     let reason: string | undefined;
     const needActions = cost.actions ?? 0;
     if (needActions) parts.push(`${needActions} ${this.config.actionsLabel?.toLowerCase() ?? 'action'}${needActions > 1 && !this.config.actionsLabel ? 's' : ''}`);
-    if (needActions > this.s.actions) reason = `Plus assez d'${this.config.actionsLabel?.toLowerCase() ?? 'actions'} cette ${this.config.tickLabel?.toLowerCase() ?? 'semaine'}`;
+    const tw = tickWords(this.config);
+    if (needActions > this.s.actions) reason = `Plus assez d'${this.config.actionsLabel?.toLowerCase() ?? 'actions'} ${tw.ce} ${tw.one}`;
     for (const [k, v] of Object.entries(cost)) {
       if (k === 'actions') continue;
       const st = this.u.stats.get(k);
@@ -611,8 +667,8 @@ export class GameSession {
       parts.push(st?.format === 'argent' ? `${fmtNumber(v)} €` : `${v} ${label.toLowerCase()}`);
       if (!reason && (this.s.stats[k] ?? 0) < v) reason = `${label} insuffisant${label.endsWith('e') ? 'e' : ''} (${v} requis)`;
     }
-    if (!reason && d.maxPerTick && (this.s.actDone[aid] ?? 0) >= d.maxPerTick) reason = `Déjà fait cette ${this.config.tickLabel?.toLowerCase() ?? 'semaine'}`;
-    if (!reason && a.when && !this.test(a.when)) reason = d.lockedText ?? this.humanize(a.when);
+    if (!reason && d.maxPerTick && (this.s.actDone[aid] ?? 0) >= d.maxPerTick) reason = `Déjà fait ${tw.ce} ${tw.one}`;
+    if (!reason && a.when && !this.test(a.when)) reason = d.lockedText ? this.render(d.lockedText) : this.humanize(a.when);
     return { kind: 'activity', id: aid, label: this.render(d.label), description: d.description ? this.render(d.description) : undefined, enabled: !reason, reason, cost: parts.join(' · ') || undefined };
   }
 
@@ -756,6 +812,15 @@ export class GameSession {
     }
   }
 
+  /** Valeurs des variables que l'univers retient pour la partie suivante (config.remember). */
+  rememberedValues(): Record<string, Value> | null {
+    const keys = this.u.def.config?.remember ?? [];
+    if (!keys.length) return null;
+    const out: Record<string, Value> = {};
+    for (const k of keys) if (k in this.s.vars) out[k] = this.s.vars[k];
+    return out;
+  }
+
   resolveEnding(): string {
     const forced = this.s.pendingEnding;
     if (forced && forced !== '*' && this.u.endings.some((e) => e.def.id === forced)) return forced;
@@ -804,7 +869,7 @@ export class GameSession {
   }
 
   dateLine(): string {
-    const tpl = this.config.dateLine ?? '{chapitre_titre} · Semaine {temps.semaine}/{temps.semaines}';
+    const tpl = this.config.dateLine ?? `{chapitre_titre} · ${this.config.tickLabel ?? 'Semaine'} {temps.semaine}/{temps.semaines}`;
     return this.render(tpl.replace('{chapitre_titre}', this.chapter.def.title));
   }
 }
@@ -827,3 +892,60 @@ function parseTemplateCached(src: string): TextPart[] {
 }
 
 export function seedFromString(s: string) { return hashString(s); }
+
+// ───────────────────────────── Entourage : utilitaires ─────────────────────
+
+/** Ne garde que les choix valides (personnages de l'entourage, prénoms raisonnables). */
+export function cleanCast(def: UniverseDef, cast?: Record<string, CastChoice>): Record<string, CastChoice> | undefined {
+  if (!cast) return undefined;
+  const slots = new Map((def.creation?.cast ?? []).map((sl) => [sl.id, sl]));
+  const out: Record<string, CastChoice> = {};
+  for (const [id, ch] of Object.entries(cast)) {
+    const sl = slots.get(id);
+    if (!sl || !ch) continue;
+    const c: CastChoice = {};
+    const name = (ch.name ?? '').replace(/[{}\[\]]/g, '').trim().slice(0, 24);
+    if (name) c.name = name;
+    if (ch.look) c.look = ch.look;
+    if (sl.genderChoice && (ch.genre === 'h' || ch.genre === 'f')) c.genre = ch.genre;
+    if (sl.optional && typeof ch.absent === 'boolean' && ch.absent !== !!sl.defaultAbsent) c.absent = ch.absent;
+    if (Object.keys(c).length) out[id] = c;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+const VOWEL_START = /^[aeiouyàâäéèêëîïôöùûüœæh]/i;
+const ELIDED: Record<string, string> = { d: 'de', D: 'De', qu: 'que', Qu: 'Que', jusqu: 'jusque', Jusqu: 'Jusque', lorsqu: 'lorsque', Lorsqu: 'Lorsque', puisqu: 'puisque', Puisqu: 'Puisque' };
+const FULL: Record<string, string> = Object.fromEntries(Object.entries(ELIDED).map(([a, b]) => [b, a]));
+const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Construit la fonction qui remplace les prénoms par défaut par ceux du joueur,
+ * mot entier uniquement, en corrigeant l'élision (« d'Inès » → « de Noah », « de Noé » → « d'Inès »).
+ * Le nom de famille reste celui de l'histoire, sauf si le joueur tape un nom complet.
+ */
+export function buildNameSub(def: UniverseDef, cast: Record<string, CastChoice>): ((t: string) => string) | null {
+  const map = new Map<string, string>();
+  for (const [id, ch] of Object.entries(cast)) {
+    const c = def.characters.find((x) => x.id === id);
+    const custom = ch.name?.trim();
+    if (!c || !custom || c.name.includes('{')) continue;
+    const from = c.name.trim().split(/\s+/);
+    const to = custom.split(/\s+/);
+    if (custom === c.name.trim()) continue;
+    const full = to.length > 1 ? custom : [to[0], ...from.slice(1)].join(' ');
+    if (from.length > 1) map.set(from.join(' '), full);
+    if (from[0] !== to[0]) map.set(from[0], to[0]);
+    if (to.length > 1 && from.length > 1) map.set(from[from.length - 1], to[to.length - 1]);
+  }
+  if (!map.size) return null;
+  const names = [...map.keys()].sort((a, b) => b.length - a.length).map(escRe).join('|');
+  const re = new RegExp(`(?<![\\p{L}\\p{N}_])(?:(${Object.keys(ELIDED).join('|')})(['’])|(${Object.keys(FULL).join('|')}) )?(${names})(?![\\p{L}\\p{N}_])`, 'gu');
+  return (t: string) => t.replace(re, (_m, eli: string | undefined, apo: string | undefined, fullWord: string | undefined, name: string) => {
+    const to = map.get(name) ?? name;
+    const v = VOWEL_START.test(to);
+    if (eli) return v ? `${eli}${apo}${to}` : `${ELIDED[eli]} ${to}`;
+    if (fullWord) return v ? `${FULL[fullWord]}'${to}` : `${fullWord} ${to}`;
+    return to;
+  });
+}

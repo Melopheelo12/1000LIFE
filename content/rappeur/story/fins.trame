@@ -1,0 +1,154 @@
+// ═══════════════════════════════════════════════════════════════════════
+//  LES FINS (évaluées par priorité décroissante ; la dernière est la fin par défaut)
+// ═══════════════════════════════════════════════════════════════════════
+
+=== fin:fin_chute
+titre: Le mauvais chemin
+type: tragique
+quand: var.chute
+priorite: 100
+resume: Un sac dans une cave a tout emporté : le studio, la musique, et quelques années de ta vie.
+lieu: cite
+---
+!moment nuit
+> Le juge a été clair : complicité, récidive. Dix-huit mois, dont six ferme.
+> Le studio de la cave a été vidé. Le PC de Momo est sous scellés, avec quarante prods que personne n'entendra jamais.
+[non var.momo_parti] > Momo vient te voir au parloir tous les jeudis. Il ne te reproche rien. C'est pire.
+> Ta mère prend deux bus pour venir. Elle a acheté une robe pour les visites. « Pour que tu me voies jolie. »
+[present(pere)] > Ton père ne vient pas. Mais chaque semaine, ta mère te transmet un mot de lui, toujours le même : « Tiens bon. »
+[var.couple] > Lina t'écrit. Des lettres longues, avec des photos du toit des Beaux-Arts. Tu les colles au mur de ta cellule.
+> Dans la cour de promenade, le soir, tu écris. Sur des feuilles volantes, sur des emballages de gâteaux. Un jour, ce sera un album. Peut-être.
+> Il y a des chemins qui ne mènent nulle part. Toi, tu as pris celui de Dris, une fois de trop.
+
+=== fin:fin_raccroche
+titre: Le micro raccroché
+type: neutre
+quand: var.raccroche
+priorite: 95
+resume: Tu as choisi ta famille plutôt que la scène. L'entrepôt, les nuits, et ton carnet dans la poche de ton bleu de travail.
+lieu: appart
+---
+!moment aube
+> Cinq heures du matin, l'entrepôt. Des cartons, des chariots, un néon qui grésille. Tu travailles à côté de l'oncle de Momo, qui chante faux du Fred M.
+> La facture d'électricité est payée. Celle du mois suivant aussi. Ta mère a recommencé à rire au téléphone avec ses sœurs.
+[present(cadet)] > Ilyès a récupéré ton vieux micro. [[cadet:Il|Elle]] écrit tous les soirs dans ta chambre, devenue la sienne. Parfois, tu l'écoutes à travers la porte.
+[non var.momo_parti] > Momo continue les prods, seul. Il t'envoie chaque beat, « au cas où ». Tu les écoutes dans le bus du matin.
+> Ton carnet est toujours dans la poche de ton bleu de travail. Tu n'écris plus de couplets. Tu écris des phrases, juste des phrases, entre deux palettes.
+> Ce n'est pas une défaite. C'est un autre courage. Celui dont on ne fait pas de chansons.
+
+=== fin:fin_legende
+titre: Les deux rives
+type: secrete
+quand: var.festival_triomphe et var.rival_paix et non var.momo_parti et stat.authenticite >= 55 et (non var.contrat_diamant ou var.contrat_rompu)
+priorite: 90
+resume: Les Glycines et les Hauts-de-Brune ont chanté ensemble. Valbrune a enfin une voix, et c'est la tienne. Et celle de Vortex. Et celle de Momo.
+lieu: festival
+---
+!moment nuit
+!fx confettis
+> Un an plus tard, « Les deux rives » est disque de platine. Mais ce n'est pas le chiffre que tout le monde retient.
+> C'est l'image : toi et Vortex, sur la grande scène du festival Bitume, et deux quartiers qui se détestaient depuis vingt ans chantant le même refrain.
+> Momo a ouvert un vrai studio, au rez-de-chaussée du bâtiment C. Gratuit pour les moins de dix-huit ans. Sur la porte, il a écrit au feutre : « Six mois. Promesse tenue. »
+!rappel momo.six_mois
+[var.famille_concert] > Ta mère a encadré la photo de la foule du festival. Elle la montre à tous ses patients.
+[present(pere) et var.pere_fier] > Ton père fait monter le son quand ta chanson passe dans son bus. Tous les matins. Les passagers ont fini par la connaître.
+[present(cadet) et var.cadet_sauve] > Ilyès enregistre son premier morceau au nouveau studio. Momo fait la prod. Tu ne dis rien, tu écoutes. Tu as appris ça de Fred.
+[var.couple] > Lina expose à Paris. La photo centrale de l'exposition : toi, de dos, face à vingt mille personnes.
+[var.dris_parti] > Une carte postale de Dris est punaisée au-dessus de la table de mixage. « Pour nous trois. »
+> Fred, lui, a ressorti « Béton armé » en vinyle. Tu as écrit la préface.
+> Sur le banc du bâtiment B, un gamin grave un nouveau prénom à côté du tien.
+
+=== fin:fin_momo
+titre: Prod. Momo
+type: inattendue
+quand: var.momo_kaiser
+priorite: 80
+resume: C'est Momo, le beatmaker de la cave, qui est devenu une star. Toi, tu écoutes son nom à la radio.
+lieu: studio
+---
+!moment nuit
+> Un an plus tard, l'album de Kaïser sort. Il bat tous les records. Sur la moitié des morceaux, on entend la même signature, une voix qui chuchote au début : « Prod. Momo ».
+> Momo vit à Paris. Il produit pour les plus grands. Les magazines l'appellent « le magicien de la cave ».
+si rel.momo >= 50
+  > Il t'appelle tous les dimanches. « Ton album, c'est moi qui le fais. Gratuitement. Quand tu veux. » Tu sais qu'il le pense.
+  !rappel momo.credit
+sinon
+  > Dans ses interviews, il ne parle jamais de toi. Une fois, un journaliste lui demande qui lui a donné sa chance. Il répond : « La cave. »
+  !rappel momo.oubli
+[var.ep_sorti] > Ton EP continue de tourner, doucement. Des gens t'écrivent encore pour te dire qu'il les aide à tenir.
+> La cave du bâtiment C est fermée. Sur le mur, à côté de la porte, la date au feutre a été repassée au stylo par quelqu'un.
+> Parfois, le plus beau destin qui naît sur un banc n'est pas celui qu'on croyait.
+
+=== fin:fin_produit
+titre: Le produit
+type: neutre
+quand: var.contrat_diamant et non var.contrat_rompu
+priorite: 70
+resume: Tu appartiens à Diamant Noir pour encore sept ans. Ta voix, ton visage, ton nom. Tout sauf ce que tu avais à dire.
+lieu: label
+---
+!moment nuit
+si stat.hype >= 45
+  > Ton visage est sur les bus. Pas ceux de ton père : ceux de Paris. Tes singles passent en boucle à la radio, entre deux publicités pour des sodas.
+  > Tu as une voiture que tu ne sais pas conduire et un appartement où tu ne dors jamais. Diamant prend soixante-dix pour cent de tout. Sur scène, tu chantes des textes que tu n'as pas écrits.
+sinon
+  > Diamant a mis ton projet « en pause ». Pas de single, pas de clip, pas d'argent. Tu ne peux sortir aucun morceau ailleurs : tes enregistrements lui appartiennent.
+  > Tu travailles de nouveau au Kiosque. Samir ne pose pas de questions.
+!rappel diamant.signature
+[var.single_commercial] > Sur le banc, personne ne chante « Ça brille ». Les gamins chantent encore ton premier son, celui de la cave.
+[var.momo_parti] > Momo ne répond plus à tes messages depuis des mois.
+[non var.momo_parti] > Momo t'attend toujours dans la cave, le dimanche. Vous faites des morceaux que personne n'entendra. Ce sont les seuls que tu aimes.
+[var.clauses_lues] > Tu avais lu le contrat, pourtant. Chaque ligne. Tu savais.
+> Fred t'a envoyé un vieux vinyle de « Béton armé ». Avec un mot : « Sept ans, ça passe. Tiens bon, et garde tes textes au chaud. »
+
+=== fin:fin_disque_or
+titre: Disque d'or
+type: heureuse
+quand: (var.ep_succes ou var.festival_triomphe) et stat.hype >= 50
+priorite: 60
+resume: Ton EP est certifié disque d'or. Du banc des Glycines aux radios nationales, sans jamais lâcher ta voix.
+lieu: spot
+---
+!moment nuit
+!fx confettis
+> Le disque d'or arrive par la poste, dans un carton banal. Tu le déballes dans la cuisine de tes parents.
+> Ta mère le pose sur le buffet, entre la photo de mariage et le portrait de ton grand-père. Elle l'essuie tous les matins.
+[present(pere) et var.pere_fier] > Ton père a demandé un exemplaire « pour le dépôt de bus ». Il est accroché dans le vestiaire des chauffeurs.
+[var.contrat_encre] > Clémence t'a déjà réservé le studio pour l'album. « Prends ton temps. Je ne veux pas un tube. Je veux ce que tu as à dire. »
+[non var.momo_parti] > Momo est crédité sur chaque titre. Il a envoyé une photo de la pochette à toute sa famille au Sénégal.
+[var.momo_parti] > Il manque une signature sur ce disque. Tu le sais. Tout le monde le sait.
+[var.couple] > Lina a fait la pochette. Une photo du banc, de nuit, avec vos trois prénoms gravés.
+[var.clash_gagne] > Vortex t'a envoyé un message, un seul : « Bien joué, Glycines. »
+> Au Spot, Fred a accroché une copie du disque derrière le comptoir, à côté de sa vieille pochette de 1997. « Deux générations », dit-il. « Et la deuxième a lu son contrat. »
+
+=== fin:fin_independant
+titre: Indépendant
+type: heureuse
+quand: (var.ep_sorti ou var.festival_ok) et stat.authenticite >= 50 et non var.momo_parti
+priorite: 50
+resume: Pas de disque d'or, pas de patron. Un public fidèle, un studio dans une cave, et ta voix intacte.
+lieu: studio
+---
+!moment nuit
+> Tu ne passes pas à la radio nationale. Tu ne fais pas la une des magazines. Mais chaque concert est complet : des salles de trois cents personnes qui connaissent toutes tes paroles.
+> Tes morceaux t'appartiennent. Tous. Tu gagnes de quoi payer ta part du loyer, et un peu plus.
+> Momo et toi avez monté votre propre petit label : « Banc Public ». Deux artistes. Trois, si on compte le chat du studio.
+[present(cadet) et var.cadet_sauve] > Ilyès vient au studio tous les soirs après le collège. [[cadet:Il|Elle]] fait ses devoirs sur le canapé, et des couplets entre deux exercices.
+[var.couple] > Lina filme tous vos clips. [[lina:Il|Elle]] dit que les meilleurs films se font sans budget.
+[var.dris_parti] > Dris a écouté l'EP depuis Marseille. Il t'a envoyé une photo de sa mère, souriante, avec un seul mot : « Merci. »
+> Fred passe parfois à la cave, un sirop à la menthe à la main. « Tu sais ce qui est rare ? Durer en restant soi-même. Tu es sur la bonne route. »
+
+=== fin:fin_banc
+titre: Retour au banc
+type: neutre
+resume: Ta voix n'a pas encore percé. Mais le banc est toujours là, et ton carnet n'est jamais fermé.
+lieu: cite
+---
+!moment soir
+> La saison se termine sans miracle. Quelques morceaux sur internet, quelques passages au Spot, et ton nom qui commence à peine à circuler.
+> Tu travailles toujours au Kiosque. Samir t'appelle « la star » en te tendant ton tablier. Tu fais semblant de t'énerver.
+[non var.momo_parti] > Le soir, Momo et toi descendez à la cave. Rien n'a changé. Les boîtes à œufs, la lumière rose, le micro sous son filtre en collant.
+[var.momo_parti] > La cave est silencieuse depuis que Momo est parti. Tu y descends quand même, parfois, juste pour l'odeur du béton.
+[var.clash_perdu] > On te parle encore de la battle contre Vortex. Tu souris. Tu avais tenu.
+> Sur le banc du bâtiment B, ton prénom est toujours gravé entre deux cœurs au compas.
+> Tu ouvres ton carnet à une page blanche. Seize mesures. Pas une de plus. Tout recommence.

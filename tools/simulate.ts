@@ -34,6 +34,25 @@ const PERSONAS: Record<string, Persona[]> = {
     { id: 'potions', label: 'Apprenti des potions', curiosity: 0.85, tags: { etude: 2, prudence: 1 }, activities: { preparer_potion: 5, acheter_ingredients: 2, cueillette: 2 } },
     { id: 'rebelle', label: 'Fauteur de troubles', curiosity: 0.7, tags: { rebelle: 4, provocation: 3, humour: 2, ruse: 2, regle: -0.9, honnete: -0.5 }, activities: { explorer: 3, travailler_auberge: 2, chocolat: 1, etudier: -0.8 } },
   ],
+  rappeur: [
+    { id: 'hasard', label: 'Au hasard', curiosity: 0.6 },
+    { id: 'artiste', label: 'Artiste sincère', curiosity: 0.9, tags: { sincere: 3, plume: 2, loyal: 3, independant: 3, prudent: 2, quartier: 2, famille: 1, argent: -0.9, danger: -0.9, ambition: -0.5 }, activities: { ecrire: 4, enregistrer: 5, prod: 3, open_mic: 3, freestyle: 2 } },
+    { id: 'ambitieux', label: 'Ambitieux', curiosity: 0.85, tags: { ambition: 4, argent: 3, showman: 3, ego: 2, clash: 2, independant: -0.9, loyal: -0.5 }, activities: { poster: 4, open_mic: 3, clip: 4, enregistrer: 3, ecrire: 3, reseauter: 2 } },
+    { id: 'rue', label: 'Tenté par la rue', curiosity: 0.85, tags: { danger: 5, argent: 4, loyal: 2, provoc: 2, prudent: -0.9, sincere: -0.5 }, activities: { freestyle: 3, taf: 1 } },
+    { id: 'coeur', label: 'Romantique', curiosity: 0.95, tags: { romance: 5, confiance: 3, sincere: 2, famille: 2, jalousie: -0.9, egoisme: -0.9, ambition: -0.5 }, activities: { open_mic: 3, reseauter: 3, famille: 2, ecrire: 2 } },
+    { id: 'famille', label: 'Proche des siens', curiosity: 0.9, tags: { famille: 5, sacrifice: 3, prudent: 2, mentor: 3, protecteur: 2, loyal: 2 }, activities: { famille: 5, taf: 4, ecrire: 2 } },
+    { id: 'paix', label: 'Rassembleur', curiosity: 0.95, tags: { paix: 5, calme: 3, sincere: 3, loyal: 4, independant: 3, preuve: 3, justice: 2, mentor: 3, genereux: 1, clash: -0.5, argent: -0.9, danger: -0.9, ambition: -0.5, sacrifice: -0.9 }, activities: { open_mic: 4, enregistrer: 5, ecrire: 4, prod: 3, freestyle: 2 } },
+    { id: 'genereux', label: 'Généreux', curiosity: 0.85, tags: { genereux: 5, ambition: 2, jaloux: -0.9, sacrifice: -0.9 }, activities: { prod: 3, enregistrer: 3, ecrire: 3 } },
+  ],
+  enquete: [
+    { id: 'hasard', label: 'Au hasard', curiosity: 0.6 },
+    { id: 'methodique', label: 'Méthodique', curiosity: 0.95, tags: { methode: 3, prudent: 3, solide: 6, cible: 5, devoir: 2, tact: 2, village: 1, intuition: -0.5, illegal: -0.9, fuite: -0.9, clemence: -0.9 }, activities: { examiner_scene: 4, labo: 5, releves: 4, archives: 3, fouiller_bureau: 3, fouiller_scierie: 3, analyser_indices: 2, perquisition: 3, rapport: 2, arreter: 2, rumeurs: 3, comparer: 4 } },
+    { id: 'impulsif', label: 'Impulsif', curiosity: 0.8, tags: { direct: 3, aplomb: 3, intuition: 3, prudent: -0.9 }, activities: { arreter: 5, perquisition: 3, rumeurs: 2 } },
+    { id: 'cowboy', label: 'Hors des clous', curiosity: 0.8, tags: { illegal: 5, fuite: 5, aplomb: 3, direct: 2, prudent: -0.9, devoir: -0.5 }, activities: { perquisition: 5, rumeurs: 2 } },
+    { id: 'coeur', label: 'Cœur tendre', curiosity: 0.95, tags: { romance: 4, amitie: 4, famille: 3, clemence: 6, tact: 2, solide: 4, cible: 4 }, activities: { diner_famille: 3, rumeurs: 3, labo: 4, examiner_scene: 3, releves: 3, fouiller_bureau: 2, perquisition: 2, arreter: 2, comparer: 3 } },
+    { id: 'prudent', label: 'Trop prudent', curiosity: 0.7, tags: { prudent: 5, methode: 2, solide: -0.5, intuition: -0.9 }, activities: { relire_notes: 3, recueillement: 2, flaner: 2, dormir: 2, arreter: -0.9 } },
+    { id: 'verite', label: 'Chercheur de vérité', curiosity: 0.95, tags: { solide: 6, cible: 5, verite: 4, methode: 3, devoir: 3, equipe: 2, famille: 2, intuition: -0.5, illegal: -0.9, fuite: -0.9, clemence: -0.9 }, activities: { fouiller_bureau: 4, archives: 4, examiner_portrait: 5, labo: 5, examiner_scene: 4, releves: 4, fouiller_scierie: 3, analyser_indices: 2, perquisition: 3, arreter: 2, rumeurs: 3, comparer: 4 } },
+  ],
 };
 const personas: Persona[] = PERSONAS[id] ?? [
   { id: 'hasard', label: 'Au hasard', curiosity: 0.6 },

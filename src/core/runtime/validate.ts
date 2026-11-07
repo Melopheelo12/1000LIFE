@@ -2,7 +2,7 @@
 // + références cassées (personnages, lieux, stats, événements, nœuds…).
 // Utilisée par l'éditeur, le build du contenu et les tests.
 import { walkExpr, type Expr, type Stmt, type TextPart } from '../expr/expr';
-import { eachInstr, type Script } from '../trame/trame';
+import { eachInstr, type Instr, type Script } from '../trame/trame';
 import { compileUniverse, TRIGGERS_WITH_TARGET, type CompiledUniverse, type Issue } from './compile';
 import { EFFECT_FUNCTIONS, EXPR_FUNCTIONS, NAMESPACES } from './session';
 import type { UniverseDef } from '../model/types';
@@ -110,7 +110,11 @@ export function validateUniverse(def: UniverseDef): ValidationReport {
     }
   };
   const checkParts = (parts: TextPart[], where: string, kind: Issue['kind'], id: string, line?: number) => {
-    for (const p of parts) if (typeof p !== 'string' && !('g' in p)) checkExpr(p, where, kind, id, line);
+    for (const p of parts) {
+      if (typeof p === 'string') continue;
+      if ('g' in p) { if (p.who && p.who !== 'moi' && !u.chars.has(p.who)) add({ where, kind, id, line, msg: `Accord selon un personnage inconnu « ${p.who} » (forme [[personnage:masculin|féminin]])`, severity: 'error' }); }
+      else checkExpr(p, where, kind, id, line);
+    }
   };
 
   for (const sc of scripts) {
@@ -151,6 +155,48 @@ export function validateUniverse(def: UniverseDef): ValidationReport {
           break;
       }
     });
+  }
+
+  // Entourage : chaque proche personnalisable existe, et un proche « facultatif »
+  // ne parle ou n'entre en scène que sous une condition present(id).
+  const slots = def.creation?.cast ?? [];
+  const seenSlot = new Set<string>();
+  for (const sl of slots) {
+    const where = `création (entourage « ${sl.id} »)`;
+    if (!u.chars.has(sl.id)) add({ where, kind: 'creation', id: sl.id, msg: `Personnage inconnu « ${sl.id} »`, severity: 'error' });
+    if (seenSlot.has(sl.id)) add({ where, kind: 'creation', id: sl.id, msg: 'Ce personnage figure deux fois dans l\'entourage', severity: 'error' });
+    seenSlot.add(sl.id);
+    if (!sl.label?.trim()) add({ where, kind: 'creation', id: sl.id, msg: 'Libellé manquant (ex. « Ta mère »)', severity: 'warning' });
+  }
+  const optional = new Set(slots.filter((sl) => sl.optional).map((sl) => sl.id));
+  if (optional.size) {
+    const presentIn = (e: Expr | null | undefined, acc = new Set<string>()): Set<string> => {
+      if (!e) return acc;
+      switch (e.k) {
+        case 'call':
+          if (e.f === 'present') { const a = e.args[0]; const n = a?.k === 'path' && a.p.length === 1 ? a.p[0] : a?.k === 'str' ? a.v : null; if (n) acc.add(n); }
+          e.args.forEach((x) => presentIn(x, acc)); break;
+        case 'bin': presentIn(e.l, acc); presentIn(e.r, acc); break;
+        case 'un': presentIn(e.e, acc); break;
+        case 'tern': presentIn(e.c, acc); presentIn(e.a, acc); presentIn(e.b, acc); break;
+      }
+      return acc;
+    };
+    const guardWalk = (list: Instr[], guard: Set<string>, where: string, kind: Issue['kind'], id: string) => {
+      for (const ins of list) {
+        const g = 'cond' in ins && ins.cond ? new Set([...guard, ...presentIn(ins.cond)]) : guard;
+        const who = ins.k === 'line' ? ins.who : ins.k === 'stage' && (ins.cmd === 'placer' || ins.cmd === 'entrer') && typeof ins.args[0]?.[0] === 'string' ? ins.args[0][0] as string : null;
+        if (who && optional.has(who) && !g.has(who)) add({ where, kind, id, line: ins.ln, msg: `« ${who} » peut être retiré de l'histoire à la création : ajoute present(${who}) à la condition de l'événement ou de ce passage`, severity: 'warning' });
+        if (ins.k === 'if') ins.branches.forEach((b) => guardWalk(b.body, new Set([...g, ...presentIn(b.cond)]), where, kind, id));
+        if (ins.k === 'choices') ins.opts.forEach((o) => guardWalk(o.body, new Set([...g, ...presentIn(o.show), ...presentIn(o.lock)]), where, kind, id));
+      }
+    };
+    for (const e of u.events.values()) {
+      const g0 = presentIn(e.when);
+      if (e.trig === 'talk' && e.target) g0.add(e.target);
+      for (const nodes of Object.values(e.script.nodes)) guardWalk(nodes, g0, `événement ${e.def.id}`, 'evenement', e.def.id);
+    }
+    for (const en of u.endings) for (const nodes of Object.values(en.script.nodes)) guardWalk(nodes, presentIn(en.when), `fin ${en.def.id}`, 'fin', en.def.id);
   }
 
   // Événements : cibles des déclencheurs

@@ -13,6 +13,8 @@ export interface SaveMeta {
   player: string;
   chapter: string;
   week: number;
+  /** Unité de temps de l'univers (« Semaine », « Journée »…), pour l'affichage de la liste des sauvegardes. */
+  tickLabel?: string;
   location: string;
   playtime: number;
   updated: number;
@@ -38,7 +40,7 @@ export function makeSave(slot: string, g: GameSession): SaveFile {
     format: SAVE_FORMAT,
     meta: {
       slot, universe: g.u.def.id, universeName: g.u.def.name, player: String(state.player.nom ?? ''),
-      chapter: g.chapter.def.title, week: state.time.week, location: loc ? g.render(loc.name) : state.location,
+      chapter: g.chapter.def.title, week: state.time.week, tickLabel: g.u.def.config?.tickLabel, location: loc ? g.render(loc.name) : state.location,
       playtime: Math.round(state.playtime), updated: Date.now(), ending: state.ending,
     },
     state,
@@ -96,6 +98,18 @@ export async function unlockEnding(universe: string, ending: string) {
   list.add(ending);
   all[universe] = [...list];
   await setJSON('meta:endings', all);
+}
+
+// ─────────────────────── Valeurs retenues d'une partie à l'autre ───────────────
+
+/** Valeurs de la dernière partie de chaque univers (config.remember), lues par precedent("nom"). */
+export async function getLastValues(universe: string): Promise<Record<string, unknown>> {
+  return (await getJSON<Record<string, Record<string, unknown>>>('meta:last', {}))[universe] ?? {};
+}
+export async function setLastValues(universe: string, values: Record<string, unknown>) {
+  const all = await getJSON<Record<string, Record<string, unknown>>>('meta:last', {});
+  all[universe] = values;
+  await setJSON('meta:last', all);
 }
 
 // ───────────────────────────── Réglages ────────────────────────────────────

@@ -118,6 +118,9 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 .dialog.narration .text { color: #dfe3f2; font-style: italic; }
 .dialog .next { position: absolute; right: 12px; bottom: 8px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 7px solid var(--accent); animation: bob 0.8s steps(2) infinite; }
 @keyframes bob { 50% { transform: translateY(3px); } }
+.dialog.recap { cursor: default; min-height: 0; padding: 8px 12px 10px; opacity: 0.92; }
+.dialog.recap .portrait { width: clamp(40px, calc(var(--px) * 18), 80px); height: clamp(40px, calc(var(--px) * 18), 80px); }
+.dialog.recap .text { font-size: calc(var(--text) * 0.9); }
 .choices { display: flex; flex-direction: column; gap: 6px; padding: 10px; max-height: calc(var(--gh) * 0.62); overflow-y: auto; }
 .stage[data-layout='portrait'] .choices { max-height: none; }
 .choice { display: flex; gap: 10px; align-items: baseline; width: 100%; font-size: var(--small); }
@@ -270,3 +273,20 @@ input[type='range'] { accent-color: var(--accent); }
 .wardrobe { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 18px; align-items: start; }
 .wardrobe-preview { padding: 14px; position: sticky; top: 0; }
 @media (max-width: 760px) { .wardrobe { grid-template-columns: 1fr; } .wardrobe-preview { position: static; } }
+
+/* ── Entourage (création) ── */
+.creation-tabs { margin-bottom: 14px; }
+.cast-group { margin: 0; font-size: 15px; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; }
+.cast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.cast-card { display: flex; flex-direction: column; gap: 8px; padding: 10px; background: var(--panel2, #1b1f2c); box-shadow: 0 0 0 2px var(--line2); }
+.cast-card.editing { box-shadow: 0 0 0 2px var(--accent); }
+.cast-card.off { opacity: 0.55; }
+.cast-top { display: flex; gap: 10px; align-items: flex-start; }
+.cast-portrait { width: 64px; height: 64px; flex: none; background: #0e1018; box-shadow: 0 0 0 2px var(--line2); }
+.cast-portrait canvas { width: 100%; height: 100%; display: block; }
+.cast-label { font-size: 15px; }
+.cast-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.seg { display: inline-flex; gap: 0; }
+.seg .pbtn.on { background: var(--accent); color: var(--accent-ink); }
+.check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+.warn-note { margin: 0; color: #ffcf6e; font-size: 14px; }

@@ -92,7 +92,7 @@ recharge: 3
 ---
 si chapitre == ch1
   ines: Tu bloques sur quoi, cette semaine ? Les fonctions ou les probabilités ?
-  * Réviser avec elle #etudes
+  * Réviser avec [[ines:lui|elle]] #etudes
     ~ stat.etudes += 5; rel.ines += 4; stat.energie -= 5
     ines (content): Tu vois, quand tu veux !
   * Lui parler d'autre chose #romance
@@ -142,7 +142,7 @@ recharge: 3
 yanis (content): Montre-moi ton crochet ! Celui de la télé !
 * Passer l'après-midi à lui apprendre #famille
   ~ rel.yanis += 6; var.yanis_protege += 1
-  > Il le rate trente fois. À la trente et unième, il hurle de joie.
+  > [[yanis:Il|Elle]] le rate trente fois. À la trente et unième, [[yanis:il|elle]] hurle de joie.
 * Jouer avec les grands, Yanis regarde
   ~ rel.yanis += 1
 
@@ -315,7 +315,7 @@ sinon si rel.ines >= 30
       ~ var.couple = vrai; rel.ines += 10
       ~ souvenir(ines, aveu, "Le soir où tu lui as dit ce que tu ressentais")
     sinon
-      ines (pensif): Je t'aime beaucoup… mais je ne suis pas prête. Pas encore.
+      ines (pensif): Je t'aime beaucoup… mais je ne suis pas [[ines:prêt|prête]]. Pas encore.
       ~ rel.ines -= 2
   * Profiter de la soirée, simplement
     ~ rel.ines += 4

@@ -120,6 +120,8 @@ export class StoryRunner {
 
       switch (ins.k) {
         case 'line':
+          // filet de sécurité : un proche retiré de l'histoire ne parle pas (la validation le signale)
+          if (ins.who && ins.who !== 'moi' && !this.g.present(ins.who)) continue;
           return { type: 'line', who: ins.who, emo: ins.emo, text: this.g.render(ins.parts), event: f.ev.id };
 
         case 'fx':
